@@ -3,10 +3,10 @@ module BenchGraph.Path (
   edgesNotInPath
 ) where
 
-import BenchGraph
+import BenchGraph (Edges,GenericGraph(..))
 
-mkPath :: Int -> Edges
-mkPath n = take n $ iterate ((\(x,y) -> (x+1,y+1)) :: (Int,Int) -> (Int,Int)) (0,1)
+mkPath :: Int -> GenericGraph
+mkPath n = GenericGraph ("cycle"++(show n)) $ take n $ iterate ((\(x,y) -> (x+1,y+1)) :: (Int,Int) -> (Int,Int)) (0,1)
 
 edgesNotInPath :: Edges -> Edges
 edgesNotInPath = map (\(x,y)-> (x-1,y+1))

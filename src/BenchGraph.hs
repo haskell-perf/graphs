@@ -2,6 +2,7 @@
 
 module BenchGraph (
   Edges,
+  GenericGraph (..),
   ToFuncToBench,
   FuncToBench (..),
   GraphImpl,
@@ -12,8 +13,10 @@ module BenchGraph (
 import Criterion.Main
 import Control.DeepSeq (NFData(..))
 
--- Generic graph
 type Edges = [(Int,Int)]
+
+-- Generic graph with a name
+data GenericGraph = GenericGraph String Edges
 
 -- We want to pass the generic graph to create an according function to test
 type ToFuncToBench a = Edges -> FuncToBench a
@@ -28,11 +31,11 @@ class GraphImpl g where
 
 -- Main function
 -- Will be cooler if its return a single benchmark with bgroup
-benchFunc :: GraphImpl g => ToFuncToBench g -> [Edges] -> [Benchmark]
-benchFunc tofunc = map (\e -> benchFunc' (tofunc e) e)
+benchFunc :: GraphImpl g => ToFuncToBench g -> GenericGraph -> Benchmark
+benchFunc tofunc (GenericGraph ename edges) = benchFunc' (tofunc edges) ename edges
 
 -- Here we bench a single function over a single graph
-benchFunc' :: GraphImpl g => FuncToBench g -> Edges -> Benchmark
-benchFunc' (Consummer name fun) edges = bench (name++"/"++(show edges)) $ nf fun $! mkGraph edges
-benchFunc' (FuncWithArg name fun showArg args ) edges = bgroup (name++"/"++(show edges)) $ map (\arg -> bench (showArg arg) $ nf (fun arg) $! mkGraph edges) args
+benchFunc' :: GraphImpl g => FuncToBench g -> String -> Edges -> Benchmark
+benchFunc' (Consummer name fun) ename edges = bench (name++"/"++ename) $ nf fun $! mkGraph edges
+benchFunc' (FuncWithArg name fun showArg args ) ename edges = bgroup (name++"/"++ename) $ map (\arg -> bench (showArg arg) $ nf (fun arg) $! mkGraph edges) args
 

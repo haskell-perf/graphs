@@ -23,4 +23,4 @@ tenPowers :: [Int]
 tenPowers = 1: map (10*) tenPowers
 
 main :: IO ()
-main = defaultMain $ benchFunc isEmpty' $ map mkPath $ take 5 tenPowers
+main = defaultMain $ map (benchFunc isEmpty') $ map mkPath $ take 5 tenPowers
