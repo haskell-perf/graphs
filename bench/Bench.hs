@@ -1,7 +1,10 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 import Criterion.Main
+
 import BenchGraph
+import BenchGraph.Path
+
 import Algebra.Graph
 
 -- For example with alga
