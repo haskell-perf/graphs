@@ -27,7 +27,7 @@ library
 benchmark benchmark-alga
     hs-source-dirs:     bench
     type:               exitcode-stdio-1.0
-    main-is:            Bench.hs
+    main-is:            BenchAlga.hs
     build-depends:      algebraic-graphs,
                         base        >= 4.7     && < 5,
                         base-compat >= 0.9.1   && < 0.10,

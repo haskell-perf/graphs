@@ -1,5 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 
+import Control.Applicative ((<*>))
+
 import Criterion.Main
 
 import BenchGraph
@@ -17,10 +19,12 @@ isEmpty' = const $ Consummer "IsEmpty" isEmpty
 
 --A simple function
 pathHasEdge :: ToFuncToBench (Graph Int)
-pathHasEdge = FuncWithArg "hasEdge" (uncurry hasEdge) show . take 5 .edgesNotInPath
+pathHasEdge = FuncWithArg "hasEdge" (uncurry hasEdge) show . take 2 . edgesNotInPath
 
 tenPowers :: [Int]
 tenPowers = 1: map (10*) tenPowers
 
 main :: IO ()
-main = defaultMain $ map (benchFunc isEmpty') $ map mkPath $ take 5 tenPowers
+main = do
+  let toTest = map benchFunc [isEmpty', pathHasEdge]
+  defaultMain $ toTest <*> (map mkPath $ take 5 tenPowers)
