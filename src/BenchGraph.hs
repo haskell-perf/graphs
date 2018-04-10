@@ -30,12 +30,11 @@ class GraphImpl g where
   mkGraph :: Edges -> g
 
 -- Main function
--- Will be cooler if its return a single benchmark with bgroup
 benchFunc :: GraphImpl g => ToFuncToBench g -> GenericGraph -> Benchmark
-benchFunc tofunc (GenericGraph ename edges) = benchFunc' (tofunc edges) ename edges
+benchFunc tofunc (GenericGraph ename edges) = benchFunc' (tofunc edges) ename $! mkGraph edges
 
 -- Here we bench a single function over a single graph
-benchFunc' :: GraphImpl g => FuncToBench g -> String -> Edges -> Benchmark
-benchFunc' (Consummer name fun) ename edges = bench (name++"/"++ename) $ nf fun $! mkGraph edges
-benchFunc' (FuncWithArg name fun showArg args ) ename edges = bgroup (name++"/"++ename) $ map (\arg -> bench (showArg arg) $ nf (fun arg) $! mkGraph edges) args
+benchFunc' :: GraphImpl g => FuncToBench g -> String -> g -> Benchmark
+benchFunc' (Consummer name fun) ename graph = bench (name++"/"++ename) $ nf fun graph
+benchFunc' (FuncWithArg name fun showArg args ) ename graph = bgroup (name++"/"++ename) $ map (\arg -> bench (showArg arg) $ nf (fun arg) graph) args
 
