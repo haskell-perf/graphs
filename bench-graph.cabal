@@ -18,7 +18,8 @@ cabal-version:       >=1.10
 library
   exposed-modules:     BenchGraph,
                        BenchGraph.Path,
-                       BenchGraph.Circuit
+                       BenchGraph.Circuit,
+                       BenchGraph.GenericGraph
   -- other-modules:       
   other-extensions:    ExistentialQuantification
   build-depends:       base >=4.10 && <4.11, criterion >=1.4 && <1.5, deepseq >=1.4 && <1.5
@@ -31,25 +32,33 @@ benchmark alga
     main-is:            Alga.hs
     build-depends:      algebraic-graphs,
                         base        >= 4.7     && < 5,
-                        base-compat >= 0.9.1   && < 0.10,
-                        containers  >= 0.5.5.1 && < 0.8,
                         criterion   >= 1.1,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
                         -Wall
-                        -fno-warn-name-shadowing
 
 benchmark containers
     hs-source-dirs:     bench
     type:               exitcode-stdio-1.0
     main-is:            Containers.hs
     build-depends:      base        >= 4.7     && < 5,
-                        base-compat >= 0.9.1   && < 0.10,
                         containers  >= 0.5.5.1 && < 0.8,
                         criterion   >= 1.1,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
                         -Wall
-                        -fno-warn-name-shadowing
+
+benchmark fgl
+    hs-source-dirs:     bench
+    type:               exitcode-stdio-1.0
+    main-is:            Fgl.hs
+    build-depends:      base        >= 4.7     && < 5,
+                        fgl >= 5.5.4.0,
+                        containers  >= 0.5.5.1 && < 0.8,
+                        criterion   >= 1.1,
+                        bench-graph
+    default-language:   Haskell2010
+    GHC-options:        -O2
+                        -Wall

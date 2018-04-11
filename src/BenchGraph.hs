@@ -1,8 +1,6 @@
 {-# LANGUAGE ExistentialQuantification #-}
 
 module BenchGraph (
-  Edges,
-  GenericGraph (..),
   ToFuncToBench,
   FuncToBench (..),
   GraphImpl,
@@ -14,10 +12,7 @@ module BenchGraph (
 import Criterion.Main
 import Control.DeepSeq (NFData(..))
 
-type Edges = [(Int,Int)]
-
--- Generic graph with a name
-data GenericGraph = GenericGraph String Edges
+import BenchGraph.GenericGraph
 
 -- We want to pass the generic graph to create an according function to test
 type ToFuncToBench a = Edges -> FuncToBench a

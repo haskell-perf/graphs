@@ -4,7 +4,7 @@ module BenchGraph.Circuit (
 ) where
 
 import BenchGraph.Path
-import BenchGraph (Edges,GenericGraph(..))
+import BenchGraph.GenericGraph (Edges,GenericGraph(..))
 
 mkCircuit :: Int -> GenericGraph
 mkCircuit n = GenericGraph ("cicruit"++(show n)) $ path ++ [(n,0)]
