@@ -10,7 +10,7 @@ module BenchGraph (
 ) where
 
 import Criterion.Main
-import Control.DeepSeq (NFData(..))
+import Control.DeepSeq (NFData(..), ($!!))
 
 import BenchGraph.GenericGraph
 
@@ -26,8 +26,8 @@ class GraphImpl g where
   mkGraph :: Edges -> g
 
 -- Main function
-benchFunc :: GraphImpl g => ToFuncToBench g -> GenericGraph -> Benchmark
-benchFunc tofunc (GenericGraph ename edges) = benchFunc' (tofunc edges) ename $! mkGraph edges
+benchFunc :: (GraphImpl g, NFData g) => ToFuncToBench g -> GenericGraph -> Benchmark
+benchFunc tofunc (GenericGraph ename edges) = benchFunc' (tofunc edges) ename $!! mkGraph edges
 
 -- Here we bench a single function over a single graph
 benchFunc' :: GraphImpl g => FuncToBench g -> String -> g -> Benchmark
