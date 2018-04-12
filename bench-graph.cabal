@@ -19,7 +19,8 @@ library
   exposed-modules:     BenchGraph,
                        BenchGraph.Path,
                        BenchGraph.Circuit,
-                       BenchGraph.GenericGraph
+                       BenchGraph.GenericGraph,
+                       BenchGraph.Complete
   -- other-modules:       
   other-extensions:    ExistentialQuantification
   build-depends:       base >=4.10 && <4.11, criterion >=1.4 && <1.5, deepseq >=1.4 && <1.5
