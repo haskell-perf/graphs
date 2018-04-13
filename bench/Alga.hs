@@ -1,5 +1,9 @@
 {-# LANGUAGE FlexibleInstances #-}
 
+module Alga
+(allBenchs)
+where
+
 import Control.Applicative ((<*>))
 
 import Criterion.Main
@@ -31,14 +35,14 @@ hasEdge' = FuncWithArg "hasEdge" (uncurry hasEdge) show
 tenPowers :: [Int]
 tenPowers = 1: map (10*) tenPowers
 
-main :: IO ()
-main = do
-  let generics = [isEmpty', vertexCount', edgeCount']
+allBenchs :: [Benchmark]
+allBenchs = completeB ++ pathB
+  where
+    generics = [isEmpty', vertexCount', edgeCount']
 
-  let toTestPath = map benchFunc $ (hasEdge' . take 2 . edgesNotInPath) : generics
-  let pathB = toTestPath <*> (map mkPath $ take 5 tenPowers)
+    toTestPath = map benchFunc $ (hasEdge' . take 2 . edgesNotInPath) : generics
+    pathB = toTestPath <*> map mkPath (take 5 tenPowers)
 
-  let toTestComplete = map benchFunc $ (hasEdge' . take 3 ): generics
-  let completeB = toTestComplete <*> (map mkComplete $ take 3 tenPowers)
+    toTestComplete = map benchFunc $ (hasEdge' . take 3 ): generics
+    completeB = toTestComplete <*> map mkComplete (take 3 tenPowers)
 
-  defaultMain $ completeB ++ pathB 

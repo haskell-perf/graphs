@@ -30,8 +30,9 @@ library
 benchmark alga
     hs-source-dirs:     bench
     type:               exitcode-stdio-1.0
-    main-is:            Alga.hs
-    build-depends:      algebraic-graphs,
+    main-is:            AlgaRun.hs
+    other-modules:      Alga
+    build-depends:      algebraic-graphs >= 0.1.1,
                         base        >= 4.7     && < 5,
                         criterion   >= 1.1,
                         bench-graph
@@ -42,7 +43,8 @@ benchmark alga
 benchmark containers
     hs-source-dirs:     bench
     type:               exitcode-stdio-1.0
-    main-is:            Containers.hs
+    main-is:            ContainersRun.hs
+    other-modules:      Containers
     build-depends:      base        >= 4.7     && < 5,
                         containers  >= 0.5.5.1 && < 0.8,
                         criterion   >= 1.1,
@@ -54,11 +56,27 @@ benchmark containers
 benchmark fgl
     hs-source-dirs:     bench
     type:               exitcode-stdio-1.0
-    main-is:            Fgl.hs
+    main-is:            FglRun.hs
+    other-modules:      Fgl
     build-depends:      base        >= 4.7     && < 5,
                         fgl >= 5.5.4.0,
                         containers  >= 0.5.5.1 && < 0.8,
                         criterion   >= 1.1,
+                        bench-graph
+    default-language:   Haskell2010
+    GHC-options:        -O2
+                        -Wall
+
+benchmark compare
+    hs-source-dirs:     bench
+    type:               exitcode-stdio-1.0
+    main-is:            Main.hs
+    other-modules:      Alga, Containers, Fgl
+    build-depends:      base        >= 4.7     && < 5,
+                        fgl >= 5.5.4.0,
+                        containers  >= 0.5.5.1 && < 0.8,
+                        criterion   >= 1.1,
+                        algebraic-graphs >= 0.1.1,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
