@@ -6,6 +6,7 @@ import Criterion.Main
 
 import BenchGraph
 import BenchGraph.Path
+import BenchGraph.Complete
 
 import Algebra.Graph
 
@@ -24,13 +25,20 @@ edgeCount' :: ToFuncToBench (Graph Int)
 edgeCount' = const $ Consummer "edgeCount" edgeCount
 
 --A simple function
-pathHasEdge :: ToFuncToBench (Graph Int)
-pathHasEdge = FuncWithArg "hasEdge" (uncurry hasEdge) show . take 2 . edgesNotInPath
+hasEdge' :: ToFuncToBench (Graph Int)
+hasEdge' = FuncWithArg "hasEdge" (uncurry hasEdge) show
 
 tenPowers :: [Int]
 tenPowers = 1: map (10*) tenPowers
 
 main :: IO ()
 main = do
-  let toTest = map benchFunc [isEmpty', vertexCount', edgeCount', pathHasEdge]
-  defaultMain $ toTest <*> (map mkPath $ take 5 tenPowers)
+  let generics = [isEmpty', vertexCount', edgeCount']
+
+  let toTestPath = map benchFunc $ (hasEdge' . take 2 . edgesNotInPath) : generics
+  let pathB = toTestPath <*> (map mkPath $ take 5 tenPowers)
+
+  let toTestComplete = map benchFunc $ (hasEdge' . take 3 ): generics
+  let completeB = toTestComplete <*> (map mkComplete $ take 3 tenPowers)
+
+  defaultMain $ completeB ++ pathB 
