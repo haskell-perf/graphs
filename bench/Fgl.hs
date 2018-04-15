@@ -21,6 +21,9 @@ instance GraphImpl UGr where
 isEmpty' :: ToFuncToBench UGr
 isEmpty' = const $ Consummer "IsEmpty" isEmpty
 
+edges' :: ToFuncToBench UGr
+edges' = const $ Consummer "edges" edges
+
 pathHasEdge :: ToFuncToBench UGr
 pathHasEdge = FuncWithArg "hasEdge" (flip hasEdge) show . take 2 . edgesNotInPath
 
@@ -30,5 +33,5 @@ tenPowers = 1: map (10*) tenPowers
 allBenchs :: [Benchmark]
 allBenchs = toTest <*> map mkPath (take 5 tenPowers)
   where
-    toTest = map benchFunc [isEmpty',pathHasEdge]
+    toTest = map benchFunc [isEmpty',pathHasEdge, edges']
 

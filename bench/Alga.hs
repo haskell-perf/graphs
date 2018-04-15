@@ -25,8 +25,8 @@ isEmpty' = const $ Consummer "IsEmpty" isEmpty
 vertexCount' :: ToFuncToBench (Graph Int)
 vertexCount' = const $ Consummer "vertexCount" vertexCount
 
-edgeCount' :: ToFuncToBench (Graph Int)
-edgeCount' = const $ Consummer "edgeCount" edgeCount
+edgeList' :: ToFuncToBench (Graph Int)
+edgeList' = const $ Consummer "edges" edgeCount
 
 --A simple function
 hasEdge' :: ToFuncToBench (Graph Int)
@@ -38,7 +38,7 @@ tenPowers = 1: map (10*) tenPowers
 allBenchs :: [Benchmark]
 allBenchs = completeB ++ pathB
   where
-    generics = [isEmpty', vertexCount', edgeCount']
+    generics = [isEmpty', vertexCount', edgeList']
 
     toTestPath = map benchFunc $ (hasEdge' . take 2 . edgesNotInPath) : generics
     pathB = toTestPath <*> map mkPath (take 5 tenPowers)
