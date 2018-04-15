@@ -1,4 +1,4 @@
-import Data.List (sort, filter, nub)
+import Data.List (sort, sortBy, filter, nub)
 import Data.Maybe (mapMaybe)
 
 import Criterion
@@ -34,7 +34,7 @@ genReport' lev arr = unlines $ map toPrint $ nub arr
   where
     toPrint breport = replicate lev '#' ++ " " ++ show breport ++ "\n" ++ why breport
     why br = case br of
-      Simple{} -> unlines $ map (\(a,b,c) -> "* "++ a ++ " : "++ show (estPoint $ anMean $ reportAnalysis c) ++ " s. (Mean)" )$ tkSimple $ here br
+      Simple{} -> unlines $ map (\(a,b,c) -> "* "++ a ++ " : "++ show (getMean c) ++ " s. (Mean)" )$ sortBy (\(_,_,a) (_,_,b) -> getMean a `compare` getMean b) $ tkSimple $ here br
       Group{} -> genReport' (lev+1) $ concat $ mapMaybe tkList $ here br 
     here e = filter (e==) arr
 
@@ -46,6 +46,9 @@ tkSimple = mapMaybe (\x -> case x of
 tkList :: BReport -> Maybe [BReport]
 tkList Simple{} = Nothing
 tkList (Group _ b) = Just b
+
+getMean :: Report -> Double
+getMean = estPoint . anMean . reportAnalysis
 
 main :: IO ()
 main = do

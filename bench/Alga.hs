@@ -4,13 +4,13 @@ module Alga
 (allBenchs)
 where
 
-import Control.Applicative ((<*>))
-
 import Criterion.Main
 
 import BenchGraph
 import BenchGraph.Path
 import BenchGraph.Complete
+
+import BenchGraph.Utils
 
 import Algebra.Graph
 
@@ -22,23 +22,20 @@ instance GraphImpl (Graph Int) where
 isEmpty' :: ToFuncToBench (Graph Int)
 isEmpty' = const $ Consummer "IsEmpty" isEmpty
 
-vertexCount' :: ToFuncToBench (Graph Int)
-vertexCount' = const $ Consummer "vertexCount" vertexCount
+vertexList' :: ToFuncToBench (Graph Int)
+vertexList' = const $ Consummer "vertexList" vertexList 
 
 edgeList' :: ToFuncToBench (Graph Int)
-edgeList' = const $ Consummer "edges" edgeCount
+edgeList' = const $ Consummer "edgeList" edgeList
 
 --A simple function
 hasEdge' :: ToFuncToBench (Graph Int)
 hasEdge' = FuncWithArg "hasEdge" (uncurry hasEdge) show
 
-tenPowers :: [Int]
-tenPowers = 1: map (10*) tenPowers
-
 allBenchs :: [Benchmark]
 allBenchs = completeB ++ pathB
   where
-    generics = [isEmpty', vertexCount', edgeList']
+    generics = [isEmpty', edgeList', vertexList']
 
     toTestPath = map benchFunc $ (hasEdge' . take 2 . edgesNotInPath) : generics
     pathB = toTestPath <*> map mkPath (take 5 tenPowers)
