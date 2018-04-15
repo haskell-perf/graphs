@@ -79,6 +79,8 @@ benchmark compare
                         criterion   >= 1.1,
                         algebraic-graphs >= 0.1.1,
                         statistics,
+                        vector,
+                        mtl,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2

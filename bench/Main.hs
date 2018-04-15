@@ -1,8 +1,17 @@
 import Data.List (sort, sortBy, filter, nub)
 import Data.Maybe (mapMaybe)
 
+import Control.Monad.Except (runExceptT)
+
 import Criterion
 import Criterion.Types
+import Criterion.Internal (runOne)
+import Criterion.Main.Options (defaultConfig)
+import Criterion.Measurement (initializeTime)
+import Criterion.IO.Printf (note, printError)
+import Criterion.Analysis (analyseSample)
+import Criterion.Monad (withConfig, Criterion (..))
+import qualified Data.Vector as V
 
 import Statistics.Types
 
@@ -23,7 +32,7 @@ instance Eq BReport where
   a == b = show a == show b 
 
 runSingleBenchmark :: String -> Benchmark -> IO BReport
-runSingleBenchmark str (Benchmark name benchm) = Simple str name <$> benchmark' benchm
+runSingleBenchmark str (Benchmark name benchm) = Simple str name <$> benchmarkWithoutOutput benchm
 runSingleBenchmark str (BenchGroup name benchmarks) = Group name <$> mapM (runSingleBenchmark str) benchmarks
 
 genReport :: [BReport] -> String 
@@ -49,6 +58,28 @@ tkList (Group _ b) = Just b
 
 getMean :: Report -> Double
 getMean = estPoint . anMean . reportAnalysis
+
+benchmarkWithoutOutput :: Benchmarkable -> IO Report
+benchmarkWithoutOutput bm = do
+  initializeTime
+  withConfig defaultConfig $ do
+    Analysed rpt <- runAndAnalyseOne 0 "function" bm
+    return rpt
+
+-- | Running a benchmark print many informations on stdout, we don't want that, so we redefine the according functions
+-- | Run a single benchmark and analyse its performance (took from Criterion.Internal sources, unmodified)
+runAndAnalyseOne :: Int -> String -> Benchmarkable -> Criterion DataRecord
+runAndAnalyseOne i desc bm = do
+  Measurement _ _ meas <- runOne i desc bm
+  analyseOne i desc meas
+
+-- | Analyse a single benchmark (took from Criterion.Internal sources, modified)
+analyseOne :: Int -> String -> V.Vector Measured -> Criterion DataRecord
+analyseOne i desc meas = do
+  erp <- runExceptT $ analyseSample i desc meas
+  case erp of
+    Left err -> printError "*** Error: %s\n" err
+    Right rpt -> return (Analysed rpt)
 
 main :: IO ()
 main = do
