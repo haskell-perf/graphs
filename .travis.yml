@@ -1,0 +1,9 @@
+nguage: haskell
+
+ghc: 8.2.2
+
+script:
+    - cabal configure --enable-benchmarks && cabal build && cabal bench compare
+
+install:
+    - cabal install --only-dependencies --enable-benchmarks
