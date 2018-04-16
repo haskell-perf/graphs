@@ -1,6 +1,5 @@
 module BenchGraph.Circuit (
-  circuit,
-  edgesNotInCircuit
+  circuit
 ) where
 
 import BenchGraph.Path
@@ -12,5 +11,3 @@ circuit = GenericGraph "Circuit" mkCircuit
 mkCircuit :: Int -> Edges 
 mkCircuit n = mk path n ++ [(n,0)]
 
-edgesNotInCircuit :: Edges -> Edges
-edgesNotInCircuit = edgesNotInPath

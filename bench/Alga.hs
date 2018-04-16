@@ -37,7 +37,7 @@ allBenchs = toTestPath ++ toTestComplete
   where
     generics = [isEmpty', edgeList', vertexList']
 
-    toTestPath = benchOver path ((hasEdge' . take 2 . edgesNotInPath) : generics) $ take 5 tenPowers
+    toTestPath = benchOver path ((hasEdge' . take 2 . edgesNotInGraph) : generics) $ take 5 tenPowers
 
     toTestComplete = benchOver complete ((hasEdge' . take 3 ): generics) $ take 3 tenPowers
 

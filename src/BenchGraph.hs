@@ -6,8 +6,7 @@ module BenchGraph (
   GraphImpl,
   benchOver,
   mkGraph,
-  benchFunc,
-  extractMaxVertex
+  benchFunc
 ) where
 
 import Criterion.Main
@@ -41,7 +40,4 @@ benchFunc gr tofunc n = benchFunc' (tofunc edges) (name gr ++ "/" ++ show n) $!!
 benchFunc' :: GraphImpl g => FuncToBench g -> String -> g -> Benchmark
 benchFunc' (Consumer name fun) ename graph = bench (name++"/"++ename) $ nf fun graph
 benchFunc' (FuncWithArg name fun showArg args ) ename graph = bgroup (name++"/"++ename) $ map (\arg -> bench (showArg arg) $ nf (fun arg) graph) args
-
-extractMaxVertex :: [(Int, Int)] -> Int
-extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
 
