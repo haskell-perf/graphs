@@ -4,6 +4,7 @@ module BenchGraph (
   ToFuncToBench,
   FuncToBench (..),
   GraphImpl,
+  benchOver,
   mkGraph,
   benchFunc,
   extractMaxVertex
@@ -11,6 +12,7 @@ module BenchGraph (
 
 import Criterion.Main
 import Control.DeepSeq (NFData(..), ($!!))
+import Control.Monad (ap)
 
 import BenchGraph.GenericGraph
 
@@ -25,9 +27,15 @@ data FuncToBench a = forall b. NFData b => Consummer String (a -> b)
 class GraphImpl g where
   mkGraph :: Edges -> g
 
+-- Utilitary
+benchOver :: (GraphImpl g, NFData g) => GenericGraph -> [ToFuncToBench g] -> [Int] -> [Benchmark]
+benchOver gr tofuncs = ap (map (benchFunc gr ) tofuncs) 
+
 -- Main function
-benchFunc :: (GraphImpl g, NFData g) => ToFuncToBench g -> GenericGraph -> Benchmark
-benchFunc tofunc (GenericGraph ename edges) = benchFunc' (tofunc edges) ename $!! mkGraph edges
+benchFunc :: (GraphImpl g, NFData g) => GenericGraph -> ToFuncToBench g -> Int -> Benchmark
+benchFunc gr tofunc n = benchFunc' (tofunc edges) (name gr ++ "/" ++ show n) $!! mkGraph edges
+  where
+    edges = mk gr n
 
 -- Here we bench a single function over a single graph
 benchFunc' :: GraphImpl g => FuncToBench g -> String -> g -> Benchmark

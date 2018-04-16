@@ -1,12 +1,15 @@
 module BenchGraph.Path (
-  mkPath,
+  path,
   edgesNotInPath
 ) where
 
 import BenchGraph.GenericGraph (Edges,GenericGraph(..))
 
-mkPath :: Int -> GenericGraph
-mkPath n = GenericGraph ("path"++(show n)) $ take n $ iterate ((\(x,y) -> (x+1,y+1)) :: (Int,Int) -> (Int,Int)) (0,1)
+path :: GenericGraph
+path = GenericGraph "path" mkPath
+
+mkPath :: Int -> Edges 
+mkPath n = take n $ iterate ((\(x,y) -> (x+1,y+1)) :: (Int,Int) -> (Int,Int)) (0,1)
 
 edgesNotInPath :: Edges -> Edges
 edgesNotInPath = map (\(x,y)-> (x-1,y+1))

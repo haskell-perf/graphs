@@ -11,7 +11,10 @@ type Vertex = Int
 type Edges = [(Vertex,Vertex)]
 
 -- Generic graph with a name
-data GenericGraph = GenericGraph String Edges deriving (Show)
-
+data GenericGraph = GenericGraph {
+  name :: String,
+  mk :: Int -> Edges
+}
+  
 vertices :: Edges -> [Vertex]
-vertices = nub . concat . unzip 
+vertices = nub . concat . unzip

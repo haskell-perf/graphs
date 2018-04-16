@@ -25,19 +25,17 @@ isEmpty' = const $ Consummer "IsEmpty" isEmpty
 edgeList :: ToFuncToBench UGr
 edgeList = const $ Consummer "edgeList" edges
 
-verticexList :: ToFuncToBench UGr
-verticexList = const $ Consummer "vertexList" nodes
+vertexList :: ToFuncToBench UGr
+vertexList = const $ Consummer "vertexList" nodes
 
 hasEdge' :: ToFuncToBench UGr
 hasEdge' = FuncWithArg "hasEdge" (flip hasEdge) show 
 
 allBenchs :: [Benchmark]
-allBenchs = pathB ++ completeB 
+allBenchs = toTestComplete ++ toTestPath 
   where
-    generics = [isEmpty', edgeList, verticexList]
+    generics = [isEmpty', edgeList, vertexList]
+    
+    toTestPath = benchOver path ((hasEdge' . take 2 . edgesNotInPath) : generics) $ take 5 tenPowers
 
-    toTestPath = map benchFunc $ (hasEdge' . take 2 . edgesNotInPath) : generics
-    pathB = toTestPath <*> map mkPath (take 5 tenPowers)
-
-    toTestComplete = map benchFunc $ (hasEdge' . take 3 ): generics
-    completeB = toTestComplete <*> map mkComplete (take 3 tenPowers)
+    toTestComplete = benchOver complete ((hasEdge' . take 3 ): generics) $ take 3 tenPowers

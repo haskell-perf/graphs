@@ -8,9 +8,9 @@ import Criterion.Types
 import Criterion.Internal (runOne)
 import Criterion.Main.Options (defaultConfig)
 import Criterion.Measurement (initializeTime)
-import Criterion.IO.Printf (note, printError)
+import Criterion.IO.Printf (printError)
 import Criterion.Analysis (analyseSample)
-import Criterion.Monad (withConfig, Criterion (..))
+import Criterion.Monad (withConfig, Criterion)
 import qualified Data.Vector as V
 
 import Statistics.Types

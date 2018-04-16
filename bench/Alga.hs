@@ -12,7 +12,7 @@ import BenchGraph.Complete
 
 import BenchGraph.Utils
 
-import Algebra.Graph
+import Algebra.Graph hiding (path)
 
 -- For example with alga
 instance GraphImpl (Graph Int) where
@@ -33,13 +33,11 @@ hasEdge' :: ToFuncToBench (Graph Int)
 hasEdge' = FuncWithArg "hasEdge" (uncurry hasEdge) show
 
 allBenchs :: [Benchmark]
-allBenchs = completeB ++ pathB
+allBenchs = toTestPath ++ toTestComplete
   where
     generics = [isEmpty', edgeList', vertexList']
 
-    toTestPath = map benchFunc $ (hasEdge' . take 2 . edgesNotInPath) : generics
-    pathB = toTestPath <*> map mkPath (take 5 tenPowers)
+    toTestPath = benchOver path ((hasEdge' . take 2 . edgesNotInPath) : generics) $ take 5 tenPowers
 
-    toTestComplete = map benchFunc $ (hasEdge' . take 3 ): generics
-    completeB = toTestComplete <*> map mkComplete (take 3 tenPowers)
+    toTestComplete = benchOver complete ((hasEdge' . take 3 ): generics) $ take 3 tenPowers
 

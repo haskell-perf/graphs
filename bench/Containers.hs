@@ -11,7 +11,7 @@ import BenchGraph.Path
 
 import BenchGraph.Utils
 
-import Data.Graph
+import Data.Graph hiding (path)
 
 -- For example with alga
 instance GraphImpl Graph where
@@ -24,7 +24,7 @@ vertexList :: ToFuncToBench Graph
 vertexList = const $ Consummer "vertexList" vertices
 
 allBenchs :: [Benchmark]
-allBenchs = toTest <*> map mkPath (take 5 tenPowers)
+allBenchs = benchOver path toTest $ take 5 tenPowers
   where
-    toTest = map benchFunc [edgeList, vertexList]
+    toTest = [edgeList, vertexList]
 
