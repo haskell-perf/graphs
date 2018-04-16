@@ -20,13 +20,13 @@ instance GraphImpl (Graph Int) where
 
 -- A simple consummer
 isEmpty' :: ToFuncToBench (Graph Int)
-isEmpty' = const $ Consummer "IsEmpty" isEmpty
+isEmpty' = const $ Consumer "IsEmpty" isEmpty
 
 vertexList' :: ToFuncToBench (Graph Int)
-vertexList' = const $ Consummer "vertexList" vertexList 
+vertexList' = const $ Consumer "vertexList" vertexList 
 
 edgeList' :: ToFuncToBench (Graph Int)
-edgeList' = const $ Consummer "edgeList" edgeList
+edgeList' = const $ Consumer "edgeList" edgeList
 
 --A simple function
 hasEdge' :: ToFuncToBench (Graph Int)

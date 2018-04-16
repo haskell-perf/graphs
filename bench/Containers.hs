@@ -18,10 +18,10 @@ instance GraphImpl Graph where
   mkGraph e = buildG (0,extractMaxVertex e) e
 
 edgeList :: ToFuncToBench Graph
-edgeList = const $ Consummer "edgeList" edges
+edgeList = const $ Consumer "edgeList" edges
 
 vertexList :: ToFuncToBench Graph
-vertexList = const $ Consummer "vertexList" vertices
+vertexList = const $ Consumer "vertexList" vertices
 
 allBenchs :: [Benchmark]
 allBenchs = benchOver path toTest $ take 5 tenPowers

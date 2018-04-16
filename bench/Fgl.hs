@@ -20,13 +20,13 @@ instance GraphImpl UGr where
   mkGraph e = mkUGraph (vertices e) e
 
 isEmpty' :: ToFuncToBench UGr
-isEmpty' = const $ Consummer "IsEmpty" isEmpty
+isEmpty' = const $ Consumer "IsEmpty" isEmpty
 
 edgeList :: ToFuncToBench UGr
-edgeList = const $ Consummer "edgeList" edges
+edgeList = const $ Consumer "edgeList" edges
 
 vertexList :: ToFuncToBench UGr
-vertexList = const $ Consummer "vertexList" nodes
+vertexList = const $ Consumer "vertexList" nodes
 
 hasEdge' :: ToFuncToBench UGr
 hasEdge' = FuncWithArg "hasEdge" (flip hasEdge) show 
