@@ -28,7 +28,7 @@ edgeList' = createConsumer "edgeList" edgeList
 
 --A simple function
 hasEdge' :: ToFuncToBench (Graph Int)
-hasEdge' = ToFuncToBench "hasEdge (not in graphs)" $ FuncWithArg (uncurry hasEdge) show . take 2 . edgesNotInGraph
+hasEdge' = ToFuncToBench "hasEdge (not in graph)" $ FuncWithArg (uncurry hasEdge) show . take 2 . edgesNotInGraph
 
 allBenchs :: [Benchmark]
 allBenchs = toTest

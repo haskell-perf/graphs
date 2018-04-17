@@ -41,9 +41,11 @@ genReport todo = "# Compare benchmarks \n" ++ genReport' 2 todo
 genReport' :: Int -> [BReport] -> String
 genReport' lev arr = unlines $ map toPrint $ nub arr 
   where
-    toPrint breport = replicate lev '#' ++ " " ++ show breport ++ "\n" ++ why breport
+    toPrint breport = replicate lev '#' ++ " " ++ show breport ++ "\n" ++ case why breport of
+      "" -> "No Data"
+      oth -> oth
     why br = case br of
-      Simple{} -> unlines $ map (\(a,b,c) -> "* "++ a ++ " : "++ show (getMean c) ++ " s. (Mean)" )$ sortBy (\(_,_,a) (_,_,b) -> getMean a `compare` getMean b) $ tkSimple  $ here br
+      Simple{} -> (++) "\n" $ unlines $ map (\(a,b,c) -> "* "++ a ++ " : "++ show (getMean c) ++ " s. (Mean)" )$ sortBy (\(_,_,a) (_,_,b) -> getMean a `compare` getMean b) $ tkSimple  $ here br
       Group{} -> genReport' (lev+1) $ concat $ mapMaybe tkList $ here br 
     here e = filter (e==) arr
 
