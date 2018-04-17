@@ -3,7 +3,9 @@ language: haskell
 ghc: 8.2.2
 
 script:
-    - travis_wait 30 cabal configure --enable-benchmarks && cabal build && cabal bench compare
+    - cabal configure --enable-benchmarks 
+    - cabal build 
+    - travis_wait 30 cabal bench compare
 
 install:
     - cabal install --only-dependencies --enable-benchmarks
