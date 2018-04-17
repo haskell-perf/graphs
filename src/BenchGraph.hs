@@ -1,12 +1,13 @@
 {-# LANGUAGE ExistentialQuantification #-}
 
 module BenchGraph (
-  ToFuncToBench,
+  ToFuncToBench (..),
   FuncToBench (..),
   GraphImpl,
   benchOver,
   mkGraph,
-  benchFunc
+  benchFunc,
+  createConsumer
 ) where
 
 import Criterion.Main
@@ -16,28 +17,36 @@ import Control.Monad (ap)
 import BenchGraph.GenericGraph
 
 -- We want to pass the generic graph to create an according function to test
-type ToFuncToBench a = Edges -> FuncToBench a
+data ToFuncToBench a = ToFuncToBench String (Edges -> FuncToBench a)
 
 -- Type used to group different types of functions
-data FuncToBench a = forall b. NFData b => Consumer String (a -> b) 
-  | forall b c. NFData c => FuncWithArg String (b -> a -> c) (b -> String) [b]
+data FuncToBench a = forall b. NFData b => Consumer (a -> b) 
+  | forall b c. NFData c => FuncWithArg (b -> a -> c) (b -> String) [b]
+
+-- Allow a cleaner syntax
+createConsumer :: (NFData b)  => String -> (a->b) -> ToFuncToBench a
+createConsumer str f = ToFuncToBench str $ const $ Consumer f 
 
 -- An interface between our generic graphs and others
 class GraphImpl g where
   mkGraph :: Edges -> g
 
 -- Utilitary
-benchOver :: (GraphImpl g, NFData g) => GenericGraph -> [ToFuncToBench g] -> [Int] -> [Benchmark]
-benchOver gr tofuncs = ap (map (benchFunc gr ) tofuncs) 
+benchOver :: (GraphImpl g, NFData g) => [(GenericGraph,[Int])] -> ToFuncToBench g -> Benchmark
+benchOver lists (ToFuncToBench name mkFuncToBench) = bgroup name $ map (uncurry $ benchOver' mkFuncToBench) lists
+
+-- Once we selected a graph, we can map over its arguments
+benchOver' :: (GraphImpl g, NFData g) => (Edges -> FuncToBench g) -> GenericGraph -> [Int] -> Benchmark
+benchOver' func gr ints = bgroup (name gr) $ map (benchFunc func gr) ints
 
 -- Main function
-benchFunc :: (GraphImpl g, NFData g) => GenericGraph -> ToFuncToBench g -> Int -> Benchmark
-benchFunc gr tofunc n = benchFunc' (tofunc edges) (name gr ++ "/" ++ show n) $!! mkGraph edges
+benchFunc :: (GraphImpl g, NFData g) => (Edges -> FuncToBench g) -> GenericGraph -> Int -> Benchmark
+benchFunc func gr n = benchFunc' (func edges) (show n) $!! mkGraph edges
   where
     edges = mk gr n
 
 -- Here we bench a single function over a single graph
 benchFunc' :: GraphImpl g => FuncToBench g -> String -> g -> Benchmark
-benchFunc' (Consumer name fun) ename graph = bench (name++"/"++ename) $ nf fun graph
-benchFunc' (FuncWithArg name fun showArg args ) ename graph = bgroup (name++"/"++ename) $ map (\arg -> bench (showArg arg) $ nf (fun arg) graph) args
+benchFunc' (Consumer fun) ename graph = bench ename $ nf fun graph
+benchFunc' (FuncWithArg fun showArg args ) ename graph = bgroup ename $ map (\arg -> bench (showArg arg) $ nf (fun arg) graph) args
 

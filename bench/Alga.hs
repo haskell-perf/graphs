@@ -7,12 +7,10 @@ where
 import Criterion.Main
 
 import BenchGraph
-import BenchGraph.Path
-import BenchGraph.Complete
 
 import BenchGraph.Utils
 
-import Algebra.Graph hiding (path)
+import Algebra.Graph 
 
 -- For example with alga
 instance GraphImpl (Graph Int) where
@@ -20,24 +18,21 @@ instance GraphImpl (Graph Int) where
 
 -- A simple consummer
 isEmpty' :: ToFuncToBench (Graph Int)
-isEmpty' = const $ Consumer "IsEmpty" isEmpty
+isEmpty' = createConsumer "isEmpty" isEmpty
 
 vertexList' :: ToFuncToBench (Graph Int)
-vertexList' = const $ Consumer "vertexList" vertexList 
+vertexList' = createConsumer "vertexList" vertexList 
 
 edgeList' :: ToFuncToBench (Graph Int)
-edgeList' = const $ Consumer "edgeList" edgeList
+edgeList' = createConsumer "edgeList" edgeList
 
 --A simple function
 hasEdge' :: ToFuncToBench (Graph Int)
-hasEdge' = FuncWithArg "hasEdge" (uncurry hasEdge) show
+hasEdge' = ToFuncToBench "hasEdge (not in graphs)" $ FuncWithArg (uncurry hasEdge) show . take 2 . edgesNotInGraph
 
 allBenchs :: [Benchmark]
-allBenchs = toTestPath ++ toTestComplete
+allBenchs = toTest
   where
-    generics = [isEmpty', edgeList', vertexList']
+    generics = [hasEdge', isEmpty', edgeList', vertexList']
 
-    toTestPath = benchOver path ((hasEdge' . take 2 . edgesNotInGraph) : generics) $ take 5 tenPowers
-
-    toTestComplete = benchOver complete ((hasEdge' . take 3 ): generics) $ take 3 tenPowers
-
+    toTest = map (benchOver graphs) generics

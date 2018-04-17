@@ -7,6 +7,4 @@ Current result of `cabal bench compare` can be found here: https://travis-ci.org
 
 * Use Criterion.Report
 
-### BenchGraph.hs
-* Rework to use better bgroup
 

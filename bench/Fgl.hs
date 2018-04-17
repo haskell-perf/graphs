@@ -7,8 +7,6 @@ where
 import Criterion.Main
 
 import BenchGraph
-import BenchGraph.Path
-import BenchGraph.Complete
 import BenchGraph.GenericGraph (vertices)
 
 import BenchGraph.Utils
@@ -20,22 +18,19 @@ instance GraphImpl UGr where
   mkGraph e = mkUGraph (vertices e) e
 
 isEmpty' :: ToFuncToBench UGr
-isEmpty' = const $ Consumer "IsEmpty" isEmpty
+isEmpty' = createConsumer "isEmpty" isEmpty
 
 edgeList :: ToFuncToBench UGr
-edgeList = const $ Consumer "edgeList" edges
+edgeList = createConsumer "edgeList" edges
 
 vertexList :: ToFuncToBench UGr
-vertexList = const $ Consumer "vertexList" nodes
+vertexList = createConsumer "vertexList" nodes
 
 hasEdge' :: ToFuncToBench UGr
-hasEdge' = FuncWithArg "hasEdge" (flip hasEdge) show 
+hasEdge' = ToFuncToBench "hasEdge (not in graphs)" $ FuncWithArg (flip hasEdge) show . take 2 . edgesNotInGraph 
 
 allBenchs :: [Benchmark]
-allBenchs = toTestComplete ++ toTestPath 
+allBenchs = map (benchOver graphs) generics
   where
-    generics = [isEmpty', edgeList, vertexList]
-    
-    toTestPath = benchOver path ((hasEdge' . take 2 . edgesNotInGraph) : generics) $ take 5 tenPowers
+    generics = [hasEdge', isEmpty', edgeList, vertexList]
 
-    toTestComplete = benchOver complete ((hasEdge' . take 3 ): generics) $ take 3 tenPowers
