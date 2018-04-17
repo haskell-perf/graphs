@@ -42,7 +42,7 @@ genReport' :: Int -> [BReport] -> String
 genReport' lev arr = unlines $ map toPrint $ nub arr 
   where
     toPrint breport = replicate lev '#' ++ " " ++ show breport ++ "\n" ++ case why breport of
-      "" -> "No Data"
+      "" -> "\nNo Data\n"
       oth -> oth
     why br = case br of
       Simple{} -> (++) "\n" $ unlines $ map (\(a,b,c) -> "* "++ a ++ " : "++ show (getMean c) ++ " s. (Mean)" )$ sortBy (\(_,_,a) (_,_,b) -> getMean a `compare` getMean b) $ tkSimple  $ here br
