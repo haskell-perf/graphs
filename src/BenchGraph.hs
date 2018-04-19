@@ -15,9 +15,6 @@ import Control.DeepSeq (NFData(..), ($!!))
 
 import BenchGraph.GenericGraph
 
-type Name = String
-type Size = Int
-
 -- A graph algorithm operates on a graph type @g@, which takes an input of
 -- type @i@ and produces an output of type @o@. Algorithms come with a list of
 -- named inputs, all of which will be tried during benchmarking.
