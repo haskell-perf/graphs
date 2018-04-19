@@ -16,14 +16,14 @@ import Data.Graph
 instance GraphImpl Graph where
   mkGraph e = buildG (0,extractMaxVertex e) e
 
-edgeList :: ToFuncToBench Graph
-edgeList = createConsumer "edgeList" edges
+edgeList :: Suite Graph
+edgeList = consumer "edgeList" edges
 
-vertexList :: ToFuncToBench Graph
-vertexList = createConsumer "vertexList" vertices
+vertexList :: Suite Graph
+vertexList = consumer "vertexList" vertices
 
 allBenchs :: [Benchmark]
-allBenchs = map (benchOver graphs) toTest 
+allBenchs = map (benchmark graphs) toTest
   where
     toTest = [edgeList, vertexList]
 

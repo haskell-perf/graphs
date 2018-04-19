@@ -17,21 +17,21 @@ import Data.Graph.Inductive.PatriciaTree
 instance GraphImpl UGr where
   mkGraph e = mkUGraph (vertices e) e
 
-isEmpty' :: ToFuncToBench UGr
-isEmpty' = createConsumer "isEmpty" isEmpty
+isEmpty' :: Suite UGr
+isEmpty' = consumer "isEmpty" isEmpty
 
-edgeList :: ToFuncToBench UGr
-edgeList = createConsumer "edgeList" edges
+edgeList :: Suite UGr
+edgeList = consumer "edgeList" edges
 
-vertexList :: ToFuncToBench UGr
-vertexList = createConsumer "vertexList" nodes
+vertexList :: Suite UGr
+vertexList = consumer "vertexList" nodes
 
-hasEdge' :: ToFuncToBench UGr
-hasEdge' = ToFuncToBench "hasEdge (not in graph)" $
-    FuncToBench (flip hasEdge) . withNames . take 2 . edgesNotInGraph
+hasEdge' :: Suite UGr
+hasEdge' = Suite "hasEdge (not in graph)" $
+    Algorithm (flip hasEdge) . withNames . take 2 . edgesNotInGraph
 
 allBenchs :: [Benchmark]
-allBenchs = map (benchOver graphs) generics
+allBenchs = map (benchmark graphs) generics
   where
     generics = [hasEdge', isEmpty', edgeList, vertexList]
 

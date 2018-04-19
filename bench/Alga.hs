@@ -17,23 +17,23 @@ instance GraphImpl (Graph Int) where
   mkGraph = edges
 
 -- A simple consummer
-isEmpty' :: ToFuncToBench (Graph Int)
-isEmpty' = createConsumer "isEmpty" isEmpty
+isEmpty' :: Suite (Graph Int)
+isEmpty' = consumer "isEmpty" isEmpty
 
-vertexList' :: ToFuncToBench (Graph Int)
-vertexList' = createConsumer "vertexList" vertexList
+vertexList' :: Suite (Graph Int)
+vertexList' = consumer "vertexList" vertexList
 
-edgeList' :: ToFuncToBench (Graph Int)
-edgeList' = createConsumer "edgeList" edgeList
+edgeList' :: Suite (Graph Int)
+edgeList' = consumer "edgeList" edgeList
 
 --A simple function
-hasEdge' :: ToFuncToBench (Graph Int)
-hasEdge' = ToFuncToBench "hasEdge (not in graph)" $
-    FuncToBench (uncurry hasEdge) . withNames . take 2 . edgesNotInGraph
+hasEdge' :: Suite (Graph Int)
+hasEdge' = Suite "hasEdge (not in graph)" $
+    Algorithm (uncurry hasEdge) . withNames . take 2 . edgesNotInGraph
 
 allBenchs :: [Benchmark]
 allBenchs = toTest
   where
     generics = [hasEdge', isEmpty', edgeList', vertexList']
 
-    toTest = map (benchOver graphs) generics
+    toTest = map (benchmark graphs) generics
