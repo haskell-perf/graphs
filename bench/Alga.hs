@@ -18,18 +18,19 @@ instance GraphImpl (Graph Int) where
 
 -- A simple consummer
 isEmpty' :: Suite (Graph Int)
-isEmpty' = consumer "isEmpty" isEmpty
+isEmpty' = simpleSuite "isEmpty" isEmpty
 
 vertexList' :: Suite (Graph Int)
-vertexList' = consumer "vertexList" vertexList
+vertexList' = simpleSuite "vertexList" vertexList
 
 edgeList' :: Suite (Graph Int)
-edgeList' = consumer "edgeList" edgeList
+edgeList' = simpleSuite "edgeList" edgeList
 
 --A simple function
 hasEdge' :: Suite (Graph Int)
-hasEdge' = Suite "hasEdge (not in graph)" (uncurry hasEdge) $
-    withNames . take 2 . edgesNotInGraph
+hasEdge' = Suite { suiteName = "hasEdge (not in graph)"
+                 , algorithm = uncurry hasEdge
+                 , inputs    = withNames . take 2 . edgesNotInGraph }
 
 allBenchs :: [Benchmark]
 allBenchs = toTest

@@ -18,13 +18,13 @@ instance GraphImpl UGr where
   mkGraph e = mkUGraph (vertices e) e
 
 isEmpty' :: Suite UGr
-isEmpty' = consumer "isEmpty" isEmpty
+isEmpty' = simpleSuite "isEmpty" isEmpty
 
 edgeList :: Suite UGr
-edgeList = consumer "edgeList" edges
+edgeList = simpleSuite "edgeList" edges
 
 vertexList :: Suite UGr
-vertexList = consumer "vertexList" nodes
+vertexList = simpleSuite "vertexList" nodes
 
 hasEdge' :: Suite UGr
 hasEdge' = Suite "hasEdge (not in graph)" (flip hasEdge) $

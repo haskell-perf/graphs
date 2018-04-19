@@ -17,10 +17,10 @@ instance GraphImpl Graph where
   mkGraph e = buildG (0,extractMaxVertex e) e
 
 edgeList :: Suite Graph
-edgeList = consumer "edgeList" edges
+edgeList = simpleSuite "edgeList" edges
 
 vertexList :: Suite Graph
-vertexList = consumer "vertexList" vertices
+vertexList = simpleSuite "vertexList" vertices
 
 allBenchs :: [Benchmark]
 allBenchs = map (benchmark graphs) toTest
