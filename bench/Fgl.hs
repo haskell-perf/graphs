@@ -27,8 +27,8 @@ vertexList :: Suite UGr
 vertexList = consumer "vertexList" nodes
 
 hasEdge' :: Suite UGr
-hasEdge' = Suite "hasEdge (not in graph)" $
-    Algorithm (flip hasEdge) . withNames . take 2 . edgesNotInGraph
+hasEdge' = Suite "hasEdge (not in graph)" (flip hasEdge) $
+    withNames . take 2 . edgesNotInGraph
 
 allBenchs :: [Benchmark]
 allBenchs = map (benchmark graphs) generics

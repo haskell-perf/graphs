@@ -28,8 +28,8 @@ edgeList' = consumer "edgeList" edgeList
 
 --A simple function
 hasEdge' :: Suite (Graph Int)
-hasEdge' = Suite "hasEdge (not in graph)" $
-    Algorithm (uncurry hasEdge) . withNames . take 2 . edgesNotInGraph
+hasEdge' = Suite "hasEdge (not in graph)" (uncurry hasEdge) $
+    withNames . take 2 . edgesNotInGraph
 
 allBenchs :: [Benchmark]
 allBenchs = toTest
