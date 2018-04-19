@@ -24,7 +24,7 @@ library
                        BenchGraph.Utils
   -- other-modules:
   other-extensions:    ExistentialQuantification
-  build-depends:       base >=4.10 && <4.11,
+  build-depends:       base >= 4.11 && <4.12,
                        criterion >=1.3 && <1.4,
                        deepseq >=1.4 && <1.5
   hs-source-dirs:      src
@@ -35,8 +35,8 @@ benchmark alga
     type:               exitcode-stdio-1.0
     main-is:            AlgaRun.hs
     other-modules:      Alga
-    build-depends:      algebraic-graphs >= 0.1.1,
-                        base        >= 4.10    && < 4.11,
+    build-depends:      algebraic-graphs >= 0.1.1.1,
+                        base        >= 4.11    && < 4.12,
                         criterion   >= 1.3     && < 1.4,
                         bench-graph
     default-language:   Haskell2010
@@ -48,7 +48,7 @@ benchmark containers
     type:               exitcode-stdio-1.0
     main-is:            ContainersRun.hs
     other-modules:      Containers
-    build-depends:      base        >= 4.10    && < 4.11,
+    build-depends:      base        >= 4.11    && < 4.12,
                         containers  >= 0.5.5.1 && < 0.8,
                         criterion   >= 1.3     && < 1.4,
                         bench-graph
@@ -61,7 +61,7 @@ benchmark fgl
     type:               exitcode-stdio-1.0
     main-is:            FglRun.hs
     other-modules:      Fgl
-    build-depends:      base        >= 4.10    && < 4.11,
+    build-depends:      base        >= 4.11    && < 4.12,
                         fgl >= 5.5.4.0,
                         containers  >= 0.5.5.1 && < 0.8,
                         criterion   >= 1.3     && < 1.4,
@@ -75,11 +75,11 @@ benchmark compare
     type:               exitcode-stdio-1.0
     main-is:            Main.hs
     other-modules:      Alga, Containers, Fgl
-    build-depends:      base        >= 4.10    && < 4.11,
+    build-depends:      base        >= 4.11    && < 4.12,
                         fgl         >= 5.5.4.0,
                         containers  >= 0.5.5.1 && < 0.8,
                         criterion   >= 1.3     && < 1.4,
-                        algebraic-graphs >= 0.1.1,
+                        algebraic-graphs >= 0.1.1.1,
                         statistics,
                         vector,
                         mtl,
