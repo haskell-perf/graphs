@@ -2,7 +2,7 @@
 
 module BenchGraph (
   ToFuncToBench (..),
-  FuncToBench (..),
+  FuncToBench (..), withNames,
   GraphImpl,
   benchOver,
   mkGraph,
@@ -12,20 +12,22 @@ module BenchGraph (
 
 import Criterion.Main
 import Control.DeepSeq (NFData(..), ($!!))
-import Control.Monad (ap)
 
 import BenchGraph.GenericGraph
 
--- We want to pass the generic graph to create an according function to test
-data ToFuncToBench a = ToFuncToBench String (Edges -> FuncToBench a)
+type Name = String
 
--- Type used to group different types of functions
-data FuncToBench a = forall b. NFData b => Consumer (a -> b) 
-  | forall b c. NFData c => FuncWithArg (b -> a -> c) (b -> String) [b]
+-- We want to pass the generic graph to create an according function to test
+data ToFuncToBench a = ToFuncToBench Name (Edges -> FuncToBench a)
+
+data FuncToBench a = forall i o. NFData o => FuncToBench (i -> a -> o) [(Name, i)]
+
+withNames :: Show a => [a] -> [(Name, a)]
+withNames = map (\x -> (show x, x))
 
 -- Allow a cleaner syntax
 createConsumer :: (NFData b)  => String -> (a->b) -> ToFuncToBench a
-createConsumer str f = ToFuncToBench str $ const $ Consumer f 
+createConsumer str f = ToFuncToBench str $ const $ FuncToBench (\() -> f) [(str, ())]
 
 -- An interface between our generic graphs and others
 class GraphImpl g where
@@ -46,7 +48,7 @@ benchFunc func gr n = benchFunc' (func edges) (show n) $!! mkGraph edges
     edges = mk gr n
 
 -- Here we bench a single function over a single graph
-benchFunc' :: GraphImpl g => FuncToBench g -> String -> g -> Benchmark
-benchFunc' (Consumer fun) ename graph = bench ename $ nf fun graph
-benchFunc' (FuncWithArg fun showArg args ) ename graph = bgroup ename $ map (\arg -> bench (showArg arg) $ nf (fun arg) graph) args
+benchFunc' :: GraphImpl g => FuncToBench g -> Name -> g -> Benchmark
+benchFunc' (FuncToBench f is) name graph =
+    bgroup name $ map (\(s, i) -> bench s $ nf (f i) graph) is
 

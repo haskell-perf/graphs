@@ -27,7 +27,8 @@ vertexList :: ToFuncToBench UGr
 vertexList = createConsumer "vertexList" nodes
 
 hasEdge' :: ToFuncToBench UGr
-hasEdge' = ToFuncToBench "hasEdge (not in graph)" $ FuncWithArg (flip hasEdge) show . take 2 . edgesNotInGraph 
+hasEdge' = ToFuncToBench "hasEdge (not in graph)" $
+    FuncToBench (flip hasEdge) . withNames . take 2 . edgesNotInGraph
 
 allBenchs :: [Benchmark]
 allBenchs = map (benchOver graphs) generics

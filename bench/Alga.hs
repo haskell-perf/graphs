@@ -10,7 +10,7 @@ import BenchGraph
 
 import BenchGraph.Utils
 
-import Algebra.Graph 
+import Algebra.Graph
 
 -- For example with alga
 instance GraphImpl (Graph Int) where
@@ -21,14 +21,15 @@ isEmpty' :: ToFuncToBench (Graph Int)
 isEmpty' = createConsumer "isEmpty" isEmpty
 
 vertexList' :: ToFuncToBench (Graph Int)
-vertexList' = createConsumer "vertexList" vertexList 
+vertexList' = createConsumer "vertexList" vertexList
 
 edgeList' :: ToFuncToBench (Graph Int)
 edgeList' = createConsumer "edgeList" edgeList
 
 --A simple function
 hasEdge' :: ToFuncToBench (Graph Int)
-hasEdge' = ToFuncToBench "hasEdge (not in graph)" $ FuncWithArg (uncurry hasEdge) show . take 2 . edgesNotInGraph
+hasEdge' = ToFuncToBench "hasEdge (not in graph)" $
+    FuncToBench (uncurry hasEdge) . withNames . take 2 . edgesNotInGraph
 
 allBenchs :: [Benchmark]
 allBenchs = toTest
