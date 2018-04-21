@@ -10,29 +10,31 @@ import BenchGraph
 
 import BenchGraph.Utils
 
-import Algebra.Graph 
+import Algebra.Graph
 
 -- For example with alga
 instance GraphImpl (Graph Int) where
   mkGraph = edges
 
 -- A simple consummer
-isEmpty' :: ToFuncToBench (Graph Int)
-isEmpty' = createConsumer "isEmpty" isEmpty
+isEmpty' :: Suite (Graph Int)
+isEmpty' = simpleSuite "isEmpty" isEmpty
 
-vertexList' :: ToFuncToBench (Graph Int)
-vertexList' = createConsumer "vertexList" vertexList 
+vertexList' :: Suite (Graph Int)
+vertexList' = simpleSuite "vertexList" vertexList
 
-edgeList' :: ToFuncToBench (Graph Int)
-edgeList' = createConsumer "edgeList" edgeList
+edgeList' :: Suite (Graph Int)
+edgeList' = simpleSuite "edgeList" edgeList
 
 --A simple function
-hasEdge' :: ToFuncToBench (Graph Int)
-hasEdge' = ToFuncToBench "hasEdge (not in graph)" $ FuncWithArg (uncurry hasEdge) show . take 2 . edgesNotInGraph
+hasEdge' :: Suite (Graph Int)
+hasEdge' = Suite { suiteName = "hasEdge (not in graph)"
+                 , algorithm = uncurry hasEdge
+                 , inputs    = withNames . take 2 . edgesNotInGraph }
 
 allBenchs :: [Benchmark]
 allBenchs = toTest
   where
     generics = [hasEdge', isEmpty', edgeList', vertexList']
 
-    toTest = map (benchOver graphs) generics
+    toTest = map (benchmark graphs) generics

@@ -1,52 +1,50 @@
 {-# LANGUAGE ExistentialQuantification #-}
 
 module BenchGraph (
-  ToFuncToBench (..),
-  FuncToBench (..),
+  Suite (..),
+  simpleSuite,
+  withNames,
   GraphImpl,
-  benchOver,
   mkGraph,
-  benchFunc,
-  createConsumer
+  benchmark
 ) where
 
 import Criterion.Main
 import Control.DeepSeq (NFData(..), ($!!))
-import Control.Monad (ap)
 
 import BenchGraph.GenericGraph
 
--- We want to pass the generic graph to create an according function to test
-data ToFuncToBench a = ToFuncToBench String (Edges -> FuncToBench a)
+-- A graph algorithm operates on a graph type @g@, which takes an input of
+-- type @i@ and produces an output of type @o@. Algorithms come with a list of
+-- named inputs, all of which will be tried during benchmarking.
+data Suite g = forall i o. NFData o => Suite
+    { suiteName :: Name
+    , algorithm :: i -> g -> o
+    , inputs    :: Edges -> [(Name, i)] }
 
--- Type used to group different types of functions
-data FuncToBench a = forall b. NFData b => Consumer (a -> b) 
-  | forall b c. NFData c => FuncWithArg (b -> a -> c) (b -> String) [b]
+-- Not the best name, but still better than "consumer", since all algorithms
+-- are consumers.
+simpleSuite :: NFData o => Name -> (g -> o) -> Suite g
+simpleSuite name algorithm = Suite name (const algorithm) (const [("", ())])
 
--- Allow a cleaner syntax
-createConsumer :: (NFData b)  => String -> (a->b) -> ToFuncToBench a
-createConsumer str f = ToFuncToBench str $ const $ Consumer f 
+-- Show items in a list
+withNames :: Show a => [a] -> [(Name, a)]
+withNames = map (\x -> (show x, x))
 
 -- An interface between our generic graphs and others
 class GraphImpl g where
-  mkGraph :: Edges -> g
+    mkGraph :: Edges -> g
 
--- Utilitary
-benchOver :: (GraphImpl g, NFData g) => [(GenericGraph,[Int])] -> ToFuncToBench g -> Benchmark
-benchOver lists (ToFuncToBench name mkFuncToBench) = bgroup name $ map (uncurry $ benchOver' mkFuncToBench) lists
-
--- Once we selected a graph, we can map over its arguments
-benchOver' :: (GraphImpl g, NFData g) => (Edges -> FuncToBench g) -> GenericGraph -> [Int] -> Benchmark
-benchOver' func gr ints = bgroup (name gr) $ map (benchFunc func gr) ints
+benchmark :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Benchmark
+benchmark graphs (Suite sname algo inputs) = bgroup sname cases
+  where
+    cases = [ bgroup (name g) $ map (benchSuite algo inputs g) ss | (g, ss) <- graphs ]
 
 -- Main function
-benchFunc :: (GraphImpl g, NFData g) => (Edges -> FuncToBench g) -> GenericGraph -> Int -> Benchmark
-benchFunc func gr n = benchFunc' (func edges) (show n) $!! mkGraph edges
+benchSuite :: (GraphImpl g, NFData g, NFData o)
+    => (i -> g -> o) -> (Edges -> [(Name, i)]) -> GenericGraph -> Size -> Benchmark
+benchSuite algorithm inputs g size = bgroup (show size) cases
   where
-    edges = mk gr n
-
--- Here we bench a single function over a single graph
-benchFunc' :: GraphImpl g => FuncToBench g -> String -> g -> Benchmark
-benchFunc' (Consumer fun) ename graph = bench ename $ nf fun graph
-benchFunc' (FuncWithArg fun showArg args ) ename graph = bgroup ename $ map (\arg -> bench (showArg arg) $ nf (fun arg) graph) args
-
+    edges = mk g size
+    graph = mkGraph edges
+    cases = [ bench name $ nf (algorithm i) $!! graph | (name, i) <- inputs edges ]

@@ -26,27 +26,27 @@ instance Show BReport where
   show (Group name _) = name
 
 instance Ord BReport where
-  a <= b = show a <= show b 
+  a <= b = show a <= show b
 
 instance Eq BReport where
-  a == b = show a == show b 
+  a == b = show a == show b
 
 runSingleBenchmark :: String -> Benchmark -> IO BReport
 runSingleBenchmark str (Benchmark name benchm) = Simple str name <$> benchmarkWithoutOutput benchm
 runSingleBenchmark str (BenchGroup name benchmarks) = Group name <$> mapM (runSingleBenchmark str) benchmarks
 
-genReport :: [BReport] -> String 
+genReport :: [BReport] -> String
 genReport todo = "# Compare benchmarks \n" ++ genReport' 2 todo
 
 genReport' :: Int -> [BReport] -> String
-genReport' lev arr = unlines $ map toPrint $ nub arr 
+genReport' lev arr = unlines $ map toPrint $ nub arr
   where
     toPrint breport = replicate lev '#' ++ " " ++ show breport ++ "\n" ++ case why breport of
       "" -> "\nNo Data\n"
       oth -> oth
     why br = case br of
       Simple{} -> (++) "\n" $ unlines $ map (\(a,b,c) -> "* "++ a ++ " : "++ show (getMean c) ++ " s. (Mean)" )$ sortBy (\(_,_,a) (_,_,b) -> getMean a `compare` getMean b) $ tkSimple  $ here br
-      Group{} -> genReport' (lev+1) $ concat $ mapMaybe tkList $ here br 
+      Group{} -> genReport' (lev+1) $ concat $ mapMaybe tkList $ here br
     here e = filter (e==) arr
 
 tkSimple :: [BReport] -> [(String,String,Report)]
@@ -86,6 +86,6 @@ analyseOne i desc meas = do
 main :: IO ()
 main = do
   let todo = [("Alga",Alga.allBenchs), ("Containers",Containers.allBenchs), ("Fgl", Fgl.allBenchs)]
-  allBenchs <- mapM (\(x,y) -> mapM (runSingleBenchmark x) y) todo 
-  putStrLn $ genReport $ sort $ concat allBenchs 
+  allBenchs <- mapM (\(x,y) -> mapM (runSingleBenchmark x) y) todo
+  putStrLn $ genReport $ sort $ concat allBenchs
   return ()
