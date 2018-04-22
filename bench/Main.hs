@@ -1,6 +1,7 @@
-import Data.List (sort, sortBy, filter, nub)
+import Data.List (sortBy, filter, nubBy)
 import Data.Maybe (mapMaybe)
 
+import Control.Monad (unless)
 import Control.Monad.Except (runExceptT)
 
 import Criterion
@@ -19,49 +20,49 @@ import qualified Alga
 import qualified Containers
 import qualified Fgl
 
-data BReport = Simple String String Report | Group String [BReport]
+showBenchmark :: Benchmark -> String
+showBenchmark (Benchmark name _) = name
+showBenchmark (BenchGroup name _) = name
 
-instance Show BReport where
-  show (Simple _ name _) = name
-  show (Group name _) = name
+instance Eq Benchmark where
+  a == b = showBenchmark a == showBenchmark b
 
-instance Ord BReport where
-  a <= b = show a <= show b
+genReport :: [(String,Benchmark)] -> IO()
+genReport todo = do
+  putStrLn "# Compare benchmarks" 
+  genReport' 2 todo
 
-instance Eq BReport where
-  a == b = show a == show b
-
-runSingleBenchmark :: String -> Benchmark -> IO BReport
-runSingleBenchmark str (Benchmark name benchm) = Simple str name <$> benchmarkWithoutOutput benchm
-runSingleBenchmark str (BenchGroup name benchmarks) = Group name <$> mapM (runSingleBenchmark str) benchmarks
-
-genReport :: [BReport] -> String
-genReport todo = "# Compare benchmarks \n" ++ genReport' 2 todo
-
-genReport' :: Int -> [BReport] -> String
-genReport' lev arr = unlines $ map toPrint $ nub arr
+genReport' :: Int -> [(String,Benchmark)] -> IO()
+genReport' _ [] = putStrLn "\nNo data\n"
+genReport' lev arr = mapM_ toPrint $ nubBy (\(_,a) (_,b) -> a == b) arr
   where
-    toPrint breport = replicate lev '#' ++ " " ++ show breport ++ "\n" ++ case why breport of
-      "" -> "\nNo Data\n"
-      oth -> oth
-    why br = case br of
-      Simple{} -> (++) "\n" $ unlines $ map (\(a,b,c) -> "* "++ a ++ " : "++ show (getMean c) ++ " s. (Mean)" )$ sortBy (\(_,_,a) (_,_,b) -> getMean a `compare` getMean b) $ tkSimple  $ here br
-      Group{} -> genReport' (lev+1) $ concat $ mapMaybe tkList $ here br
-    here e = filter (e==) arr
+    toPrint (_, breport) = do
+        let name = showBenchmark breport
+        unless (null name) $ putStrLn $ replicate lev '#' ++ " " ++ showBenchmark breport
+        case breport of
+          Benchmark{} -> do
+            simples <- sequence $ mapMaybe tkSimple $ here breport
+            putStrLn $ "\n" ++ showSimples simples
+          BenchGroup{} -> genReport' (lev+1) $ concatMap tkChilds $ here breport
+    here e = filter (\(_,b) -> e==b) arr
 
-tkSimple :: [BReport] -> [(String,String,Report)]
-tkSimple = mapMaybe (\x -> case x of
-                       Simple a b c -> Just (a,b,c)
-                       Group _ _ -> Nothing)
+tkSimple :: (String, Benchmark) -> Maybe (IO (String, Double))
+tkSimple (libName,Benchmark _ b) = Just $ benchmarkWithoutOutput b >>= \x -> return (libName, getMean x)
+tkSimple (_,BenchGroup{}) = Nothing
 
-tkList :: BReport -> Maybe [BReport]
-tkList Simple{} = Nothing
-tkList (Group _ b) = Just b
+showSimples :: [(String,Double)] -> String
+showSimples = unlines . map shw . sortBy (\(_,t1) (_,t2) -> t1 `compare` t2)
+  where
+    shw (libname, time) = "* " ++ libname ++ " : " ++ show time ++ " s. (Mean)"
+
+tkChilds :: (String,Benchmark) -> [(String,Benchmark)]
+tkChilds (_,Benchmark{}) = []
+tkChilds (lib,BenchGroup _ childs) = insertName lib childs
 
 getMean :: Report -> Double
 getMean = estPoint . anMean . reportAnalysis
 
-benchmarkWithoutOutput :: Benchmarkable -> IO Report
+benchmarkWithoutOutput :: Benchmarkable -> IO Report 
 benchmarkWithoutOutput bm = do
   initializeTime
   withConfig defaultConfig $ do
@@ -69,13 +70,13 @@ benchmarkWithoutOutput bm = do
     return rpt
 
 -- | Running a benchmark print many informations on stdout, we don't want that, so we redefine the according functions
--- | Run a single benchmark and analyse its performance (took from Criterion.Internal sources, unmodified)
+-- | Run a single benchmark and analyse its performance (taken from Criterion.Internal sources, unmodified)
 runAndAnalyseOne :: Int -> String -> Benchmarkable -> Criterion DataRecord
 runAndAnalyseOne i desc bm = do
   Measurement _ _ meas <- runOne i desc bm
   analyseOne i desc meas
 
--- | Analyse a single benchmark (took from Criterion.Internal sources, modified)
+-- | Analyse a single benchmark (taken from Criterion.Internal sources, modified)
 analyseOne :: Int -> String -> V.Vector Measured -> Criterion DataRecord
 analyseOne i desc meas = do
   erp <- runExceptT $ analyseSample i desc meas
@@ -84,8 +85,7 @@ analyseOne i desc meas = do
     Right rpt -> return (Analysed rpt)
 
 main :: IO ()
-main = do
-  let todo = [("Alga",Alga.allBenchs), ("Containers",Containers.allBenchs), ("Fgl", Fgl.allBenchs)]
-  allBenchs <- mapM (\(x,y) -> mapM (runSingleBenchmark x) y) todo
-  putStrLn $ genReport $ sort $ concat allBenchs
-  return ()
+main = genReport $ concatMap (uncurry insertName) [("Alga",Alga.allBenchs), ("Containers",Containers.allBenchs), ("Fgl",Fgl.allBenchs)]
+
+insertName :: String -> [i] -> [(String,i)]
+insertName name = map (\x -> (name, x))
