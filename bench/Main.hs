@@ -6,7 +6,7 @@ import Control.Monad.Except (runExceptT)
 
 import Criterion
 import Criterion.Types
-import Criterion.Internal (runOne)
+import Criterion.Internal -- (runOne)
 import Criterion.Main.Options (defaultConfig)
 import Criterion.Measurement (initializeTime)
 import Criterion.IO.Printf (printError)
@@ -65,25 +65,12 @@ getMean = estPoint . anMean . reportAnalysis
 benchmarkWithoutOutput :: Benchmarkable -> IO Report 
 benchmarkWithoutOutput bm = do
   initializeTime
-  withConfig defaultConfig $ do
+  withConfig defaultConfig' $ do
     Analysed rpt <- runAndAnalyseOne 0 "function" bm
     return rpt
-
--- | Running a benchmark print many informations on stdout, we don't want that, so we redefine the according functions
--- | Run a single benchmark and analyse its performance (taken from Criterion.Internal sources, unmodified)
-runAndAnalyseOne :: Int -> String -> Benchmarkable -> Criterion DataRecord
-runAndAnalyseOne i desc bm = do
-  Measurement _ _ meas <- runOne i desc bm
-  analyseOne i desc meas
-
--- | Analyse a single benchmark (taken from Criterion.Internal sources, modified)
-analyseOne :: Int -> String -> V.Vector Measured -> Criterion DataRecord
-analyseOne i desc meas = do
-  erp <- runExceptT $ analyseSample i desc meas
-  case erp of
-    Left err -> printError "*** Error: %s\n" err
-    Right rpt -> return (Analysed rpt)
-
+  where
+    defaultConfig' = defaultConfig {verbosity = Quiet}
+    
 main :: IO ()
 main = genReport $ concatMap (uncurry insertName) [("Alga",Alga.allBenchs), ("Containers",Containers.allBenchs), ("Fgl",Fgl.allBenchs)]
 
