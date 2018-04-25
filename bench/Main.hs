@@ -14,6 +14,7 @@ import Statistics.Types
 import qualified Alga
 import qualified Containers
 import qualified Fgl
+import qualified HashGraph
 
 showBenchmark :: Benchmark -> String
 showBenchmark (Benchmark name _) = name
@@ -76,4 +77,4 @@ insertName :: String -> [i] -> [(String,i)]
 insertName name = map (\x -> (name, x))
 
 main :: IO ()
-main = genReport $ concatMap (uncurry insertName) [("Alga",Alga.allBenchs), ("Containers",Containers.allBenchs), ("Fgl",Fgl.allBenchs)]
+main = genReport $ concatMap (uncurry insertName) [("Alga",Alga.allBenchs), ("Containers",Containers.allBenchs), ("Fgl",Fgl.allBenchs), ("HashGraph", HashGraph.allBenchs)]
