@@ -1,3 +1,7 @@
-resolver: nightly-2018-04-19
+# Don't use stack for benchmark on travis: https://github.com/commercialhaskell/stack/issues/2279
+resolver: lts-11.6
 packages:
-- '.'
+  - '.'
+extra-deps:
+  - git: https://github.com/patrickdoc/hash-graph.git
+    commit: 30cbaa1192c9f74cb5404b5587713db9106b8b4c
