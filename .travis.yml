@@ -2,14 +2,12 @@ language: haskell
 
 ghc: 8.2.2
 
-before_script:
-  - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph
-  - cabal install /tmp/hash-graph
-
 script:
     - cabal configure --enable-benchmarks 
     - cabal build 
     - travis_wait cabal bench compare
 
 install:
+    - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph
+    - cabal install /tmp/hash-graph
     - cabal install --only-dependencies --enable-benchmarks
