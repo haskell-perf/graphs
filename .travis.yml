@@ -4,8 +4,8 @@ ghc: 8.2.2
 
 script:
     - cabal configure --enable-benchmarks 
-    - cabal build 
-    - travis_wait cabal bench compare
+    - cabal build
+    - travis_wait 30 cabal bench compare
 
 install:
     - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph
