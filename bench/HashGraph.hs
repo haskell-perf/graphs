@@ -13,13 +13,13 @@ import BenchGraph.Utils
 
 import qualified Data.HashGraph.Strict as HG
 
-type Gr = HG.Gr Int Int
+type Gr = HG.Gr () Int
 
 instance GraphImpl Gr where
   mkGraph e = HG.mkGraph (map mkEdge e) (vertices e)
 
-mkEdge :: (Int,Int) -> HG.Edge Int Int
-mkEdge (x,y) = HG.Edge x 0 y
+mkEdge :: (Int,Int) -> HG.Edge () Int
+mkEdge (x,y) = HG.Edge x () y
 
 isEmpty' :: Suite Gr
 isEmpty' = simpleSuite "isEmpty" HG.null 
