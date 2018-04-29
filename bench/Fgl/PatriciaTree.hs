@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 
-module Fgl
+module Fgl.PatriciaTree
 (allBenchs)
 where
 

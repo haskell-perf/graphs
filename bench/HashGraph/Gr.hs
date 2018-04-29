@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 
-module HashGraph 
+module HashGraph.Gr 
 (allBenchs)
 where
 

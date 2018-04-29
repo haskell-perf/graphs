@@ -1,5 +1,5 @@
 import Criterion.Main
-import HashGraph
+import Fgl.PatriciaTree
 
 main :: IO ()
 main = defaultMain allBenchs 

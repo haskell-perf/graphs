@@ -1,5 +1,5 @@
 import Criterion.Main
-import Containers
+import HashGraph.Gr
 
 main :: IO ()
 main = defaultMain allBenchs 

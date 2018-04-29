@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 
-module Alga
+module Alga.NonEmptyGraph
 (allBenchs)
 where
 
@@ -10,24 +10,21 @@ import BenchGraph
 
 import BenchGraph.Utils
 
-import Algebra.Graph
+import Algebra.Graph.NonEmpty
 
--- For example with alga
-instance GraphImpl (Graph Int) where
-  mkGraph = edges
+import qualified Data.List.NonEmpty as NE
 
--- A simple consummer
-isEmpty' :: Suite (Graph Int)
-isEmpty' = simpleSuite "isEmpty" isEmpty
+instance GraphImpl (NonEmptyGraph Int) where
+  mkGraph = edges1 . NE.fromList
 
-vertexList' :: Suite (Graph Int)
-vertexList' = simpleSuite "vertexList" vertexList
+vertexList' :: Suite (NonEmptyGraph Int)
+vertexList' = simpleSuite "vertexList" vertexList1
 
-edgeList' :: Suite (Graph Int)
+edgeList' :: Suite (NonEmptyGraph Int)
 edgeList' = simpleSuite "edgeList" edgeList
 
 --A simple function
-hasEdge' :: Suite (Graph Int)
+hasEdge' :: Suite (NonEmptyGraph Int)
 hasEdge' = Suite { suiteName = "hasEdge (not in graph)"
                  , algorithm = uncurry hasEdge
                  , inputs    = withNames . take 2 . edgesNotInGraph }
@@ -35,6 +32,6 @@ hasEdge' = Suite { suiteName = "hasEdge (not in graph)"
 allBenchs :: [Benchmark]
 allBenchs = toTest
   where
-    generics = [hasEdge', isEmpty', edgeList', vertexList']
+    generics = [hasEdge', edgeList', vertexList']
 
     toTest = map (benchmark graphs) generics

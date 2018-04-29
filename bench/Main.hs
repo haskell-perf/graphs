@@ -11,10 +11,11 @@ import Criterion.Monad (withConfig)
 
 import Statistics.Types
 
-import qualified Alga
-import qualified Containers
-import qualified Fgl
-import qualified HashGraph
+import qualified Alga.Graph
+import qualified Alga.NonEmptyGraph
+import qualified Containers.Graph
+import qualified Fgl.PatriciaTree
+import qualified HashGraph.Gr
 
 showBenchmark :: Benchmark -> String
 showBenchmark (Benchmark name _) = name
@@ -77,4 +78,9 @@ insertName :: String -> [i] -> [(String,i)]
 insertName name = map (\x -> (name, x))
 
 main :: IO ()
-main = genReport $ concatMap (uncurry insertName) [("Alga",Alga.allBenchs), ("Containers",Containers.allBenchs), ("Fgl",Fgl.allBenchs), ("HashGraph", HashGraph.allBenchs)]
+main = genReport $ concatMap (uncurry insertName) [
+  ("Alga (Algebra.Graph)",Alga.Graph.allBenchs),
+  ("Alga (Algebra.Graph.NonEmpty)",Alga.NonEmptyGraph.allBenchs),
+  ("Containers (Data.Graph)",Containers.Graph.allBenchs),
+  ("Fgl (Data.Graph.Inductive.PatriciaTree)",Fgl.PatriciaTree.allBenchs),
+  ("Hash-Graph (Data.HashGraph.Strict)", HashGraph.Gr.allBenchs)]

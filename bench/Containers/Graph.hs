@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 
-module Containers
+module Containers.Graph 
 (allBenchs)
 where
 

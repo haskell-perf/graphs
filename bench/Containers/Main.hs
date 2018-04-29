@@ -1,5 +1,5 @@
 import Criterion.Main
-import Alga
+import Containers.Graph
 
 main :: IO ()
 main = defaultMain allBenchs 
