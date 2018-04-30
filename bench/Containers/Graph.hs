@@ -1,10 +1,8 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Containers.Graph 
-(allBenchs)
+(functions)
 where
-
-import Criterion.Main
 
 import BenchGraph
 
@@ -22,8 +20,6 @@ edgeList = simpleSuite "edgeList" edges
 vertexList :: Suite Graph
 vertexList = simpleSuite "vertexList" vertices
 
-allBenchs :: [Benchmark]
-allBenchs = map (benchmark graphs) toTest
-  where
-    toTest = [edgeList, vertexList]
+functions :: [Suite Graph]
+functions = [edgeList, vertexList]
 

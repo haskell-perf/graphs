@@ -1,6 +1,13 @@
-import Criterion.Main
-import qualified Alga.Graph
-import qualified Alga.NonEmptyGraph
+import Criterion.Main (defaultMain)
+import Weigh (mainWith)
+
+import qualified Alga.Graph (functions)
+import qualified Alga.NonEmptyGraph (functions)
+
+import BenchGraph (allBenchs, allWeighs)
 
 main :: IO ()
-main = defaultMain $ Alga.Graph.allBenchs ++ Alga.NonEmptyGraph.allBenchs  
+main = do
+  defaultMain $ allBenchs Alga.Graph.functions ++ allBenchs Alga.NonEmptyGraph.functions
+  mainWith $ allWeighs Alga.Graph.functions
+  mainWith $ allWeighs Alga.NonEmptyGraph.functions

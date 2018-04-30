@@ -1,5 +1,11 @@
-import Criterion.Main
-import Containers.Graph
+import Criterion.Main (defaultMain)
+import Weigh (mainWith)
+
+import Containers.Graph (functions)
+
+import BenchGraph (allBenchs,allWeighs)
 
 main :: IO ()
-main = defaultMain allBenchs 
+main = do
+  defaultMain $ allBenchs functions
+  mainWith $ allWeighs functions

@@ -1,10 +1,8 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module HashGraph.Gr 
-(allBenchs)
+(functions)
 where
-
-import Criterion.Main
 
 import BenchGraph
 import BenchGraph.GenericGraph (vertices)
@@ -34,8 +32,6 @@ hasEdge' :: Suite Gr
 hasEdge' = Suite "hasEdge (not in graph)" HG.hasEdge $
     map (\(x,y)->(x,mkEdge y)) . withNames . take 2 . edgesNotInGraph
 
-allBenchs :: [Benchmark]
-allBenchs = map (benchmark graphs) generics
-  where
-    generics = [hasEdge', isEmpty', edgeList, vertexList]
+functions :: [Suite Gr]
+functions = [hasEdge', isEmpty', edgeList, vertexList]
 

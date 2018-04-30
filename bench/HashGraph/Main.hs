@@ -1,5 +1,11 @@
-import Criterion.Main
-import HashGraph.Gr
+import Criterion.Main (defaultMain)
+import Weigh (mainWith)
+
+import HashGraph.Gr (functions)
+
+import BenchGraph (allBenchs,allWeighs)
 
 main :: IO ()
-main = defaultMain allBenchs 
+main = do
+  defaultMain $ allBenchs functions
+  mainWith $ allWeighs functions

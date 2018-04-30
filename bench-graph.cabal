@@ -26,7 +26,8 @@ library
   other-extensions:    ExistentialQuantification
   build-depends:       base      >= 4.7 && < 4.12,
                        criterion >= 1.3 && < 1.5,
-                       deepseq   >= 1.4 && < 1.5
+                       deepseq   >= 1.4 && < 1.5,
+                       weigh     >= 0.0.11
   hs-source-dirs:      src
   default-language:    Haskell2010
 
@@ -39,6 +40,7 @@ benchmark alga
     build-depends:      algebraic-graphs >= 0.1.1.1,
                         base             >= 4.7     && < 4.12,
                         criterion        >= 1.3     && < 1.5,
+                        weigh            >= 0.0.11,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
@@ -52,6 +54,7 @@ benchmark containers
     build-depends:      base        >= 4.7     && < 4.12,
                         containers  >= 0.5.5.1 && < 0.8,
                         criterion   >= 1.3     && < 1.5,
+                        weigh            >= 0.0.11,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
@@ -66,6 +69,7 @@ benchmark fgl
                         fgl         >= 5.5.4.0,
                         containers  >= 0.5.5.1 && < 0.8,
                         criterion   >= 1.3     && < 1.5,
+                        weigh            >= 0.0.11,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
@@ -79,6 +83,7 @@ benchmark hash-graph
     build-depends:      base        >= 4.7     && < 4.12,
                         hash-graph  >= 0.1.0.0,
                         criterion   >= 1.3     && < 1.5,
+                        weigh            >= 0.0.11,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
@@ -99,6 +104,7 @@ benchmark compare
                         criterion        >= 1.3     && < 1.5,
                         hash-graph  >= 0.1.0.0,
                         algebraic-graphs >= 0.1.1.1,
+                        weigh            >= 0.0.11,
                         statistics,
                         bench-graph
     default-language:   Haskell2010

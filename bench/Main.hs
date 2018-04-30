@@ -17,6 +17,8 @@ import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
 
+import BenchGraph (allBenchs, allWeighs)
+
 showBenchmark :: Benchmark -> String
 showBenchmark (Benchmark name _) = name
 showBenchmark (BenchGroup name _) = name
@@ -79,8 +81,8 @@ insertName name = map (\x -> (name, x))
 
 main :: IO ()
 main = genReport $ concatMap (uncurry insertName) [
-  ("Alga (Algebra.Graph)",Alga.Graph.allBenchs),
-  ("Alga (Algebra.Graph.NonEmpty)",Alga.NonEmptyGraph.allBenchs),
-  ("Containers (Data.Graph)",Containers.Graph.allBenchs),
-  ("Fgl (Data.Graph.Inductive.PatriciaTree)",Fgl.PatriciaTree.allBenchs),
-  ("Hash-Graph (Data.HashGraph.Strict)", HashGraph.Gr.allBenchs)]
+  ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions),
+  ("Alga (Algebra.Graph.NonEmpty)",allBenchs Alga.NonEmptyGraph.functions),
+  ("Containers (Data.Graph)",allBenchs Containers.Graph.functions),
+  ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions),
+  ("Hash-Graph (Data.HashGraph.Strict)", allBenchs HashGraph.Gr.functions)]

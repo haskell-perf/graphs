@@ -1,13 +1,12 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Alga.NonEmptyGraph
-(allBenchs)
+  (
+  functions 
+  )
 where
 
-import Criterion.Main
-
 import BenchGraph
-
 import BenchGraph.Utils
 
 import Algebra.Graph.NonEmpty
@@ -29,9 +28,5 @@ hasEdge' = Suite { suiteName = "hasEdge (not in graph)"
                  , algorithm = uncurry hasEdge
                  , inputs    = withNames . take 2 . edgesNotInGraph }
 
-allBenchs :: [Benchmark]
-allBenchs = toTest
-  where
-    generics = [hasEdge', edgeList', vertexList']
-
-    toTest = map (benchmark graphs) generics
+functions :: [Suite (NonEmptyGraph Int)]
+functions = [hasEdge', edgeList', vertexList']

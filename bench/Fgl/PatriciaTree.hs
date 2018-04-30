@@ -1,10 +1,8 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Fgl.PatriciaTree
-(allBenchs)
+(functions)
 where
-
-import Criterion.Main
 
 import BenchGraph
 import BenchGraph.GenericGraph (vertices)
@@ -30,8 +28,6 @@ hasEdge' :: Suite UGr
 hasEdge' = Suite "hasEdge (not in graph)" (flip hasEdge) $
     withNames . take 2 . edgesNotInGraph
 
-allBenchs :: [Benchmark]
-allBenchs = map (benchmark graphs) generics
-  where
-    generics = [hasEdge', isEmpty', edgeList, vertexList]
+functions :: [Suite UGr]
+functions = [hasEdge', isEmpty', edgeList, vertexList]
 
