@@ -2,15 +2,20 @@ module BenchGraph.Utils (
 tenPowers,
 edgesNotInGraph,
 extractMaxVertex,
-graphs
+graphs,
+mainWeigh
 )
 where
 
-import Data.List ((\\))
+import Data.List ((\\), isInfixOf)
 import BenchGraph.GenericGraph
 import BenchGraph.Complete
 import BenchGraph.Circuit
 import BenchGraph.Path
+
+import Weigh (mainWith, Weigh)
+import System.Environment (getArgs)
+import Control.Monad (unless)
 
 tenPowers :: [Int]
 tenPowers = iterate (10*) 1 
@@ -28,3 +33,9 @@ graphs = [
   (circuit, take 5 tenPowers),
   (complete, take 3 tenPowers)
   ]
+
+mainWeigh :: Weigh () -> IO () -> IO ()
+mainWeigh wei rest = do
+  args <- getArgs
+  mainWith wei
+  unless (foldl (\x y -> x || isInfixOf "--case" y) False args) rest
