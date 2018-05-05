@@ -28,6 +28,13 @@ hasEdge' :: Suite UGr
 hasEdge' = Suite "hasEdge (not in graph)" (flip hasEdge) $
     withNames . take 2 . edgesNotInGraph
 
+insNode' :: Suite UGr
+insNode' = Suite { suiteName = "add a new vertex"
+             , algorithm = insNode
+                 , inputs    = \x -> [("new vertex: " ++ (show $ getNewV x),(getNewV x,()))] }
+    where
+      getNewV x = 1 + extractMaxVertex x
+
 functions :: [Suite UGr]
-functions = [hasEdge', isEmpty', edgeList, vertexList]
+functions = [insNode', hasEdge', isEmpty', edgeList, vertexList]
 

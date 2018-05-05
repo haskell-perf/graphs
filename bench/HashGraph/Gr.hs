@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 
-module HashGraph.Gr 
+module HashGraph.Gr
 (functions)
 where
 
@@ -20,7 +20,7 @@ mkEdge :: (Int,Int) -> HG.Edge () Int
 mkEdge (x,y) = HG.Edge x () y
 
 isEmpty' :: Suite Gr
-isEmpty' = simpleSuite "isEmpty" HG.null 
+isEmpty' = simpleSuite "isEmpty" HG.null
 
 edgeList :: Suite Gr
 edgeList = simpleSuite "edgeList" HG.edges
@@ -32,6 +32,13 @@ hasEdge' :: Suite Gr
 hasEdge' = Suite "hasEdge (not in graph)" HG.hasEdge $
     map (\(x,y)->(x,mkEdge y)) . withNames . take 2 . edgesNotInGraph
 
+insNode' :: Suite Gr
+insNode' = Suite { suiteName = "add a new vertex"
+             , algorithm = HG.insNode
+             , inputs    = \x -> [("new vertex: " ++ (show $ getNewV x),getNewV x)] }
+    where
+      getNewV x = 1 + extractMaxVertex x
+
 functions :: [Suite Gr]
-functions = [hasEdge', isEmpty', edgeList, vertexList]
+functions = [insNode', hasEdge', isEmpty', edgeList, vertexList]
 

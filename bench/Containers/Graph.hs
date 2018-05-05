@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 
-module Containers.Graph 
+module Containers.Graph
 (functions)
 where
 

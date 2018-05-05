@@ -2,7 +2,7 @@
 
 module Alga.NonEmptyGraph
   (
-  functions 
+  functions
   )
 where
 
@@ -28,5 +28,12 @@ hasEdge' = Suite { suiteName = "hasEdge (not in graph)"
                  , algorithm = uncurry hasEdge
                  , inputs    = withNames . take 2 . edgesNotInGraph }
 
+connect' :: Suite (NonEmptyGraph Int)
+connect' = Suite { suiteName = "add a new vertex"
+                 , algorithm = connect
+                 , inputs    = \x -> [("new vertex: " ++ (show $ getNewV x), vertex $ getNewV x)]}
+    where
+      getNewV x = 1 + extractMaxVertex x
+
 functions :: [Suite (NonEmptyGraph Int)]
-functions = [hasEdge', edgeList', vertexList']
+functions = [connect', hasEdge', edgeList', vertexList']

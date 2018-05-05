@@ -28,7 +28,7 @@ instance Eq Benchmark where
 
 genReport :: [(String,Benchmark)] -> IO()
 genReport todo = do
-  putStrLn "# Compare benchmarks" 
+  putStrLn "# Compare benchmarks"
   genReport' 2 todo
 
 genReport' :: Int
@@ -67,7 +67,7 @@ showSimples = unlines . map shw . sortBy (\(_,t1) (_,t2) -> t1 `compare` t2)
 getMean :: Report -> Double
 getMean = estPoint . anMean . reportAnalysis
 
-benchmarkWithoutOutput :: Benchmarkable -> IO Report 
+benchmarkWithoutOutput :: Benchmarkable -> IO Report
 benchmarkWithoutOutput bm = do
   initializeTime
   withConfig defaultConfig' $ do

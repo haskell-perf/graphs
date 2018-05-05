@@ -30,6 +30,13 @@ hasEdge' = Suite { suiteName = "hasEdge (not in graph)"
                  , algorithm = uncurry hasEdge
                  , inputs    = withNames . take 2 . edgesNotInGraph }
 
+connect' :: Suite (Graph Int)
+connect' = Suite { suiteName = "add a new vertex"
+                 , algorithm = connect
+                 , inputs    = \x -> [("new vertex: " ++ (show $ getNewV x), vertex $ getNewV x)]}
+    where
+      getNewV x = 1 + extractMaxVertex x
+
 functions :: [Suite (Graph Int)]
-functions = [hasEdge', isEmpty', edgeList', vertexList']
+functions = [connect', hasEdge', isEmpty', edgeList', vertexList']
 
