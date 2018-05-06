@@ -8,7 +8,7 @@ where
 import BenchGraph
 import BenchGraph.GenericGraph (vertices)
 
-import BenchGraph.Utils
+import BenchGraph.Suites
 
 import Data.Graph.Inductive.Graph
 import Data.Graph.Inductive.PatriciaTree
@@ -25,17 +25,16 @@ edgeList = simpleSuite "edgeList" edges
 vertexList :: Suite UGr
 vertexList = simpleSuite "vertexList" nodes
 
+--A simple function
 hasEdge' :: Suite UGr
-hasEdge' = Suite "hasEdge (not in graph)" (flip hasEdge) $
-    withNames . take 2 . edgesNotInGraph
+hasEdge' = hasEdgeS (flip hasEdge) id
 
 insNode' :: Suite UGr
-insNode' = Suite { suiteName = "add a new vertex"
-             , algorithm = insNode
-                 , inputs    = \x -> [("new vertex: " ++ (show $ getNewV x),(getNewV x,()))] }
-    where
-      getNewV x = 1 + extractMaxVertex x
+insNode' = addVertexS insNode (\x -> (x,()))
+
+removeVertex' :: Suite UGr
+removeVertex' = removeVertexS delNode id
 
 functions :: [Suite UGr]
-functions = [insNode', hasEdge', isEmpty', edgeList, vertexList]
+functions = [insNode',removeVertex', hasEdge', isEmpty', edgeList, vertexList]
 

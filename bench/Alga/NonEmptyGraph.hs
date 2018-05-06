@@ -9,6 +9,7 @@ where
 
 import BenchGraph
 import BenchGraph.Utils
+import BenchGraph.Suites
 
 import Algebra.Graph.NonEmpty
 
@@ -25,16 +26,13 @@ edgeList' = simpleSuite "edgeList" edgeList
 
 --A simple function
 hasEdge' :: Suite (NonEmptyGraph Int)
-hasEdge' = Suite { suiteName = "hasEdge (not in graph)"
-                 , algorithm = uncurry hasEdge
-                 , inputs    = withNames . take 2 . edgesNotInGraph }
+hasEdge' = hasEdgeS (uncurry hasEdge) id
 
 connect' :: Suite (NonEmptyGraph Int)
-connect' = Suite { suiteName = "add a new vertex"
-                 , algorithm = connect
-                 , inputs    = \x -> [("new vertex: " ++ (show $ getNewV x), vertex $ getNewV x)]}
-    where
-      getNewV x = 1 + extractMaxVertex x
+connect' = addVertexS connect vertex
+
+removeVertex' :: Suite (NonEmptyGraph Int)
+removeVertex' = removeVertexS removeVertex1 id
 
 functions :: [Suite (NonEmptyGraph Int)]
-functions = [connect', hasEdge', edgeList', vertexList']
+functions = [removeVertex', connect', hasEdge', edgeList', vertexList']

@@ -8,7 +8,7 @@ module Alga.Graph
 where
 
 import BenchGraph
-import BenchGraph.Utils
+import BenchGraph.Suites
 
 import Algebra.Graph
 
@@ -27,17 +27,14 @@ edgeList' = simpleSuite "edgeList" edgeList
 
 --A simple function
 hasEdge' :: Suite (Graph Int)
-hasEdge' = Suite { suiteName = "hasEdge (not in graph)"
-                 , algorithm = uncurry hasEdge
-                 , inputs    = withNames . take 2 . edgesNotInGraph }
+hasEdge' = hasEdgeS (uncurry hasEdge) id
 
 connect' :: Suite (Graph Int)
-connect' = Suite { suiteName = "add a new vertex"
-                 , algorithm = connect
-                 , inputs    = \x -> [("new vertex: " ++ (show $ getNewV x), vertex $ getNewV x)]}
-    where
-      getNewV x = 1 + extractMaxVertex x
+connect' = addVertexS connect vertex
+
+removeVertex' :: Suite (Graph Int)
+removeVertex' = removeVertexS removeVertex id
 
 functions :: [Suite (Graph Int)]
-functions = [connect', hasEdge', isEmpty', edgeList', vertexList']
+functions = [connect', removeVertex', hasEdge', isEmpty', edgeList', vertexList']
 
