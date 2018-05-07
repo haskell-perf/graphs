@@ -8,7 +8,6 @@ module Alga.NonEmptyGraph
 where
 
 import BenchGraph
-import BenchGraph.Utils
 import BenchGraph.Suites
 
 import Algebra.Graph.NonEmpty

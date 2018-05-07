@@ -29,7 +29,7 @@ vertexList :: Suite Gr
 vertexList = simpleSuite "vertexList" HG.nodes
 
 hasEdge' :: Suite Gr
-hasEdge' = hasEdgeS HG.hasEdge (\(x,y)->(x,mkEdge y))
+hasEdge' = hasEdgeS HG.hasEdge mkEdge
 
 insNode' :: Suite Gr
 insNode' = addVertexS HG.insNode id
