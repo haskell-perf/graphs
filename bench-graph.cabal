@@ -37,7 +37,6 @@ benchmark alga
     type:               exitcode-stdio-1.0
     main-is:            Alga/Main.hs
     other-modules:      Alga.Graph
-                      , Alga.NonEmptyGraph
     build-depends:      algebraic-graphs >= 0.1.1.1,
                         base             >= 4.7     && < 4.12,
                         criterion        >= 1.3     && < 1.5,
@@ -95,7 +94,6 @@ benchmark compare
     type:               exitcode-stdio-1.0
     main-is:            Main.hs
     other-modules:      Alga.Graph
-                      , Alga.NonEmptyGraph
                       , Containers.Graph
                       , Fgl.PatriciaTree
                       , HashGraph.Gr

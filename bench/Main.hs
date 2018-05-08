@@ -13,7 +13,6 @@ import Criterion.Monad (withConfig)
 import Statistics.Types
 
 import qualified Alga.Graph
-import qualified Alga.NonEmptyGraph
 import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
@@ -91,7 +90,6 @@ main = do
   where
     grList = concatMap (uncurry insertName) [
      ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions),
-     ("Alga (Algebra.Graph.NonEmpty)",allBenchs Alga.NonEmptyGraph.functions),
      ("Containers (Data.Graph)",allBenchs Containers.Graph.functions),
      ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions),
      ("Hash-Graph (Data.HashGraph.Strict)", allBenchs HashGraph.Gr.functions)]
