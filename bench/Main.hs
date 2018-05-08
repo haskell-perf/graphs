@@ -1,4 +1,4 @@
-import Data.List (sortBy, filter, nubBy)
+import Data.List (sortBy, filter, nubBy, uncons)
 import Data.Maybe (mapMaybe)
 import Control.Monad (unless)
 import System.Environment (getArgs)
@@ -83,9 +83,11 @@ insertName name = map (\x -> (name, x))
 main :: IO ()
 main = do
   args <- getArgs
-  if null args
-     then genReport grList
-     else genReport $ filter ((==) (head args) . showBenchmark . snd) grList
+  case uncons args of
+    Nothing -> genReport grList
+    Just (hea,_) -> case hea of
+                      "--list" -> putStr $ unlines $ map (showBenchmark . snd) grList
+                      oth -> genReport $ filter ((==) oth . showBenchmark . snd) grList
   where
     grList = concatMap (uncurry insertName) [
      ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions),
