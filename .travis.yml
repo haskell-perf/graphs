@@ -5,7 +5,7 @@ ghc: 8.2.2
 script:
     - cabal configure --enable-benchmarks 
     - cabal build
-    - travis_wait 45 cabal bench compare
+    - IFS=$'\n'; for bench in $(./dist/build/compare/compare --list); do ./dist/build/compare/compare "$bench"; done;  
 
 install:
     - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph
