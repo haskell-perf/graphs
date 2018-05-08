@@ -6,5 +6,5 @@ import BenchGraph (allBenchs, allWeighs)
 import BenchGraph.Utils (mainWeigh)
 
 main :: IO ()
-main = mainWeigh allWeighs Alga.Graph.functions $
+main = mainWeigh (allWeighs Alga.Graph.functions) $
         defaultMain $ allBenchs Alga.Graph.functions
