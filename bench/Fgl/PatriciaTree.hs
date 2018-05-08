@@ -35,6 +35,9 @@ insNode' = addVertexS insNode (\x -> (x,()))
 removeVertex' :: Suite UGr
 removeVertex' = removeVertexS delNode id
 
+eq :: Suite UGr
+eq = eqS (==)
+
 functions :: [Suite UGr]
-functions = [insNode',removeVertex', hasEdge', isEmpty', edgeList, vertexList]
+functions = [insNode',removeVertex', hasEdge', isEmpty', edgeList, vertexList, eq]
 

@@ -33,5 +33,8 @@ connect' = addVertexS connect vertex
 removeVertex' :: Suite (NonEmptyGraph Int)
 removeVertex' = removeVertexS removeVertex1 id
 
+eq :: Suite (NonEmptyGraph Int)
+eq = eqS (===)
+
 functions :: [Suite (NonEmptyGraph Int)]
-functions = [removeVertex', connect', hasEdge', edgeList', vertexList']
+functions = [removeVertex', connect', hasEdge', edgeList', vertexList', eq]

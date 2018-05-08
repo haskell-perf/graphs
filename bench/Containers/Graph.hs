@@ -6,8 +6,8 @@ module Containers.Graph
 where
 
 import BenchGraph
-
-import BenchGraph.Utils
+import BenchGraph.Utils (extractMaxVertex)
+import BenchGraph.Suites
 
 import Data.Graph
 
@@ -21,6 +21,9 @@ edgeList = simpleSuite "edgeList" edges
 vertexList :: Suite Graph
 vertexList = simpleSuite "vertexList" vertices
 
+eq :: Suite Graph
+eq = eqS (==)
+
 functions :: [Suite Graph]
-functions = [edgeList, vertexList]
+functions = [edgeList, vertexList, eq]
 
