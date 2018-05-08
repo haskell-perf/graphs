@@ -1,7 +1,8 @@
 import Data.List (sortBy, filter, nubBy)
 import Data.Maybe (mapMaybe)
-
 import Control.Monad (unless)
+import System.Environment (getArgs)
+
 import Criterion
 import Criterion.Types
 import Criterion.Internal
@@ -34,7 +35,7 @@ genReport todo = do
 genReport' :: Int
            -- ^ The number of '#' to write
            -> [(String,Benchmark)]
-           -- ^ THe list of benchmarks with their library name
+           -- ^ The list of benchmarks with their library name
            -> IO()
 genReport' _ [] = putStrLn "\nNo data\n"
 genReport' lev arr = mapM_ toPrint $ nubBy (\(_,a) (_,b) -> a == b) arr
@@ -80,9 +81,15 @@ insertName :: String -> [i] -> [(String,i)]
 insertName name = map (\x -> (name, x))
 
 main :: IO ()
-main = genReport $ concatMap (uncurry insertName) [
-  ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions),
-  ("Alga (Algebra.Graph.NonEmpty)",allBenchs Alga.NonEmptyGraph.functions),
-  ("Containers (Data.Graph)",allBenchs Containers.Graph.functions),
-  ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions),
-  ("Hash-Graph (Data.HashGraph.Strict)", allBenchs HashGraph.Gr.functions)]
+main = do
+  args <- getArgs
+  if null args
+     then genReport grList
+     else genReport $ filter ((==) (head args) . showBenchmark . snd) grList
+  where
+    grList = concatMap (uncurry insertName) [
+     ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions),
+     ("Alga (Algebra.Graph.NonEmpty)",allBenchs Alga.NonEmptyGraph.functions),
+     ("Containers (Data.Graph)",allBenchs Containers.Graph.functions),
+     ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions),
+     ("Hash-Graph (Data.HashGraph.Strict)", allBenchs HashGraph.Gr.functions)]

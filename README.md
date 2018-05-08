@@ -8,3 +8,20 @@ Feel free to open an issue anyway :)
 
 ## Results
 Current result of `cabal bench compare` can be found here: https://travis-ci.org/haskell-perf/graphs
+
+## Usage
+You can call benchmarks with:
+```Bash
+$ cabal bench
+```
+
+The comparing tool can be used with:
+```Bash
+$ cabal bench compare
+```
+
+And you can select one function comparison with:
+```Bash
+$ cabal bench compare --benchmark-option=Name
+```
+
