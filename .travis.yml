@@ -5,9 +5,9 @@ ghc: 8.2.2
 script:
     - cabal configure --enable-benchmarks 
     - cabal build
-    - cabal bench compare --benchmark-options="--part 0 2"
-    - cabal bench compare --benchmark-options="--part 1 2"
-    - cabal bench compare --benchmark-options="--part 2 2"
+    - travis_wait 45 cabal bench compare --benchmark-options="--part 0 2"
+    - travis_wait 45 cabal bench compare --benchmark-options="--part 1 2"
+    - travis_wait 45 cabal bench compare --benchmark-options="--part 2 2"
 
 install:
     - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph
