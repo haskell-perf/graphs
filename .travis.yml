@@ -3,9 +3,9 @@ language: haskell
 ghc: 8.2.2
 
 env:
-    - STEP = 0
-    - STEP = 1
-    - STEP = 2
+    - STEP=0
+    - STEP=1
+    - STEP=2
 
 script:
     - cabal configure --enable-benchmarks 
