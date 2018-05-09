@@ -2,12 +2,15 @@ language: haskell
 
 ghc: 8.2.2
 
+env:
+    - STEP = 0
+    - STEP = 1
+    - STEP = 2
+
 script:
     - cabal configure --enable-benchmarks 
     - cabal build
-    - travis_wait 45 ./dist/build/compare/compare --part 0 2
-    - travis_wait 45 ./dist/build/compare/compare --part 1 2
-    - travis_wait 45 ./dist/build/compare/compare --part 2 2
+    - ./dist/build/compare/compare --part $STEP 2
 
 install:
     - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph
