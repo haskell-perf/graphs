@@ -1,4 +1,4 @@
-import Data.List (sortBy, filter, nubBy, uncons)
+import Data.List (sortBy, filter, nubBy, uncons, intersectBy)
 import Data.Maybe (mapMaybe)
 import Control.Monad (unless)
 import System.Environment (getArgs)
@@ -26,6 +26,9 @@ showBenchmark (BenchGroup name _) = name
 instance Eq Benchmark where
   a == b = showBenchmark a == showBenchmark b
 
+eq :: (a, Benchmark) -> (b, Benchmark) -> Bool
+eq (_,a) (_,b) = a==b
+
 genReport :: [(String,Benchmark)] -> IO()
 genReport todo = do
   putStrLn "# Compare benchmarks"
@@ -37,7 +40,7 @@ genReport' :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport' _ [] = putStrLn "\nNo data\n"
-genReport' lev arr = mapM_ toPrint $ nubBy (\(_,a) (_,b) -> a == b) arr
+genReport' lev arr = mapM_ toPrint $ nubBy eq arr
   where
     toPrint (_, breport) = do
         let name = showBenchmark breport
@@ -79,13 +82,31 @@ benchmarkWithoutOutput bm = do
 insertName :: String -> [i] -> [(String,i)]
 insertName name = map (\x -> (name, x))
 
+showBenchsName :: [(a,Benchmark)] -> String
+showBenchsName = unlines . map (showBenchmark . snd)
+
+elemBy :: (a -> a -> Bool) -> a -> [a] -> Bool
+elemBy _ _ [] = False
+elemBy f a (x:xs) = if f a x then True else elemBy f a xs
+
 main :: IO ()
 main = do
   args <- getArgs
   case uncons args of
     Nothing -> genReport grList
-    Just (hea,_) -> case hea of
-                      "--list" -> putStr $ unlines $ map (showBenchmark . snd) grList
+    Just (hea,rst) -> case hea of
+                      "--list" -> putStr $ showBenchsName grList'
+                      "--part" -> case rst of
+                        (one:two:_) -> let one' = read one + 1
+                                           two' = read two :: Int
+                                           per = length grList' `div` two'
+                                           todo' = drop ((one'-1)*per) $ take (one'*per) grList'
+                                           todo = filter ((flip $ elemBy eq) todo') grList
+                                        in do
+                                          putStrLn "Doing:"
+                                          putStrLn $ "\n----\n"++showBenchsName todo' ++ "----\n"
+                                          genReport todo
+                        _ -> fail "Malformed option: --part int int"
                       oth -> genReport $ filter ((==) oth . showBenchmark . snd) grList
   where
     grList = concatMap (uncurry insertName) [
@@ -93,3 +114,4 @@ main = do
      ("Containers (Data.Graph)",allBenchs Containers.Graph.functions),
      ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions),
      ("Hash-Graph (Data.HashGraph.Strict)", allBenchs HashGraph.Gr.functions)]
+    grList' = nubBy eq grList
