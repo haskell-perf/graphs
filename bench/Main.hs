@@ -6,9 +6,6 @@ import Control.Monad (unless, void)
 import System.Environment (getArgs)
 import Data.Map.Strict (Map, alter, unionWith, empty, toList)
 
-import Options.Applicative hiding (empty)
-import Data.Semigroup ((<>))
-
 import Criterion
 import Criterion.Types
 import Criterion.Internal
@@ -25,6 +22,9 @@ import qualified HashGraph.Gr
 
 import BenchGraph (allBenchs, allWeighs)
 
+import Options.Applicative (execParser)
+import Options
+
 showBenchmark :: Benchmark -> String
 showBenchmark (Benchmark name _) = name
 showBenchmark (BenchGroup name _) = name
@@ -37,32 +37,6 @@ eq (_,a) (_,b) = a==b
 
 comparesS :: (Ord a) => (b,a) -> (c,a) -> Ordering
 comparesS (_,t1) (_,t2) = t1 `compare` t2
-
--- Options
-data Options = List | Part Int Int | Only String deriving (Show,Eq)
-
-listOpt :: Parser Options
-listOpt = flag' List (long "list" <> short 'l' <> help "List all benchmarks")
-
-partOpt :: Parser Options
-partOpt = Part <$> rpart <*> rof
-  where
-    rpart = option auto (long "part")
-    rof = option auto (long "of")
-
-onlyOpt :: Parser Options
-onlyOpt = Only <$> strOption (long "only" <> short 'o')
-
-options :: Parser (Maybe Options)
-options = optional $ listOpt <|> partOpt <|> onlyOpt
-
-
-optionsI :: ParserInfo (Maybe Options)
-optionsI = info (options <**> helper)
-      ( fullDesc
-     <> progDesc "Compare benchmarks of graphs libraries"
-     <> header "Help" )
-
 
 data Grouped a = Simple a | Group [Grouped a] deriving (Show)
 
@@ -143,9 +117,9 @@ elemBy :: (a -> a -> Bool) -> a -> [a] -> Bool
 elemBy f a = foldr (\x y -> f a x || y) False
 
 main :: IO ()
-main = main' =<< execParser optionsI
+main = execParser optionsI >>= main'
 
-main' :: Maybe Options -> IO ()
+main' :: Maybe Option -> IO ()
 main' opts
   = case opts of
       Nothing -> genReport grList

@@ -93,7 +93,8 @@ benchmark compare
     hs-source-dirs:     bench
     type:               exitcode-stdio-1.0
     main-is:            Main.hs
-    other-modules:      Alga.Graph
+    other-modules:      Options
+                      , Alga.Graph
                       , Containers.Graph
                       , Fgl.PatriciaTree
                       , HashGraph.Gr
