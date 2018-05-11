@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 import Data.List (sortBy, filter, nubBy, uncons, intersectBy)
 import Data.Maybe (mapMaybe)
 import Control.Monad (unless)
@@ -80,14 +82,13 @@ benchmarkWithoutOutput bm = do
     defaultConfig' = defaultConfig {verbosity = Quiet}
 
 insertName :: String -> [i] -> [(String,i)]
-insertName name = map (\x -> (name, x))
+insertName name = map (name,)
 
 showBenchsName :: [(a,Benchmark)] -> String
 showBenchsName = unlines . map (showBenchmark . snd)
 
 elemBy :: (a -> a -> Bool) -> a -> [a] -> Bool
-elemBy _ _ [] = False
-elemBy f a (x:xs) = if f a x then True else elemBy f a xs
+elemBy f a = foldr (\x y -> f a x || y) False
 
 main :: IO ()
 main = do
