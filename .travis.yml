@@ -10,7 +10,7 @@ env:
 script:
     - cabal configure --enable-benchmarks 
     - cabal build
-    - ./dist/build/compare/compare --part $STEP 2
+    - ./dist/build/compare/compare --part $STEP --of 2
 
 install:
     - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph

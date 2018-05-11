@@ -1,10 +1,13 @@
 {-# LANGUAGE TupleSections #-}
 
-import Data.List (sortBy, filter, nubBy, uncons, intersectBy)
-import Data.Maybe (mapMaybe, maybe)
+import Data.List (sortBy, filter, nubBy, uncons)
+import Data.Maybe (mapMaybe)
 import Control.Monad (unless, void)
 import System.Environment (getArgs)
-import Data.Map.Strict (Map, alter, unionWith, empty, foldMapWithKey, toList)
+import Data.Map.Strict (Map, alter, unionWith, empty, toList)
+
+import Options.Applicative hiding (empty)
+import Data.Semigroup ((<>))
 
 import Criterion
 import Criterion.Types
@@ -34,6 +37,32 @@ eq (_,a) (_,b) = a==b
 
 comparesS :: (Ord a) => (b,a) -> (c,a) -> Ordering
 comparesS (_,t1) (_,t2) = t1 `compare` t2
+
+-- Options
+data Options = List | Part Int Int | Only String deriving (Show,Eq)
+
+listOpt :: Parser Options
+listOpt = flag' List (long "list" <> short 'l' <> help "List all benchmarks")
+
+partOpt :: Parser Options
+partOpt = Part <$> rpart <*> rof
+  where
+    rpart = option auto (long "part")
+    rof = option auto (long "of")
+
+onlyOpt :: Parser Options
+onlyOpt = Only <$> strOption (long "only" <> short 'o')
+
+options :: Parser (Maybe Options)
+options = optional $ listOpt <|> partOpt <|> onlyOpt
+
+
+optionsI :: ParserInfo (Maybe Options)
+optionsI = info (options <**> helper)
+      ( fullDesc
+     <> progDesc "Compare benchmarks of graphs libraries"
+     <> header "Help" )
+
 
 data Grouped a = Simple a | Group [Grouped a] deriving (Show)
 
@@ -67,7 +96,7 @@ toPrint lev arr breport = do
 printMap :: Map String Int -> IO ()
 printMap m = do
   putStrLn "\nSUMMARY:"
-  void $ foldMap (\(k,v) -> putStrLn $ k ++" was the fastest " ++show v++" times") $ sortBy comparesS $ toList m
+  void $ foldMap (\(k,v) -> putStrLn $ k ++" was the fastest " ++show v++" times") $ sortBy (flip comparesS) $ toList m
   putStrLn ""
 
 getFastest :: Map String Int -> Grouped [(String,Double)] -> Map String Int
@@ -114,24 +143,23 @@ elemBy :: (a -> a -> Bool) -> a -> [a] -> Bool
 elemBy f a = foldr (\x y -> f a x || y) False
 
 main :: IO ()
-main = do
-  args <- getArgs
-  case uncons args of
-    Nothing -> genReport grList
-    Just (hea,rst) -> case hea of
-                      "--list" -> putStr $ showBenchsName grList'
-                      "--part" -> case rst of
-                        (one:two:_) -> let one' = read one + 1
-                                           two' = read two :: Int
-                                           per = length grList' `div` two'
-                                           todo' = drop ((one'-1)*per) $ take (one'*per) grList'
-                                           todo = filter ((flip $ elemBy eq) todo') grList
-                                        in do
-                                          putStrLn "Doing:"
-                                          putStrLn $ "\n----\n"++showBenchsName todo' ++ "----\n"
-                                          genReport todo
-                        _ -> fail "Malformed option: --part int int"
-                      oth -> genReport $ filter ((==) oth . showBenchmark . snd) grList
+main = main' =<< execParser optionsI
+
+main' :: Maybe Options -> IO ()
+main' opts
+  = case opts of
+      Nothing -> genReport grList
+      Just opt -> case opt of
+        List -> putStr $ showBenchsName grList'
+        Only name -> genReport $ filter ((==) name . showBenchmark . snd) grList
+        Part one' two -> let one = one' + 1
+                             per = length grList' `div` two
+                             todo' = drop ((one-1)*per) $ take (one*per) grList'
+                             todo = filter ((flip $ elemBy eq) todo') grList
+                          in do
+                            putStrLn "Doing:"
+                            putStrLn $ "\n----\n"++showBenchsName todo' ++ "----\n"
+                            genReport todo
   where
     grList = concatMap (uncurry insertName) [
      ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions),
