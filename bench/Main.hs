@@ -4,7 +4,7 @@ import Data.List (sortBy, filter, nubBy, uncons, intersectBy)
 import Data.Maybe (mapMaybe, maybe)
 import Control.Monad (unless, void)
 import System.Environment (getArgs)
-import Data.Map.Strict (Map, alter, unionWith, empty, foldMapWithKey)
+import Data.Map.Strict (Map, alter, unionWith, empty, foldMapWithKey, toList)
 
 import Criterion
 import Criterion.Types
@@ -67,7 +67,7 @@ toPrint lev arr breport = do
 printMap :: Map String Int -> IO ()
 printMap m = do
   putStrLn "\nSUMMARY:"
-  void $ foldMap (\k v -> putStrLn $ k ++" was the fastest " ++show v++" times") $ sortBy comparesS $ toList m
+  void $ foldMap (\(k,v) -> putStrLn $ k ++" was the fastest " ++show v++" times") $ sortBy comparesS $ toList m
   putStrLn ""
 
 getFastest :: Map String Int -> Grouped [(String,Double)] -> Map String Int
