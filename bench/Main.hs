@@ -1,9 +1,10 @@
 {-# LANGUAGE TupleSections #-}
 
 import Data.List (sortBy, filter, nubBy, uncons, intersectBy)
-import Data.Maybe (mapMaybe)
-import Control.Monad (unless)
+import Data.Maybe (mapMaybe, maybe)
+import Control.Monad (unless, void)
 import System.Environment (getArgs)
+import Data.Map.Strict (Map, alter, unionWith, empty, foldMapWithKey)
 
 import Criterion
 import Criterion.Types
@@ -31,6 +32,11 @@ instance Eq Benchmark where
 eq :: (a, Benchmark) -> (b, Benchmark) -> Bool
 eq (_,a) (_,b) = a==b
 
+comparesS :: (Ord a) => (b,a) -> (c,a) -> Ordering
+comparesS (_,t1) (_,t2) = t1 `compare` t2
+
+data Grouped a = Simple a | Group [Grouped a] deriving (Show)
+
 genReport :: [(String,Benchmark)] -> IO()
 genReport todo = do
   putStrLn "# Compare benchmarks"
@@ -42,17 +48,34 @@ genReport' :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport' _ [] = putStrLn "\nNo data\n"
-genReport' lev arr = mapM_ toPrint $ nubBy eq arr
+genReport' lev arr = mapM_ (\x -> toPrint lev arr (snd x) >>= printMap . getFastest empty) $ nubBy eq arr
+
+toPrint :: Int -> [(String,Benchmark)] -> Benchmark -> IO (Grouped [(String, Double)])
+toPrint lev arr breport = do
+  let name = showBenchmark breport
+  unless (null name) $ putStrLn $ replicate lev '#' ++ " " ++ showBenchmark breport
+  case breport of
+    Benchmark{} -> do
+      simples <- sequence $ mapMaybe tkSimple $ here breport
+      putStrLn $ "\n" ++ showSimples simples
+      return $ Simple simples
+    BenchGroup{} -> Group <$> mapM (toPrint (lev+1) otherGroups . snd) (nubBy eq otherGroups)
   where
-    toPrint (_, breport) = do
-        let name = showBenchmark breport
-        unless (null name) $ putStrLn $ replicate lev '#' ++ " " ++ showBenchmark breport
-        case breport of
-          Benchmark{} -> do
-            simples <- sequence $ mapMaybe tkSimple $ here breport
-            putStrLn $ "\n" ++ showSimples simples
-          BenchGroup{} -> genReport' (lev+1) $ concatMap tkChilds $ here breport
+    otherGroups = concatMap tkChilds $ here breport
     here e = filter (\(_,b) -> e==b) arr
+
+printMap :: Map String Int -> IO ()
+printMap m = do
+  putStrLn "\nSUMMARY:"
+  void $ foldMap (\k v -> putStrLn $ k ++" was the fastest " ++show v++" times") $ sortBy comparesS $ toList m
+  putStrLn ""
+
+getFastest :: Map String Int -> Grouped [(String,Double)] -> Map String Int
+getFastest m (Simple a) = getFastest' (sortBy comparesS a) m
+getFastest m (Group grp) = foldr (unionWith (+) . getFastest m) empty grp
+
+getFastest' :: [(String,Double)] -> Map String Int -> Map String Int
+getFastest' (l:_) = alter (Just . maybe 1 (+ 1)) $ fst l
 
 -- | Bench only if it is possible
 tkSimple :: (String, Benchmark) -> Maybe (IO (String, Double))
@@ -65,7 +88,7 @@ tkChilds (_,Benchmark{}) = []
 tkChilds (lib,BenchGroup _ childs) = insertName lib childs
 
 showSimples :: [(String,Double)] -> String
-showSimples = unlines . map shw . sortBy (\(_,t1) (_,t2) -> t1 `compare` t2)
+showSimples = unlines . map shw . sortBy comparesS
   where
     shw (libname, time) = "* " ++ libname ++ " : " ++ show time ++ " s. (Mean)"
 

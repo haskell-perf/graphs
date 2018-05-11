@@ -18,7 +18,7 @@ import System.Environment (getArgs)
 import Control.Monad (unless)
 
 tenPowers :: [Int]
-tenPowers = iterate (10*) 1 
+tenPowers = iterate (10*) 1
 
 -- | Remove given edges from the complete graph
 edgesNotInGraph :: Edges -> Edges
