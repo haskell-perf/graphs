@@ -1,7 +1,8 @@
-import Data.List (sortBy, filter, nub, sort)
+import Data.List (sortBy, filter, nub, nubBy, sort)
 import Data.Maybe (mapMaybe, isNothing, isJust)
-import Control.Monad (unless, void, when)
+import Control.Monad (unless, void, when, (>=>))
 import Data.Map.Strict (Map, alter, unionWith, empty, toList)
+import Data.Functor.Classes (eq1)
 
 import Criterion
 import Criterion.Types
@@ -30,9 +31,6 @@ instance WithName Benchmark where
 instance Eq Benchmark where
   a == b = getName a == getName b
 
-comparesS :: (Ord a) => (b,a) -> (c,a) -> Ordering
-comparesS (_,t1) (_,t2) = t1 `compare` t2
-
 data Grouped a = Simple a | Group [Grouped a] deriving (Show)
 
 genReport :: Int
@@ -43,25 +41,26 @@ genReport :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_ (\x -> toPrint lev flg arr (obj x) >>= printMap . getFastest empty) $ nub arr
+genReport lev flg arr = mapM_ (toPrint lev flg arr >=> (printMap . getFastest empty)) $ nub arr
 
-toPrint :: Int -> Maybe Flag -> [Named Benchmark] -> Benchmark -> IO (Grouped [Named Double])
+toPrint :: Int -> Maybe Flag -> [Named Benchmark] -> Named Benchmark -> IO (Grouped [Named Double])
 toPrint lev flg arr breport = do
-  unless (null (getName breport) || (isJust flg && lev /= 2)) $ putStrLn $ replicate lev '#' ++ " " ++ getName breport
-  case breport of
+  let bname = getName $ obj breport
+  unless (null bname || (isJust flg && lev /= 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
+  case obj breport of
     Benchmark{} -> do
       simples <- sequence $ mapMaybe tkSimple $ here breport
       when (isNothing flg) $ putStrLn $ "\n" ++ showSimples simples
       return $ Simple simples
-    BenchGroup{} -> Group <$> mapM (toPrint (lev+1) flg otherGroups) (nub $ map obj otherGroups)
+    BenchGroup{} -> Group <$> mapM (toPrint (lev+1) flg otherGroups) (nubBy eq1 otherGroups)
   where
     otherGroups = concatMap tkChilds $ here breport
-    here e = filter (\(Named _ x) -> e==x) arr
+    here e = filter (eq1 e) arr
 
 printMap :: Map String Int -> IO ()
 printMap m = do
   putStrLn "\nSUMMARY:"
-  void $ foldMap (\(k,v) -> putStrLn $ k ++" was the fastest " ++show v++" times") $ sortBy (flip comparesS) $ toList m
+  void $ foldMap (\(Named k v) -> putStrLn $ k ++" was the fastest " ++show v++" times") $ sortBy (flip compare) $ map toNamed $ toList m
   putStrLn ""
 
 getFastest :: Map String Int -> Grouped [Named Double] -> Map String Int
@@ -99,7 +98,7 @@ benchmarkWithoutOutput bm = do
     defaultConfig' = defaultConfig {verbosity = Quiet}
 
 nameChilds :: String -> [i] -> [Named i]
-nameChilds name = map (nameBy $ const name)
+nameChilds = map . nameBy . const
 
 main :: IO ()
 main = execParser commandI >>= main'
