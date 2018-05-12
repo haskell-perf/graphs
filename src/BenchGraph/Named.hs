@@ -7,7 +7,8 @@ module BenchGraph.Named
     nameShow,
     nameBy,
     toNamed,
-    showListN
+    showListN,
+    classicShow
   )
 where
 
@@ -17,9 +18,6 @@ type Name = String
 
 class WithName a where
   getName :: a -> String
-
-showListN :: WithName a => [a] -> String
-showListN = unlines . map getName
 
 data Named a = Named {
   name :: Name,
@@ -52,3 +50,9 @@ nameBy f a = Named (f a) a
 
 toNamed :: (String,a) -> Named a
 toNamed = uncurry Named
+
+classicShow :: Show a => Named a -> String
+classicShow = show . obj
+
+showListN :: WithName a => [Named a] -> String
+showListN = unlines . map (getName . obj)

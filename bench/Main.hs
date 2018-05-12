@@ -100,6 +100,9 @@ benchmarkWithoutOutput bm = do
 nameChilds :: String -> [i] -> [Named i]
 nameChilds = map . nameBy . const
 
+elemBy :: (a -> a -> Bool) -> a -> [a] -> Bool
+elemBy f a = foldr (\x y -> f a x || y) False
+
 main :: IO ()
 main = execParser commandI >>= main'
 
@@ -107,19 +110,19 @@ main' :: Command -> IO ()
 main' opts
   = case opts of
       List -> putStr $ showListN grList'
-      Run opt' flg -> do
-          let todo = case opt' of
-                Nothing -> grList
-                Just opt'' -> case opt'' of
+      Run opt flg -> do
+          let todo = case opt of
+                Nothing -> grList'
+                Just opt' -> case opt' of
                   Only name -> filter ((==) name . getName) grList
                   Part one' two -> let one = one' + 1
                                        per = length grList' `div` two
                                    in drop ((one-1)*per) $ take (one*per) grList'
-          let samples = filter (`elem` todo) grList
+          let samples = filter ((flip $ elemBy eq1) todo) grList
           putStrLn "# Compare benchmarks\n"
           putStrLn "Doing:"
-          putStrLn $ "\n----\n"++ showListN (nub samples) ++ "----\n"
-          genReport 2 flg todo
+          putStrLn $ "\n----\n"++ showListN todo ++ "----\n"
+          genReport 2 flg samples
 
   where
     grList = concatMap (uncurry nameChilds) [
@@ -127,4 +130,4 @@ main' opts
      ("Containers (Data.Graph)",allBenchs Containers.Graph.functions),
      ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions),
      ("Hash-Graph (Data.HashGraph.Strict)", allBenchs HashGraph.Gr.functions)]
-    grList' = nub grList
+    grList' = nubBy eq1 grList
