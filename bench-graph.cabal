@@ -23,6 +23,7 @@ library
                      , BenchGraph.Complete
                      , BenchGraph.Utils
                      , BenchGraph.Suites
+                     , BenchGraph.Named
   -- other-modules:
   other-extensions:    ExistentialQuantification
   build-depends:       base      >= 4.7 && < 4.12,
