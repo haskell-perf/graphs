@@ -63,11 +63,11 @@ printMap m = do
   putStrLn ""
 
 getFastest :: Map String Int -> Grouped [Named Double] -> Map String Int
-getFastest m (Simple a) = getFastest' (sort a) m
+getFastest m (Simple a) = getFastest' a m
 getFastest m (Group grp) = foldr (unionWith (+) . getFastest m) empty grp
 
 getFastest' :: [Named Double] -> Map String Int -> Map String Int
-getFastest' (l:_) = alter (Just . maybe 1 (+ 1)) $ show l
+getFastest' l = alter (Just . maybe 1 (+ 1)) $ show $ minimum l
 
 -- | Bench only if it is possible
 tkSimple :: Named Benchmark -> Maybe (IO (Named Double))
