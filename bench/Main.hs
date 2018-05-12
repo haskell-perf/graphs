@@ -1,8 +1,8 @@
 {-# LANGUAGE TupleSections #-}
 
 import Data.List (sortBy, filter, nubBy, uncons)
-import Data.Maybe (mapMaybe)
-import Control.Monad (unless, void)
+import Data.Maybe (mapMaybe, isNothing, isJust)
+import Control.Monad (unless, void, when)
 import System.Environment (getArgs)
 import Data.Map.Strict (Map, alter, unionWith, empty, toList)
 
@@ -23,7 +23,7 @@ import qualified HashGraph.Gr
 import BenchGraph (allBenchs, allWeighs)
 
 import Options.Applicative (execParser)
-import Options
+import Command
 
 showBenchmark :: Benchmark -> String
 showBenchmark (Benchmark name _) = name
@@ -40,29 +40,26 @@ comparesS (_,t1) (_,t2) = t1 `compare` t2
 
 data Grouped a = Simple a | Group [Grouped a] deriving (Show)
 
-genReport :: [(String,Benchmark)] -> IO()
-genReport todo = do
-  putStrLn "# Compare benchmarks"
-  genReport' 2 todo
-
-genReport' :: Int
+genReport :: Int
            -- ^ The number of '#' to write
+           -> Maybe Flag
+           -- ^ Flag ?
            -> [(String,Benchmark)]
            -- ^ The list of benchmarks with their library name
            -> IO()
-genReport' _ [] = putStrLn "\nNo data\n"
-genReport' lev arr = mapM_ (\x -> toPrint lev arr (snd x) >>= printMap . getFastest empty) $ nubBy eq arr
+genReport _ _ [] = putStrLn "\nNo data\n"
+genReport lev flg arr = mapM_ (\x -> toPrint lev flg arr (snd x) >>= printMap . getFastest empty) $ nubBy eq arr
 
-toPrint :: Int -> [(String,Benchmark)] -> Benchmark -> IO (Grouped [(String, Double)])
-toPrint lev arr breport = do
+toPrint :: Int -> Maybe Flag -> [(String,Benchmark)] -> Benchmark -> IO (Grouped [(String, Double)])
+toPrint lev flg arr breport = do
   let name = showBenchmark breport
-  unless (null name) $ putStrLn $ replicate lev '#' ++ " " ++ showBenchmark breport
+  unless (null name || (isJust flg && lev /= 2)) $ putStrLn $ replicate lev '#' ++ " " ++ showBenchmark breport
   case breport of
     Benchmark{} -> do
       simples <- sequence $ mapMaybe tkSimple $ here breport
-      putStrLn $ "\n" ++ showSimples simples
+      when (isNothing flg) $ putStrLn $ "\n" ++ showSimples simples
       return $ Simple simples
-    BenchGroup{} -> Group <$> mapM (toPrint (lev+1) otherGroups . snd) (nubBy eq otherGroups)
+    BenchGroup{} -> Group <$> mapM (toPrint (lev+1) flg otherGroups . snd) (nubBy eq otherGroups)
   where
     otherGroups = concatMap tkChilds $ here breport
     here e = filter (\(_,b) -> e==b) arr
@@ -117,23 +114,26 @@ elemBy :: (a -> a -> Bool) -> a -> [a] -> Bool
 elemBy f a = foldr (\x y -> f a x || y) False
 
 main :: IO ()
-main = execParser optionsI >>= main'
+main = execParser commandI >>= main'
 
-main' :: Maybe Option -> IO ()
+main' :: Command -> IO ()
 main' opts
   = case opts of
-      Nothing -> genReport grList
-      Just opt -> case opt of
-        List -> putStr $ showBenchsName grList'
-        Only name -> genReport $ filter ((==) name . showBenchmark . snd) grList
-        Part one' two -> let one = one' + 1
-                             per = length grList' `div` two
-                             todo' = drop ((one-1)*per) $ take (one*per) grList'
-                             todo = filter ((flip $ elemBy eq) todo') grList
-                          in do
-                            putStrLn "Doing:"
-                            putStrLn $ "\n----\n"++showBenchsName todo' ++ "----\n"
-                            genReport todo
+      List -> putStr $ showBenchsName grList'
+      Run opt' flg -> do
+          let todo = case opt' of
+                Nothing -> grList
+                Just opt'' -> case opt'' of
+                  Only name -> filter ((==) name . showBenchmark . snd) grList
+                  Part one' two -> let one = one' + 1
+                                       per = length grList' `div` two
+                                   in drop ((one-1)*per) $ take (one*per) grList'
+          let samples = filter ((flip $ elemBy eq) todo) grList
+          putStrLn "# Compare benchmarks\n"
+          putStrLn "Doing:"
+          putStrLn $ "\n----\n"++showBenchsName (nubBy eq samples) ++ "----\n"
+          genReport 2 flg todo
+
   where
     grList = concatMap (uncurry insertName) [
      ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions),
