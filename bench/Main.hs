@@ -1,4 +1,4 @@
-import Data.List (sortBy, filter, nub, nubBy, sort)
+import Data.List (sortBy, filter, nubBy, sort)
 import Data.Maybe (mapMaybe, isNothing, isJust)
 import Control.Monad (unless, void, when, (>=>))
 import Data.Map.Strict (Map, alter, unionWith, empty, toList)
@@ -41,7 +41,7 @@ genReport :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_ (toPrint lev flg arr >=> (printMap . getFastest empty)) $ nub arr
+genReport lev flg arr = mapM_ (toPrint lev flg arr >=> (printMap . getFastest empty)) $ nubBy eq1 arr
 
 toPrint :: Int -> Maybe Flag -> [Named Benchmark] -> Named Benchmark -> IO (Grouped [Named Double])
 toPrint lev flg arr breport = do
@@ -60,7 +60,7 @@ toPrint lev flg arr breport = do
 printMap :: Map String Int -> IO ()
 printMap m = do
   putStrLn "\nSUMMARY:"
-  void $ foldMap (\(Named k v) -> putStrLn $ k ++" was the fastest " ++show v++" times") $ sortBy (flip compare) $ map toNamed $ toList m
+  void $ foldMap (\(Named k v) -> putStrLn $ k ++ " was the fastest " ++ show v ++ " times") $ sortBy (flip compare) $ map toNamed $ toList m
   putStrLn ""
 
 getFastest :: Map String Int -> Grouped [Named Double] -> Map String Int
