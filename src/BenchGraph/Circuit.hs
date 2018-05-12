@@ -3,11 +3,12 @@ module BenchGraph.Circuit (
 ) where
 
 import BenchGraph.Path
-import BenchGraph.GenericGraph (Edges,GenericGraph(..))
+import BenchGraph.Named
+import BenchGraph.GenericGraph (Edges,GenericGraph(..),mk)
 
 circuit :: GenericGraph
-circuit = GenericGraph "Circuit" mkCircuit
+circuit = Named "Circuit" mkCircuit
 
-mkCircuit :: Int -> Edges 
+mkCircuit :: Int -> Edges
 mkCircuit n = mk path n ++ [(n,0)]
 

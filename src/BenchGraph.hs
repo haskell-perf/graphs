@@ -18,6 +18,7 @@ import Control.DeepSeq (NFData(..), ($!!))
 
 import BenchGraph.GenericGraph
 import BenchGraph.Utils (graphs)
+import BenchGraph.Named
 
 -- A graph algorithm operates on a graph type @g@, which takes an input of
 -- type @i@ and produces an output of type @o@. Algorithms come with a list of
