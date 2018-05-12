@@ -1,8 +1,7 @@
-import Data.List (sortBy, filter, nubBy, sort)
+import Data.List (sortBy, filter, nub, sort)
 import Data.Maybe (mapMaybe, isNothing, isJust)
 import Control.Monad (unless, void, when, (>=>))
 import Data.Map.Strict (Map, alter, unionWith, empty, toList)
-import Data.Functor.Classes (eq1)
 
 import Criterion
 import Criterion.Types
@@ -25,8 +24,8 @@ import Options.Applicative (execParser)
 import Command
 
 instance WithName Benchmark where
-  getName (Benchmark name _) = name
-  getName (BenchGroup name _) = name
+  getName (Benchmark n _) = n
+  getName (BenchGroup n _) = n
 
 instance Eq Benchmark where
   a == b = getName a == getName b
@@ -41,7 +40,7 @@ genReport :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_ (toPrint lev flg arr >=> (printMap . getFastest empty)) $ nubBy eq1 arr
+genReport lev flg arr = mapM_ (toPrint lev flg arr >=> (printMap . getFastest empty)) $ nub arr
 
 toPrint :: Int -> Maybe Flag -> [Named Benchmark] -> Named Benchmark -> IO (Grouped [Named Double])
 toPrint lev flg arr breport = do
@@ -52,10 +51,10 @@ toPrint lev flg arr breport = do
       simples <- sequence $ mapMaybe tkSimple $ here breport
       when (isNothing flg) $ putStrLn $ "\n" ++ showSimples simples
       return $ Simple simples
-    BenchGroup{} -> Group <$> mapM (toPrint (lev+1) flg otherGroups) (nubBy eq1 otherGroups)
+    BenchGroup{} -> Group <$> mapM (toPrint (lev+1) flg otherGroups) (nub otherGroups)
   where
     otherGroups = concatMap tkChilds $ here breport
-    here e = filter (eq1 e) arr
+    here e = filter (== e) arr
 
 printMap :: Map String Int -> IO ()
 printMap m = do
@@ -100,9 +99,6 @@ benchmarkWithoutOutput bm = do
 nameChilds :: String -> [i] -> [Named i]
 nameChilds = map . nameBy . const
 
-elemBy :: (a -> a -> Bool) -> a -> [a] -> Bool
-elemBy f a = foldr (\x y -> f a x || y) False
-
 main :: IO ()
 main = execParser commandI >>= main'
 
@@ -118,7 +114,7 @@ main' opts
                   Part one' two -> let one = one' + 1
                                        per = length grList' `div` two
                                    in drop ((one-1)*per) $ take (one*per) grList'
-          let samples = filter ((flip $ elemBy eq1) todo) grList
+          let samples = filter (`elem` todo) grList
           putStrLn "# Compare benchmarks\n"
           putStrLn "Doing:"
           putStrLn $ "\n----\n"++ showListN todo ++ "----\n"
@@ -130,4 +126,4 @@ main' opts
      ("Containers (Data.Graph)",allBenchs Containers.Graph.functions),
      ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions),
      ("Hash-Graph (Data.HashGraph.Strict)", allBenchs HashGraph.Gr.functions)]
-    grList' = nubBy eq1 grList
+    grList' = nub grList

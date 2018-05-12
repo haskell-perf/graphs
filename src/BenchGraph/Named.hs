@@ -12,8 +12,6 @@ module BenchGraph.Named
   )
 where
 
-import Data.Functor.Classes
-
 type Name = String
 
 class WithName a where
@@ -27,17 +25,14 @@ data Named a = Named {
 instance WithName (Named a) where
   getName = name
 
-instance Eq (Named a) where
-  (Named a _ ) == (Named b _) = a == b
-
-instance Eq1 Named where
-  liftEq f (Named _ a) (Named _ b) = f a b
-
-instance Show (Named a) where
-  show (Named a _) = a
+instance Eq a => Eq (Named a) where
+  (Named _ a ) == (Named _ b) = a == b
 
 instance Ord a => Ord (Named a) where
   a <= b = obj a <= obj b
+
+instance Show (Named a) where
+  show (Named a _) = a
 
 instance Functor Named where
   fmap f (Named n x) = Named n (f x)

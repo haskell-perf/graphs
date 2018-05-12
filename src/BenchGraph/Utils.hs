@@ -28,8 +28,8 @@ extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
 
 graphs :: [(GenericGraph, [Int])]
-graphs = take 1 [
-  (path, take 1 tenPowers),
+graphs = [
+  (path, take 5 tenPowers),
   (circuit, take 5 tenPowers),
   (complete, take 3 tenPowers)
   ]
