@@ -2,28 +2,19 @@ module BenchGraph.Named
   (
     Name,
     Named (..),
-    WithName,
-    getName,
     nameShow,
     nameBy,
     toNamed,
-    showListN,
     classicShow
   )
 where
 
 type Name = String
 
-class WithName a where
-  getName :: a -> String
-
 data Named a = Named {
   name :: Name,
   obj :: a
                      }
-
-instance WithName (Named a) where
-  getName = name
 
 instance Eq a => Eq (Named a) where
   (Named _ a ) == (Named _ b) = a == b
@@ -48,6 +39,3 @@ toNamed = uncurry Named
 
 classicShow :: Show a => Named a -> String
 classicShow = show . obj
-
-showListN :: WithName a => [Named a] -> String
-showListN = unlines . map (getName . obj)

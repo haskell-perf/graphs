@@ -23,12 +23,12 @@ import BenchGraph.Named
 import Options.Applicative (execParser)
 import Command
 
-instance WithName Benchmark where
-  getName (Benchmark n _) = n
-  getName (BenchGroup n _) = n
-
 instance Eq Benchmark where
-  a == b = getName a == getName b
+  a == b = showBenchName a == showBenchName b
+
+showBenchName :: Benchmark -> Name
+showBenchName (Benchmark n _) = n
+showBenchName (BenchGroup n _) = n
 
 data Grouped a = Simple a | Group [Grouped a] deriving (Show)
 
@@ -44,7 +44,7 @@ genReport lev flg arr = mapM_ (toPrint lev flg arr >=> (printMap . getFastest em
 
 toPrint :: Int -> Maybe Flag -> [Named Benchmark] -> Named Benchmark -> IO (Grouped [Named Double])
 toPrint lev flg arr breport = do
-  let bname = getName $ obj breport
+  let bname = showBenchName $ obj breport
   unless (null bname || (isJust flg && lev /= 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   case obj breport of
     Benchmark{} -> do
@@ -99,6 +99,9 @@ benchmarkWithoutOutput bm = do
 nameChilds :: String -> [i] -> [Named i]
 nameChilds = map . nameBy . const
 
+showListN :: [Named Benchmark] -> String
+showListN = unlines . map (showBenchName . obj)
+
 main :: IO ()
 main = execParser commandI >>= main'
 
@@ -110,7 +113,7 @@ main' opts
           let todo = case opt of
                 Nothing -> grList'
                 Just opt' -> case opt' of
-                  Only name -> filter ((==) name . getName) grList
+                  Only bname -> filter ((==) bname . showBenchName . obj) grList'
                   Part one' two -> let one = one' + 1
                                        per = length grList' `div` two
                                    in drop ((one-1)*per) $ take (one*per) grList'
