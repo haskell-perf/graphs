@@ -5,7 +5,8 @@ module BenchGraph.Named
     nameShow,
     nameBy,
     toNamed,
-    classicShow
+    classicShow,
+    fromNamed
   )
 where
 
@@ -39,3 +40,6 @@ toNamed = uncurry Named
 
 classicShow :: Show a => Named a -> String
 classicShow = show . obj
+
+fromNamed :: Named a -> (String,a)
+fromNamed (Named n a) = (n,a)
