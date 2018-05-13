@@ -15,6 +15,7 @@ module BenchGraph (
 import Criterion.Main
 import Weigh
 import Control.DeepSeq (NFData(..), ($!!))
+import Control.Comonad (extract)
 
 import BenchGraph.GenericGraph
 import BenchGraph.Utils (graphs)
@@ -46,13 +47,13 @@ class GraphImpl g where
 benchmark :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Benchmark
 benchmark graphs (Suite sname algo inputs) = bgroup sname cases
   where
-    cases = [ bgroup (name g) $ map (benchSuite algo inputs g) ss | (g, ss) <- graphs ]
+    cases = [ bgroup (show g) $ map (benchSuite algo inputs g) ss | (g, ss) <- graphs ]
 
 benchSuite :: (GraphImpl g, NFData g, NFData o)
            => (i -> g -> o) -> (Edges -> [Named i]) -> GenericGraph -> Size -> Benchmark
 benchSuite algorithm inputs g size = bgroup (show size) cases
   where
-    edges = obj g size
+    edges = extract g size
     graph = mkGraph edges
     cases = [ bench name $ nf (algorithm i) $!! graph | (Named name i) <- inputs edges ]
 
@@ -64,13 +65,13 @@ weigh :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Weigh
 weigh graphs (Suite sname algo inputs) = wgroup sname cases
   where
     cases = mapM_ (uncurry mkGroup) graphs
-    mkGroup g ss = wgroup (name g) $ mapM_ (weighSuite algo inputs g) ss
+    mkGroup g ss = wgroup (show g) $ mapM_ (weighSuite algo inputs g) ss
 
 weighSuite :: (GraphImpl g, NFData g, NFData o)
            => (i -> g -> o) -> (Edges -> [Named i]) -> GenericGraph -> Size -> Weigh ()
 weighSuite algorithm inputs g size = wgroup (show size) cases
   where
-    edges = obj g size
+    edges = extract g size
     graph = mkGraph edges
     cases = mapM_ (uncurry wFunc . fromNamed) $ inputs edges
     wFunc name i = func name (algorithm i) $!! graph

@@ -6,28 +6,33 @@ module BenchGraph.Named
     toNamed,
     classicShow,
     fromNamed,
-    nameShow
+    nameShow,
+    invertMonad,
+    fmapInM
   )
 where
 
+import Control.Comonad
+
 type Name = String
 
-data Named a = Named {
-  name :: Name,
-  obj :: a
-                     }
-
-instance Eq a => Eq (Named a) where
-  a == b = obj a == obj b
-
-instance Ord a => Ord (Named a) where
-  a <= b = obj a <= obj b
+data Named a = Named Name a
 
 instance Show (Named a) where
-  show = name
+  show (Named name _) = name
 
 instance Functor Named where
-  fmap f (Named n x) = Named n (f x)
+  fmap = liftW
+
+instance Comonad Named where
+  extract (Named _ obj) = obj
+  extend f named = Named (show named) $ f named
+
+instance Eq a => Eq (Named a) where
+  a == b = extract a == extract b
+
+instance Ord a => Ord (Named a) where
+  a <= b = extract a <= extract b
 
 nameShow :: Show a => a -> Named a
 nameShow = nameBy show
@@ -39,7 +44,13 @@ toNamed :: (String,a) -> Named a
 toNamed = uncurry Named
 
 classicShow :: Show a => Named a -> String
-classicShow = show . obj
+classicShow = show . extract
 
 fromNamed :: Named a -> (String,a)
 fromNamed (Named n a) = (n,a)
+
+invertMonad :: Monad m => Named (m a) -> m (Named a)
+invertMonad (Named n m) = Named n <$> m
+
+fmapInM :: Monad m => (a -> m b) -> Named a -> m (Named b)
+fmapInM f = invertMonad . fmap f

@@ -15,7 +15,7 @@ import Data.List (nub)
 import BenchGraph.Named
 
 type Vertex = Int
-type Edge = (Vertex,Vertex)
+type Edge   = (Vertex,Vertex)
 type Edges  = [Edge]
 type Size   = Int
 

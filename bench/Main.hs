@@ -20,6 +20,8 @@ import qualified HashGraph.Gr
 import BenchGraph (allBenchs, allWeighs)
 import BenchGraph.Named
 
+import Control.Comonad (extract)
+
 import Options.Applicative (execParser)
 import Command
 
@@ -40,44 +42,45 @@ genReport :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_ (toPrint lev flg arr >=> (printMap . getFastest empty)) $ nub arr
+genReport lev flg arr = mapM_ (toPrint lev flg arr >=> (printMap . getFastests)) $ nub arr
 
 toPrint :: Int -> Maybe Flag -> [Named Benchmark] -> Named Benchmark -> IO (Grouped [Named Double])
 toPrint lev flg arr breport = do
-  let bname = showBenchName $ obj breport
+  let bname = showBenchName $ extract breport
   unless (null bname || (isJust flg && lev /= 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
-  case obj breport of
+  case extract breport of
     Benchmark{} -> do
-      simples <- sequence $ mapMaybe tkSimple $ here breport
+      simples <- mapM (fmapInM benchmarkWithoutOutput) $ mapMaybe (fmapInM tkSimple) $ here breport
       when (isNothing flg) $ putStrLn $ "\n" ++ showSimples simples
       return $ Simple simples
     BenchGroup{} -> Group <$> mapM (toPrint (lev+1) flg otherGroups) (nub otherGroups)
   where
-    otherGroups = concatMap tkChilds $ here breport
+    otherGroups = concatMap nameChilds $ mapMaybe (fmapInM tkChilds) $ here breport
     here e = filter (== e) arr
 
-printMap :: Map String Int -> IO ()
+printMap :: [Named Int] -> IO ()
 printMap m = do
   putStrLn "\nSUMMARY:"
-  void $ foldMap (\(Named k v) -> putStrLn $ k ++ " was the fastest " ++ show v ++ " times") $ sortBy (flip compare) $ map toNamed $ toList m
+  void $ foldMap (\(Named k v) -> putStrLn $ k ++ " was the fastest " ++ show v ++ " times") m
   putStrLn ""
 
-getFastest :: Map String Int -> Grouped [Named Double] -> Map String Int
-getFastest m (Simple a) = getFastest' a m
-getFastest m (Group grp) = foldr (unionWith (+) . getFastest m) empty grp
+-- | get fastests libraries, sorted
+getFastests :: Grouped [Named Double] -> [Named Int]
+getFastests = sortBy (flip compare) . map toNamed . toList . getFastests' empty
 
-getFastest' :: [Named Double] -> Map String Int -> Map String Int
-getFastest' l = alter (Just . maybe 1 (+ 1)) $ show $ minimum l
+getFastests' :: Map String Int -> Grouped [Named Double] -> Map String Int
+getFastests' m (Simple a) = alter (Just . maybe 1 (+ 1)) (show $ minimum a) m
+getFastests' m (Group grp) = foldr (unionWith (+) . getFastests' m) empty grp
 
 -- | Bench only if it is possible
-tkSimple :: Named Benchmark -> Maybe (IO (Named Double))
-tkSimple (Named libName (Benchmark _ b)) = Just $ Named libName . getMean <$> benchmarkWithoutOutput b
-tkSimple (Named _ BenchGroup{}) = Nothing
+tkSimple :: Benchmark -> Maybe Benchmarkable
+tkSimple (Benchmark _ b) = Just b
+tkSimple _ = Nothing
 
 -- | Get the childs of a BenchGroup, inserting the name of the library
-tkChilds :: Named Benchmark -> [Named Benchmark]
-tkChilds (Named _ Benchmark{}) = []
-tkChilds (Named lib (BenchGroup _ childs)) = nameChilds lib childs
+tkChilds :: Benchmark -> Maybe [Benchmark]
+tkChilds (BenchGroup _ childs) = Just childs
+tkChilds _ = Nothing
 
 showSimples :: [Named Double] -> String
 showSimples = unlines . map shw . sort
@@ -87,20 +90,20 @@ showSimples = unlines . map shw . sort
 getMean :: Report -> Double
 getMean = estPoint . anMean . reportAnalysis
 
-benchmarkWithoutOutput :: Benchmarkable -> IO Report
+benchmarkWithoutOutput :: Benchmarkable -> IO Double
 benchmarkWithoutOutput bm = do
   initializeTime
   withConfig defaultConfig' $ do
     Analysed rpt <- runAndAnalyseOne 0 "function" bm
-    return rpt
+    return $ getMean rpt
   where
     defaultConfig' = defaultConfig {verbosity = Quiet}
 
-nameChilds :: String -> [i] -> [Named i]
-nameChilds = map . nameBy . const
+nameChilds :: Named [i] -> [Named i]
+nameChilds f = map (nameBy (const $ show f)) $ extract f
 
 showListN :: [Named Benchmark] -> String
-showListN = unlines . map (showBenchName . obj)
+showListN = unlines . map (showBenchName . extract)
 
 main :: IO ()
 main = execParser commandI >>= main'
@@ -113,7 +116,7 @@ main' opts
           let todo = case opt of
                 Nothing -> grList'
                 Just opt' -> case opt' of
-                  Only bname -> filter ((==) bname . showBenchName . obj) grList'
+                  Only bname -> filter ((==) bname . showBenchName . extract) grList'
                   Part one' two -> let one = one' + 1
                                        per = length grList' `div` two
                                    in drop ((one-1)*per) $ take (one*per) grList'
@@ -124,7 +127,7 @@ main' opts
           genReport 2 flg samples
 
   where
-    grList = concatMap (uncurry nameChilds) [
+    grList = concatMap (nameChilds . toNamed) [
      ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions),
      ("Containers (Data.Graph)",allBenchs Containers.Graph.functions),
      ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions),

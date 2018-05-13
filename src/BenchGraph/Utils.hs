@@ -16,6 +16,8 @@ import BenchGraph.Circuit
 import BenchGraph.Path
 import BenchGraph.Named
 
+import Control.Comonad (extract)
+
 import Weigh (mainWith, Weigh)
 import System.Environment (getArgs)
 import Control.Monad (unless)
@@ -25,7 +27,7 @@ tenPowers = iterate (10*) 1
 
 -- | Remove given edges from the complete graph
 edgesNotInGraph :: Edges -> Edges
-edgesNotInGraph edgs = (\\) (obj complete  $ extractMaxVertex edgs) edgs
+edgesNotInGraph edgs = (\\) (extract complete  $ extractMaxVertex edgs) edgs
 
 extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
