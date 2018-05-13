@@ -18,13 +18,13 @@ data Named a = Named {
                      }
 
 instance Eq a => Eq (Named a) where
-  (Named _ a ) == (Named _ b) = a == b
+  a == b = obj a == obj b
 
 instance Ord a => Ord (Named a) where
   a <= b = obj a <= obj b
 
 instance Show (Named a) where
-  show (Named a _) = a
+  show = name
 
 instance Functor Named where
   fmap f (Named n x) = Named n (f x)

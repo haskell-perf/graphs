@@ -42,7 +42,7 @@ eqS :: (NFData g, GraphImpl g) => (g -> g -> Bool) -> Suite g
 eqS fun = Suite { suiteName = "Equality"
                 , algorithm = fun
                 , inputs    = \x -> fmap mkGraph <$>
-                  [Named ("One edge: "++ show (head x)) [head x]
+                  [nameBy ((++)"vertex: " . show . head) [(0,2)]
                   ,Named "Same graph" x
                   ]
                 }
