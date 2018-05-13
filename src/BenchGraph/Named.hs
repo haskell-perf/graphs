@@ -2,11 +2,11 @@ module BenchGraph.Named
   (
     Name,
     Named (..),
-    nameShow,
     nameBy,
     toNamed,
     classicShow,
-    fromNamed
+    fromNamed,
+    nameShow
   )
 where
 

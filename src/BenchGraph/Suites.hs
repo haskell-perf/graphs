@@ -19,7 +19,7 @@ type SpecialisedSuite u o i g = (i -> g -> o) -- ^ The actual function to test.
   -> (u -> i) -- ^ A function to create the tested function argument
   -> Suite g
 
-hasEdgeS :: NFData o => SpecialisedSuite (Vertex,Vertex) o i g
+hasEdgeS :: NFData o => SpecialisedSuite Edge o i g
 hasEdgeS fun genArg = Suite { suiteName = "HasEdge (not in graph)"
                             , algorithm = fun
                             , inputs    = map (fmap genArg) . withNames . take 2 . edgesNotInGraph }

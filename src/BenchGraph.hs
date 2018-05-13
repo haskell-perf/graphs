@@ -52,7 +52,7 @@ benchSuite :: (GraphImpl g, NFData g, NFData o)
            => (i -> g -> o) -> (Edges -> [Named i]) -> GenericGraph -> Size -> Benchmark
 benchSuite algorithm inputs g size = bgroup (show size) cases
   where
-    edges = mk g size
+    edges = obj g size
     graph = mkGraph edges
     cases = [ bench name $ nf (algorithm i) $!! graph | (Named name i) <- inputs edges ]
 
@@ -70,7 +70,7 @@ weighSuite :: (GraphImpl g, NFData g, NFData o)
            => (i -> g -> o) -> (Edges -> [Named i]) -> GenericGraph -> Size -> Weigh ()
 weighSuite algorithm inputs g size = wgroup (show size) cases
   where
-    edges = mk g size
+    edges = obj g size
     graph = mkGraph edges
     cases = mapM_ (uncurry wFunc . fromNamed) $ inputs edges
     wFunc name i = func name (algorithm i) $!! graph
