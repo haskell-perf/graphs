@@ -50,12 +50,12 @@ toPrint lev flg arr breport = do
   unless (null bname || (isJust flg && lev /= 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   case extract breport of
     Benchmark{} -> do
-      simples <- mapM (fmapInM benchmarkWithoutOutput) $ mapMaybe (fmapInM tkSimple) $ here breport
+      simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimple) $ here breport
       when (isNothing flg) $ putStrLn $ "\n" ++ showSimples simples
       return $ Simple simples
     BenchGroup{} -> Group <$> mapM (toPrint (lev+1) flg otherGroups) (nub otherGroups)
   where
-    otherGroups = concatMap nameChilds $ mapMaybe (fmapInM tkChilds) $ here breport
+    otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here breport
     here e = filter (== e) arr
 
 printMap :: [Named Int] -> IO ()
@@ -99,9 +99,6 @@ benchmarkWithoutOutput bm = do
   where
     defaultConfig' = defaultConfig {verbosity = Quiet}
 
-nameChilds :: Named [i] -> [Named i]
-nameChilds f = map (nameBy (const $ show f)) $ extract f
-
 showListN :: [Named Benchmark] -> String
 showListN = unlines . map (showBenchName . extract)
 
@@ -127,7 +124,7 @@ main' opts
           genReport 2 flg samples
 
   where
-    grList = concatMap (nameChilds . toNamed) [
+    grList = concatMap (sequence . toNamed) [
      ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions),
      ("Containers (Data.Graph)",allBenchs Containers.Graph.functions),
      ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions),

@@ -6,9 +6,7 @@ module BenchGraph.Named
     toNamed,
     classicShow,
     fromNamed,
-    nameShow,
-    invertMonad,
-    fmapInM
+    nameShow
   )
 where
 
@@ -27,6 +25,12 @@ instance Functor Named where
 instance Comonad Named where
   extract (Named _ obj) = obj
   extend f named = Named (show named) $ f named
+
+instance Foldable Named where
+  foldMap f x = f $ extract x
+
+instance Traversable Named where
+  sequenceA (Named n m) = Named n <$> m
 
 instance Eq a => Eq (Named a) where
   a == b = extract a == extract b
@@ -49,8 +53,3 @@ classicShow = show . extract
 fromNamed :: Named a -> (String,a)
 fromNamed (Named n a) = (n,a)
 
-invertMonad :: Monad m => Named (m a) -> m (Named a)
-invertMonad (Named n m) = Named n <$> m
-
-fmapInM :: Monad m => (a -> m b) -> Named a -> m (Named b)
-fmapInM f = invertMonad . fmap f
