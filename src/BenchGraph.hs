@@ -26,16 +26,16 @@ import BenchGraph.Named
 data Suite g = forall i o. NFData o => Suite
     { suiteName :: Name
     , algorithm :: i -> g -> o
-    , inputs    :: Edges -> [(Name, i)] }
+    , inputs    :: Edges -> [Named i] }
 
 -- Not the best name, but still better than "consumer", since all algorithms
 -- are consumers.
 simpleSuite :: NFData o => Name -> (g -> o) -> Suite g
-simpleSuite name algorithm = Suite name (const algorithm) (const [("", ())])
+simpleSuite name algorithm = Suite name (const algorithm) (const [Named "" ()])
 
 -- Show items in a list
-withNames :: Show a => [a] -> [(Name, a)]
-withNames = map (\x -> (show x, x))
+withNames :: Show a => [a] -> [Named a]
+withNames = map nameShow
 
 -- An interface between our generic graphs and others
 class GraphImpl g where
@@ -49,12 +49,12 @@ benchmark graphs (Suite sname algo inputs) = bgroup sname cases
     cases = [ bgroup (name g) $ map (benchSuite algo inputs g) ss | (g, ss) <- graphs ]
 
 benchSuite :: (GraphImpl g, NFData g, NFData o)
-    => (i -> g -> o) -> (Edges -> [(Name, i)]) -> GenericGraph -> Size -> Benchmark
+           => (i -> g -> o) -> (Edges -> [Named i]) -> GenericGraph -> Size -> Benchmark
 benchSuite algorithm inputs g size = bgroup (show size) cases
   where
     edges = mk g size
     graph = mkGraph edges
-    cases = [ bench name $ nf (algorithm i) $!! graph | (name, i) <- inputs edges ]
+    cases = [ bench name $ nf (algorithm i) $!! graph | (Named name i) <- inputs edges ]
 
 allBenchs :: (GraphImpl g, NFData g) => [Suite g] -> [Benchmark]
 allBenchs = map (benchmark graphs)
@@ -67,12 +67,12 @@ weigh graphs (Suite sname algo inputs) = wgroup sname cases
     mkGroup g ss = wgroup (name g) $ mapM_ (weighSuite algo inputs g) ss
 
 weighSuite :: (GraphImpl g, NFData g, NFData o)
-           => (i -> g -> o) -> (Edges -> [(Name, i)]) -> GenericGraph -> Size -> Weigh ()
+           => (i -> g -> o) -> (Edges -> [Named i]) -> GenericGraph -> Size -> Weigh ()
 weighSuite algorithm inputs g size = wgroup (show size) cases
   where
     edges = mk g size
     graph = mkGraph edges
-    cases = mapM_ (uncurry wFunc) $ inputs edges
+    cases = mapM_ (uncurry wFunc . fromNamed) $ inputs edges
     wFunc name i = func name (algorithm i) $!! graph
 
 allWeighs :: (GraphImpl g, NFData g) =>  [Suite g] -> Weigh ()
