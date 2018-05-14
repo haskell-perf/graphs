@@ -33,8 +33,8 @@ library
   hs-source-dirs:      src
   default-language:    Haskell2010
 
-benchmark compare
-    hs-source-dirs:     bench/compare
+benchmark time 
+    hs-source-dirs:     bench/time
     type:               exitcode-stdio-1.0
     main-is:            Main.hs
     other-modules:      Command
