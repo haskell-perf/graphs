@@ -4,13 +4,13 @@ module BenchGraph.Named
     Named (..),
     nameBy,
     toNamed,
-    classicShow,
     fromNamed,
     nameShow
   )
 where
 
 import Control.Comonad
+import Data.Functor.Classes
 
 type Name = String
 
@@ -18,6 +18,9 @@ data Named a = Named Name a
 
 instance Show (Named a) where
   show (Named name _) = name
+
+instance Show1 Named where
+  liftShowsPrec f _ i = f i . extract
 
 instance Functor Named where
   fmap = liftW
@@ -41,15 +44,12 @@ instance Ord a => Ord (Named a) where
 nameShow :: Show a => a -> Named a
 nameShow = nameBy show
 
-nameBy :: (a -> String) -> a -> Named a
+nameBy :: (a -> Name) -> a -> Named a
 nameBy f a = Named (f a) a
 
-toNamed :: (String,a) -> Named a
+toNamed :: (Name,a) -> Named a
 toNamed = uncurry Named
 
-classicShow :: Show a => Named a -> String
-classicShow = show . extract
-
-fromNamed :: Named a -> (String,a)
+fromNamed :: Named a -> (Name,a)
 fromNamed (Named n a) = (n,a)
 
