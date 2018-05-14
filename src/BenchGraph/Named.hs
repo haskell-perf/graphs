@@ -36,10 +36,10 @@ instance Traversable Named where
   sequenceA (Named n m) = Named n <$> m
 
 instance Eq a => Eq (Named a) where
-  a == b = extract a == extract b
+  (==) = liftExtract (==)
 
 instance Ord a => Ord (Named a) where
-  a <= b = extract a <= extract b
+  (<=) = liftExtract (<=)
 
 nameShow :: Show a => a -> Named a
 nameShow = nameBy show
@@ -53,3 +53,5 @@ toNamed = uncurry Named
 fromNamed :: Named a -> (Name,a)
 fromNamed (Named n a) = (n,a)
 
+liftExtract :: (Comonad w) => (a-> b -> c) -> w a -> w b -> c
+liftExtract f a b = f (extract a) (extract b)
