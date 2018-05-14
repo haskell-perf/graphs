@@ -15,15 +15,15 @@ import Algebra.Graph
 instance GraphImpl (Graph Int) where
   mkGraph = edges
 
--- A simple consummer
+-- A simple consumer
 isEmpty' :: Suite (Graph Int)
-isEmpty' = simpleSuite "isEmpty" isEmpty
+isEmpty' = isEmptyS isEmpty
 
 vertexList' :: Suite (Graph Int)
-vertexList' = simpleSuite "vertexList" vertexList
+vertexList' = isEmptyS vertexList
 
 edgeList' :: Suite (Graph Int)
-edgeList' = simpleSuite "edgeList" edgeList
+edgeList' = isEmptyS edgeList
 
 --A simple function
 hasEdge' :: Suite (Graph Int)

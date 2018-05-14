@@ -17,13 +17,13 @@ instance GraphImpl UGr where
   mkGraph e = mkUGraph (vertices e) e
 
 isEmpty' :: Suite UGr
-isEmpty' = simpleSuite "isEmpty" isEmpty
+isEmpty' = isEmptyS isEmpty
 
 edgeList :: Suite UGr
-edgeList = simpleSuite "edgeList" edges
+edgeList = edgeListS edges
 
 vertexList :: Suite UGr
-vertexList = simpleSuite "vertexList" nodes
+vertexList = vertexListS nodes
 
 --A simple function
 hasEdge' :: Suite UGr

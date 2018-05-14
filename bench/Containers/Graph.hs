@@ -16,10 +16,10 @@ instance GraphImpl Graph where
   mkGraph e = buildG (0,extractMaxVertex e) e
 
 edgeList :: Suite Graph
-edgeList = simpleSuite "edgeList" edges
+edgeList = edgeListS edges
 
 vertexList :: Suite Graph
-vertexList = simpleSuite "vertexList" vertices
+vertexList = vertexListS vertices
 
 eq :: Suite Graph
 eq = eqS (==)

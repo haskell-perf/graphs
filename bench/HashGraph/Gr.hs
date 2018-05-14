@@ -20,13 +20,13 @@ mkEdge :: (Int,Int) -> HG.Edge () Int
 mkEdge (x,y) = HG.Edge x () y
 
 isEmpty' :: Suite Gr
-isEmpty' = simpleSuite "isEmpty" HG.null
+isEmpty' = isEmptyS HG.null
 
 edgeList :: Suite Gr
-edgeList = simpleSuite "edgeList" HG.edges
+edgeList = edgeListS HG.edges
 
 vertexList :: Suite Gr
-vertexList = simpleSuite "vertexList" HG.nodes
+vertexList = vertexListS HG.nodes
 
 hasEdge' :: Suite Gr
 hasEdge' = hasEdgeS HG.hasEdge mkEdge
