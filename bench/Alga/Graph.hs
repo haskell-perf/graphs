@@ -15,32 +15,15 @@ import Algebra.Graph
 instance GraphImpl (Graph Int) where
   mkGraph = edges
 
--- A simple consumer
-isEmpty' :: Suite (Graph Int)
-isEmpty' = isEmptyS isEmpty
-
-vertexList' :: Suite (Graph Int)
-vertexList' = isEmptyS vertexList
-
-edgeList' :: Suite (Graph Int)
-edgeList' = isEmptyS edgeList
-
---A simple function
-hasEdge' :: Suite (Graph Int)
-hasEdge' = hasEdgeS (uncurry hasEdge) id
-
-connect' :: Suite (Graph Int)
-connect' = addVertexS connect vertex
-
-removeVertex' :: Suite (Graph Int)
-removeVertex' = removeVertexS removeVertex id
-
-eq :: Suite (Graph Int)
-eq = eqS (==)
-
-removeEdge' :: Suite (Graph Int)
-removeEdge' = removeEdgeS (uncurry removeEdge) id
-
 functions :: [Suite (Graph Int)]
-functions = [connect', removeVertex', hasEdge', isEmpty', edgeList', vertexList', eq, removeEdge']
+functions =
+  [ isEmptyS isEmpty
+  , vertexListS vertexList
+  , edgeListS edgeList
+  , hasEdgeS (uncurry hasEdge) id
+  , addVertexS connect vertex
+  , removeVertexS removeVertex id
+  , eqS (==)
+  , removeEdgeS (uncurry removeEdge) id
+  ]
 

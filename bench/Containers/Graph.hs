@@ -15,15 +15,9 @@ import Data.Graph
 instance GraphImpl Graph where
   mkGraph e = buildG (0,extractMaxVertex e) e
 
-edgeList :: Suite Graph
-edgeList = edgeListS edges
-
-vertexList :: Suite Graph
-vertexList = vertexListS vertices
-
-eq :: Suite Graph
-eq = eqS (==)
-
 functions :: [Suite Graph]
-functions = [edgeList, vertexList, eq]
-
+functions =
+  [ edgeListS edges
+  , vertexListS vertices
+  , eqS (==)
+  ]

@@ -16,34 +16,17 @@ import Data.Graph.Inductive.PatriciaTree
 instance GraphImpl UGr where
   mkGraph e = mkUGraph (vertices e) e
 
-isEmpty' :: Suite UGr
-isEmpty' = isEmptyS isEmpty
-
-edgeList :: Suite UGr
-edgeList = edgeListS edges
-
-vertexList :: Suite UGr
-vertexList = vertexListS nodes
-
---A simple function
-hasEdge' :: Suite UGr
-hasEdge' = hasEdgeS (flip hasEdge) id
-
-insNode' :: Suite UGr
-insNode' = addVertexS insNode (\x -> (x,()))
-
-removeVertex' :: Suite UGr
-removeVertex' = removeVertexS delNode id
-
-eq :: Suite UGr
-eq = eqS (==)
-
-addEdge' :: Suite UGr
-addEdge' = addEdgeS insEdge (\(x,y) -> (x,y,()))
-
-removeEdge' :: Suite UGr
-removeEdge' = removeEdgeS delEdge id
 
 functions :: [Suite UGr]
-functions = [insNode',removeVertex', hasEdge', isEmpty', edgeList, vertexList, eq, addEdge', removeEdge']
+functions =
+  [ isEmptyS isEmpty
+  , edgeListS edges
+  , vertexListS nodes
+  , hasEdgeS (flip hasEdge) id
+  , addVertexS insNode (\x -> (x,()))
+  , removeVertexS delNode id
+  , eqS (==)
+  , addEdgeS insEdge (\(x,y) -> (x,y,()))
+  , removeEdgeS delEdge id
+  ]
 
