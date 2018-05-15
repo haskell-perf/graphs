@@ -40,6 +40,12 @@ removeVertex' = removeVertexS HG.delNode id
 eq :: Suite Gr
 eq = eqS (==)
 
+addEdge' :: Suite Gr
+addEdge' = addEdgeS HG.insEdge mkEdge
+
+removeEdge' :: Suite Gr
+removeEdge' = removeEdgeS HG.delEdge mkEdge
+
 functions :: [Suite Gr]
-functions = [removeVertex', insNode', hasEdge', isEmpty', edgeList, vertexList, eq]
+functions = [removeVertex', insNode', hasEdge', isEmpty', edgeList, vertexList, eq, addEdge', removeEdge']
 

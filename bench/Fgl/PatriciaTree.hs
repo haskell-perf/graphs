@@ -38,6 +38,12 @@ removeVertex' = removeVertexS delNode id
 eq :: Suite UGr
 eq = eqS (==)
 
+addEdge' :: Suite UGr
+addEdge' = addEdgeS insEdge (\(x,y) -> (x,y,()))
+
+removeEdge' :: Suite UGr
+removeEdge' = removeEdgeS delEdge id
+
 functions :: [Suite UGr]
-functions = [insNode',removeVertex', hasEdge', isEmpty', edgeList, vertexList, eq]
+functions = [insNode',removeVertex', hasEdge', isEmpty', edgeList, vertexList, eq, addEdge', removeEdge']
 

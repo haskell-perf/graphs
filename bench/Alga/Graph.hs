@@ -38,6 +38,9 @@ removeVertex' = removeVertexS removeVertex id
 eq :: Suite (Graph Int)
 eq = eqS (==)
 
+removeEdge' :: Suite (Graph Int)
+removeEdge' = removeEdgeS (uncurry removeEdge) id
+
 functions :: [Suite (Graph Int)]
-functions = [connect', removeVertex', hasEdge', isEmpty', edgeList', vertexList', eq]
+functions = [connect', removeVertex', hasEdge', isEmpty', edgeList', vertexList', eq, removeEdge']
 
