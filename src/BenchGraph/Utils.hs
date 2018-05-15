@@ -18,7 +18,7 @@ import BenchGraph.Named
 
 import Control.Comonad (extract)
 
-import Weigh (mainWith, Weigh)
+import Weigh (mainWith, Weigh, Grouped, Weight, weighResults)
 import System.Environment (getArgs)
 import Control.Monad (unless)
 
@@ -32,15 +32,15 @@ edgesNotInGraph edgs = (\\) (extract complete  $ extractMaxVertex edgs) edgs
 extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
 
-graphs :: [(GenericGraph, [Int])]
-graphs = [
-  (path, take 5 tenPowers),
-  (circuit, take 5 tenPowers),
-  (complete, take 3 tenPowers)
+graphs :: (Int, Int, Int) -> [(GenericGraph, [Int])]
+graphs (a,b,c) = [
+  (path, take a tenPowers),
+  (circuit, take b tenPowers),
+  (complete, take c tenPowers)
   ]
 
-mainWeigh :: Weigh () -> IO () -> IO ()
-mainWeigh wei rest = do
+mainWeigh :: Weigh () -> ([Grouped (Weight, Maybe String)] -> IO ()) -> IO ()
+mainWeigh wei f = do
   args <- getArgs
-  mainWith wei
-  unless (foldl (\x y -> x || isInfixOf "--case" y) False args) rest
+  (results,_) <- weighResults wei
+  unless (foldl (\x y -> x || isInfixOf "--case" y) False args) $ f results

@@ -34,9 +34,9 @@ library
   default-language:    Haskell2010
 
 benchmark time 
-    hs-source-dirs:     bench/time
+    hs-source-dirs:     bench
     type:               exitcode-stdio-1.0
-    main-is:            Main.hs
+    main-is:            Time.hs
     other-modules:      Command
                       , Alga.Graph
                       , Containers.Graph
@@ -48,7 +48,6 @@ benchmark time
                         criterion        >= 1.3     && < 1.5,
                         hash-graph       >= 0.1.0.0,
                         algebraic-graphs >= 0.1.1.1,
-                        weigh            >= 0.0.11,
                         comonad          >= 5.0.3,
                         statistics,
                         optparse-applicative,
@@ -56,3 +55,24 @@ benchmark time
     default-language:   Haskell2010
     GHC-options:        -O2
                         -Wall
+
+benchmark size
+    hs-source-dirs:     bench
+    type:               exitcode-stdio-1.0
+    main-is:            Space.hs
+    other-modules:      Alga.Graph
+                      , Containers.Graph
+                      , Fgl.PatriciaTree
+                      , HashGraph.Gr
+    build-depends:      base             >= 4.7     && < 4.12,
+                        fgl              >= 5.5.4.0,
+                        containers       >= 0.5.5.1 && < 0.8,
+                        hash-graph       >= 0.1.0.0,
+                        algebraic-graphs >= 0.1.1.1,
+                        weigh            >= 0.0.11,
+                        comonad          >= 5.0.3,
+                        bench-graph
+    default-language:   Haskell2010
+    GHC-options:        -O2
+                        -Wall
+

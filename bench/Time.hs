@@ -17,7 +17,7 @@ import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
 
-import BenchGraph (allBenchs, allWeighs)
+import BenchGraph (allBenchs)
 import BenchGraph.Named
 
 import Control.Comonad (extract)

@@ -43,7 +43,6 @@ class GraphImpl g where
     mkGraph :: Edges -> g
 
 ---- Criterion
-
 benchmark :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Benchmark
 benchmark graphs (Suite sname algo inputs) = bgroup sname cases
   where
@@ -58,7 +57,7 @@ benchSuite algorithm inputs g size = bgroup (show size) cases
     cases = [ bench name $ nf (algorithm i) $!! graph | (Named name i) <- inputs edges ]
 
 allBenchs :: (GraphImpl g, NFData g) => [Suite g] -> [Benchmark]
-allBenchs = map (benchmark graphs)
+allBenchs = map (benchmark $ graphs (5,5,3) )
 
 ---- Weigh
 weigh :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Weigh ()
@@ -77,4 +76,4 @@ weighSuite algorithm inputs g size = wgroup (show size) cases
     wFunc name i = func name (algorithm i) $!! graph
 
 allWeighs :: (GraphImpl g, NFData g) =>  [Suite g] -> Weigh ()
-allWeighs = mapM_ (weigh graphs)
+allWeighs = mapM_ (weigh $ graphs (3,3,2))

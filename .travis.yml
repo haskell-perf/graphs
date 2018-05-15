@@ -3,14 +3,15 @@ language: haskell
 ghc: 8.2.2
 
 env:
-    - STEP=0
-    - STEP=1
-    - STEP=2
+    - DO=TIME STEP=0
+    - DO=TIME STEP=1
+    - DO=TIME STEP=2
+    - DO=SIZE
 
 script:
     - cabal configure --enable-benchmarks 
     - cabal build
-    - ./dist/build/time/time run --part $STEP --of 2
+    - if [ $DO = SIZE ]; then ./dist/build/size/size; else ./dist/build/time/time run --part $STEP --of 2; fi;
 
 install:
     - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph
