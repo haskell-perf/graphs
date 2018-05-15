@@ -1,15 +1,33 @@
+import Data.List (nub, nubBy)
+import Data.Maybe (mapMaybe)
+
 import qualified Alga.Graph
 import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
 
 import BenchGraph (allWeighs)
+import BenchGraph.Named
 import BenchGraph.Utils (mainWeigh)
 
 import Weigh
 
+showGrouped :: Grouped a -> String
+showGrouped (Grouped n _) = n
+showGrouped (Singleton n _) = n
+
+eqG :: Grouped a -> Grouped a -> Bool
+eqG a b = showGrouped a == showGrouped b
+
+groupedToNamed :: Grouped a -> Maybe (Named [Grouped a])
+groupedToNamed (Grouped n rst) = Just $ Named n rst
+groupedToNamed _ = Nothing
+
 useResults :: [Grouped (Weight, Maybe String)] -> IO ()
-useResults res = print res
+useResults res = putStrLn $ unlines $ map (liftExtract show) namedBenchs
+  where
+    namedBenchs = concatMap sequence $ mapMaybe groupedToNamed res
+    benchs' = nubBy (liftExtract2 eqG) namedBenchs
 
 main :: IO ()
 main = mainWeigh benchs useResults

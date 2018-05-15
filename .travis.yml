@@ -6,12 +6,12 @@ env:
     - DO=TIME STEP=0
     - DO=TIME STEP=1
     - DO=TIME STEP=2
-    - DO=SIZE
+    - DO=SPACE
 
 script:
     - cabal configure --enable-benchmarks 
     - cabal build
-    - if [ $DO = SIZE ]; then ./dist/build/size/size; else ./dist/build/time/time run --part $STEP --of 2; fi;
+    - if [ $DO = SPACE ]; then ./dist/build/space/space; else ./dist/build/time/time run --part $STEP --of 2; fi;
 
 install:
     - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph

@@ -5,7 +5,9 @@ module BenchGraph.Named
     nameBy,
     toNamed,
     fromNamed,
-    nameShow
+    nameShow,
+    liftExtract,
+    liftExtract2
   )
 where
 
@@ -18,9 +20,6 @@ data Named a = Named Name a
 
 instance Show (Named a) where
   show (Named name _) = name
-
-instance Show1 Named where
-  liftShowsPrec f _ i = f i . extract
 
 instance Functor Named where
   fmap = liftW
@@ -36,10 +35,10 @@ instance Traversable Named where
   sequenceA (Named n m) = Named n <$> m
 
 instance Eq a => Eq (Named a) where
-  (==) = liftExtract (==)
+  (==) = liftExtract2 (==)
 
 instance Ord a => Ord (Named a) where
-  (<=) = liftExtract (<=)
+  (<=) = liftExtract2 (<=)
 
 nameShow :: Show a => a -> Named a
 nameShow = nameBy show
@@ -53,5 +52,8 @@ toNamed = uncurry Named
 fromNamed :: Named a -> (Name,a)
 fromNamed (Named n a) = (n,a)
 
-liftExtract :: (Comonad w) => (a-> b -> c) -> w a -> w b -> c
-liftExtract f a b = f (extract a) (extract b)
+liftExtract :: (a -> b) -> Named a -> b
+liftExtract f = f . extract
+
+liftExtract2 :: (Comonad w) => (a-> b -> c) -> w a -> w b -> c
+liftExtract2 f a b = f (extract a) (extract b)
