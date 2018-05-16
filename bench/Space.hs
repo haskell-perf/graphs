@@ -1,4 +1,4 @@
-import Data.List (nubBy)
+import Data.List (nubBy, sortBy)
 import Data.Maybe (mapMaybe)
 import Control.Monad (unless)
 
@@ -52,7 +52,7 @@ printSimples lev arr act = do
   unless (null bname) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   putStrLn $ unlines $ map showNamed filtered
   where
-    filtered = filter (liftExtract (eqW act)) arr
+    filtered = sortBy (liftExtract2 $ \(x,_) (y,_) -> weightAllocatedBytes x `compare` weightAllocatedBytes y) $ filter (liftExtract (eqW act)) arr
     showNamed (Named k v) = unwords
       [ "* "
       , k
