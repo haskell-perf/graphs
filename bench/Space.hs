@@ -22,6 +22,9 @@ showGrouped (Singleton n _) = n
 eqG :: Grouped a -> Grouped a -> Bool
 eqG a b = showGrouped a == showGrouped b
 
+eqW :: (Weight, a) -> (Weight, a) -> Bool
+eqW (x,_) (y,_) = weightLabel x == weightLabel y
+
 groupedToNamed :: Grouped a -> Maybe (Named [Grouped a])
 groupedToNamed (Grouped n rst) = Just $ Named n rst
 groupedToNamed _ = Nothing
@@ -34,13 +37,20 @@ genReport lev arr act = do
   let bname = showGrouped act
   unless (null bname) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   case act of
-    Singleton{} -> putStrLn $ unlines $ map (\(Named k v) -> k ++ " :" ++ show v) simples
-    --(Grouped _ [Singleton{}]) -> putStrLn $ unlines $ map (\(Named k v) -> k ++ " :" ++ show v) simples
+    (Grouped _ (Singleton{}:_)) -> mapM_ (showSimples (lev+1) semiSimples . extract) $ nubBy (liftExtract2 eqW) semiSimples
     Grouped{} -> mapM_ (genReport (lev+1) otherGroups . extract) $ nubBy (liftExtract2 eqG) otherGroups
     where
-      simples = mapMaybe (traverse tkSingl) $ here act
-      otherGroups = map (fmap  trueSingIsSing) $ concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
+      semiSimples = mapMaybe (traverse tkSingl) otherGroups
+      otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
       here e = filter (eqG e . extract) arr
+
+showSimples :: Int -> [Named (Weight, Maybe String)] -> (Weight, Maybe String) -> IO ()
+showSimples lev arr act = do
+  let bname = weightLabel $ fst act
+  unless (null bname) $ putStrLn $ replicate lev '#' ++ " " ++ bname
+  putStrLn $ unlines $ map (\(Named k v) -> "* " ++ k ++ " :" ++ show v) filtered
+  where
+    filtered = filter (liftExtract (eqW act)) arr
 
 -- | Take singletons
 tkSingl :: Grouped (Weight, Maybe String) -> Maybe (Weight, Maybe String)
@@ -51,10 +61,6 @@ tkSingl _ = Nothing
 tkChilds :: Grouped (Weight, Maybe String) -> Maybe [Grouped (Weight, Maybe String)]
 tkChilds (Grouped _ childs) = Just childs
 tkChilds _ = Nothing
-
-trueSingIsSing :: Grouped (Weight, Maybe String) -> Grouped (Weight, Maybe String)
-trueSingIsSing (Grouped n [Singleton _ b]) = Singleton n b
-trueSingIsSing a = a
 
 useResults :: [Grouped (Weight, Maybe String)] -> IO ()
 useResults res = mapM_ (genReport 2 namedBenchs . extract) benchs'
