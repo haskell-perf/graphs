@@ -42,21 +42,21 @@ genReport :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_ (toPrint lev flg arr >=> (printMap . getFastests)) $ nub arr
+genReport lev flg arr = mapM_ (toPrint lev flg arr . extract >=> (printMap . getFastests)) $ nub arr
 
-toPrint :: Int -> Maybe Flag -> [Named Benchmark] -> Named Benchmark -> IO (Grouped [Named Double])
+toPrint :: Int -> Maybe Flag -> [Named Benchmark] -> Benchmark -> IO (Grouped [Named Double])
 toPrint lev flg arr breport = do
-  let bname = showBenchName $ extract breport
+  let bname = showBenchName breport
   unless (null bname || (isJust flg && lev /= 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
-  case extract breport of
+  case breport of
     Benchmark{} -> do
       simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimple) $ here breport
       when (isNothing flg) $ putStrLn $ "\n" ++ showSimples simples
       return $ Simple simples
-    BenchGroup{} -> Group <$> mapM (toPrint (lev+1) flg otherGroups) (nub otherGroups)
+    BenchGroup{} -> Group <$> mapM (toPrint (lev+1) flg otherGroups . extract) (nub otherGroups)
   where
     otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here breport
-    here e = filter (== e) arr
+    here e = filter (liftExtract (== e)) arr
 
 printMap :: [Named Int] -> IO ()
 printMap m = do

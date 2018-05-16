@@ -33,24 +33,39 @@ genReport :: Int -- ^ The number of # to write
           -> [Named (Grouped (Weight, Maybe String))] -- ^ The list of benchs
           -> Grouped (Weight, Maybe String) -- ^ A selected bench name
           -> IO ()
+genReport _ [] _ = putStrLn "\nNo data\n"
 genReport lev arr act = do
   let bname = showGrouped act
   unless (null bname) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   case act of
-    (Grouped _ (Singleton{}:_)) -> mapM_ (showSimples (lev+1) semiSimples . extract) $ nubBy (liftExtract2 eqW) semiSimples
+    (Grouped _ (Singleton{}:_)) -> mapM_ (printSimples (lev+1) semiSimples . extract) $ nubBy (liftExtract2 eqW) semiSimples
     Grouped{} -> mapM_ (genReport (lev+1) otherGroups . extract) $ nubBy (liftExtract2 eqG) otherGroups
     where
       semiSimples = mapMaybe (traverse tkSingl) otherGroups
       otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
       here e = filter (eqG e . extract) arr
 
-showSimples :: Int -> [Named (Weight, Maybe String)] -> (Weight, Maybe String) -> IO ()
-showSimples lev arr act = do
+printSimples :: Int -> [Named (Weight, Maybe String)] -> (Weight, Maybe String) -> IO ()
+printSimples lev arr act = do
   let bname = weightLabel $ fst act
   unless (null bname) $ putStrLn $ replicate lev '#' ++ " " ++ bname
-  putStrLn $ unlines $ map (\(Named k v) -> "* " ++ k ++ " :" ++ show v) filtered
+  putStrLn $ unlines $ map showNamed filtered
   where
     filtered = filter (liftExtract (eqW act)) arr
+    showNamed (Named k v) = unwords
+      [ "* "
+      , k
+      , ":"
+      ,  showWeight (fst v) -- Use the Maybe String ?
+      ]
+
+showWeight :: Weight -> String
+showWeight w = unwords
+  [ "AllocatedBytes:"
+  , show (weightAllocatedBytes w)
+  , ", GCs :"
+  , show (weightGCs w)
+  ]
 
 -- | Take singletons
 tkSingl :: Grouped (Weight, Maybe String) -> Maybe (Weight, Maybe String)
