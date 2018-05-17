@@ -2,11 +2,11 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module HashGraph.Gr
-(functions)
+  (functions, mk)
 where
 
 import BenchGraph
-import BenchGraph.GenericGraph (vertices)
+import BenchGraph.GenericGraph (Edges,vertices)
 import BenchGraph.Suites
 
 import qualified Data.HashGraph.Strict as HG
@@ -14,10 +14,13 @@ import qualified Data.HashGraph.Strict as HG
 type Gr = HG.Gr () Int
 
 instance GraphImpl Gr where
-  mkGraph e = HG.mkGraph (map mkEdge e) (vertices e)
+  mkGraph = mk
 
 mkEdge :: (Int,Int) -> HG.Edge () Int
 mkEdge (x,y) = HG.Edge x () y
+
+mk :: Edges -> Gr
+mk e = HG.mkGraph (map mkEdge e) (vertices e)
 
 functions :: [Suite Gr]
 functions =

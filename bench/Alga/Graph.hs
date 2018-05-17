@@ -3,17 +3,22 @@
 
 module Alga.Graph
   (
-  functions
+   functions
+  ,mk
   )
 where
 
 import BenchGraph
 import BenchGraph.Suites
+import BenchGraph.GenericGraph (Edges)
 
 import Algebra.Graph
 
 instance GraphImpl (Graph Int) where
   mkGraph = edges
+
+mk :: Edges -> Graph Int
+mk = edges
 
 functions :: [Suite (Graph Int)]
 functions =

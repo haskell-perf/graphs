@@ -16,7 +16,7 @@ import Command
 import qualified Types as Ty
 import Best
 
-import BenchGraph (allWeighs)
+import BenchGraph (allWeighs, weighCreation)
 import BenchGraph.Named
 import BenchGraph.Utils (mainWeigh)
 
@@ -111,3 +111,7 @@ main' opts = mainWeigh benchs (useResults opts)
       wgroup "Containers (Data.Graph)" $ allWeighs Containers.Graph.functions
       wgroup "Fgl (Data.Graph.Inductive.PatriciaTree)" $ allWeighs Fgl.PatriciaTree.functions
       wgroup "Hash-Graph (Data.HashGraph.Strict)" $ allWeighs HashGraph.Gr.functions
+      wgroup "Alga (Algebra.Graph)" $ weighCreation Alga.Graph.mk
+      wgroup "Containers (Data.Graph)" $ weighCreation Containers.Graph.mk
+      wgroup "Fgl (Data.Graph.Inductive.PatriciaTree)" $ weighCreation Fgl.PatriciaTree.mk
+      wgroup "Hash-Graph (Data.HashGraph.Strict)" $ weighCreation HashGraph.Gr.mk

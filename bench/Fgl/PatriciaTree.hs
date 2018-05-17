@@ -2,20 +2,21 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Fgl.PatriciaTree
-(functions)
+  (functions, mk)
 where
 
 import BenchGraph
-import BenchGraph.GenericGraph (vertices)
-
+import BenchGraph.GenericGraph (Edges,vertices)
 import BenchGraph.Suites
 
 import Data.Graph.Inductive.Graph
 import Data.Graph.Inductive.PatriciaTree
 
 instance GraphImpl UGr where
-  mkGraph e = mkUGraph (vertices e) e
+  mkGraph = mk
 
+mk :: Edges -> UGr
+mk e = mkUGraph (vertices e) e
 
 functions :: [Suite UGr]
 functions =
