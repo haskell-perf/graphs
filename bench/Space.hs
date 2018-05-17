@@ -18,6 +18,10 @@ import Weigh
 import qualified Text.Tabular as T
 import qualified Text.Tabular.AsciiArt as TAA
 
+import Options.Applicative (execParser)
+
+import Command
+
 showGrouped :: Grouped a -> String
 showGrouped (Grouped n _) = n
 showGrouped _ = ""
@@ -40,25 +44,26 @@ groupedToNamed _ = Nothing
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write
-          -> [Named (Grouped (Weight, Maybe String))] -- ^ The list of benchs
-          -> Grouped (Weight, Maybe String) -- ^ A selected bench name
-          -> IO ()
-printReport lev arr act = do
+            -> Maybe Flag -- ^ Maybe a flag
+            -> [Named (Grouped (Weight, Maybe String))] -- ^ The list of benchs
+            -> Grouped (Weight, Maybe String) -- ^ A selected bench name
+            -> IO ()
+printReport lev flg arr act = do
   let bname = showGrouped act
   unless (null bname) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   case act of
-    (Grouped _ (Singleton{}:_)) -> mapM_ (printSimples (lev+1) semiSimples . extract) $ nubBy (liftExtract2 eqW) semiSimples
+    (Grouped _ (Singleton{}:_)) -> mapM_ (printSimples (lev+1) flg semiSimples . extract) $ nubBy (liftExtract2 eqW) semiSimples
     Grouped{} -> case nubBy (liftExtract2 eqG) otherGroups of
                    [] -> putStrLn "No data\n"
-                   real -> mapM_ (printReport (lev+1) otherGroups . extract) real
+                   real -> mapM_ (printReport (lev+1) flg otherGroups . extract) real
     where
       semiSimples = mapMaybe (traverse tkSingl) otherGroups
       otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
       here e = filter (eqG e . extract) arr
 
 -- | Really print the simples, different than printReport for type reason
-printSimples :: Int -> [Named (Weight, Maybe String)] -> (Weight, Maybe String) -> IO ()
-printSimples lev arr act = do
+printSimples :: Int -> Maybe Flag -> [Named (Weight, Maybe String)] -> (Weight, Maybe String) -> IO ()
+printSimples lev flg arr act = do
   let bname = takeLastAfterBk $ weightLabel $ fst act
   unless (null bname) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   putStrLn $ TAA.render id id id table
@@ -86,14 +91,17 @@ tkChilds :: Grouped (Weight, Maybe String) -> Maybe [Grouped (Weight, Maybe Stri
 tkChilds (Grouped _ childs) = Just childs
 tkChilds _ = Nothing
 
-useResults :: [Grouped (Weight, Maybe String)] -> IO ()
-useResults res = mapM_ (genReport 2 namedBenchs . extract) benchs'
+useResults :: Maybe Flag -> [Grouped (Weight, Maybe String)] -> IO ()
+useResults flg res = mapM_ (printReport 2 flg namedBenchs . extract) benchs'
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed res
     benchs' = nubBy (liftExtract2 eqG) namedBenchs
 
 main :: IO ()
-main = mainWeigh benchs useResults
+main = execParser flagSpace >>= main'
+
+main' :: Maybe Flag -> IO ()
+main' opts = mainWeigh benchs (useResults opts)
   where
     benchs = do
       wgroup "Alga (Algebra.Graph)" $ allWeighs Alga.Graph.functions

@@ -3,7 +3,8 @@ module Command
   Option (..),
   Flag (..),
   Command (..),
-  commandI
+  commandTime,
+  flagSpace
   )
 
 where
@@ -57,10 +58,17 @@ command' = subparser
      <> progDesc "Compare benchmarks of graphs libraries"
      <> header "Help" )
 
-commandI :: ParserInfo Command
-commandI = info (semiOptional <**> helper)
+commandTime :: ParserInfo Command
+commandTime = info (semiOptional <**> helper)
       ( fullDesc
-     <> progDesc "Compare benchmarks of graphs libraries"
+     <> progDesc "Benchmark time of functions on different graphs libraries"
      <> header "Help" )
   where
     semiOptional = pure (fromMaybe (Run Nothing Nothing)) <*> optional command'
+
+flagSpace :: ParserInfo (Maybe Flag)
+flagSpace = info (optional sumFlag <**> helper)
+      ( fullDesc
+     <> progDesc "Benchmark size of functions on different graphs libraries"
+     <> header "Help" )
+

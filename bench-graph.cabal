@@ -37,11 +37,13 @@ benchmark time
     hs-source-dirs:     bench
     type:               exitcode-stdio-1.0
     main-is:            Time.hs
-    other-modules:      Command
-                      , Alga.Graph
+    other-modules:      Alga.Graph
                       , Containers.Graph
                       , Fgl.PatriciaTree
                       , HashGraph.Gr
+                      , Command
+                      , Types
+                      , Best
     build-depends:      base             >= 4.7     && < 4.12,
                         fgl              >= 5.5.4.0,
                         containers       >= 0.5.5.1 && < 0.8,
@@ -65,6 +67,9 @@ benchmark space
                       , Containers.Graph
                       , Fgl.PatriciaTree
                       , HashGraph.Gr
+                      , Command
+                      , Types
+                      , Best
     build-depends:      base             >= 4.7     && < 4.12,
                         fgl              >= 5.5.4.0,
                         containers       >= 0.5.5.1 && < 0.8,
@@ -73,6 +78,7 @@ benchmark space
                         weigh            >= 0.0.12,
                         comonad          >= 5.0.3,
                         tabular          >= 0.2.2.7,
+                        optparse-applicative,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
