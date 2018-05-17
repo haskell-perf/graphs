@@ -62,7 +62,7 @@ allBenchs :: (GraphImpl g, NFData g) => [Suite g] -> [Benchmark]
 allBenchs = map (benchmark $ graphs (5,5,3) )
 
 benchmarkCreation :: (NFData g) => (Edges -> g) -> [Benchmark]
-benchmarkCreation mk = [ bgroup n $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | (Named n grf, ss) <- graphs (5,5,3) ]
+benchmarkCreation mk = [ bgroup ("make a " ++  n ++ " from a list") $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | (Named n grf, ss) <- graphs (5,5,3) ]
 
 ---- Weigh
 weigh :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Weigh ()
@@ -84,4 +84,4 @@ allWeighs :: (GraphImpl g, NFData g) =>  [Suite g] -> Weigh ()
 allWeighs = mapM_ (weigh $ graphs (3,3,2))
 
 weighCreation :: (NFData g) => (Edges -> g) -> Weigh ()
-weighCreation mk = sequence_ [wgroup n $ mapM_ (\i -> func (show i) mk $ grf i ) ss | (Named n grf, ss) <- graphs (3,3,2) ]
+weighCreation mk = sequence_ [wgroup ("make a " ++  n ++ " from a list") $ mapM_ (\i -> func (show i) mk $ grf i ) ss | (Named n grf, ss) <- graphs (3,3,2) ]

@@ -16,7 +16,7 @@ import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
 
-import BenchGraph (allBenchs)
+import BenchGraph (allBenchs, benchmarkCreation)
 import BenchGraph.Named
 
 import Control.Comonad (extract)
@@ -122,8 +122,8 @@ main' opts
 
   where
     grList = concatMap (sequence . toNamed) [
-     ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions),
-     ("Containers (Data.Graph)",allBenchs Containers.Graph.functions),
-     ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions),
-     ("Hash-Graph (Data.HashGraph.Strict)", allBenchs HashGraph.Gr.functions)]
+     ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions ++ benchmarkCreation Alga.Graph.mk ),
+     ("Containers (Data.Graph)",allBenchs Containers.Graph.functions ++ benchmarkCreation Containers.Graph.mk),
+     ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions ++ benchmarkCreation Fgl.PatriciaTree.mk),
+     ("Hash-Graph (Data.HashGraph.Strict)", allBenchs HashGraph.Gr.functions ++ benchmarkCreation HashGraph.Gr.mk)]
     grList' = nub grList

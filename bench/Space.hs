@@ -107,11 +107,8 @@ main' :: Maybe Flag -> IO ()
 main' opts = mainWeigh benchs (useResults opts)
   where
     benchs = do
-      wgroup "Alga (Algebra.Graph)" $ allWeighs Alga.Graph.functions
-      wgroup "Containers (Data.Graph)" $ allWeighs Containers.Graph.functions
-      wgroup "Fgl (Data.Graph.Inductive.PatriciaTree)" $ allWeighs Fgl.PatriciaTree.functions
-      wgroup "Hash-Graph (Data.HashGraph.Strict)" $ allWeighs HashGraph.Gr.functions
-      wgroup "Alga (Algebra.Graph)" $ weighCreation Alga.Graph.mk
-      wgroup "Containers (Data.Graph)" $ weighCreation Containers.Graph.mk
-      wgroup "Fgl (Data.Graph.Inductive.PatriciaTree)" $ weighCreation Fgl.PatriciaTree.mk
-      wgroup "Hash-Graph (Data.HashGraph.Strict)" $ weighCreation HashGraph.Gr.mk
+      wgroup "Alga (Algebra.Graph)" $ allWeighs Alga.Graph.functions >> weighCreation Alga.Graph.mk
+      wgroup "Containers (Data.Graph)" $ allWeighs Containers.Graph.functions >> weighCreation Containers.Graph.mk
+      wgroup "Fgl (Data.Graph.Inductive.PatriciaTree)" $ allWeighs Fgl.PatriciaTree.functions >> weighCreation Fgl.PatriciaTree.mk
+      wgroup "Hash-Graph (Data.HashGraph.Strict)" $ allWeighs HashGraph.Gr.functions >> weighCreation HashGraph.Gr.mk
+
