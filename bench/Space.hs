@@ -1,5 +1,5 @@
-import Data.List (nubBy, sortBy)
-import Data.Maybe (mapMaybe)
+import Data.List (nubBy, sortBy, elemIndices)
+import Data.Maybe (mapMaybe, fromMaybe)
 import Control.Monad (unless)
 
 import qualified Alga.Graph
@@ -15,15 +15,23 @@ import Control.Comonad (extract)
 
 import Weigh
 
+import qualified Text.Tabular as T
+import qualified Text.Tabular.AsciiArt as TAA
+
 showGrouped :: Grouped a -> String
 showGrouped (Grouped n _) = n
-showGrouped (Singleton n _) = n
+showGrouped _ = ""
 
 eqG :: Grouped a -> Grouped a -> Bool
 eqG a b = showGrouped a == showGrouped b
 
 eqW :: (Weight, a) -> (Weight, a) -> Bool
-eqW (x,_) (y,_) = weightLabel x == weightLabel y
+eqW (x,_) (y,_) = takeLastAfterBk (weightLabel x) == takeLastAfterBk (weightLabel y)
+
+takeLastAfterBk :: String -> String
+takeLastAfterBk w = case elemIndices '/' w of
+                          [] -> w
+                          x -> drop (1+last x) w
 
 groupedToNamed :: Grouped a -> Maybe (Named [Grouped a])
 groupedToNamed (Grouped n rst) = Just $ Named n rst
@@ -48,29 +56,24 @@ genReport lev arr act = do
 
 printSimples :: Int -> [Named (Weight, Maybe String)] -> (Weight, Maybe String) -> IO ()
 printSimples lev arr act = do
-  let bname = weightLabel $ fst act
+  let bname = takeLastAfterBk $ weightLabel $ fst act
   unless (null bname) $ putStrLn $ replicate lev '#' ++ " " ++ bname
-  putStrLn $ unlines $ map showNamed filtered
+  putStrLn $ TAA.render id id id table
   where
     filtered = sortBy (liftExtract2 $ \(x,_) (y,_) -> weightAllocatedBytes x `compare` weightAllocatedBytes y) $ filter (liftExtract (eqW act)) arr
-    showNamed (Named k v) = unwords
-      [ "* "
-      , k
-      , ":"
-      ,  showWeight (fst v) -- Use the Maybe String ?
-      ]
+    filtered' = map extract filtered
+    libs = map show filtered
+    table = T.Table
+      (T.Group T.NoLine $ map T.Header libs)
+      (T.Group T.SingleLine [T.Header "AllocatedBytes", T.Header "GCs"])
+      (map (showWeight . fst) filtered')
 
-showWeight :: Weight -> String
-showWeight w = unwords
-  [ "AllocatedBytes:"
-  , show (weightAllocatedBytes w)
-  , ", GCs :"
-  , show (weightGCs w)
-  ]
+showWeight :: Weight -> [String]
+showWeight w = [show (weightAllocatedBytes w),show (weightGCs w)]
 
 -- | Take singletons
 tkSingl :: Grouped (Weight, Maybe String) -> Maybe (Weight, Maybe String)
-tkSingl (Singleton _ b) = Just b
+tkSingl (Singleton b) = Just b
 tkSingl _ = Nothing
 
 -- | Get the childs of a BenchGroup, inserting the name of the library
