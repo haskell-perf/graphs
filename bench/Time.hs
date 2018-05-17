@@ -46,7 +46,7 @@ genReport :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_ (toPrint lev flg arr . extract >=> printBest) $ nub arr
+genReport lev flg arr = mapM_ (toPrint lev flg arr . extract >=> printBest "was the fastest") $ nub arr
 
 toPrint :: Int -> Maybe Flag -> [Named Benchmark] -> Benchmark -> IO (Grouped [Named Double])
 toPrint lev flg arr breport = do

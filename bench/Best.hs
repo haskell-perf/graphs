@@ -12,14 +12,16 @@ import Data.List (sortBy)
 import Control.Monad (void)
 import Data.Map.Strict (Map, alter, unionWith, empty, toList)
 
+printBest :: Ord a
+          => String -- ^ An infix for the output (like "was the fastest")
+          -> Grouped [Named a] -- ^ The datas
+          -> IO ()
+printBest str = printMap str . getBest
 
-printBest :: Ord a => Grouped [Named a] -> IO ()
-printBest = printMap . getBest
-
-printMap :: [Named Int] -> IO ()
-printMap m = do
-  putStrLn "\nSUMMARY:"
-  void $ foldMap (\(Named k v) -> putStrLn $ k ++ " was the fastest " ++ show v ++ " times") m
+printMap :: String -> [Named Int] -> IO ()
+printMap str m = do
+  putStrLn "\nSUMMARY:\n"
+  void $ foldMap (\(Named k v) -> putStrLn $ unwords [" *",k,str,show v,"times"]) m
   putStrLn ""
 
 -- | get fastests libraries, sorted
