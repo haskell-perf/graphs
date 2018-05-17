@@ -33,33 +33,37 @@ takeLastAfterBk w = case elemIndices '/' w of
                           [] -> w
                           x -> drop (1+last x) w
 
+-- | Name from grouped, necessary for the first level of Grouped for Weigh
 groupedToNamed :: Grouped a -> Maybe (Named [Grouped a])
 groupedToNamed (Grouped n rst) = Just $ Named n rst
 groupedToNamed _ = Nothing
 
-genReport :: Int -- ^ The number of # to write
+-- | Print a report from the lists of benchmarks
+printReport :: Int -- ^ The number of # to write
           -> [Named (Grouped (Weight, Maybe String))] -- ^ The list of benchs
           -> Grouped (Weight, Maybe String) -- ^ A selected bench name
           -> IO ()
-genReport lev arr act = do
+printReport lev arr act = do
   let bname = showGrouped act
   unless (null bname) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   case act of
     (Grouped _ (Singleton{}:_)) -> mapM_ (printSimples (lev+1) semiSimples . extract) $ nubBy (liftExtract2 eqW) semiSimples
     Grouped{} -> case nubBy (liftExtract2 eqG) otherGroups of
                    [] -> putStrLn "No data\n"
-                   real -> mapM_ (genReport (lev+1) otherGroups . extract) real
+                   real -> mapM_ (printReport (lev+1) otherGroups . extract) real
     where
       semiSimples = mapMaybe (traverse tkSingl) otherGroups
       otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
       here e = filter (eqG e . extract) arr
 
+-- | Really print the simples, different than printReport for type reason
 printSimples :: Int -> [Named (Weight, Maybe String)] -> (Weight, Maybe String) -> IO ()
 printSimples lev arr act = do
   let bname = takeLastAfterBk $ weightLabel $ fst act
   unless (null bname) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   putStrLn $ TAA.render id id id table
   where
+    -- filter by the 'act' argument
     filtered = sortBy (liftExtract2 $ \(x,_) (y,_) -> weightAllocatedBytes x `compare` weightAllocatedBytes y) $ filter (liftExtract (eqW act)) arr
     filtered' = map extract filtered
     libs = map show filtered
@@ -68,6 +72,7 @@ printSimples lev arr act = do
       (T.Group T.SingleLine [T.Header "AllocatedBytes", T.Header "GCs"])
       (map (showWeight . fst) filtered')
 
+-- | Convert a @Weight@ to a list of @String@ for tabular representation
 showWeight :: Weight -> [String]
 showWeight w = [show (weightAllocatedBytes w),show (weightGCs w)]
 

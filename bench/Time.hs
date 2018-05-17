@@ -28,6 +28,7 @@ import Command
 import qualified Text.Tabular as T
 import qualified Text.Tabular.AsciiArt as TAA
 
+-- We consider Benchmark equality using their name
 instance Eq Benchmark where
   a == b = showBenchName a == showBenchName b
 
@@ -98,6 +99,7 @@ showSimples arr = TAA.render id id id table
 getMean :: Report -> Double
 getMean = estPoint . anMean . reportAnalysis
 
+-- | Utilitary, disable the standard output of Criterion
 benchmarkWithoutOutput :: Benchmarkable -> IO Double
 benchmarkWithoutOutput bm = do
   initializeTime
@@ -107,6 +109,7 @@ benchmarkWithoutOutput bm = do
   where
     defaultConfig' = defaultConfig {verbosity = Quiet}
 
+-- show a list of benchmarks
 showListN :: [Named Benchmark] -> String
 showListN = unlines . map (showBenchName . extract)
 
