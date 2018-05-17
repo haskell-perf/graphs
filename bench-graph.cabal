@@ -49,6 +49,7 @@ benchmark time
                         hash-graph       >= 0.1.0.0,
                         algebraic-graphs >= 0.1.1.1,
                         comonad          >= 5.0.3,
+                        tabular          >= 0.2.2.7,
                         statistics,
                         optparse-applicative,
                         bench-graph

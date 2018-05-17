@@ -25,6 +25,9 @@ import Control.Comonad (extract)
 import Options.Applicative (execParser)
 import Command
 
+import qualified Text.Tabular as T
+import qualified Text.Tabular.AsciiArt as TAA
+
 instance Eq Benchmark where
   a == b = showBenchName a == showBenchName b
 
@@ -83,9 +86,14 @@ tkChilds (BenchGroup _ childs) = Just childs
 tkChilds _ = Nothing
 
 showSimples :: [Named Double] -> String
-showSimples = unlines . map shw . sort
+showSimples arr = TAA.render id id id table
   where
-    shw (Named n o) = "* " ++ n ++ " : " ++ show o ++ " s. (Mean)"
+    arrD = map (show . extract) arr
+    libs = map show arr
+    table = T.Table
+      (T.Group T.NoLine $ map T.Header libs)
+      (T.Group T.SingleLine [T.Header "Seconds (Mean)"])
+      (map return arrD)
 
 getMean :: Report -> Double
 getMean = estPoint . anMean . reportAnalysis
