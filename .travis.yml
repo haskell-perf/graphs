@@ -11,7 +11,7 @@ env:
 script:
     - cabal configure --enable-benchmarks 
     - cabal build
-    - if [ $DO = SPACE ]; then ./dist/build/space/space; else ./dist/build/time/time run --part $STEP --of 2; fi;
+    - if [ $DO = SPACE ]; then ./dist/build/space/space; else ./dist/build/time/time run --part $STEP --of 3 --graphs-size "(3,3,2)"; fi;
 
 install:
     - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph

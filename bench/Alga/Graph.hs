@@ -2,10 +2,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Alga.Graph
-  (
-   functions
-  ,mk
-  )
+  (functions, mk)
 where
 
 import BenchGraph

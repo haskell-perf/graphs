@@ -101,10 +101,10 @@ tkChilds :: Grouped (Weight, Maybe String) -> Maybe [Grouped (Weight, Maybe Stri
 tkChilds = groupedToNamed >=> Just . extract
 
 main :: IO ()
-main = execParser flagSpace >>= main'
+main = execParser runSpace >>= main'
 
 main' :: Maybe Flag -> IO ()
-main' opts = mainWeigh benchs (useResults opts)
+main' flg = mainWeigh benchs (useResults flg)
   where
     benchs = do
       wgroup "Alga (Algebra.Graph)" $ allWeighs Alga.Graph.functions >> weighCreation Alga.Graph.mk

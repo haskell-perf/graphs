@@ -9,7 +9,7 @@ module BenchGraph.Utils
 
 where
 
-import Data.List ((\\), isInfixOf)
+import Data.List ((\\))
 import BenchGraph.GenericGraph
 import BenchGraph.Complete
 import BenchGraph.Circuit
@@ -19,8 +19,9 @@ import BenchGraph.Named
 import Control.Comonad (extract)
 
 import Weigh (mainWith, Weigh, Grouped, Weight, weighResults)
-import System.Environment (getArgs)
+import System.Environment (lookupEnv)
 import Control.Monad (unless)
+import Data.Maybe (isJust)
 
 tenPowers :: [Int]
 tenPowers = iterate (10*) 1
@@ -41,6 +42,6 @@ graphs (a,b,c) = [
 
 mainWeigh :: Weigh () -> ([Grouped (Weight, Maybe String)] -> IO ()) -> IO ()
 mainWeigh wei f = do
-  args <- getArgs
+  args <- lookupEnv "WEIGH_CASE"
   (results,_) <- weighResults wei
-  unless (foldl (\x y -> x || isInfixOf "--case" y) False args) $ f results
+  unless (isJust args) $ f results

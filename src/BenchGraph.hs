@@ -58,11 +58,11 @@ benchSuite algorithm inputs g size = bgroup (show size) cases
     graph = mkGraph edges
     cases = [ bench name $ nf (algorithm i) $!! graph | (Named name i) <- inputs edges ]
 
-allBenchs :: (GraphImpl g, NFData g) => [Suite g] -> [Benchmark]
-allBenchs = map (benchmark $ graphs (5,5,3) )
+allBenchs :: (GraphImpl g, NFData g) => (Int,Int,Int) -> [Suite g] -> [Benchmark]
+allBenchs size = map (benchmark $ graphs size)
 
-benchmarkCreation :: (NFData g) => (Edges -> g) -> [Benchmark]
-benchmarkCreation mk = [ bgroup ("make a " ++  n ++ " from a list") $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | (Named n grf, ss) <- graphs (5,5,3) ]
+benchmarkCreation :: (NFData g) => (Int,Int,Int) -> (Edges -> g) -> [Benchmark]
+benchmarkCreation size mk = [ bgroup ("make a " ++  n ++ " from a list") $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | (Named n grf, ss) <- graphs size ]
 
 ---- Weigh
 weigh :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Weigh ()
@@ -80,7 +80,7 @@ weighSuite algorithm inputs g size = wgroup (show size) cases
     cases = mapM_ (uncurry wFunc . fromNamed) $ inputs edges
     wFunc name i = func name (algorithm i) $!! graph
 
-allWeighs :: (GraphImpl g, NFData g) =>  [Suite g] -> Weigh ()
+allWeighs :: (GraphImpl g, NFData g) => [Suite g] -> Weigh ()
 allWeighs = mapM_ (weigh $ graphs (3,3,2))
 
 weighCreation :: (NFData g) => (Edges -> g) -> Weigh ()

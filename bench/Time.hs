@@ -23,12 +23,12 @@ import Control.Comonad (extract)
 
 import Options.Applicative (execParser)
 
+import qualified Text.Tabular as T
+import qualified Text.Tabular.AsciiArt as TAA
+
 import Command
 import Types
 import Best
-
-import qualified Text.Tabular as T
-import qualified Text.Tabular.AsciiArt as TAA
 
 -- We consider Benchmark equality using their name
 instance Eq Benchmark where
@@ -107,25 +107,24 @@ main = execParser commandTime >>= main'
 main' :: Command -> IO ()
 main' opts
   = case opts of
-      List -> putStr $ showListN grList'
-      Run opt flg -> do
-          let todo = case opt of
-                Nothing -> grList'
-                Just opt' -> case opt' of
-                  Only bname -> filter ((==) bname . showBenchName . extract) grList'
+      List -> putStr $ showListN $ grList' (0,0,0)
+      Run opt flg size -> do
+        let todo = case opt of
+              Nothing -> grList' size
+              Just opt' -> case opt' of
+                  Only bname -> filter ((==) bname . showBenchName . extract) $ grList' size
                   Part one' two -> let one = one' + 1
-                                       per = length grList' `div` two
-                                   in drop ((one-1)*per) $ take (one*per) grList'
-          let samples = filter (`elem` todo) grList
-          putStrLn "# Compare benchmarks\n"
-          putStrLn "Doing:"
-          putStrLn $ "\n----\n"++ showListN todo ++ "----\n"
-          genReport 2 flg samples
-
+                                       per = length (grList' size) `div` two
+                                    in drop ((one-1)*per) $ take (one*per) (grList' size)
+        let samples = filter (`elem` todo) $ grList size
+        putStrLn "# Compare benchmarks\n"
+        putStrLn "Doing:"
+        putStrLn $ "\n----\n"++ showListN todo ++ "----\n"
+        genReport 2 flg samples
   where
-    grList = concatMap (sequence . toNamed) [
-     ("Alga (Algebra.Graph)",allBenchs Alga.Graph.functions ++ benchmarkCreation Alga.Graph.mk ),
-     ("Containers (Data.Graph)",allBenchs Containers.Graph.functions ++ benchmarkCreation Containers.Graph.mk),
-     ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs Fgl.PatriciaTree.functions ++ benchmarkCreation Fgl.PatriciaTree.mk),
-     ("Hash-Graph (Data.HashGraph.Strict)", allBenchs HashGraph.Gr.functions ++ benchmarkCreation HashGraph.Gr.mk)]
-    grList' = nub grList
+    grList size = concatMap (sequence . toNamed) [
+     ("Alga (Algebra.Graph)",allBenchs size Alga.Graph.functions ++ benchmarkCreation size Alga.Graph.mk ),
+     ("Containers (Data.Graph)",allBenchs size Containers.Graph.functions ++ benchmarkCreation size Containers.Graph.mk),
+     ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs size Fgl.PatriciaTree.functions ++ benchmarkCreation size Fgl.PatriciaTree.mk),
+     ("Hash-Graph (Data.HashGraph.Strict)", allBenchs size HashGraph.Gr.functions ++ benchmarkCreation size HashGraph.Gr.mk)]
+    grList' = nub . grList
