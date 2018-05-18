@@ -25,6 +25,8 @@ import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
 
+type WeighResult = (Weight,Maybe String)
+
 showGrouped :: Grouped a -> String
 showGrouped (Grouped n _) = n
 showGrouped _ = ""
@@ -32,7 +34,7 @@ showGrouped _ = ""
 eqG :: Grouped a -> Grouped a -> Bool
 eqG a b = showGrouped a == showGrouped b
 
-eqW :: (Weight, a) -> (Weight, a) -> Bool
+eqW :: WeighResult -> WeighResult -> Bool
 eqW (x,_) (y,_) = takeLastAfterBk (weightLabel x) == takeLastAfterBk (weightLabel y)
 
 takeLastAfterBk :: String -> String
@@ -40,7 +42,7 @@ takeLastAfterBk w = case elemIndices '/' w of
                           [] -> w
                           x -> drop (1+last x) w
 
-useResults :: Maybe Flag -> [Grouped (Weight, Maybe String)] -> IO ()
+useResults :: Maybe Flag -> [Grouped WeighResult] -> IO ()
 useResults flg res = mapM_ ((printReport 2 flg namedBenchs . extract) >=> maybe (return ()) (printBest "used the least amount of memory")) benchs'
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed res
@@ -49,8 +51,8 @@ useResults flg res = mapM_ ((printReport 2 flg namedBenchs . extract) >=> maybe 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write
             -> Maybe Flag -- ^ Maybe a flag, it will desactivate all output except the sumarry
-            -> [Named (Grouped (Weight, Maybe String))] -- ^ The list of benchs
-            -> Grouped (Weight, Maybe String) -- ^ A selected bench name
+            -> [Named (Grouped WeighResult)] -- ^ The list of benchs
+            -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (Ty.Grouped [Named Int64])) -- Maybe if there was actual data
 printReport lev flg arr act = do
   let bname = showGrouped act
@@ -68,7 +70,7 @@ printReport lev flg arr act = do
       semiSimples = mapMaybe (traverse tkSingl) otherGroups
 
 -- | Really print the simples, different than printReport for type reason
-printSimples :: Int -> Maybe Flag -> [Named (Weight, Maybe String)] -> (Weight, Maybe String) -> IO (Ty.Grouped [Named Int64])
+printSimples :: Int -> Maybe Flag -> [Named WeighResult] -> WeighResult -> IO (Ty.Grouped [Named Int64])
 printSimples lev flg arr act = do
   let bname = takeLastAfterBk $ weightLabel $ fst act
   unless (null bname || (isJust flg && lev /= 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
@@ -87,7 +89,7 @@ showWeight :: Weight -> [String]
 showWeight w = [show (weightAllocatedBytes w),show (weightGCs w)]
 
 -- | Take singletons
-tkSingl :: Grouped (Weight, Maybe String) -> Maybe (Weight, Maybe String)
+tkSingl :: Grouped WeighResult -> Maybe WeighResult
 tkSingl (Singleton b) = Just b
 tkSingl _ = Nothing
 
@@ -97,7 +99,7 @@ groupedToNamed (Grouped n rst) = Just $ Named n rst
 groupedToNamed _ = Nothing
 
 -- | Get the childs of a BenchGroup, inserting the name of the library
-tkChilds :: Grouped (Weight, Maybe String) -> Maybe [Grouped (Weight, Maybe String)]
+tkChilds :: Grouped WeighResult -> Maybe [Grouped WeighResult]
 tkChilds = groupedToNamed >=> Just . extract
 
 main :: IO ()
