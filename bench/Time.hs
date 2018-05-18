@@ -109,16 +109,22 @@ main = execParser commandTime >>= main'
 main' :: Command -> IO ()
 main' opts
   = case opts of
-      List -> putStr $ showListN $ grList' (0,0,0)
-      Run opt flg size -> do
+      List listOpt -> case listOpt of
+                        Benchs -> putStr $ showListN $ nub $ grList (0,0,0)
+                        Libs -> putStr $ unlines $ nub $ map show $ grList (0,0,0)
+      Run opt flg libs size -> do
+        let modifyL = case libs of
+              Nothing -> id
+              Just libss -> filter (\x -> show x `elem` libss)
+        let grList' = nub $ modifyL $ grList size
         let todo = case opt of
-              Nothing -> grList' size
+              Nothing -> grList'
               Just opt' -> case opt' of
-                  Only bname -> filter ((==) bname . showBenchName . extract) $ grList' size
+                  Only bname -> filter ((==) bname . showBenchName . extract) grList'
                   Part one' two -> let one = one' + 1
-                                       per = length (grList' size) `div` two
-                                    in drop ((one-1)*per) $ take (one*per) (grList' size)
-        let samples = filter (`elem` todo) $ grList size
+                                       per = length grList' `div` two
+                                    in drop ((one-1)*per) $ take (one*per) grList'
+        let samples = filter (`elem` todo) $ modifyL $ grList size
         putStrLn "# Compare benchmarks\n"
         putStrLn "Doing:"
         putStrLn $ "\n----\n"++ showListN todo ++ "----\n"
@@ -130,4 +136,3 @@ main' opts
      ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs size Fgl.PatriciaTree.functions ++ benchmarkCreation size Fgl.PatriciaTree.mk),
      ("Fgl (Data.Graph.Inductive.Tree)", allBenchs size Fgl.Tree.functions ++ benchmarkCreation size Fgl.Tree.mk),
      ("Hash-Graph (Data.HashGraph.Strict)", allBenchs size HashGraph.Gr.functions ++ benchmarkCreation size HashGraph.Gr.mk)]
-    grList' = nub . grList

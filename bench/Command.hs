@@ -3,6 +3,7 @@ module Command
   Option (..),
   Flag (..),
   Command (..),
+  ListOption (..),
   CommandSpace (..),
   commandTime,
   runSpace
@@ -22,13 +23,16 @@ type Size = (Int,Int,Int)
 data Flag = Summarize
   deriving (Show, Eq)
 
-data Command = List | Run (Maybe Option) (Maybe Flag) Size
+type Only = String
+type Lib = String
+
+data ListOption = Benchs | Libs
   deriving (Show, Eq)
 
-data CommandSpace = ListS | RunS (Maybe String) (Maybe Flag)
+data Command = List ListOption | Run (Maybe Option) (Maybe Flag) (Maybe [Lib]) Size
+  deriving (Show, Eq)
 
-listCom :: Parser Command
-listCom = pure List
+data CommandSpace = ListS | RunS (Maybe Only) (Maybe Flag)
 
 partOpt :: Parser Option
 partOpt = Part <$> rpart <*> rof
@@ -38,6 +42,9 @@ partOpt = Part <$> rpart <*> rof
 
 onlyOpt :: Parser String
 onlyOpt = strOption (long "only" <> short 'o' <> metavar "NAME")
+
+libOpt :: Parser String
+libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME")
 
 sizeOpt :: Parser Size
 sizeOpt = read <$> strOption (long "graphs-size" <> value "(5,3,3)" <> showDefault <> help "(ten power to generate path, ten power to generate a circuit, ten power to generate a complete graph)" )
@@ -49,7 +56,13 @@ sumFlag :: Parser Flag
 sumFlag = flag' Summarize $ long "summarize" <> short 's'
 
 runCom :: Parser Command
-runCom = Run <$> optional options <*> optional sumFlag <*> sizeOpt
+runCom = Run <$> optional options <*> optional sumFlag <*> optional (some libOpt) <*> sizeOpt
+
+listOpt :: Parser ListOption
+listOpt = flag' Benchs (long "benchs") <|> flag' Libs (long "libs")
+
+listCom :: Parser Command
+listCom = List <$> listOpt
 
 command' :: Parser Command
 command' = subparser
