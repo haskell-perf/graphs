@@ -11,13 +11,15 @@ module BenchGraph (
   allBenchs,
   allWeighs,
   benchmarkCreation,
-  weighCreation
+  weighCreation,
+  weighCreationList
 ) where
 
 import Criterion.Main
 import Weigh
 import Control.DeepSeq (NFData, ($!!))
 import Control.Comonad (extract)
+import Control.Monad (when)
 
 import BenchGraph.GenericGraph
 import BenchGraph.Utils (graphs)
@@ -83,5 +85,17 @@ weighSuite algorithm inputs g size = wgroup (show size) cases
 allWeighs :: (GraphImpl g, NFData g) => [Suite g] -> Weigh ()
 allWeighs = mapM_ (weigh $ graphs (3,3,2))
 
-weighCreation :: (NFData g) => (Edges -> g) -> Weigh ()
-weighCreation mk = sequence_ [wgroup ("make a " ++  n ++ " from a list") $ mapM_ (\i -> func (show i) mk $ grf i ) ss | (Named n grf, ss) <- graphs (3,3,2) ]
+-- | Use the list from weighCreationList
+weighCreation :: (NFData g)
+              => Maybe String -- ^ Maybe a selected bench to do
+              -> (Edges -> g) -- ^ A graph-creator function, typically from the GraphImpl class
+              -> Weigh ()
+weighCreation name mk = sequence_ [when (todo str) $ wgroup str $ mapM_ (\i -> func (show i) mk $ grf i ) ss | Named str (Named n grf, ss) <- weighCreationList ]
+  where
+    todo str  = maybe True (str ==) name
+
+-- | List of generic graph with their case-name
+weighCreationList :: [Named (GenericGraph, [Int])]
+weighCreationList = [ Named (str n) t | t@(Named n _, _) <- graphs (3,3,2)]
+  where
+    str n = "make a " ++ n ++ " from a list"

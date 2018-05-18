@@ -1,4 +1,4 @@
-import Data.List (nubBy, sortBy, elemIndices)
+import Data.List (nub, nubBy, sortBy, elemIndices)
 import Data.Maybe (mapMaybe, catMaybes, isJust, isNothing)
 import Data.Int (Int64)
 import Control.Monad (unless, when, (>=>))
@@ -16,7 +16,7 @@ import Command
 import qualified Types as Ty
 import Best
 
-import BenchGraph (allWeighs, weighCreation)
+import BenchGraph
 import BenchGraph.Named
 import BenchGraph.Utils (mainWeigh)
 
@@ -103,12 +103,14 @@ tkChilds = groupedToNamed >=> Just . extract
 main :: IO ()
 main = execParser runSpace >>= main'
 
-main' :: Maybe Flag -> IO ()
-main' flg = mainWeigh benchs (useResults flg)
+main' :: CommandSpace -> IO ()
+main' ListS = putStr $ unlines $ nub $ map suiteName Alga.Graph.functions ++ map suiteName Containers.Graph.functions ++ map suiteName Fgl.PatriciaTree.functions ++ map suiteName HashGraph.Gr.functions ++ map show weighCreationList
+main' (RunS only flg) = mainWeigh benchs (useResults flg)
   where
+    select funcs = maybe funcs (\x -> filter ((==) x . suiteName) funcs) only
     benchs = do
-      wgroup "Alga (Algebra.Graph)" $ allWeighs Alga.Graph.functions >> weighCreation Alga.Graph.mk
-      wgroup "Containers (Data.Graph)" $ allWeighs Containers.Graph.functions >> weighCreation Containers.Graph.mk
-      wgroup "Fgl (Data.Graph.Inductive.PatriciaTree)" $ allWeighs Fgl.PatriciaTree.functions >> weighCreation Fgl.PatriciaTree.mk
-      wgroup "Hash-Graph (Data.HashGraph.Strict)" $ allWeighs HashGraph.Gr.functions >> weighCreation HashGraph.Gr.mk
+      wgroup "Alga (Algebra.Graph)" $ allWeighs (select Alga.Graph.functions) >> weighCreation only Alga.Graph.mk
+      wgroup "Containers (Data.Graph)" $ allWeighs (select Containers.Graph.functions) >> weighCreation only Containers.Graph.mk
+      wgroup "Fgl (Data.Graph.Inductive.PatriciaTree)" $ allWeighs (select Fgl.PatriciaTree.functions) >> weighCreation only Fgl.PatriciaTree.mk
+      wgroup "Hash-Graph (Data.HashGraph.Strict)" $ allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk
 
