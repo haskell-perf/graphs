@@ -40,6 +40,7 @@ benchmark time
     other-modules:      Alga.Graph
                       , Containers.Graph
                       , Fgl.PatriciaTree
+                      , Fgl.Tree
                       , HashGraph.Gr
                       , Command
                       , Types
@@ -66,6 +67,7 @@ benchmark space
     other-modules:      Alga.Graph
                       , Containers.Graph
                       , Fgl.PatriciaTree
+                      , Fgl.Tree
                       , HashGraph.Gr
                       , Command
                       , Types

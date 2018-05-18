@@ -15,6 +15,7 @@ import qualified Alga.Graph
 import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
+import qualified Fgl.Tree
 
 import BenchGraph (allBenchs, benchmarkCreation)
 import BenchGraph.Named
@@ -127,5 +128,6 @@ main' opts
      ("Alga (Algebra.Graph)",allBenchs size Alga.Graph.functions ++ benchmarkCreation size Alga.Graph.mk ),
      ("Containers (Data.Graph)",allBenchs size Containers.Graph.functions ++ benchmarkCreation size Containers.Graph.mk),
      ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs size Fgl.PatriciaTree.functions ++ benchmarkCreation size Fgl.PatriciaTree.mk),
+     ("Fgl (Data.Graph.Inductive.Tree)", allBenchs size Fgl.Tree.functions ++ benchmarkCreation size Fgl.Tree.mk),
      ("Hash-Graph (Data.HashGraph.Strict)", allBenchs size HashGraph.Gr.functions ++ benchmarkCreation size HashGraph.Gr.mk)]
     grList' = nub . grList

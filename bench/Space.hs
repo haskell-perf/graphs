@@ -23,6 +23,7 @@ import BenchGraph.Utils (mainWeigh)
 import qualified Alga.Graph
 import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
+import qualified Fgl.Tree
 import qualified HashGraph.Gr
 
 type WeighResult = (Weight,Maybe String)
@@ -106,7 +107,7 @@ main :: IO ()
 main = execParser runSpace >>= main'
 
 main' :: CommandSpace -> IO ()
-main' ListS = putStr $ unlines $ nub $ map suiteName Alga.Graph.functions ++ map suiteName Containers.Graph.functions ++ map suiteName Fgl.PatriciaTree.functions ++ map suiteName HashGraph.Gr.functions ++ map show weighCreationList
+main' ListS = putStr $ unlines $ nub $ map suiteName Alga.Graph.functions ++ map suiteName Containers.Graph.functions ++ map suiteName Fgl.PatriciaTree.functions ++ map suiteName HashGraph.Gr.functions ++ map suiteName Fgl.Tree.functions ++ map show weighCreationList
 main' (RunS only flg) = mainWeigh benchs (useResults flg)
   where
     select funcs = maybe funcs (\x -> filter ((==) x . suiteName) funcs) only
@@ -114,5 +115,6 @@ main' (RunS only flg) = mainWeigh benchs (useResults flg)
       wgroup "Alga (Algebra.Graph)" $ allWeighs (select Alga.Graph.functions) >> weighCreation only Alga.Graph.mk
       wgroup "Containers (Data.Graph)" $ allWeighs (select Containers.Graph.functions) >> weighCreation only Containers.Graph.mk
       wgroup "Fgl (Data.Graph.Inductive.PatriciaTree)" $ allWeighs (select Fgl.PatriciaTree.functions) >> weighCreation only Fgl.PatriciaTree.mk
+      wgroup "Fgl (Data.Graph.Inductive.Tree)" $ allWeighs (select Fgl.Tree.functions) >> weighCreation only Fgl.Tree.mk
       wgroup "Hash-Graph (Data.HashGraph.Strict)" $ allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk
 
