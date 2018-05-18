@@ -23,4 +23,4 @@ type Size   = Int
 type GenericGraph = Named (Size -> Edges)
 
 vertices :: Edges -> [Vertex]
-vertices = nub . concat . unzip
+vertices = nub . uncurry (++) . unzip
