@@ -77,8 +77,9 @@ tkChilds _ = Nothing
 showSimples :: [Named Double] -> String
 showSimples arr = TAA.render id id id table
   where
-    arrD = sort $ map (show . extract) arr
-    libs = map show arr
+    arr' = sort arr
+    arrD = map (show . extract) arr'
+    libs = map show arr'
     table = T.Table
       (T.Group T.NoLine $ map T.Header libs)
       (T.Group T.SingleLine [T.Header "Seconds (Mean)"])

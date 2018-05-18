@@ -1,15 +1,5 @@
 module BenchGraph.Suites
-  (
-  vertexListS,
-  addVertexS,
-  removeVertexS,
-  edgeListS,
-  hasEdgeS,
-  addEdgeS,
-  removeEdgeS,
-  isEmptyS,
-  eqS
-  )
+
 where
 
 import BenchGraph
@@ -54,7 +44,7 @@ edgeListS = simpleSuite "edgeList"
 
 hasEdgeS :: NFData o => SpecialisedSuite Edge o i g
 hasEdgeS fun genArg = Suite
-  { suiteName = "hasEdge (not in graph)"
+  { suiteName = "hasEdge"
   , algorithm = fun
   , inputs    = map (fmap genArg) . withNames . take 2 . edgesNotInGraph
   }
@@ -76,7 +66,10 @@ removeEdgeS fun genArg = Suite
 -- Graph work
 
 isEmptyS :: NFData o => (g -> o) -> Suite g
-isEmptyS = simpleSuite "IsEmpty"
+isEmptyS = simpleSuite "isEmpty"
+
+transposeS :: NFData o => (g -> o) -> Suite g
+transposeS = simpleSuite "transpose"
 
 eqS :: (NFData g, GraphImpl g) => (g -> g -> Bool) -> Suite g
 eqS fun = Suite

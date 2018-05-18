@@ -27,5 +27,6 @@ functions =
   , removeVertexS removeVertex id
   , eqS (==)
   , removeEdgeS (uncurry removeEdge) id
+  , transposeS transpose
   ]
 

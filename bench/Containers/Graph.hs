@@ -24,4 +24,5 @@ functions =
   [ edgeListS edges
   , vertexListS vertices
   , eqS (==)
+  , transposeS transposeG
   ]
