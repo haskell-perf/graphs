@@ -26,7 +26,7 @@ functions =
   , hasEdgeS (flip hasEdge) id
   , addVertexS insNode (\x -> (x,()))
   , removeVertexS delNode id
-  , eqS (==)
+  , eqS equal
   , addEdgeS insEdge (\(x,y) -> (x,y,()))
   , removeEdgeS delEdge id
   ]
