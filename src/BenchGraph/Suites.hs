@@ -80,3 +80,11 @@ eqS fun = Suite
     ,Named "Same graph" x
     ]
   }
+
+contextS :: NFData o => SpecialisedSuite Edge o i g
+contextS fun genArg = Suite
+  { suiteName = "merge a context"
+  , algorithm = fun
+  , inputs = map (fmap genArg) . withNames . const [(0,3)]
+
+  }

@@ -10,6 +10,7 @@ import BenchGraph.GenericGraph (Edges,vertices)
 import BenchGraph.Suites
 
 import qualified Data.HashGraph.Strict as HG
+import qualified Data.HashSet as S
 
 type Gr = HG.Gr () Int
 
@@ -33,4 +34,5 @@ functions =
   , eqS (==)
   , addEdgeS HG.insEdge mkEdge
   , removeEdgeS HG.delEdge mkEdge
+  , contextS (HG.&) $ \(x,y) -> (x,HG.Context' S.empty (S.singleton (HG.Tail () y)))
   ]

@@ -29,5 +29,6 @@ functions =
   , eqS equal
   , addEdgeS insEdge (\(x,y) -> (x,y,()))
   , removeEdgeS delEdge id
+  , contextS (&) (\(x,y) -> ([],x,(),[((),y)]))
   ]
 
