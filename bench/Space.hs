@@ -1,7 +1,7 @@
 import Data.List (nub, nubBy, sortBy, elemIndices)
-import Data.Maybe (mapMaybe, catMaybes, isJust, isNothing)
+import Data.Maybe (mapMaybe, catMaybes)
 import Data.Int (Int64)
-import Control.Monad (unless, when, (>=>))
+import Control.Monad (when, (>=>))
 
 import Control.Comonad (extract)
 
@@ -43,26 +43,26 @@ takeLastAfterBk w = case elemIndices '/' w of
                           [] -> w
                           x -> drop (1+last x) w
 
-useResults :: Maybe Flag -> [Grouped WeighResult] -> IO ()
-useResults flg res = mapM_ ((printReport 2 flg namedBenchs . extract) >=> maybe (return ()) (printBest "used the least amount of memory")) benchs'
+useResults :: Output -> [Grouped WeighResult] -> IO ()
+useResults flg res = mapM_ ((printReport 2 flg namedBenchs . extract) >=> maybe (return ()) (when (sumOut flg) . printBest "used the least amount of memory")) benchs'
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed res
     benchs' = nubBy (liftExtract2 eqG) namedBenchs
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write
-            -> Maybe Flag -- ^ Maybe a flag, it will desactivate all output except the sumarry
+            -> Output -- ^ Output infos
             -> [Named (Grouped WeighResult)] -- ^ The list of benchs
             -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (Ty.Grouped [Named Int64])) -- Maybe if there was actual data
 printReport lev flg arr act = do
   let bname = showGrouped act
-  unless (null bname || (isJust flg && lev /= 2))  $ putStrLn $ replicate lev '#' ++ " " ++ bname
+  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   case act of
     (Grouped _ (Singleton{}:_)) -> Just . Ty.Group <$> mapM (printSimples (lev+1) flg semiSimples . extract) (nubBy (liftExtract2 eqW) semiSimples)
     Grouped{} -> case otherGroups of
                    [] -> do
-                     when (isNothing flg) $ putStrLn "No data\n"
+                     when (staOut flg) $ putStrLn "No data\n"
                      return Nothing
                    real -> Just . Ty.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . extract) (nubBy (liftExtract2 eqG) real)
     where
@@ -71,11 +71,11 @@ printReport lev flg arr act = do
       semiSimples = mapMaybe (traverse tkSingl) otherGroups
 
 -- | Really print the simples, different than printReport for type reason
-printSimples :: Int -> Maybe Flag -> [Named WeighResult] -> WeighResult -> IO (Ty.Grouped [Named Int64])
+printSimples :: Int -> Output -> [Named WeighResult] -> WeighResult -> IO (Ty.Grouped [Named Int64])
 printSimples lev flg arr act = do
   let bname = takeLastAfterBk $ weightLabel $ fst act
-  unless (null bname || (isJust flg && lev /= 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
-  unless (isJust flg) $ putStrLn $ TAA.render id id id table
+  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
+  when (staOut flg) $ putStrLn $ TAA.render id id id table
   return $ Ty.Simple $ map (fmap $ weightAllocatedBytes . fst) filtered
   where
     -- filter by the 'act' argument, and sort

@@ -1,7 +1,7 @@
 module Command
   (
   Option (..),
-  Flag (..),
+  Output (..),
   Command (..),
   ListOption (..),
   CommandSpace (..),
@@ -20,7 +20,10 @@ data Option = Part Int Int | Only String
 
 type Size = (Int,Int,Int)
 
-data Flag = Summarize
+data Output = Output {
+  sumOut :: Bool, -- ^ Output summary ?
+  staOut :: Bool -- ^ Output standard ?
+  }
   deriving (Show, Eq)
 
 type Only = String
@@ -29,10 +32,10 @@ type Lib = String
 data ListOption = Benchs | Libs
   deriving (Show, Eq)
 
-data Command = List ListOption | Run (Maybe Option) (Maybe Flag) (Maybe [Lib]) Size
+data Command = List ListOption | Run (Maybe Option) Output (Maybe [Lib]) Size
   deriving (Show, Eq)
 
-data CommandSpace = ListS ListOption | RunS (Maybe Only) (Maybe Flag) (Maybe [Lib])
+data CommandSpace = ListS ListOption | RunS (Maybe Only) Output (Maybe [Lib])
 
 partOpt :: Parser Option
 partOpt = Part <$> rpart <*> rof
@@ -52,11 +55,17 @@ sizeOpt = read <$> strOption (long "graphs-size" <> value "(5,3,3)" <> showDefau
 options :: Parser Option
 options = partOpt <|> ( Only <$> onlyOpt)
 
-sumFlag :: Parser Flag
-sumFlag = flag' Summarize $ long "summarize" <> short 's'
+sumFlag :: Parser Bool
+sumFlag = flag True False $ long "noSummarize" <> short 's'
+
+staFlag :: Parser Bool
+staFlag = flag True False $ long "noStandard" <> short 'd'
+
+output :: Parser Output
+output = Output <$> sumFlag <*> staFlag
 
 runCom :: Parser Command
-runCom = Run <$> optional options <*> optional sumFlag <*> optional (some libOpt) <*> sizeOpt
+runCom = Run <$> optional options <*> output <*> optional (some libOpt) <*> sizeOpt
 
 listOpt :: Parser ListOption
 listOpt = flag' Benchs (long "benchs") <|> flag' Libs (long "libs")
@@ -95,7 +104,7 @@ space' = subparser
       ( fullDesc
       <> progDesc "Compare benchmarks of graphs libraries"
       <> header "Help" )
-    run = info ( (RunS <$> optional onlyOpt <*> optional sumFlag <*> optional (some libOpt) ) <**> helper)
+    run = info ( (RunS <$> optional onlyOpt <*> output <*> optional (some libOpt) ) <**> helper)
       ( fullDesc
      <> progDesc "list benchmarks"
      <> header "Help" )
@@ -106,4 +115,4 @@ runSpace = info ( semiOptional <**> helper)
      <> progDesc "Benchmark size of functions on different graphs libraries"
      <> header "Help")
   where
-    semiOptional = pure (fromMaybe (RunS Nothing Nothing Nothing)) <*> optional space'
+    semiOptional = pure (fromMaybe (RunS Nothing (Output False False) Nothing)) <*> optional space'

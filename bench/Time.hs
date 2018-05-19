@@ -1,6 +1,6 @@
 import Data.List (filter, nub, sort)
-import Data.Maybe (mapMaybe, isNothing, isJust, catMaybes)
-import Control.Monad (unless, when, (>=>))
+import Data.Maybe (mapMaybe, catMaybes)
+import Control.Monad (when, (>=>))
 
 import Criterion
 import Criterion.Types
@@ -41,22 +41,22 @@ showBenchName (BenchGroup n _) = n
 
 genReport :: Int
            -- ^ The number of '#' to write
-           -> Maybe Flag
-           -- ^ Flag ?
+           -> Output
+           -- ^ Output options ?
            -> [Named Benchmark]
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_ (toPrint lev flg arr . extract >=> maybe (return ()) (printBest "was the fastest")) $ nub arr
+genReport lev flg arr = mapM_ (toPrint lev flg arr . extract >=> maybe (return ()) (when (sumOut flg) . printBest "was the fastest")) $ nub arr
 
-toPrint :: Int -> Maybe Flag -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Double]))
+toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Double]))
 toPrint lev flg arr breport = do
   let bname = showBenchName breport
-  unless (null bname || (isJust flg && lev /= 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
+  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
   case breport of
     Benchmark{} -> do
       simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimple) $ here breport
-      when (isNothing flg) $ putStrLn $ "\n" ++ showSimples simples
+      when (staOut flg) $ putStrLn $ "\n" ++ showSimples simples
       return $ Just $ Simple simples
     BenchGroup{} -> case nub otherGroups of
                       [] -> putStrLn "\nNo data\n" >> return Nothing
