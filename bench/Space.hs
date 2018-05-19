@@ -83,7 +83,7 @@ printSimples lev flg arr act = do
     table = T.Table
       (T.Group T.NoLine $ map (T.Header . show) filtered)
       (T.Group T.SingleLine [T.Header "AllocatedBytes", T.Header "GCs"])
-      (map (showWeight . fst . extract) filtered)
+      (map ((\(x,y) -> maybe (showWeight x) (\y'->["Errored: "++y']) y) . extract) filtered)
 
 -- | Convert a @Weight@ to a list of @String@ for tabular representation
 showWeight :: Weight -> [String]
@@ -112,7 +112,7 @@ main' (ListS opt) = case opt of
                     Libs -> putStr $ unlines $ map show $ namedWeigh Nothing
 main' (RunS only flg libs) = mainWeigh benchs (useResults flg)
   where
-    benchs = mapM_ (uncurry wgroup . fromNamed) $ maybe id (\libs' -> filter (\x -> show x `elem` libs')) libs $ namedWeigh  only
+    benchs = mapM_ (uncurry wgroup . fromNamed) $ maybe id (\libs' -> filter (flip elem libs' . show)) libs $ namedWeigh  only
 
 namedWeigh :: Maybe String -> [Named (Weigh ())]
 namedWeigh only =
