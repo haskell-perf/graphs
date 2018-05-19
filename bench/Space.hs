@@ -107,14 +107,20 @@ main :: IO ()
 main = execParser runSpace >>= main'
 
 main' :: CommandSpace -> IO ()
-main' ListS = putStr $ unlines $ nub $ map suiteName Alga.Graph.functions ++ map suiteName Containers.Graph.functions ++ map suiteName Fgl.PatriciaTree.functions ++ map suiteName HashGraph.Gr.functions ++ map suiteName Fgl.Tree.functions ++ map show weighCreationList
-main' (RunS only flg) = mainWeigh benchs (useResults flg)
+main' (ListS opt) = case opt of
+                    Benchs -> putStr $ unlines $ nub $ map suiteName Alga.Graph.functions ++ map suiteName Containers.Graph.functions ++ map suiteName Fgl.PatriciaTree.functions ++ map suiteName HashGraph.Gr.functions ++ map suiteName Fgl.Tree.functions ++ map show weighCreationList
+                    Libs -> putStr $ unlines $ map show $ namedWeigh Nothing
+main' (RunS only flg libs) = mainWeigh benchs (useResults flg)
+  where
+    benchs = mapM_ (uncurry wgroup . fromNamed) $ maybe id (\libs' -> filter (\x -> show x `elem` libs')) libs $ namedWeigh  only
+
+namedWeigh :: Maybe String -> [Named (Weigh ())]
+namedWeigh only =
+  [ Named "Alga (Algebra.Graph)" $ allWeighs (select Alga.Graph.functions) >> weighCreation only Alga.Graph.mk
+  , Named "Containers (Data.Graph)" $ allWeighs (select Containers.Graph.functions) >> weighCreation only Containers.Graph.mk
+  , Named "Fgl (Data.Graph.Inductive.PatriciaTree)" $ allWeighs (select Fgl.PatriciaTree.functions) >> weighCreation only Fgl.PatriciaTree.mk
+  , Named "Fgl (Data.Graph.Inductive.Tree)" $ allWeighs (select Fgl.Tree.functions) >> weighCreation only Fgl.Tree.mk
+  , Named "Hash-Graph (Data.HashGraph.Strict)" $ allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk
+  ]
   where
     select funcs = maybe funcs (\x -> filter ((==) x . suiteName) funcs) only
-    benchs = do
-      wgroup "Alga (Algebra.Graph)" $ allWeighs (select Alga.Graph.functions) >> weighCreation only Alga.Graph.mk
-      wgroup "Containers (Data.Graph)" $ allWeighs (select Containers.Graph.functions) >> weighCreation only Containers.Graph.mk
-      wgroup "Fgl (Data.Graph.Inductive.PatriciaTree)" $ allWeighs (select Fgl.PatriciaTree.functions) >> weighCreation only Fgl.PatriciaTree.mk
-      wgroup "Fgl (Data.Graph.Inductive.Tree)" $ allWeighs (select Fgl.Tree.functions) >> weighCreation only Fgl.Tree.mk
-      wgroup "Hash-Graph (Data.HashGraph.Strict)" $ allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk
-

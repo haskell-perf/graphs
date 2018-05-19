@@ -32,7 +32,7 @@ data ListOption = Benchs | Libs
 data Command = List ListOption | Run (Maybe Option) (Maybe Flag) (Maybe [Lib]) Size
   deriving (Show, Eq)
 
-data CommandSpace = ListS | RunS (Maybe Only) (Maybe Flag)
+data CommandSpace = ListS ListOption | RunS (Maybe Only) (Maybe Flag) (Maybe [Lib])
 
 partOpt :: Parser Option
 partOpt = Part <$> rpart <*> rof
@@ -91,11 +91,11 @@ space' = subparser
     <> command "run" run
   )
   where
-    list = info (pure ListS <**> helper)
+    list = info (ListS <$> listOpt <**> helper)
       ( fullDesc
       <> progDesc "Compare benchmarks of graphs libraries"
       <> header "Help" )
-    run = info ( (RunS <$> optional onlyOpt <*> optional sumFlag) <**> helper)
+    run = info ( (RunS <$> optional onlyOpt <*> optional sumFlag <*> optional (some libOpt) ) <**> helper)
       ( fullDesc
      <> progDesc "list benchmarks"
      <> header "Help" )
@@ -106,4 +106,4 @@ runSpace = info ( semiOptional <**> helper)
      <> progDesc "Benchmark size of functions on different graphs libraries"
      <> header "Help")
   where
-    semiOptional = pure (fromMaybe (RunS Nothing Nothing)) <*> optional space'
+    semiOptional = pure (fromMaybe (RunS Nothing Nothing Nothing)) <*> optional space'
