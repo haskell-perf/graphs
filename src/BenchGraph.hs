@@ -12,11 +12,14 @@ module BenchGraph (
   allWeighs,
   benchmarkCreation,
   weighCreation,
-  weighCreationList
+  weighCreationList,
+  computeSize
 ) where
 
 import Criterion.Main
 import Weigh
+import GHC.DataSize
+
 import Control.DeepSeq (NFData, ($!!))
 import Control.Comonad (extract)
 import Control.Monad (when)
@@ -99,3 +102,9 @@ weighCreationList :: [Named (GenericGraph, [Int])]
 weighCreationList = [ Named (str n) t | t@(Named n _, _) <- graphs (3,3,2)]
   where
     str n = "make a " ++ n ++ " from a list"
+
+---- DataSize
+
+computeSize :: (NFData g) => (Int,Int,Int) -> (Edges -> g) -> IO [Named [Named Word]]
+computeSize size fun = mapM (\(g,ss) -> sequence $ Named (show g) $ mapM (\s -> sequence $ Named (show s) $ recursiveSize $!! fun $ extract g s) ss) $ graphs size
+
