@@ -115,4 +115,4 @@ runSpace = info ( semiOptional <**> helper)
      <> progDesc "Benchmark size of functions on different graphs libraries"
      <> header "Help")
   where
-    semiOptional = pure (fromMaybe (RunS Nothing (Output False False) Nothing)) <*> optional space'
+    semiOptional = pure (fromMaybe (RunS Nothing (Output True True) Nothing)) <*> optional space'
