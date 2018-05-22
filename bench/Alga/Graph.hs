@@ -23,6 +23,7 @@ functions =
   , vertexListS vertexList
   , edgeListS edgeList
   , hasEdgeS (uncurry hasEdge) id
+  , addEdgeS (\(x,y) -> overlay $ edge x y) id
   , addVertexS connect vertex
   , removeVertexS removeVertex id
   , eqS (==)
