@@ -32,12 +32,15 @@ showGrouped :: Grouped a -> String
 showGrouped (Grouped n _) = n
 showGrouped _ = ""
 
+-- | Grouped are equals by their names
 eqG :: Grouped a -> Grouped a -> Bool
 eqG a b = showGrouped a == showGrouped b
 
+-- | WeighResult are equals by their names
 eqW :: WeighResult -> WeighResult -> Bool
 eqW (x,_) (y,_) = takeLastAfterBk (weightLabel x) == takeLastAfterBk (weightLabel y)
 
+-- | Drop the prefix of a WeighResult
 takeLastAfterBk :: String -> String
 takeLastAfterBk w = case elemIndices '/' w of
                           [] -> w
