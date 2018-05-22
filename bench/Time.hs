@@ -123,7 +123,8 @@ main' opts
                   Only bname -> filter ((==) bname . showBenchName . extract) grList'
                   Part one' two -> let one = one' + 1
                                        per = length grList' `div` two
-                                    in drop ((one-1)*per) $ take (one*per) grList'
+                                       f   = if one' + 1 == two then id else take (one*per)
+                                    in drop ((one-1)*per) $ f grList'
         let samples = filter (`elem` todo) $ modifyL $ grList size
         putStrLn "# Compare benchmarks\n"
         putStrLn "Doing:"
