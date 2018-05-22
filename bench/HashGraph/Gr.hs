@@ -27,6 +27,8 @@ functions :: [Suite Gr]
 functions =
   [ S.isEmpty HG.null
   , S.edgeList HG.edges
+  , S.edgeCount HG.size
+  , S.vertexCount HG.order
   , S.vertexList HG.nodes
   , S.hasEdge HG.hasEdge mkEdge
   , S.addVertex HG.insNode id

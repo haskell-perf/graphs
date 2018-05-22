@@ -23,6 +23,8 @@ functions =
   [ S.isEmpty isEmpty
   , S.edgeList edges
   , S.vertexList nodes
+  , S.edgeCount size
+  , S.vertexCount order
   , S.hasEdge (flip hasEdge) id
   , S.addVertex insNode (\x -> (x,()))
   , S.removeVertex delNode id

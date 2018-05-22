@@ -22,6 +22,8 @@ functions :: [Suite UGr]
 functions =
   [ S.isEmpty isEmpty
   , S.edgeList edges
+  , S.edgeCount size
+  , S.vertexCount order
   , S.vertexList nodes
   , S.hasEdge (flip hasEdge) id
   , S.addVertex insNode (\x -> (x,()))

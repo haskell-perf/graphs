@@ -19,6 +19,9 @@ type SpecialisedSuite u o i g = (i -> g -> o) -- ^ The actual function to test.
 vertexList :: NFData o => (g -> o) -> Suite g
 vertexList = simpleSuite "vertexList"
 
+vertexCount :: NFData o => (g -> o) -> Suite g
+vertexCount = simpleSuite "vertexCount"
+
 addVertex :: NFData o => SpecialisedSuite Vertex o i g
 addVertex fun genArg = Suite
   { suiteName = "add a new vertex"
@@ -41,6 +44,9 @@ removeVertex fun genArg = Suite
 
 edgeList :: NFData o => (g -> o) -> Suite g
 edgeList = simpleSuite "edgeList"
+
+edgeCount :: NFData o => (g -> o) -> Suite g
+edgeCount = simpleSuite "edgeCount"
 
 hasEdge :: NFData o => SpecialisedSuite Edge o i g
 hasEdge fun genArg = Suite

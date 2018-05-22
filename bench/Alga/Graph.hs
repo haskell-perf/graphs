@@ -21,6 +21,8 @@ functions :: [Suite (Graph Int)]
 functions =
   [ S.isEmpty isEmpty
   , S.vertexList vertexList
+  , S.vertexCount vertexCount
+  , S.edgeCount edgeCount
   , S.edgeList edgeList
   , S.hasEdge (uncurry hasEdge) id
   , S.addEdge (\(x,y) -> overlay $ edge x y) id
