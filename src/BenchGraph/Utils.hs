@@ -4,12 +4,13 @@ module BenchGraph.Utils
   edgesNotInGraph,
   extractMaxVertex,
   graphs,
-  mainWeigh
+  mainWeigh,
+  vertices
   )
 
 where
 
-import Data.List ((\\))
+import Data.List ((\\), nub)
 import BenchGraph.GenericGraph
 import BenchGraph.Complete
 import BenchGraph.Circuit
@@ -39,6 +40,9 @@ graphs (a,b,c) = [
   (circuit, take b tenPowers),
   (complete, take c tenPowers)
   ]
+
+vertices :: Edges -> [Vertex]
+vertices = nub . uncurry (++) . unzip
 
 mainWeigh :: Weigh () -> ([Grouped (Weight, Maybe String)] -> IO ()) -> IO ()
 mainWeigh wei f = do

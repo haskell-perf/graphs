@@ -6,7 +6,8 @@ module Fgl.PatriciaTree
 where
 
 import BenchGraph
-import BenchGraph.GenericGraph (Edges,vertices)
+import BenchGraph.GenericGraph (Edges)
+import BenchGraph.Utils
 import qualified BenchGraph.Suites as S
 
 import Data.Graph.Inductive.Graph

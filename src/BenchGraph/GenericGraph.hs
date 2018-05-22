@@ -5,8 +5,7 @@ module BenchGraph.GenericGraph
   Edges,
   Size,
   Name,
-  GenericGraph,
-  vertices
+  GenericGraph
   )
 
 where
@@ -21,6 +20,3 @@ type Size   = Int
 
 -- Generic graph with a name
 type GenericGraph = Named (Size -> Edges)
-
-vertices :: Edges -> [Vertex]
-vertices = nub . uncurry (++) . unzip

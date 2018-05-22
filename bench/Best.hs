@@ -37,9 +37,6 @@ getBest :: (Ord a, Fractional a) => Grouped [Named a] -> (Int,[Named Int])
 getBest lst = (lengthG lst - foldr (\x act -> act + extract x) 0 res,res)
   where
     res = sortBy (flip compare) $ map toNamed $ toList $ getBest' empty lst
-    lengthG a = case a of
-                  Simple{} -> 1
-                  Group a' -> sum $ map lengthG a'
 
 getBest' :: (Ord a, Fractional a) => Map String Int -> Grouped [Named a] -> Map String Int
 getBest' m (Simple a) = maybe m (\x -> alter (Just . maybe 1 (+ 1)) (show x) m) $ takeVeryBest $ sort a

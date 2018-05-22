@@ -8,6 +8,7 @@ import BenchGraph.Utils
 import BenchGraph.Named
 
 import Control.DeepSeq (NFData)
+import Data.List (nub)
 
 -- | Type to express the common interface between Specialised suites
 type SpecialisedSuite u o i g = (i -> g -> o) -- ^ The actual function to test.
@@ -52,21 +53,21 @@ hasEdge :: NFData o => SpecialisedSuite Edge o i g
 hasEdge fun genArg = Suite
   { suiteName = "hasEdge"
   , algorithm = fun
-  , inputs    = map (fmap genArg) . withNames . take 2 . edgesNotInGraph
+  , inputs    = map (fmap genArg) . withNames . getDifferents . edgesNotInGraph
   }
 
 addEdge :: NFData o => SpecialisedSuite Edge o i g
 addEdge fun genArg = Suite
   { suiteName = "add a new edge"
   , algorithm = fun
-  , inputs = map (fmap genArg) . withNames . take 2 . edgesNotInGraph
+  , inputs = map (fmap genArg) . withNames . getDifferents . edgesNotInGraph
   }
 
 removeEdge :: NFData o => SpecialisedSuite Edge o i g
 removeEdge fun genArg = Suite
   { suiteName = "remove an edge"
   , algorithm = fun
-  , inputs    = map (fmap genArg) . withNames . take 2
+    , inputs    = map (fmap genArg) . withNames . getDifferents
   }
 
 -- Graph work
@@ -93,3 +94,11 @@ context fun genArg = Suite
   , algorithm = fun
   , inputs = map (fmap genArg) . withNames . const [(0,3)]
   }
+
+-- Utils
+
+-- | Take the first, the middle and the last edges, if possible
+getDifferents :: Edges -> Edges
+getDifferents edgs = if length edgs >= 2
+                        then nub [head edgs, edgs !! (length edgs `div` 2 - 1), last $ init edgs]
+                        else edgs

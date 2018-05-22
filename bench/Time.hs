@@ -30,6 +30,7 @@ import qualified Text.Tabular.AsciiArt as TAA
 import Command
 import Types
 import Best
+import Compare
 
 -- We consider Benchmark equality using their name
 instance Eq Benchmark where
@@ -47,7 +48,7 @@ genReport :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_ (toPrint lev flg arr . extract >=> maybe (return ()) (when (sumOut flg) . printBest "was the fastest")) $ nub arr
+genReport lev flg arr = mapM_ (toPrint lev flg arr . extract >=> maybe (return ()) (when (sumOut flg) . compareResults)) $ nub arr
 
 toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Double]))
 toPrint lev flg arr breport = do
