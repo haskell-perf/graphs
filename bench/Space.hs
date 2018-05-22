@@ -44,7 +44,7 @@ takeLastAfterBk w = case elemIndices '/' w of
                           x -> drop (1+last x) w
 
 useResults :: Output -> [Grouped WeighResult] -> IO ()
-useResults flg res = mapM_ ((printReport 2 flg namedBenchs . extract) >=> maybe (return ()) (when (sumOut flg) . printBest "used the least amount of memory")) benchs'
+useResults flg res = mapM_ ((printReport 2 flg namedBenchs . extract) >=> maybe (return ()) (when (sumOut flg) . printBestI "used the least amount of memory")) benchs'
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed res
     benchs' = nubBy (liftExtract2 eqG) namedBenchs
