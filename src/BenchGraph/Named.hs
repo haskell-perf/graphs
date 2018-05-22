@@ -7,7 +7,8 @@ module BenchGraph.Named
     fromNamed,
     nameShow,
     liftExtract,
-    liftExtract2
+    liftExtract2,
+    fix
   )
 where
 
@@ -63,3 +64,7 @@ liftExtract f = f . extract
 
 liftExtract2 :: (Comonad w) => (a-> b -> c) -> w a -> w b -> c
 liftExtract2 f a b = f (extract a) (extract b)
+
+-- | Precedence for the first name
+fix :: Named (Named a) -> Named a
+fix (Named n (Named _ a))= Named n a
