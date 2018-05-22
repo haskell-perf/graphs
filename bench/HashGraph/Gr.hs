@@ -7,10 +7,10 @@ where
 
 import BenchGraph
 import BenchGraph.GenericGraph (Edges,vertices)
-import BenchGraph.Suites
+import qualified BenchGraph.Suites as S
 
 import qualified Data.HashGraph.Strict as HG
-import qualified Data.HashSet as S
+import qualified Data.HashSet as Set
 
 type Gr = HG.Gr () Int
 
@@ -25,14 +25,14 @@ mk e = HG.mkGraph (map mkEdge e) (vertices e)
 
 functions :: [Suite Gr]
 functions =
-  [ isEmptyS HG.null
-  , edgeListS HG.edges
-  , vertexListS HG.nodes
-  , hasEdgeS HG.hasEdge mkEdge
-  , addVertexS HG.insNode id
-  , removeVertexS HG.delNode id
-  , eqS (==)
-  , addEdgeS HG.insEdge mkEdge
-  , removeEdgeS HG.delEdge mkEdge
-  , contextS (HG.&) $ \(x,y) -> (x,HG.Context' S.empty (S.singleton (HG.Tail () y)))
+  [ S.isEmpty HG.null
+  , S.edgeList HG.edges
+  , S.vertexList HG.nodes
+  , S.hasEdge HG.hasEdge mkEdge
+  , S.addVertex HG.insNode id
+  , S.removeVertex HG.delNode id
+  , S.eq (==)
+  , S.addEdge HG.insEdge mkEdge
+  , S.removeEdge HG.delEdge mkEdge
+  , S.context (HG.&) $ \(x,y) -> (x,HG.Context' Set.empty (Set.singleton (HG.Tail () y)))
   ]

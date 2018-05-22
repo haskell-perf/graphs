@@ -16,11 +16,11 @@ type SpecialisedSuite u o i g = (i -> g -> o) -- ^ The actual function to test.
 
 -- Vertex work
 
-vertexListS :: NFData o => (g -> o) -> Suite g
-vertexListS = simpleSuite "vertexList"
+vertexList :: NFData o => (g -> o) -> Suite g
+vertexList = simpleSuite "vertexList"
 
-addVertexS :: NFData o => SpecialisedSuite Vertex o i g
-addVertexS fun genArg = Suite
+addVertex :: NFData o => SpecialisedSuite Vertex o i g
+addVertex fun genArg = Suite
   { suiteName = "add a new vertex"
   , algorithm = fun
   , inputs    = \x -> fmap genArg <$> [nameBy ((++)"new vertex: " . show ) $ getNewV x]
@@ -28,8 +28,8 @@ addVertexS fun genArg = Suite
     where
       getNewV x = 1 + extractMaxVertex x
 
-removeVertexS :: NFData o => SpecialisedSuite Vertex o i g
-removeVertexS fun genArg = Suite
+removeVertex :: NFData o => SpecialisedSuite Vertex o i g
+removeVertex fun genArg = Suite
   { suiteName = "remove a vertex"
   , algorithm = fun
   , inputs    = \x -> fmap genArg <$> [nameBy ((++)"vertex: " . show ) $ getOldV x]
@@ -39,25 +39,25 @@ removeVertexS fun genArg = Suite
 
 -- Edge work
 
-edgeListS :: NFData o => (g -> o) -> Suite g
-edgeListS = simpleSuite "edgeList"
+edgeList :: NFData o => (g -> o) -> Suite g
+edgeList = simpleSuite "edgeList"
 
-hasEdgeS :: NFData o => SpecialisedSuite Edge o i g
-hasEdgeS fun genArg = Suite
+hasEdge :: NFData o => SpecialisedSuite Edge o i g
+hasEdge fun genArg = Suite
   { suiteName = "hasEdge"
   , algorithm = fun
   , inputs    = map (fmap genArg) . withNames . take 2 . edgesNotInGraph
   }
 
-addEdgeS :: NFData o => SpecialisedSuite Edge o i g
-addEdgeS fun genArg = Suite
+addEdge :: NFData o => SpecialisedSuite Edge o i g
+addEdge fun genArg = Suite
   { suiteName = "add a new edge"
   , algorithm = fun
   , inputs = map (fmap genArg) . withNames . take 2 . edgesNotInGraph
   }
 
-removeEdgeS :: NFData o => SpecialisedSuite Edge o i g
-removeEdgeS fun genArg = Suite
+removeEdge :: NFData o => SpecialisedSuite Edge o i g
+removeEdge fun genArg = Suite
   { suiteName = "remove an edge"
   , algorithm = fun
   , inputs    = map (fmap genArg) . withNames . take 2
@@ -65,14 +65,14 @@ removeEdgeS fun genArg = Suite
 
 -- Graph work
 
-isEmptyS :: NFData o => (g -> o) -> Suite g
-isEmptyS = simpleSuite "isEmpty"
+isEmpty :: NFData o => (g -> o) -> Suite g
+isEmpty = simpleSuite "isEmpty"
 
-transposeS :: NFData o => (g -> o) -> Suite g
-transposeS = simpleSuite "transpose"
+transpose :: NFData o => (g -> o) -> Suite g
+transpose = simpleSuite "transpose"
 
-eqS :: (NFData g, GraphImpl g) => (g -> g -> Bool) -> Suite g
-eqS fun = Suite
+eq :: (NFData g, GraphImpl g) => (g -> g -> Bool) -> Suite g
+eq fun = Suite
   { suiteName = "equality"
   , algorithm = fun
   , inputs    = \x -> fmap mkGraph <$>
@@ -81,10 +81,9 @@ eqS fun = Suite
     ]
   }
 
-contextS :: NFData o => SpecialisedSuite Edge o i g
-contextS fun genArg = Suite
+context :: NFData o => SpecialisedSuite Edge o i g
+context fun genArg = Suite
   { suiteName = "merge a context"
   , algorithm = fun
   , inputs = map (fmap genArg) . withNames . const [(0,3)]
-
   }

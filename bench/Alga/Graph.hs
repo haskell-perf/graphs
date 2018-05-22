@@ -6,7 +6,7 @@ module Alga.Graph
 where
 
 import BenchGraph
-import BenchGraph.Suites
+import qualified BenchGraph.Suites as S
 import BenchGraph.GenericGraph (Edges)
 
 import Algebra.Graph
@@ -19,15 +19,15 @@ mk = edges
 
 functions :: [Suite (Graph Int)]
 functions =
-  [ isEmptyS isEmpty
-  , vertexListS vertexList
-  , edgeListS edgeList
-  , hasEdgeS (uncurry hasEdge) id
-  , addEdgeS (\(x,y) -> overlay $ edge x y) id
-  , addVertexS connect vertex
-  , removeVertexS removeVertex id
-  , eqS (==)
-  , removeEdgeS (uncurry removeEdge) id
-  , transposeS transpose
+  [ S.isEmpty isEmpty
+  , S.vertexList vertexList
+  , S.edgeList edgeList
+  , S.hasEdge (uncurry hasEdge) id
+  , S.addEdge (\(x,y) -> overlay $ edge x y) id
+  , S.addVertex connect vertex
+  , S.removeVertex removeVertex id
+  , S.eq (==)
+  , S.removeEdge (uncurry removeEdge) id
+  , S.transpose transpose
   ]
 

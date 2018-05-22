@@ -7,7 +7,7 @@ where
 
 import BenchGraph
 import BenchGraph.Utils (extractMaxVertex)
-import BenchGraph.Suites
+import qualified BenchGraph.Suites as S
 import BenchGraph.GenericGraph (Edges)
 
 import Data.Graph
@@ -21,8 +21,8 @@ mk e = buildG (0,extractMaxVertex e) e
 
 functions :: [Suite Graph]
 functions =
-  [ edgeListS edges
-  , vertexListS vertices
-  , eqS (==)
-  , transposeS transposeG
+  [ S.edgeList edges
+  , S.vertexList vertices
+  , S.eq (==)
+  , S.transpose transposeG
   ]

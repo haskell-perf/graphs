@@ -7,7 +7,7 @@ where
 
 import BenchGraph
 import BenchGraph.GenericGraph (Edges,vertices)
-import BenchGraph.Suites
+import qualified BenchGraph.Suites as S
 
 import Data.Graph.Inductive.Graph
 import Data.Graph.Inductive.PatriciaTree
@@ -20,15 +20,15 @@ mk e = mkUGraph (vertices e) e
 
 functions :: [Suite UGr]
 functions =
-  [ isEmptyS isEmpty
-  , edgeListS edges
-  , vertexListS nodes
-  , hasEdgeS (flip hasEdge) id
-  , addVertexS insNode (\x -> (x,()))
-  , removeVertexS delNode id
-  , eqS equal
-  , addEdgeS insEdge (\(x,y) -> (x,y,()))
-  , removeEdgeS delEdge id
-  , contextS (&) (\(x,y) -> ([],x,(),[((),y)]))
+  [ S.isEmpty isEmpty
+  , S.edgeList edges
+  , S.vertexList nodes
+  , S.hasEdge (flip hasEdge) id
+  , S.addVertex insNode (\x -> (x,()))
+  , S.removeVertex delNode id
+  , S.eq equal
+  , S.addEdge insEdge (\(x,y) -> (x,y,()))
+  , S.removeEdge delEdge id
+  , S.context (&) (\(x,y) -> ([],x,(),[((),y)]))
   ]
 
