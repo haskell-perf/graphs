@@ -4,6 +4,10 @@ import BenchGraph.Named
 import Control.Comonad (extract)
 import Data.List (nub, sort)
 
+import Options.Applicative (execParser)
+
+import Command
+
 import qualified Alga.Graph
 import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
@@ -38,7 +42,10 @@ shExtr :: Named (Named a) -> String
 shExtr = show . extract
 
 main :: IO ()
-main = do
+main = execParser runDataSize >>= main'
+
+main' :: (Int,Int,Int) -> IO ()
+main' size = do
   res <- mapM sequence
     [ Named "Alga (Algebra.Graph)" $ computeSize size Alga.Graph.mk
     , Named "Containers (Data.Graph)" $ computeSize size Containers.Graph.mk
@@ -48,5 +55,3 @@ main = do
     ]
   let res' = concatMap sequence res
   mapM_ (printNArr res') $ nub $ map shExtr res'
-  where
-    size = (3,3,2)

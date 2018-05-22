@@ -6,7 +6,8 @@ module Command
   ListOption (..),
   CommandSpace (..),
   commandTime,
-  runSpace
+  runSpace,
+  runDataSize
   )
 
 where
@@ -50,7 +51,7 @@ libOpt :: Parser String
 libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME")
 
 sizeOpt :: Parser Size
-sizeOpt = read <$> strOption (long "graphs-size" <> value "(5,3,3)" <> showDefault <> help "(ten power to generate path, ten power to generate a circuit, ten power to generate a complete graph)" )
+sizeOpt = read <$> strOption (long "graphs-size" <> value "(3,3,2)" <> showDefault <> help "(ten power to generate path, ten power to generate a circuit, ten power to generate a complete graph)" )
 
 options :: Parser Option
 options = partOpt <|> ( Only <$> onlyOpt)
@@ -116,3 +117,10 @@ runSpace = info ( semiOptional <**> helper)
      <> header "Help")
   where
     semiOptional = pure (fromMaybe (RunS Nothing (Output True True) Nothing)) <*> optional space'
+
+runDataSize :: ParserInfo Size
+runDataSize = info (sizeOpt <**> helper)
+     ( fullDesc
+     <> progDesc "Benchmark datasize on different graphs representations"
+     <> header "Help")
+
