@@ -15,24 +15,27 @@ printNArr :: [Named (Named [Named Word])] -- ^ Array of all benchs
           -> IO ()
 printNArr arr selected = do
   putStrLn $ replicate 2 '#' ++ selected
-  mapM_ (printNArr' here) $ nub $ map (show . extract) here
+  mapM_ (printNArr' here) $ nub $ map shExtr here
   where
-    herePre = filter (\(Named _ (Named f _ )) -> f == selected) arr
-    here = concatMap (sequence . fix) herePre
+    here = concatMap (sequence . fix) $ filter (eqDeepSelected selected) arr
 
 printNArr' :: [Named (Named Word)] -- ^ Array of all benchs
           -> String -- ^ A selected func
           -> IO ()
 printNArr' arr selected = do
   putStrLn $ replicate 3 '#' ++ selected
-  mapM_ printNArr'' $ sort here
+  mapM_ printN $ sort here
   where
-    herePre = filter (\(Named _ (Named f _ )) -> f == selected) arr
-    here = map fix herePre
+    here = map fix $ filter (eqDeepSelected selected) arr
 
-printNArr'' :: Named Word -> IO ()
-printNArr'' (Named n a) = putStrLn $ unwords [" *", n, ":",show a]
+printN :: Named Word -> IO ()
+printN (Named n a) = putStrLn $ unwords [" *", n, ":",show a]
 
+eqDeepSelected :: String -> Named (Named a) -> Bool
+eqDeepSelected s = (==) s . shExtr
+
+shExtr :: Named (Named a) -> String
+shExtr = show . extract
 
 main :: IO ()
 main = do
@@ -44,6 +47,6 @@ main = do
     , Named "Hash-Graph (Data.HashGraph.Strict)" $ computeSize size HashGraph.Gr.mk
     ]
   let res' = concatMap sequence res
-  mapM_ (printNArr res') $ nub $ map (show . extract) res'
+  mapM_ (printNArr res') $ nub $ map shExtr res'
   where
     size = (3,3,2)
