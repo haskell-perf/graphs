@@ -1,4 +1,4 @@
-import Data.List (filter, nub, sort)
+import Data.List (filter, nub, sortBy)
 import Data.Maybe (mapMaybe, catMaybes)
 import Control.Monad (when)
 
@@ -26,6 +26,7 @@ import Options.Applicative (execParser)
 
 import qualified Text.Tabular as T
 import qualified Text.Tabular.AsciiArt as TAA
+import Text.Printf (printf)
 
 import Command
 import Types
@@ -52,13 +53,14 @@ genReport lev flg arr = mapM_  mapped $ nub arr
   where
     mapped e = do
       res <- toPrint lev flg arr $ extract e
-      case res of
+      let res' = fmap (fmap (map (fmap getMean))) res
+      case res' of
         Nothing -> return ()
         Just res' -> do
           when (sumOut flg) $ printBest "was the fastest" res'
           when (sumOut flg) $ printAbstract "faster" res'
 
-toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Double]))
+toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = do
   let bname = showBenchName breport
   when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
@@ -84,27 +86,31 @@ tkChilds :: Benchmark -> Maybe [Benchmark]
 tkChilds (BenchGroup _ childs) = Just childs
 tkChilds _ = Nothing
 
-showSimples :: [Named Double] -> String
+showSimples :: [Named Report] -> String
 showSimples arr = TAA.render id id id table
   where
-    arr' = sort arr
-    arrD = map (show . extract) arr'
+    arr' = sortBy (\x y -> liftExtract getMean x `compare` liftExtract getMean y) arr
+    arrD = map (\(Named _ r) -> [show $ getMean r, printf "%.3f" $ getRSquare r ]) arr'
     libs = map show arr'
     table = T.Table
       (T.Group T.NoLine $ map T.Header libs)
-      (T.Group T.SingleLine [T.Header "Seconds (Mean)"])
-      (map return arrD)
+      (T.Group T.SingleLine [T.Header "Seconds (Mean)", T.Header "R\178"])
+      arrD
 
 getMean :: Report -> Double
 getMean = estPoint . anMean . reportAnalysis
 
+-- head ?
+getRSquare :: Report -> Double
+getRSquare = estPoint . regRSquare . head . anRegress . reportAnalysis
+
 -- | Utilitary, disable the standard output of Criterion
-benchmarkWithoutOutput :: Benchmarkable -> IO Double
+benchmarkWithoutOutput :: Benchmarkable -> IO Report
 benchmarkWithoutOutput bm = do
   initializeTime
   withConfig defaultConfig' $ do
     Analysed rpt <- runAndAnalyseOne 0 "function" bm
-    return $ getMean rpt
+    return rpt
   where
     defaultConfig' = defaultConfig {verbosity = Quiet}
 
