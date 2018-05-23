@@ -61,7 +61,7 @@ genReport lev flg arr = mapM_  mapped $ nub arr
 toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Double]))
 toPrint lev flg arr breport = do
   let bname = showBenchName breport
-  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
+  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
   case breport of
     Benchmark{} -> do
       simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimple) $ here breport
@@ -125,8 +125,8 @@ main' opts
         let modifyL = case libs of
               Nothing -> id
               Just libss -> filter (\x -> show x `elem` libss)
-        let grList' = nub $ modifyL $ grList size
-        let todo = case opt of
+            grList' = nub $ modifyL $ grList size
+            todo = case opt of
               Nothing -> grList'
               Just opt' -> case opt' of
                   Only bname -> filter ((==) bname . showBenchName . extract) grList'
@@ -134,7 +134,7 @@ main' opts
                                        per = length grList' `div` two
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grList'
-        let samples = filter (`elem` todo) $ modifyL $ grList size
+            samples = filter (`elem` todo) $ modifyL $ grList size
         putStrLn "# Compare benchmarks\n"
         putStrLn "Doing:"
         putStrLn $ "\n----\n"++ showListN todo ++ "----\n"

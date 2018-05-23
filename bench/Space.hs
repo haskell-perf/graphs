@@ -68,7 +68,7 @@ printReport :: Int -- ^ The number of # to write
             -> IO (Maybe (Ty.Grouped [Named Int64])) -- Maybe if there was actual data
 printReport lev flg arr act = do
   let bname = showGrouped act
-  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
+  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
   case act of
     (Grouped _ (Singleton{}:_)) -> Just . Ty.Group <$> mapM (printSimples (lev+1) flg semiSimples . extract) (nubBy (liftExtract2 eqW) semiSimples)
     Grouped{} -> case otherGroups of
@@ -85,7 +85,7 @@ printReport lev flg arr act = do
 printSimples :: Int -> Output -> [Named WeighResult] -> WeighResult -> IO (Ty.Grouped [Named Int64])
 printSimples lev flg arr act = do
   let bname = takeLastAfterBk $ weightLabel $ fst act
-  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ replicate lev '#' ++ " " ++ bname
+  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
   when (staOut flg) $ putStrLn $ TAA.render id id id table
   return $ Ty.Simple $ map (fmap $ weightAllocatedBytes . fst) filtered
   where
