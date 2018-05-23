@@ -1,6 +1,6 @@
-module Compare
+module Abstract
   (
-  compareResults
+    printAbstract
   )
 
 where
@@ -14,8 +14,10 @@ import BenchGraph.Named
 
 import Types
 
-compareResults :: Grouped [Named Double] -> IO ()
-compareResults = printMap . fmap reverse . rearrange . getComparison
+printAbstract :: String -- ^ A comparative (like "faster")
+              -> Grouped [Named Double] -- ^ The actual data
+              -> IO ()
+printAbstract superlative = printMap superlative . fmap reverse . rearrange . getComparison
 
 -- | Sort the results, plus put the worst lib for comparison
 rearrange :: Named [Named Double] -> Named [Named Double]
@@ -27,15 +29,16 @@ rearrange (Named n arr) =
     sorted = sort arr
     (Named n' db) = head sorted
 
-printMap :: Named [Named Double] -> IO ()
-printMap (Named ref res) = do
-  putStrLn "\nSUMMARY:\n"
-  mapM_ (\(Named name av) -> putStrLn $ unwords [" *",name,"was",printf "%.2f" av,"times faster than",ref]) res
+printMap :: String -> Named [Named Double] -> IO ()
+printMap superlative (Named ref res) = do
+  putStrLn "\nABSTRACT:\n"
+  mapM_ (\(Named name av) -> putStrLn $ unwords [" *",name,"was",printf "%.2f" av,"times",superlative,"than",ref]) res
   putStrLn ""
 
 average :: Fractional a => [a] -> a
 average lst = sum lst / fromRational (toRational (length lst))
 
+-- | The first Name given is the reference name for comparison, the others are the comparison themselves
 getComparison :: Grouped [Named Double] -> Named [Named Double]
 getComparison grp = Named (ref grp) $ map toNamed $ toList $ M.map average $ getComparison' (ref grp) start grp
   where

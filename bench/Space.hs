@@ -15,6 +15,7 @@ import Options.Applicative (execParser)
 import Command
 import qualified Types as Ty
 import Best
+import Abstract
 
 import BenchGraph
 import BenchGraph.Named
@@ -47,10 +48,17 @@ takeLastAfterBk w = case elemIndices '/' w of
                           x -> drop (1+last x) w
 
 useResults :: Output -> [Grouped WeighResult] -> IO ()
-useResults flg res = mapM_ ((printReport 2 flg namedBenchs . extract) >=> maybe (return ()) (when (sumOut flg) . printBestI "used the least amount of memory")) benchs'
+useResults flg todo = mapM_ mapped $ nubBy (liftExtract2 eqG) namedBenchs
   where
-    namedBenchs = concatMap sequence $ mapMaybe groupedToNamed res
-    benchs' = nubBy (liftExtract2 eqG) namedBenchs
+    namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
+    mapped e = do
+      res <- printReport 2 flg namedBenchs $ extract e
+      case res of
+        Nothing -> return ()
+        Just res' -> do
+          let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
+          when (sumOut flg) $ printBest "used the least amount of memory" res''
+          when (sumOut flg) $ printAbstract "lighter" res''
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write

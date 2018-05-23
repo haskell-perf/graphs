@@ -1,6 +1,6 @@
 import Data.List (filter, nub, sort)
 import Data.Maybe (mapMaybe, catMaybes)
-import Control.Monad (when, (>=>))
+import Control.Monad (when)
 
 import Criterion
 import Criterion.Types
@@ -30,7 +30,7 @@ import qualified Text.Tabular.AsciiArt as TAA
 import Command
 import Types
 import Best
-import Compare
+import Abstract
 
 -- We consider Benchmark equality using their name
 instance Eq Benchmark where
@@ -48,7 +48,15 @@ genReport :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_ (toPrint lev flg arr . extract >=> maybe (return ()) (when (sumOut flg) . compareResults)) $ nub arr
+genReport lev flg arr = mapM_  mapped $ nub arr
+  where
+    mapped e = do
+      res <- toPrint lev flg arr $ extract e
+      case res of
+        Nothing -> return ()
+        Just res' -> do
+          when (sumOut flg) $ printBest "was the fastest" res'
+          when (sumOut flg) $ printAbstract "faster" res'
 
 toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Double]))
 toPrint lev flg arr breport = do
