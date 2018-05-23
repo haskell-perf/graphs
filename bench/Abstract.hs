@@ -8,6 +8,7 @@ where
 import Data.Map.Strict (Map, unionWith, empty, toList, fromList)
 import qualified Data.Map.Strict as M
 import Data.List (find, sort)
+import Data.Maybe (mapMaybe)
 import Text.Printf (printf)
 
 import BenchGraph.Named
@@ -17,14 +18,19 @@ import Types
 printAbstract :: String -- ^ A comparative (like "faster")
               -> Grouped [Named Double] -- ^ The actual data
               -> IO ()
-printAbstract superlative = printMap superlative . fmap reverse . rearrange . getComparison
+printAbstract superlative = printMap superlative . fmap reverse . rearrange . removeNaN . getComparison
+
+removeNaN :: Named [Named Double] -> Named [Named Double]
+removeNaN = fmap (mapMaybe (\n@(Named _ x) -> if isNaN x then Nothing else Just n))
 
 -- | Sort the results, plus put the worst lib for comparison
 rearrange :: Named [Named Double] -> Named [Named Double]
-rearrange (Named n arr) =
-  if db >= 1
-     then Named n sorted
-     else rearrange $ Named n' $ Named n (recip db) : map (fmap (recip db *)) (tail sorted)
+rearrange na@(Named n arr) =
+  if not $ null arr
+     then if db >= 1
+             then Named n sorted
+             else rearrange $ Named n' $ Named n (recip db) : map (fmap (recip db *)) (tail sorted)
+    else na
   where
     sorted = sort arr
     (Named n' db) = head sorted
