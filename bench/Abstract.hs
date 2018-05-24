@@ -52,6 +52,7 @@ getComparison grp = Named (ref grp) $ map toNamed $ toList $ M.map average $ get
     getRef grp' = case grp' of
                    (Simple a) -> a
                    (Group (x:_)) -> getRef x
+                   Group{} -> error "Empty Group, should not happen"
     start = fromList $ map (\x -> (show x, [])) $ tail $ getRef grp
 
 getComparison' :: String -> Map String [Double] -> Grouped [Named Double] -> Map String [Double]

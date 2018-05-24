@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+
 import Data.List (filter, nub, sortBy)
 import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes)
@@ -41,6 +43,7 @@ instance Eq Benchmark where
 showBenchName :: Benchmark -> Name
 showBenchName (Benchmark n _) = n
 showBenchName (BenchGroup n _) = n
+showBenchName Environment{}    = error "Cannot show the bench name of an Env"
 
 genReport :: Int
            -- ^ The number of '#' to write
