@@ -123,7 +123,7 @@ main = execParser runSpace >>= main'
 
 main' :: CommandSpace -> IO ()
 main' (ListS opt) = case opt of
-                    Benchs -> putStr $ unlines $ nub $ map suiteName Alga.Graph.functions ++ map suiteName Containers.Graph.functions ++ map suiteName Fgl.PatriciaTree.functions ++ map suiteName HashGraph.Gr.functions ++ map suiteName Fgl.Tree.functions ++ map show weighCreationList
+                    Benchs -> putStr $ unlines $ nub $ map show Alga.Graph.functions ++ map show Containers.Graph.functions ++ map show Fgl.PatriciaTree.functions ++ map show HashGraph.Gr.functions ++ map show Fgl.Tree.functions ++ map show weighCreationList
                     Libs -> putStr $ unlines $ map show $ namedWeigh Nothing
 main' (RunS only flg libs) = mainWeigh benchs (useResults flg)
   where
@@ -138,4 +138,4 @@ namedWeigh only =
   , Named "Hash-Graph (Data.HashGraph.Strict)" $ allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk
   ]
   where
-    select funcs = maybe funcs (\x -> filter ((==) x . suiteName) funcs) only
+    select funcs = maybe funcs (\x -> filter ((==) x . show) funcs) only

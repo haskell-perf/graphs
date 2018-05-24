@@ -25,7 +25,7 @@ mkEdge (x,y) = HG.Edge x () y
 mk :: Edges -> Gr
 mk e = HG.mkGraph (map mkEdge e) (vertices e)
 
-functions :: [Suite Gr]
+functions :: [NSuite Gr]
 functions =
   [ S.isEmpty HG.null
   , S.edgeList HG.edges

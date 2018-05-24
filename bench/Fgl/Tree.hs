@@ -20,7 +20,7 @@ instance GraphImpl UGr where
 mk :: Edges -> UGr
 mk e = mkUGraph (vertices e) e
 
-functions :: [Suite UGr]
+functions :: [NSuite UGr]
 functions =
   [ S.isEmpty isEmpty
   , S.edgeList edges

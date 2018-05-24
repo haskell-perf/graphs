@@ -2,6 +2,7 @@
 
 module BenchGraph (
   Suite (..),
+  NSuite,
   simpleSuite,
   withNames,
   GraphImpl,
@@ -32,14 +33,15 @@ import BenchGraph.Named
 -- type @i@ and produces an output of type @o@. Algorithms come with a list of
 -- named inputs, all of which will be tried during benchmarking.
 data Suite g = forall i o. NFData o => Suite
-    { suiteName :: Name
-    , algorithm :: i -> g -> o
+    { algorithm :: i -> g -> o
     , inputs    :: Edges -> [Named i] }
+
+type NSuite g = Named (Suite g)
 
 -- Not the best name, but still better than "consumer", since all algorithms
 -- are consumers.
-simpleSuite :: NFData o => Name -> (g -> o) -> Suite g
-simpleSuite name algorithm = Suite name (const algorithm) (const [Named "" ()])
+simpleSuite :: NFData o => Name -> (g -> o) -> NSuite g
+simpleSuite name algorithm = Named name $ Suite (const algorithm) (const [Named "" ()])
 
 -- Show items in a list
 withNames :: Show a => [a] -> [Named a]
@@ -50,8 +52,8 @@ class GraphImpl g where
     mkGraph :: Edges -> g
 
 ---- Criterion
-benchmark :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Benchmark
-benchmark graphs (Suite sname algo inputs) = bgroup sname cases
+benchmark :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> NSuite g -> Benchmark
+benchmark graphs (Named sname (Suite algo inputs)) = bgroup sname cases
   where
     cases = [ bgroup (show g) $ map (benchSuite algo inputs g) ss | (g, ss) <- graphs ]
 
@@ -63,15 +65,15 @@ benchSuite algorithm inputs g size = bgroup (show size) cases
     graph = mkGraph edges
     cases = [ bench name $ nf (algorithm i) $!! graph | (Named name i) <- inputs edges ]
 
-allBenchs :: (GraphImpl g, NFData g) => (Int,Int,Int) -> [Suite g] -> [Benchmark]
+allBenchs :: (GraphImpl g, NFData g) => (Int,Int,Int) -> [NSuite g] -> [Benchmark]
 allBenchs size = map (benchmark $ graphs size)
 
 benchmarkCreation :: (NFData g) => (Int,Int,Int) -> (Edges -> g) -> [Benchmark]
 benchmarkCreation size mk = [ bgroup ("make a " ++  n ++ " from a list") $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | (Named n grf, ss) <- graphs size ]
 
 ---- Weigh
-weigh :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Weigh ()
-weigh graphs (Suite sname algo inputs) = wgroup sname cases
+weigh :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> NSuite g -> Weigh ()
+weigh graphs (Named sname (Suite algo inputs)) = wgroup sname cases
   where
     cases = mapM_ (uncurry mkGroup) graphs
     mkGroup g ss = wgroup (show g) $ mapM_ (weighSuite algo inputs g) ss
@@ -85,7 +87,7 @@ weighSuite algorithm inputs g size = wgroup (show size) cases
     cases = mapM_ (uncurry wFunc . fromNamed) $ inputs edges
     wFunc name i = func name (algorithm i) $!! graph
 
-allWeighs :: (GraphImpl g, NFData g) => [Suite g] -> Weigh ()
+allWeighs :: (GraphImpl g, NFData g) => [NSuite g] -> Weigh ()
 allWeighs = mapM_ (weigh $ graphs (3,3,2))
 
 -- | Use the list from weighCreationList

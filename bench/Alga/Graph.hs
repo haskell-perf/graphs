@@ -17,7 +17,7 @@ instance GraphImpl (Graph Int) where
 mk :: Edges -> Graph Int
 mk = edges
 
-functions :: [Suite (Graph Int)]
+functions :: [NSuite (Graph Int)]
 functions =
   [ S.isEmpty isEmpty
   , S.vertexList vertexList
