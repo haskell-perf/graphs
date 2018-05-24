@@ -10,6 +10,12 @@ env:
     - DO=SPACE
     - DO=DATASIZE
 
+cache:
+    directories:
+        - $HOME/.cabal/packages
+        - $HOME/.cabal/store
+        - $HOME/.cabal/bin
+
 script:
     - cabal configure --enable-benchmarks 
     - cabal build
