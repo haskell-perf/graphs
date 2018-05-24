@@ -5,7 +5,7 @@ import Control.Monad (when, (>=>))
 
 import Control.Comonad (extract)
 
-import Weigh
+import Weigh (Grouped (..), Weight (..), Weigh, wgroup, commas)
 
 import qualified Text.Tabular as T
 import qualified Text.Tabular.AsciiArt as TAA
@@ -76,6 +76,7 @@ printReport lev flg arr act = do
                      when (staOut flg) $ putStrLn "No data\n"
                      return Nothing
                    real -> Just . Ty.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . extract) (nubBy (liftExtract2 eqG) real)
+    Singleton{} -> error "A single singleton of a WeighResult, this should not happen"
     where
       here e = filter (eqG e . extract) arr
       otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
@@ -85,7 +86,7 @@ printReport lev flg arr act = do
 printSimples :: Int -> Output -> [Named WeighResult] -> WeighResult -> IO (Ty.Grouped [Named Int64])
 printSimples lev flg arr act = do
   let bname = takeLastAfterBk $ weightLabel $ fst act
-  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
+  when (not (null bname) && staOut flg) $ putStrLn $ unwords [replicate lev '#',bname]
   when (staOut flg) $ putStrLn $ TAA.render id id id table
   return $ Ty.Simple $ map (fmap $ weightAllocatedBytes . fst) filtered
   where
@@ -98,7 +99,7 @@ printSimples lev flg arr act = do
 
 -- | Convert a @Weight@ to a list of @String@ for tabular representation
 showWeight :: Weight -> [String]
-showWeight w = [show (weightAllocatedBytes w),show (weightGCs w)]
+showWeight w = [commas (weightAllocatedBytes w),show (weightGCs w)]
 
 -- | Take singletons
 tkSingl :: Grouped WeighResult -> Maybe WeighResult
