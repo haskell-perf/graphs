@@ -56,22 +56,23 @@ genReport lev flg arr = mapM_  mapped $ nub arr
       let res' = fmap (fmap (map (fmap getMean))) res
       case res' of
         Nothing -> return ()
-        Just res' -> do
-          when (sumOut flg) $ printBest "was the fastest" res'
-          when (sumOut flg) $ printAbstract "faster" res'
+        Just res'' -> do
+          when (sumOut flg) $ printBest "was the fastest" res''
+          when (sumOut flg) $ printAbstract "faster" res''
 
 toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = do
   let bname = showBenchName breport
   when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
   case breport of
-    Benchmark{} -> do
+    Benchmark{}   -> do
       simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimple) $ here breport
       when (staOut flg) $ putStrLn $ "\n" ++ showSimples simples
       return $ Just $ Simple simples
-    BenchGroup{} -> case nub otherGroups of
+    BenchGroup{}  -> case nub otherGroups of
                       [] -> putStrLn "\nNo data\n" >> return Nothing
                       real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . extract) real
+    Environment{} -> error "Not wanted environnement"
   where
     otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here breport
     here e = filter (liftExtract (== e)) arr
