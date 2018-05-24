@@ -95,6 +95,14 @@ context fun genArg = Suite
   , inputs = map (fmap genArg) . withNames . const [(0,3)]
   }
 
+-- Algorithms
+
+dff :: NFData o => (g -> o) -> Suite g
+dff = simpleSuite "dff"
+
+topSort :: NFData o => (g -> o) -> Suite g
+topSort = simpleSuite "topSort"
+
 -- Utils
 
 -- | Take the first, the middle and the last edges, if possible

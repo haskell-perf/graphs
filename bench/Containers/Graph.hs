@@ -25,4 +25,6 @@ functions =
   , S.vertexList vertices
   , S.eq (==)
   , S.transpose transposeG
+  , S.dff dff
+  , S.topSort topSort
   ]

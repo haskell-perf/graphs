@@ -12,6 +12,7 @@ import qualified BenchGraph.Suites as S
 
 import Data.Graph.Inductive.Graph
 import Data.Graph.Inductive.Tree
+import Data.Graph.Inductive.Query.DFS
 
 instance GraphImpl UGr where
   mkGraph = mk
@@ -33,4 +34,6 @@ functions =
   , S.addEdge insEdge (\(x,y) -> (x,y,()))
   , S.removeEdge delEdge id
 --  , S.context (&) (\(x,y) -> ([],x,(),[((),y)]))
+  , S.dff dfs'
+  , S.topSort topsort
   ]

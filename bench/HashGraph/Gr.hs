@@ -11,6 +11,7 @@ import BenchGraph.Utils
 import qualified BenchGraph.Suites as S
 
 import qualified Data.HashGraph.Strict as HG
+import qualified Data.HashGraph.Algorithms as A
 import qualified Data.HashSet as Set
 
 type Gr = HG.Gr () Int
@@ -38,4 +39,5 @@ functions =
   , S.addEdge HG.insEdge mkEdge
   , S.removeEdge HG.delEdge mkEdge
   , S.context (HG.&) $ \(x,y) -> (x,HG.Context' Set.empty (Set.singleton (HG.Tail () y)))
+  , S.dff A.dfs
   ]
