@@ -62,7 +62,7 @@ fromNamed (Named n a) = (n,a)
 liftExtract :: (Comonad w) => (a -> b) -> w a -> b
 liftExtract f = f . extract
 
-liftExtract2 :: (Comonad w) => (a-> b -> c) -> w a -> w b -> c
+liftExtract2 :: (Comonad w) => (a -> b -> c) -> w a -> w b -> c
 liftExtract2 f a b = f (extract a) (extract b)
 
 -- | Precedence for the first name

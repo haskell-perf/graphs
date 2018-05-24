@@ -1,4 +1,5 @@
 import Data.List (filter, nub, sortBy)
+import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes)
 import Control.Monad (when)
 
@@ -35,7 +36,7 @@ import Abstract
 
 -- We consider Benchmark equality using their name
 instance Eq Benchmark where
-  a == b = showBenchName a == showBenchName b
+  (==) = on (==) showBenchName
 
 showBenchName :: Benchmark -> Name
 showBenchName (Benchmark n _) = n
@@ -53,16 +54,14 @@ genReport lev flg arr = mapM_  mapped $ nub arr
   where
     mapped e = do
       res <- toPrint lev flg arr $ extract e
-      let res' = fmap (fmap (map (fmap getMean))) res
-      case res' of
+      case fmap (fmap (map (fmap getMean))) res of
         Nothing -> return ()
-        Just res'' -> do
-          when (sumOut flg) $ printBest "was the fastest" res''
-          when (sumOut flg) $ printAbstract "faster" res''
+        Just res'' -> when (sumOut flg) $ do
+          printBest "was the fastest" res''
+          printAbstract "faster" res''
 
 toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = do
-  let bname = showBenchName breport
   when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
   case breport of
     Benchmark{}   -> do
@@ -74,6 +73,7 @@ toPrint lev flg arr breport = do
                       real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . extract) real
     Environment{} -> error "Not wanted environnement"
   where
+    bname = showBenchName breport
     otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here breport
     here e = filter (liftExtract (== e)) arr
 
@@ -90,7 +90,7 @@ tkChilds _ = Nothing
 showSimples :: [Named Report] -> String
 showSimples arr = TAA.render id id id table
   where
-    arr' = sortBy (\x y -> liftExtract getMean x `compare` liftExtract getMean y) arr
+    arr' = sortBy (on compare (liftExtract getMean)) arr
     arrD = map (\(Named _ r) -> [secs $ getMean r, printf "%.3f" $ getRSquare r ]) arr'
     libs = map show arr'
     table = T.Table
@@ -142,9 +142,7 @@ main' opts
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grList'
             samples = filter (`elem` todo) $ modifyL $ grList size
-        putStrLn "# Compare benchmarks\n"
-        putStrLn "Doing:"
-        putStrLn $ "\n----\n"++ showListN todo ++ "----\n"
+        putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",showListN todo,"----"]
         genReport 2 flg samples
   where
     grList size = concatMap (sequence . toNamed) [

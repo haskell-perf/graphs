@@ -1,7 +1,8 @@
 import Data.List (nub, nubBy, sortBy, elemIndices)
+import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes)
 import Data.Int (Int64)
-import Control.Monad (when, (>=>))
+import Control.Monad (when, unless, (>=>))
 
 import Control.Comonad (extract)
 
@@ -35,11 +36,11 @@ showGrouped _ = ""
 
 -- | Grouped are equals by their names
 eqG :: Grouped a -> Grouped a -> Bool
-eqG a b = showGrouped a == showGrouped b
+eqG = on (==) showGrouped
 
 -- | WeighResult are equals by their names
 eqW :: WeighResult -> WeighResult -> Bool
-eqW (x,_) (y,_) = takeLastAfterBk (weightLabel x) == takeLastAfterBk (weightLabel y)
+eqW = on (==) (takeLastAfterBk . weightLabel . fst)
 
 -- | Drop the prefix of a WeighResult
 takeLastAfterBk :: String -> String
@@ -55,10 +56,11 @@ useResults flg todo = mapM_ mapped $ nubBy (liftExtract2 eqG) namedBenchs
       res <- printReport 2 flg namedBenchs $ extract e
       case res of
         Nothing -> return ()
-        Just res' -> do
+        Just res' ->
           let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
-          when (sumOut flg) $ printBest "used the least amount of memory" res''
-          when (sumOut flg) $ printAbstract "lighter" res''
+              in when (sumOut flg) $ do
+                printBest "used the least amount of memory" res''
+                printAbstract "lighter" res''
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write
@@ -67,7 +69,6 @@ printReport :: Int -- ^ The number of # to write
             -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (Ty.Grouped [Named Int64])) -- Maybe if there was actual data
 printReport lev flg arr act = do
-  let bname = showGrouped act
   when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
   case act of
     (Grouped _ (Singleton{}:_)) -> Just . Ty.Group <$> mapM (printSimples (lev+1) flg semiSimples . extract) (nubBy (liftExtract2 eqW) semiSimples)
@@ -78,6 +79,7 @@ printReport lev flg arr act = do
                    real -> Just . Ty.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . extract) (nubBy (liftExtract2 eqG) real)
     Singleton{} -> error "A single singleton of a WeighResult, this should not happen"
     where
+      bname = showGrouped act
       here e = filter (eqG e . extract) arr
       otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
       semiSimples = mapMaybe (traverse tkSingl) otherGroups
@@ -85,11 +87,12 @@ printReport lev flg arr act = do
 -- | Really print the simples, different than printReport for type reason
 printSimples :: Int -> Output -> [Named WeighResult] -> WeighResult -> IO (Ty.Grouped [Named Int64])
 printSimples lev flg arr act = do
-  let bname = takeLastAfterBk $ weightLabel $ fst act
-  when (not (null bname) && staOut flg) $ putStrLn $ unwords [replicate lev '#',bname]
-  when (staOut flg) $ putStrLn $ TAA.render id id id table
+  when (staOut flg) $ do
+    unless (null bname) $ putStrLn $ unwords [replicate lev '#',bname]
+    putStrLn $ TAA.render id id id table
   return $ Ty.Simple $ map (fmap $ weightAllocatedBytes . fst) filtered
   where
+    bname = takeLastAfterBk $ weightLabel $ fst act
     -- filter by the 'act' argument, and sort
     filtered = sortBy (liftExtract2 $ \(x,_) (y,_) -> weightAllocatedBytes x `compare` weightAllocatedBytes y) $ filter (liftExtract (eqW act)) arr
     table = T.Table
@@ -124,7 +127,7 @@ main' (ListS opt) = case opt of
                     Libs -> putStr $ unlines $ map show $ namedWeigh Nothing
 main' (RunS only flg libs) = mainWeigh benchs (useResults flg)
   where
-    benchs = mapM_ (uncurry wgroup . fromNamed) $ maybe id (\libs' -> filter (flip elem libs' . show)) libs $ namedWeigh  only
+    benchs = mapM_ (uncurry wgroup . fromNamed) $ maybe id (\libs' -> filter (flip elem libs' . show)) libs $ namedWeigh only
 
 namedWeigh :: Maybe String -> [Named (Weigh ())]
 namedWeigh only =
