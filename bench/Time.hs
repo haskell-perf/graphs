@@ -6,7 +6,7 @@ import Criterion
 import Criterion.Types
 import Criterion.Internal
 import Criterion.Main.Options (defaultConfig)
-import Criterion.Measurement (initializeTime)
+import Criterion.Measurement (initializeTime, secs)
 import Criterion.Monad (withConfig)
 
 import Statistics.Types
@@ -90,11 +90,11 @@ showSimples :: [Named Report] -> String
 showSimples arr = TAA.render id id id table
   where
     arr' = sortBy (\x y -> liftExtract getMean x `compare` liftExtract getMean y) arr
-    arrD = map (\(Named _ r) -> [show $ getMean r, printf "%.3f" $ getRSquare r ]) arr'
+    arrD = map (\(Named _ r) -> [secs $ getMean r, printf "%.3f" $ getRSquare r ]) arr'
     libs = map show arr'
     table = T.Table
       (T.Group T.NoLine $ map T.Header libs)
-      (T.Group T.SingleLine [T.Header "Seconds (Mean)", T.Header "R\178"])
+      (T.Group T.SingleLine [T.Header "Time (Mean)", T.Header "R\178"])
       arrD
 
 getMean :: Report -> Double
