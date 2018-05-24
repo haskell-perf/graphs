@@ -2,14 +2,14 @@ import Data.List (filter, nub, sortBy)
 import Data.Maybe (mapMaybe, catMaybes)
 import Control.Monad (when)
 
-import Criterion
-import Criterion.Types
-import Criterion.Internal
+import Criterion (Benchmarkable)
+import Criterion.Types (Benchmark (..), Report (..), DataRecord( Analysed ), Config (..), SampleAnalysis (..), Verbosity (..), Regression (..))
+import Criterion.Internal (runAndAnalyseOne)
 import Criterion.Main.Options (defaultConfig)
 import Criterion.Measurement (initializeTime, secs)
 import Criterion.Monad (withConfig)
 
-import Statistics.Types
+import Statistics.Types (estPoint)
 
 import qualified Alga.Graph
 import qualified Containers.Graph
