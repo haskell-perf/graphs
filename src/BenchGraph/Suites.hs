@@ -103,6 +103,13 @@ dff = simpleSuite "dff"
 topSort :: NFData o => (g -> o) -> Suite g
 topSort = simpleSuite "topSort"
 
+reachable :: NFData o => SpecialisedSuite Vertex o i g
+reachable fun genArg = Suite
+  { suiteName = "reachable"
+  , algorithm = fun
+  , inputs    = map (fmap genArg) . withNames . const [0]
+  }
+
 -- Utils
 
 -- | Take the first, the middle and the last edges, if possible

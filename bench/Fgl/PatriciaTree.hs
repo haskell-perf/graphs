@@ -36,5 +36,6 @@ functions =
   , S.context (&) (\(x,y) -> ([],x,(),[((),y)]))
   , S.dff dfs'
   , S.topSort topsort
+  , S.reachable reachable id
   ]
 
