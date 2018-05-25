@@ -51,7 +51,7 @@ libOpt :: Parser String
 libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME")
 
 sizeOpt :: Parser Size
-sizeOpt = read <$> strOption (long "graphs-size" <> value "(3,3,2)" <> showDefault <> help "(ten power to generate path, ten power to generate a circuit, ten power to generate a complete graph)" )
+sizeOpt = option auto (long "graphs-size" <> value (3,3,2) <> showDefault <> help "(ten power to generate path, ten power to generate a circuit, ten power to generate a complete graph)" )
 
 options :: Parser Option
 options = partOpt <|> ( Only <$> onlyOpt)
