@@ -49,28 +49,27 @@ class GraphImpl g where
 
 It allows to convert `Edges` ( a traditional list of edges ) to the graph representation of the library.
 
-### The `Suite g` data
-
-All functions to bench are encapsulated inside a `Suite` data:
-```Haskell
-type Name = String
-
-data Suite g = forall i o. NFData o => Suite
-    { suiteName :: Name
-    , algorithm :: i -> g -> o
-    , inputs    :: Edges -> [Named i] }
-```
-
-* `suiteName` _identify_ the benchmarked function. Same function from different libraries (for example `hasEdge`) will be given the same `suiteName` to allow comparison.
-* `algorithm` is the actual function to be benchmarked. It take an argument, a graph, and produce something.
-* `inputs` will receive the actual graph, and will be used to generate inputs for the algorithm.
-
 ### The Named data
 
 ```Haskell
 data Named a = Named String a
 ```
 `Named a` data is used to allow a lighter syntax, and can be viewed as a `(String,a)`
+
+### The `Suite g` data
+
+All functions to bench are encapsulated inside a `Suite` data:
+```Haskell
+data Suite g = forall i o. NFData o => Suite
+    { algorithm :: i -> g -> o
+    , inputs    :: Edges -> [Named i] }
+
+type NSuite g = Named (Suite g)
+```
+
+* `suiteName` _identify_ the benchmarked function. Same function from different libraries (for example `hasEdge`) will be given the same `name` to allow comparison.
+* `algorithm` is the actual function to be benchmarked. It take an argument, a graph, and produce something.
+* `inputs` will receive the actual graph, and will be used to generate inputs for the algorithm.
 
 ### BenchGraph.Suites
 
