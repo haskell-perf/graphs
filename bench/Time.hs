@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-import Data.List (filter, nub, sortBy)
+import Data.List (filter, nub, sortBy, transpose)
 import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes)
 import Control.Monad (when)
@@ -29,7 +29,10 @@ import Options.Applicative (execParser)
 
 import qualified Text.Tabular as T
 import qualified Text.Tabular.AsciiArt as TAA
+import qualified Text.Tabular.Html as TH
+
 import Text.Printf (printf)
+import Text.Html (stringToHtml)
 
 import Command
 import Types
@@ -65,17 +68,26 @@ genReport lev flg arr = mapM_  mapped $ nub arr
 
 toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = do
-  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
+  when (not (null bname) && (staOut flg /= Null || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
   case breport of
+    (BenchGroup _ (Benchmark{}:_)) -> if staOut flg /= Html
+      then doGrp
+      else do
+        res'@(Just (Group res)) <- doGrp
+        printHtml $ zipWith (curry toNamed) getNOtherGroups $ mapMaybe takeSimple res
+        return res'
     Benchmark{}   -> do
       simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimple) $ here breport
-      when (staOut flg) $ putStrLn $ "\n" ++ showSimples simples
+      when (staOut flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
       return $ Just $ Simple simples
-    BenchGroup{}  -> case nub otherGroups of
-                      [] -> putStrLn "\nNo data\n" >> return Nothing
-                      real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . extract) real
+    BenchGroup{}  -> doGrp
     Environment{} -> error "Not wanted environnement"
   where
+    doGrp = case nubOtherGroups of
+              [] -> putStrLn "\nNo data\n" >> return Nothing
+              real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . extract) real
+    nubOtherGroups = nub otherGroups
+    getNOtherGroups = map (showBenchName . extract) nubOtherGroups
     bname = showBenchName breport
     otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here breport
     here e = filter (liftExtract (== e)) arr
@@ -100,6 +112,18 @@ showSimples arr = TAA.render id id id table
       (T.Group T.NoLine $ map T.Header libs)
       (T.Group T.SingleLine [T.Header "Time (Mean)", T.Header "R\178"])
       arrD
+
+-- TODO
+printHtml :: [Named [Named Report]] -> IO ()
+printHtml arr = print $ TH.render stringToHtml stringToHtml stringToHtml table
+  where
+    cases = map show arr
+    libs = map show $ extract $ head arr
+    content = transpose $ map (map (secs . getMean . extract) . extract) arr
+    table = T.Table
+      (T.Group T.NoLine $ map T.Header libs)
+      (T.Group T.SingleLine $ map T.Header cases)
+      content
 
 getMean :: Report -> Double
 getMean = estPoint . anMean . reportAnalysis

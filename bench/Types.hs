@@ -1,4 +1,4 @@
-module Types (Grouped (..), lengthG)
+module Types (Grouped (..), lengthG, takeSimple)
 where
 
 data Grouped a = Simple a | Group [Grouped a] deriving (Show)
@@ -11,3 +11,7 @@ lengthG :: Grouped a -> Int
 lengthG a = case a of
               Simple{} -> 1
               Group a' -> sum $ map lengthG a'
+
+takeSimple :: Grouped a -> Maybe a
+takeSimple (Simple a) = Just a
+takeSimple _ = Nothing

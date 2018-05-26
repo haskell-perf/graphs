@@ -5,6 +5,7 @@ module Command
   Command (..),
   ListOption (..),
   CommandSpace (..),
+  StaOut (..),
   commandTime,
   runSpace,
   runDataSize
@@ -21,11 +22,14 @@ data Option = Part Int Int | Only String
 
 type Size = (Int,Int,Int)
 
+data StaOut = Ascii | Html | Null deriving (Read, Show, Eq)
+
+
 data Output = Output {
   sumOut :: Bool, -- ^ Output summary ?
-  staOut :: Bool -- ^ Output standard ?
+  staOut :: StaOut -- ^ Output standard ?
   }
-  deriving (Show, Eq)
+  deriving (Read, Show, Eq)
 
 type Only = String
 type Lib = String
@@ -59,8 +63,8 @@ options = partOpt <|> ( Only <$> onlyOpt)
 sumFlag :: Parser Bool
 sumFlag = flag True False $ long "noSummarize" <> short 's'
 
-staFlag :: Parser Bool
-staFlag = flag True False $ long "noStandard" <> short 'd'
+staFlag :: Parser StaOut
+staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii
 
 output :: Parser Output
 output = Output <$> sumFlag <*> staFlag
@@ -116,7 +120,7 @@ runSpace = info ( semiOptional <**> helper)
      <> progDesc "Benchmark size of functions on different graphs libraries"
      <> header "Help")
   where
-    semiOptional = pure (fromMaybe (RunS Nothing (Output True True) Nothing)) <*> optional space'
+    semiOptional = pure (fromMaybe (RunS Nothing (Output True Ascii) Nothing)) <*> optional space'
 
 runDataSize :: ParserInfo Size
 runDataSize = info (sizeOpt <**> helper)

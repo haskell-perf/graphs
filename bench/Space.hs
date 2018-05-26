@@ -69,12 +69,12 @@ printReport :: Int -- ^ The number of # to write
             -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (Ty.Grouped [Named Int64])) -- Maybe if there was actual data
 printReport lev flg arr act = do
-  when (not (null bname) && (staOut flg || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
+  when (not (null bname) && (staOut flg /= Null || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
   case act of
     (Grouped _ (Singleton{}:_)) -> Just . Ty.Group <$> mapM (printSimples (lev+1) flg semiSimples . extract) (nubBy (liftExtract2 eqW) semiSimples)
     Grouped{} -> case otherGroups of
                    [] -> do
-                     when (staOut flg) $ putStrLn "No data\n"
+                     when (staOut flg /= Null) $ putStrLn "No data\n"
                      return Nothing
                    real -> Just . Ty.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . extract) (nubBy (liftExtract2 eqG) real)
     Singleton{} -> error "A single singleton of a WeighResult, this should not happen"
@@ -87,7 +87,7 @@ printReport lev flg arr act = do
 -- | Really print the simples, different than printReport for type reason
 printSimples :: Int -> Output -> [Named WeighResult] -> WeighResult -> IO (Ty.Grouped [Named Int64])
 printSimples lev flg arr act = do
-  when (staOut flg) $ do
+  when (staOut flg /= Null) $ do
     unless (null bname) $ putStrLn $ unwords [replicate lev '#',bname]
     putStrLn $ TAA.render id id id table
   return $ Ty.Simple $ map (fmap $ weightAllocatedBytes . fst) filtered
