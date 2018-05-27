@@ -1,6 +1,7 @@
 module Abstract
   (
     printAbstract
+  , average
   )
 
 where

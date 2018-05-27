@@ -1,4 +1,4 @@
-module Types (Grouped (..), lengthG, takeSimple)
+module Types (Grouped (..), lengthG, takeSimple, takeChilds)
 where
 
 data Grouped a = Simple a | Group [Grouped a] deriving (Show)
@@ -15,3 +15,7 @@ lengthG a = case a of
 takeSimple :: Grouped a -> Maybe a
 takeSimple (Simple a) = Just a
 takeSimple _ = Nothing
+
+takeChilds :: Grouped a -> Maybe [Grouped a]
+takeChilds (Group a) = Just a
+takeChilds _ = Nothing

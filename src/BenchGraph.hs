@@ -18,6 +18,7 @@ module BenchGraph (
 ) where
 
 import Criterion.Main
+import Criterion.Types (Benchmark (..))
 import Weigh
 import GHC.DataSize
 

@@ -68,21 +68,28 @@ genReport lev flg arr = mapM_  mapped $ nub arr
 
 toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = do
-  when (not (null bname) && (staOut flg /= Null || lev == 2)) $ putStrLn $ unwords [replicate lev '#',bname]
+  when (staOut flg == Ascii || lev == 2) pTitle
   case breport of
-    (BenchGroup _ (Benchmark{}:_)) -> if staOut flg /= Html
+    (BenchGroup _ (BenchGroup _ (Benchmark{}:_):_)) -> if staOut flg /= Html
       then doGrp
       else do
+        pTitle
+        putStrLn ""
         res'@(Just (Group res)) <- doGrp
-        printHtml $ zipWith (curry toNamed) getNOtherGroups $ mapMaybe takeSimple res
+        let ch = mapMaybe takeChilds res :: [[Grouped [Named Report]]]
+            results = map (mapMaybe takeSimple) ch :: [[[Named Report]]]
+            libs = map show $ head $ head results
+            results' = map (map (average . map (getMean . extract))) results :: [[Double]]
+        printHtml libs $ zipWith (curry toNamed) getNOtherGroups results'
         return res'
-    Benchmark{}   -> do
+    BenchGroup{} -> doGrp
+    Benchmark{} -> do
       simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimple) $ here breport
       when (staOut flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
       return $ Just $ Simple simples
-    BenchGroup{}  -> doGrp
     Environment{} -> error "Not wanted environnement"
   where
+    pTitle = putStrLn $ unwords [replicate lev '#',bname]
     doGrp = case nubOtherGroups of
               [] -> putStrLn "\nNo data\n" >> return Nothing
               real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . extract) real
@@ -114,12 +121,11 @@ showSimples arr = TAA.render id id id table
       arrD
 
 -- TODO
-printHtml :: [Named [Named Report]] -> IO ()
-printHtml arr = print $ TH.render stringToHtml stringToHtml stringToHtml table
+printHtml :: [String] -> [Named [Double]] -> IO ()
+printHtml libs arr = print $ TH.render stringToHtml stringToHtml stringToHtml table
   where
     cases = map show arr
-    libs = map show $ extract $ head arr
-    content = transpose $ map (map (secs . getMean . extract) . extract) arr
+    content = transpose $ map (map secs . extract) arr
     table = T.Table
       (T.Group T.NoLine $ map T.Header libs)
       (T.Group T.SingleLine $ map T.Header cases)
