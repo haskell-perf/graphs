@@ -1,5 +1,9 @@
-module Types (Grouped (..), lengthG, takeSimple, takeChilds)
+{-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
+
+module Types (Grouped (..), lengthG, IsGrouped, tkSimple, tkGroup, isSimple )
 where
+
+import qualified Weigh as W
 
 data Grouped a = Simple a | Group [Grouped a] deriving (Show)
 
@@ -12,10 +16,26 @@ lengthG a = case a of
               Simple{} -> 1
               Group a' -> sum $ map lengthG a'
 
-takeSimple :: Grouped a -> Maybe a
-takeSimple (Simple a) = Just a
-takeSimple _ = Nothing
+class IsGrouped f where
+  isSimple :: f a -> Bool
+  simple_ :: f a -> a
+  group_ :: f a -> [f a]
 
-takeChilds :: Grouped a -> Maybe [Grouped a]
-takeChilds (Group a) = Just a
-takeChilds _ = Nothing
+  tkSimple :: f a -> Maybe a
+  tkSimple e = if isSimple e then Just (simple_ e) else Nothing
+  tkGroup :: f a -> Maybe [f a]
+  tkGroup e = if not (isSimple e) then Just (group_ e) else Nothing
+
+instance IsGrouped Grouped where
+  isSimple Simple{} = True
+  isSimple _ = False
+  simple_ (Simple e) = e
+  group_ (Group e) = e
+
+-- | Weigh Grouped isGrouped
+instance IsGrouped W.Grouped where
+  isSimple W.Singleton{} = True
+  isSimple _ = False
+  simple_ (W.Singleton e) = e
+  group_ (W.Grouped _ e) = e
+

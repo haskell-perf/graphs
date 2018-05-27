@@ -78,8 +78,8 @@ printReport lev flg arr act = do
         pTitle
         putStrLn ""
         res'@(Just (T.Group res)) <- doGrp
-        let ch = mapMaybe T.takeChilds res :: [[T.Grouped [Named Int64]]]
-            results = zipWith (curry toNamed) getNOtherGroups $ map (mapMaybe T.takeSimple) ch :: [Named [[Named Int64]]]
+        let ch = mapMaybe T.tkGroup res :: [[T.Grouped [Named Int64]]]
+            results = zipWith (curry toNamed) getNOtherGroups $ map (mapMaybe T.tkSimple) ch :: [Named [[Named Int64]]]
             results' = map (fmap (makeAverage . map (map (fmap (fromRational . toRational)))) ) results :: [Named [Named Double]]
         printHtml results' ((commas :: Integer -> String) . round)
         return res'
@@ -98,7 +98,7 @@ printReport lev flg arr act = do
       nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
       getNOtherGroups = map (showGrouped . extract) nubOtherGroups
       otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
-      semiSimples = mapMaybe (traverse tkSingl) otherGroups
+      semiSimples = mapMaybe (traverse T.tkSimple) otherGroups
 
 -- | Really print the simples, different than printReport for type reason
 printSimples :: Int -> StaOut -> [Named WeighResult] -> WeighResult -> IO (T.Grouped [Named Int64])
@@ -119,11 +119,6 @@ printSimples lev flg arr act = do
 -- | Convert a @Weight@ to a list of @String@ for tabular representation
 showWeight :: Weight -> [String]
 showWeight w = [commas (weightAllocatedBytes w),show (weightGCs w)]
-
--- | Take singletons
-tkSingl :: Grouped WeighResult -> Maybe WeighResult
-tkSingl (Singleton b) = Just b
-tkSingl _ = Nothing
 
 -- | Name from grouped, necessary for the first level of Grouped for Weigh
 groupedToNamed :: Grouped a -> Maybe (Named [Grouped a])

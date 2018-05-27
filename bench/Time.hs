@@ -75,14 +75,14 @@ toPrint lev flg arr breport = do
         pTitle
         putStrLn ""
         res'@(Just (Group res)) <- doGrp
-        let ch = mapMaybe takeChilds res :: [[Grouped [Named Report]]]
-            results = zipWith (curry toNamed) getNOtherGroups $ map (mapMaybe takeSimple) ch :: [Named [[Named Report]]]
+        let ch = mapMaybe tkGroup res :: [[Grouped [Named Report]]]
+            results = zipWith (curry toNamed) getNOtherGroups $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]]
             results' = map (fmap (makeAverage . map (map (fmap getMean))) ) results :: [Named [Named Double]]
         printHtml results' secs
         return res'
     BenchGroup{} -> doGrp
     Benchmark{} -> do
-      simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimple) $ here breport
+      simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimpleB) $ here breport
       when (flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
       return $ Just $ Simple simples
     Environment{} -> error "Not wanted environnement"
@@ -100,9 +100,9 @@ toPrint lev flg arr breport = do
     here e = filter (liftExtract (== e)) arr
 
 -- | Bench only if it is possible
-tkSimple :: Benchmark -> Maybe Benchmarkable
-tkSimple (Benchmark _ b) = Just b
-tkSimple _ = Nothing
+tkSimpleB :: Benchmark -> Maybe Benchmarkable
+tkSimpleB (Benchmark _ b) = Just b
+tkSimpleB _ = Nothing
 
 -- | Get the childs of a BenchGroup, inserting the name of the library
 tkChilds :: Benchmark -> Maybe [Benchmark]
