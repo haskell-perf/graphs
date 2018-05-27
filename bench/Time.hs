@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-import Data.List (filter, nub, sortBy, transpose)
+import Data.List (filter, nub, sortBy)
 import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes)
 import Control.Monad (when)
@@ -29,15 +29,14 @@ import Options.Applicative (execParser)
 
 import qualified Text.Tabular as T
 import qualified Text.Tabular.AsciiArt as TAA
-import qualified Text.Tabular.Html as TH
 
 import Text.Printf (printf)
-import Text.Html (stringToHtml)
 
 import Command
 import Types
 import Best
 import Abstract
+import Common
 
 -- We consider Benchmark equality using their name
 instance Eq Benchmark where
@@ -78,8 +77,8 @@ toPrint lev flg arr breport = do
         res'@(Just (Group res)) <- doGrp
         let ch = mapMaybe takeChilds res :: [[Grouped [Named Report]]]
             results = zipWith (curry toNamed) getNOtherGroups $ map (mapMaybe takeSimple) ch :: [Named [[Named Report]]]
-            results' = map (fmap makeAverage) results :: [Named [Named Double]]
-        printHtml results'
+            results' = map (fmap (makeAverage . map (map (fmap getMean))) ) results :: [Named [Named Double]]
+        printHtml results' secs
         return res'
     BenchGroup{} -> doGrp
     Benchmark{} -> do
@@ -118,22 +117,6 @@ showSimples arr = TAA.render id id id table
       (T.Group T.NoLine $ map T.Header libs)
       (T.Group T.SingleLine [T.Header "Time (Mean)", T.Header "R\178"])
       arrD
-
-makeAverage :: [[Named Report]] -> [Named Double]
-makeAverage arr = map (\(Named n _ ) -> Named n $ average $ mk n) $ head arr
-  where
-    mk n = map (getMean . extract) $ concatMap (filter ((==) n . show)) arr
-
-printHtml :: [Named [Named Double]] -> IO ()
-printHtml arr = print $ TH.render stringToHtml stringToHtml stringToHtml table
-  where
-    libs = map show $ extract $ head arr
-    cases = map show arr
-    content = transpose $ map (map (secs . extract) . extract) arr
-    table = T.Table
-      (T.Group T.NoLine $ map T.Header libs)
-      (T.Group T.SingleLine $ map T.Header cases)
-      content
 
 getMean :: Report -> Double
 getMean = estPoint . anMean . reportAnalysis

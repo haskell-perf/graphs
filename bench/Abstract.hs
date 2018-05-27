@@ -15,6 +15,7 @@ import Text.Printf (printf)
 import BenchGraph.Named
 
 import Types
+import Common (average)
 
 printAbstract :: String -- ^ A comparative (like "faster")
               -> Grouped [Named Double] -- ^ The actual data
@@ -41,9 +42,6 @@ printMap superlative (Named ref res) = do
   putStrLn "\nABSTRACT:\n"
   mapM_ (\(Named name av) -> putStrLn $ unwords [" *",name,"was",printf "%.2f" av,"times",superlative,"than",ref]) res
   putStrLn ""
-
-average :: Fractional a => [a] -> a
-average lst = sum lst / fromRational (toRational (length lst))
 
 -- | The first Name given is the reference name for comparison, the others are the comparison themselves
 getComparison :: Grouped [Named Double] -> Named [Named Double]
