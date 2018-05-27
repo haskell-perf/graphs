@@ -90,8 +90,10 @@ printReport lev flg arr act = do
       pTitle = putStrLn $ unwords [replicate lev '#',bname]
       bname = showGrouped act
       doGrp = case nubOtherGroups of
-                   [] -> putStrLn "\nNo data\n" >> return Nothing
-                   real -> Just . T.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . extract) real
+                [] -> do
+                  when (flg /= Html) $ putStrLn "\nNo data\n"
+                  return Nothing
+                real -> Just . T.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . extract) real
       here e = filter (eqG e . extract) arr
       nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
       getNOtherGroups = map (showGrouped . extract) nubOtherGroups

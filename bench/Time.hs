@@ -67,7 +67,7 @@ genReport lev flg arr = mapM_  mapped $ nub arr
 
 toPrint :: Int -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = do
-  when (flg == Ascii || lev == 2) pTitle
+  when (not (null bname) && (flg == Ascii || lev == 2)) pTitle
   case breport of
     (BenchGroup _ (BenchGroup _ (Benchmark{}:_):_)) -> if flg /= Html
       then doGrp
@@ -89,7 +89,9 @@ toPrint lev flg arr breport = do
   where
     pTitle = putStrLn $ unwords [replicate lev '#',bname]
     doGrp = case nubOtherGroups of
-              [] -> putStrLn "\nNo data\n" >> return Nothing
+              [] -> do
+                when (flg /= Html) $ putStrLn "\nNo data\n"
+                return Nothing
               real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . extract) real
     nubOtherGroups = nub otherGroups
     getNOtherGroups = map (showBenchName . extract) nubOtherGroups
