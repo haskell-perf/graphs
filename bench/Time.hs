@@ -59,33 +59,32 @@ genReport _ _ [] = putStrLn "\nNo data\n"
 genReport lev flg arr = mapM_  mapped $ nub arr
   where
     mapped e = do
-      res <- toPrint lev flg arr $ extract e
+      res <- toPrint lev (staOut flg) arr $ extract e
       case fmap (fmap (map (fmap getMean))) res of
         Nothing -> return ()
         Just res'' -> when (sumOut flg) $ do
           printBest "was the fastest" res''
           printAbstract "faster" res''
 
-toPrint :: Int -> Output -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
+toPrint :: Int -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = do
-  when (staOut flg == Ascii || lev == 2) pTitle
+  when (flg == Ascii || lev == 2) pTitle
   case breport of
-    (BenchGroup _ (BenchGroup _ (Benchmark{}:_):_)) -> if staOut flg /= Html
+    (BenchGroup _ (BenchGroup _ (Benchmark{}:_):_)) -> if flg /= Html
       then doGrp
       else do
         pTitle
         putStrLn ""
         res'@(Just (Group res)) <- doGrp
         let ch = mapMaybe takeChilds res :: [[Grouped [Named Report]]]
-            results = map (mapMaybe takeSimple) ch :: [[[Named Report]]]
-            libs = map show $ head $ head results
-            results' = map (map (average . map (getMean . extract))) results :: [[Double]]
-        printHtml libs $ zipWith (curry toNamed) getNOtherGroups results'
+            results = zipWith (curry toNamed) getNOtherGroups $ map (mapMaybe takeSimple) ch :: [Named [[Named Report]]]
+            results' = map (fmap makeAverage) results :: [Named [Named Double]]
+        printHtml results'
         return res'
     BenchGroup{} -> doGrp
     Benchmark{} -> do
       simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimple) $ here breport
-      when (staOut flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
+      when (flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
       return $ Just $ Simple simples
     Environment{} -> error "Not wanted environnement"
   where
@@ -120,12 +119,17 @@ showSimples arr = TAA.render id id id table
       (T.Group T.SingleLine [T.Header "Time (Mean)", T.Header "R\178"])
       arrD
 
--- TODO
-printHtml :: [String] -> [Named [Double]] -> IO ()
-printHtml libs arr = print $ TH.render stringToHtml stringToHtml stringToHtml table
+makeAverage :: [[Named Report]] -> [Named Double]
+makeAverage arr = map (\(Named n _ ) -> Named n $ average $ mk n) $ head arr
   where
+    mk n = map (getMean . extract) $ concatMap (filter ((==) n . show)) arr
+
+printHtml :: [Named [Named Double]] -> IO ()
+printHtml arr = print $ TH.render stringToHtml stringToHtml stringToHtml table
+  where
+    libs = map show $ extract $ head arr
     cases = map show arr
-    content = transpose $ map (map secs . extract) arr
+    content = transpose $ map (map (secs . extract) . extract) arr
     table = T.Table
       (T.Group T.NoLine $ map T.Header libs)
       (T.Group T.SingleLine $ map T.Header cases)
