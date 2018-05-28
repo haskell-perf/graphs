@@ -18,6 +18,6 @@ mkMesh n = concatMap
                  second = if x+sq >= sq^2 then [] else [(x,x+sq)]
              in first ++ second
       )
-      [0..(sq^2-1)]
+      [0..(sq^2)]
   where
     sq = round $ sqrt $ fromRational $ toRational n
