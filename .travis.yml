@@ -19,7 +19,7 @@ cache:
 script:
     - cabal configure --enable-benchmarks 
     - cabal build
-    - if [ $DO = DATASIZE ]; then ./dist/build/datasize/datasize; else if [ $DO = SPACE ]; then ./dist/build/space/space; else ./dist/build/time/time run --part $STEP --of 4 --graphs '[("Mesh",3),("Complete",2)]'; fi; fi;
+    - if [ $DO = DATASIZE ]; then ./dist/build/datasize/datasize; else if [ $DO = SPACE ]; then ./dist/build/space/space; else ./dist/build/time/time run --part $STEP --of 4 --graphs '[("Mesh",2),("Complete",2)]'; fi; fi;
 
 install:
     - git clone https://github.com/patrickdoc/hash-graph.git /tmp/hash-graph
