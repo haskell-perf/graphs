@@ -18,6 +18,7 @@ source-repository head
 library
   exposed-modules:     BenchGraph
                      , BenchGraph.Path
+                     , BenchGraph.Mesh
                      , BenchGraph.Circuit
                      , BenchGraph.GenericGraph
                      , BenchGraph.Complete

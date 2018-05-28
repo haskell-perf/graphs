@@ -5,7 +5,9 @@ module BenchGraph.Utils
   extractMaxVertex,
   graphs,
   mainWeigh,
-  vertices
+  vertices,
+  SizeGraph,
+  defaultSizeGraph
   )
 
 where
@@ -15,6 +17,7 @@ import BenchGraph.GenericGraph
 import BenchGraph.Complete
 import BenchGraph.Circuit
 import BenchGraph.Path
+import BenchGraph.Mesh
 import BenchGraph.Named
 
 import Control.Comonad (extract)
@@ -23,6 +26,8 @@ import Weigh (mainWith, Weigh, Grouped, Weight, weighResults)
 import System.Environment (lookupEnv)
 import Control.Monad (unless)
 import Data.Maybe (isJust)
+
+type SizeGraph = (Int,Int,Int,Int)
 
 tenPowers :: [Int]
 tenPowers = iterate (10*) 1
@@ -34,12 +39,16 @@ edgesNotInGraph edgs = (\\) (extract complete  $ extractMaxVertex edgs) edgs
 extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
 
-graphs :: (Int, Int, Int) -> [(GenericGraph, [Int])]
-graphs (a,b,c) = [
+graphs :: SizeGraph -> [(GenericGraph, [Int])]
+graphs (a,b,c,d) = [
   (path, take a tenPowers),
   (circuit, take b tenPowers),
-  (complete, take c tenPowers)
+  (mesh, take c tenPowers),
+  (complete, take d tenPowers)
   ]
+
+defaultSizeGraph :: SizeGraph
+defaultSizeGraph = (3,3,3,2)
 
 vertices :: Edges -> [Vertex]
 vertices = nub . uncurry (++) . unzip

@@ -1,5 +1,6 @@
 import BenchGraph (computeSize)
 import BenchGraph.Named
+import BenchGraph.Utils (SizeGraph)
 
 import Control.Comonad (extract)
 import Data.List (nub, sort)
@@ -44,7 +45,7 @@ shExtr = show . extract
 main :: IO ()
 main = execParser runDataSize >>= main'
 
-main' :: (Int,Int,Int) -> IO ()
+main' :: SizeGraph -> IO ()
 main' size = do
   res <- mapM sequence
     [ Named "Alga (Algebra.Graph)" $ computeSize size Alga.Graph.mk

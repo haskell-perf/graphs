@@ -22,6 +22,7 @@ import qualified Fgl.Tree
 
 import BenchGraph (allBenchs, benchmarkCreation)
 import BenchGraph.Named
+import BenchGraph.Utils (defaultSizeGraph)
 
 import Control.Comonad (extract)
 
@@ -148,8 +149,8 @@ main' :: Command -> IO ()
 main' opts
   = case opts of
       List listOpt -> case listOpt of
-                        Benchs -> putStr $ showListN $ nub $ grList (0,0,0)
-                        Libs -> putStr $ unlines $ nub $ map show $ grList (0,0,0)
+                        Benchs -> putStr $ showListN $ nub $ grList defaultSizeGraph
+                        Libs -> putStr $ unlines $ nub $ map show $ grList defaultSizeGraph
       Run opt flg libs size -> do
         let modifyL = case libs of
               Nothing -> id
