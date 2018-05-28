@@ -46,7 +46,7 @@ install:
 script:
 # Build the package, its tests, and its docs and run the tests
 - stack --no-terminal bench --no-run-benchmarks
-- PREFIX=.stack-work/dist/x86_64-linux-tinfo6/Cabal-2.0.1.0/build
+- PREFIX=.stack-work/dist/x86_64-linux/Cabal-2.0.1.0/build
 - if [ $DO = DATASIZE ]; then $PREFIX/datasize/datasize; else if [ $DO = SPACE ]; then $PREFIX/space/space; else $PREFIX/time/time run --part $STEP --of 4 --graphs '[("Mesh",2),("Complete",2)]'; fi; fi;
 
 
