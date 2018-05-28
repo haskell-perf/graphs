@@ -6,13 +6,12 @@ module BenchGraph.Utils
   graphs,
   mainWeigh,
   vertices,
-  defaultSizeGraph,
-  defaultGraphsNames
+  defaultGr
   )
 
 where
 
-import Data.List ((\\), nub)
+import Data.List ((\\), nub, elemIndex)
 import BenchGraph.GenericGraph
 import BenchGraph.Complete
 import BenchGraph.Circuit
@@ -25,7 +24,7 @@ import Control.Comonad (extract)
 import Weigh (mainWith, Weigh, Grouped, Weight, weighResults)
 import System.Environment (lookupEnv)
 import Control.Monad (unless)
-import Data.Maybe (isJust)
+import Data.Maybe (isJust, mapMaybe)
 
 tenPowers :: [Int]
 tenPowers = iterate (10*) 1
@@ -37,11 +36,14 @@ edgesNotInGraph edgs = (\\) (extract complete  $ extractMaxVertex edgs) edgs
 extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
 
-graphs :: [String] -> [Int] -> [(GenericGraph, [Int])]
-graphs grNames = zip (filter (\x -> show x `elem` grNames) defaultGraphs) . map (`take` tenPowers)
+graphs :: [(String, Int)] -> [(GenericGraph, [Int])]
+graphs = mapMaybe (\(x,y) -> (\n -> (defaultGraphs !! n, take y tenPowers)) <$> elemIndex x defaultGraphsNames)
 
 defaultGraphs :: [GenericGraph]
 defaultGraphs = [path, circuit, mesh, complete]
+
+defaultGr :: [(String,Int)]
+defaultGr = zip defaultGraphsNames defaultSizeGraph
 
 defaultGraphsNames :: [String]
 defaultGraphsNames = map show defaultGraphs

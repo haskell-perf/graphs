@@ -18,7 +18,7 @@ import Options.Applicative
 import Data.Semigroup ((<>))
 import Data.Maybe (fromMaybe)
 
-import BenchGraph.Utils (defaultSizeGraph, defaultGraphsNames)
+import BenchGraph.Utils (defaultGr)
 
 data Option = Part Int Int | Only String
   deriving (Show, Eq)
@@ -38,12 +38,12 @@ type Graph = String
 data ListOption = Benchs | Libs
   deriving (Show, Eq)
 
-data Command = List ListOption | Run (Maybe Option) Output (Maybe [Lib]) [Graph] [Int]
+data Command = List ListOption | Run (Maybe Option) Output (Maybe [Lib]) [(Graph,Int)]
   deriving (Show, Eq)
 
 data CommandSpace = ListS ListOption | RunS (Maybe Only) Output (Maybe [Lib])
 
-data CommandDataSize = RunD [Graph] [Int]
+newtype CommandDataSize = RunD [(Graph,Int)]
 
 partOpt :: Parser Option
 partOpt = Part <$> rpart <*> rof
@@ -57,11 +57,8 @@ onlyOpt = strOption (long "only" <> short 'o' <> metavar "NAME")
 libOpt :: Parser Lib
 libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME")
 
-graphOpt :: Parser [Graph]
-graphOpt = option auto (long "graphs" <> short 'g' <> metavar "GRAPHNAMES" <> value defaultGraphsNames <> showDefault <> help "graphs to be tested")
-
-sizeOpt :: Parser [Int]
-sizeOpt = option auto (long "graphs-size" <> value defaultSizeGraph <> showDefault <> help "[ten power to generate path, ten power to generate a circuit, ten power to generate a mesh, ten power to generate a complete graph]" )
+graphOpt :: Parser [(Graph,Int)]
+graphOpt = option auto (long "graphs" <> short 'g' <> metavar "GRAPHNAMES" <> value defaultGr <> showDefault <> help "graphs to be tested")
 
 options :: Parser Option
 options = partOpt <|> ( Only <$> onlyOpt)
@@ -76,7 +73,7 @@ output :: Parser Output
 output = Output <$> sumFlag <*> staFlag
 
 runCom :: Parser Command
-runCom = Run <$> optional options <*> output <*> optional (some libOpt) <*> graphOpt <*> sizeOpt
+runCom = Run <$> optional options <*> output <*> optional (some libOpt) <*> graphOpt
 
 listOpt :: Parser ListOption
 listOpt = flag' Benchs (long "benchs") <|> flag' Libs (long "libs")
@@ -129,7 +126,7 @@ runSpace = info ( semiOptional <**> helper)
     semiOptional = pure (fromMaybe (RunS Nothing (Output True Ascii) Nothing)) <*> optional space'
 
 runDataSize :: ParserInfo CommandDataSize
-runDataSize = info ((RunD <$> graphOpt <*> sizeOpt ) <**> helper)
+runDataSize = info ((RunD <$> graphOpt) <**> helper)
      ( fullDesc
      <> progDesc "Benchmark datasize on different graphs representations"
      <> header "Help")
