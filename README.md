@@ -32,8 +32,17 @@ The benchmark suite `datasize` will use `ghc-datasize` to calculate size of grap
 
 ### Arguments
 
-Command-line arguments are self-explaining, but the `--graphs-size (int,int,int)` requires some explanations:
-We test functions against standards graphs, and they are built from ten powers. For example, a function will be tested with a path of length `1`, then `10`, then `100`. The ints represents these powers. The first is for _path_, the second for _circuit_ and the last for _complete_ graphs. Please be careful with this last one, because it can become _really big_.
+Command-line arguments are self-explaining, but the `--graphs "[(String,Int)...]` requires some explanations:
+We test functions against standards graphs, and they are built with ten-powers vertex (plus one). the Int supplied is the upper-bound of the ten-powers. So `"(Path,100)"` will generate the `Path` with `1`, `10` and `100` vertices.
+
+#### Graphs name
+
+The following graphs are supported.
+
+* Path
+* Circuit
+* Mesh
+* Complete
 
 ## About implementation
 

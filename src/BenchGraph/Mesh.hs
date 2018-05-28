@@ -11,10 +11,13 @@ import Control.Comonad (extract)
 mesh :: GenericGraph
 mesh = Named "Mesh" mkMesh
 
+-- | The Int supplied has to be a square, this will not be checked
 mkMesh :: Int -> Edges
-mkMesh n = verticals ++ horizontals
+mkMesh n = concatMap
+      (\x -> let first = if (x+1) `mod` sq == 0 then [] else [(x,x+1)]
+                 second = if x+sq >= sq^2 then [] else [(x,x+sq)]
+             in first ++ second
+      )
+      [0..(sq^2-1)]
   where
-    verticals = concatMap (\n' -> map (\(x,y) -> (x+n',y+n')) firstV) [0..n]
-    firstV = map (\(x,y) -> (x*(n+1),y*(n+1))) firstH
-    horizontals = concatMap (\n' -> map (\(x,y) -> (x+(n+1)*n',y+(n+1)*n')) firstH ) [0..n]
-    firstH = extract path n
+    sq = round $ sqrt $ fromRational $ toRational n
