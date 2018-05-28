@@ -6,8 +6,8 @@ module BenchGraph.Utils
   graphs,
   mainWeigh,
   vertices,
-  SizeGraph,
-  defaultSizeGraph
+  defaultSizeGraph,
+  defaultGraphsNames
   )
 
 where
@@ -27,8 +27,6 @@ import System.Environment (lookupEnv)
 import Control.Monad (unless)
 import Data.Maybe (isJust)
 
-type SizeGraph = (Int,Int,Int,Int)
-
 tenPowers :: [Int]
 tenPowers = iterate (10*) 1
 
@@ -39,16 +37,17 @@ edgesNotInGraph edgs = (\\) (extract complete  $ extractMaxVertex edgs) edgs
 extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
 
-graphs :: SizeGraph -> [(GenericGraph, [Int])]
-graphs (a,b,c,d) = [
-  (path, take a tenPowers),
-  (circuit, take b tenPowers),
-  (mesh, take c tenPowers),
-  (complete, take d tenPowers)
-  ]
+graphs :: [String] -> [Int] -> [(GenericGraph, [Int])]
+graphs grNames = zip (filter (\x -> show x `elem` grNames) defaultGraphs) . map (`take` tenPowers)
 
-defaultSizeGraph :: SizeGraph
-defaultSizeGraph = (3,3,3,2)
+defaultGraphs :: [GenericGraph]
+defaultGraphs = [path, circuit, mesh, complete]
+
+defaultGraphsNames :: [String]
+defaultGraphsNames = map show defaultGraphs
+
+defaultSizeGraph ::[Int]
+defaultSizeGraph = [3,3,3,2]
 
 vertices :: Edges -> [Vertex]
 vertices = nub . uncurry (++) . unzip

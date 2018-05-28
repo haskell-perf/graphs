@@ -27,7 +27,7 @@ import Control.Comonad (extract)
 import Control.Monad (when)
 
 import BenchGraph.GenericGraph
-import BenchGraph.Utils (graphs, defaultSizeGraph, SizeGraph)
+import BenchGraph.Utils (graphs, defaultSizeGraph, defaultGraphsNames)
 import BenchGraph.Named
 
 -- A graph algorithm operates on a graph type @g@, which takes an input of
@@ -66,11 +66,11 @@ benchSuite algorithm inputs g size = bgroup (show size) cases
     graph = mkGraph edges
     cases = [ bench name $ nf (algorithm i) $!! graph | (Named name i) <- inputs edges ]
 
-allBenchs :: (GraphImpl g, NFData g) => SizeGraph -> [NSuite g] -> [Benchmark]
-allBenchs size = map (benchmark $ graphs size)
+allBenchs :: (GraphImpl g, NFData g) => [String] -> [Int] -> [NSuite g] -> [Benchmark]
+allBenchs grNames size = map (benchmark $ graphs grNames size)
 
-benchmarkCreation :: (NFData g) => SizeGraph -> (Edges -> g) -> [Benchmark]
-benchmarkCreation size mk = [ bgroup ("make a " ++  n ++ " from a list") $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | (Named n grf, ss) <- graphs size ]
+benchmarkCreation :: (NFData g) => [String] -> [Int] -> (Edges -> g) -> [Benchmark]
+benchmarkCreation grNames size mk = [ bgroup ("make a " ++  n ++ " from a list") $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | (Named n grf, ss) <- graphs grNames size ]
 
 ---- Weigh
 weigh :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> NSuite g -> Weigh ()
@@ -89,7 +89,7 @@ weighSuite algorithm inputs g size = wgroup (show size) cases
     wFunc name i = func name (algorithm i) $!! graph
 
 allWeighs :: (GraphImpl g, NFData g) => [NSuite g] -> Weigh ()
-allWeighs = mapM_ (weigh $ graphs defaultSizeGraph)
+allWeighs = mapM_ (weigh $ graphs defaultGraphsNames defaultSizeGraph)
 
 -- | Use the list from weighCreationList
 weighCreation :: (NFData g)
@@ -102,12 +102,12 @@ weighCreation name mk = sequence_ [when (todo str) $ wgroup str $ mapM_ (\i -> f
 
 -- | List of generic graph with their case-name
 weighCreationList :: [Named (GenericGraph, [Int])]
-weighCreationList = [ Named (str n) t | t@(Named n _, _) <- graphs defaultSizeGraph]
+weighCreationList = [ Named (str n) t | t@(Named n _, _) <- graphs defaultGraphsNames defaultSizeGraph]
   where
     str n = "make a " ++ n ++ " from a list"
 
 ---- DataSize
 
-computeSize :: (NFData g) => SizeGraph -> (Edges -> g) -> IO [Named [Named Word]]
-computeSize size fun = mapM (\(g,ss) -> sequence $ Named (show g) $ mapM (\s -> sequence $ Named (show s) $ recursiveSize $!! fun $ extract g s) ss) $ graphs size
+computeSize :: (NFData g) => [String] -> [Int] -> (Edges -> g) -> IO [Named [Named Word]]
+computeSize grNames size fun = mapM (\(g,ss) -> sequence $ Named (show g) $ mapM (\s -> sequence $ Named (show s) $ recursiveSize $!! fun $ extract g s) ss) $ graphs grNames size
 

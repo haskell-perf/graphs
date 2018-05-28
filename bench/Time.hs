@@ -22,7 +22,6 @@ import qualified Fgl.Tree
 
 import BenchGraph (allBenchs, benchmarkCreation)
 import BenchGraph.Named
-import BenchGraph.Utils (defaultSizeGraph)
 
 import Control.Comonad (extract)
 
@@ -149,13 +148,13 @@ main' :: Command -> IO ()
 main' opts
   = case opts of
       List listOpt -> case listOpt of
-                        Benchs -> putStr $ showListN $ nub $ grList defaultSizeGraph
-                        Libs -> putStr $ unlines $ nub $ map show $ grList defaultSizeGraph
-      Run opt flg libs size -> do
+                        Benchs -> putStr $ showListN $ nub $ grList [] []
+                        Libs -> putStr $ unlines $ nub $ map show $ grList [] []
+      Run opt flg libs graphs size -> do
         let modifyL = case libs of
               Nothing -> id
               Just libss -> filter (\x -> show x `elem` libss)
-            grList' = nub $ modifyL $ grList size
+            grList' = nub $ modifyL $ grList graphs size
             todo = case opt of
               Nothing -> grList'
               Just opt' -> case opt' of
@@ -164,13 +163,13 @@ main' opts
                                        per = length grList' `div` two
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grList'
-            samples = filter (`elem` todo) $ modifyL $ grList size
+            samples = filter (`elem` todo) $ modifyL $ grList graphs size
         putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",showListN todo,"----"]
         genReport 2 flg samples
   where
-    grList size = concatMap (sequence . toNamed) [
-     ("Alga (Algebra.Graph)",allBenchs size Alga.Graph.functions ++ benchmarkCreation size Alga.Graph.mk ),
-     ("Containers (Data.Graph)",allBenchs size Containers.Graph.functions ++ benchmarkCreation size Containers.Graph.mk),
-     ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs size Fgl.PatriciaTree.functions ++ benchmarkCreation size Fgl.PatriciaTree.mk),
-     ("Fgl (Data.Graph.Inductive.Tree)", allBenchs size Fgl.Tree.functions ++ benchmarkCreation size Fgl.Tree.mk),
-     ("Hash-Graph (Data.HashGraph.Strict)", allBenchs size HashGraph.Gr.functions ++ benchmarkCreation size HashGraph.Gr.mk)]
+    grList graphs size = concatMap (sequence . toNamed) [
+     ("Alga (Algebra.Graph)",allBenchs graphs size Alga.Graph.functions ++ benchmarkCreation graphs size Alga.Graph.mk ),
+     ("Containers (Data.Graph)",allBenchs graphs size Containers.Graph.functions ++ benchmarkCreation graphs size Containers.Graph.mk),
+     ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs graphs size Fgl.PatriciaTree.functions ++ benchmarkCreation graphs size Fgl.PatriciaTree.mk),
+     ("Fgl (Data.Graph.Inductive.Tree)", allBenchs graphs size Fgl.Tree.functions ++ benchmarkCreation graphs size Fgl.Tree.mk),
+     ("Hash-Graph (Data.HashGraph.Strict)", allBenchs graphs size HashGraph.Gr.functions ++ benchmarkCreation graphs size HashGraph.Gr.mk)]

@@ -1,6 +1,5 @@
 import BenchGraph (computeSize)
 import BenchGraph.Named
-import BenchGraph.Utils (SizeGraph)
 
 import Control.Comonad (extract)
 import Data.List (nub, sort)
@@ -45,14 +44,14 @@ shExtr = show . extract
 main :: IO ()
 main = execParser runDataSize >>= main'
 
-main' :: SizeGraph -> IO ()
-main' size = do
+main' :: CommandDataSize -> IO ()
+main' (RunD graphs size) = do
   res <- mapM sequence
-    [ Named "Alga (Algebra.Graph)" $ computeSize size Alga.Graph.mk
-    , Named "Containers (Data.Graph)" $ computeSize size Containers.Graph.mk
-    , Named "Fgl (Data.Graph.Inductive.PatriciaTree)" $ computeSize size Fgl.PatriciaTree.mk
-    , Named "Fgl (Data.Graph.Inductive.Tree)" $ computeSize size Fgl.Tree.mk
-    , Named "Hash-Graph (Data.HashGraph.Strict)" $ computeSize size HashGraph.Gr.mk
+    [ Named "Alga (Algebra.Graph)" $ computeSize graphs size Alga.Graph.mk
+    , Named "Containers (Data.Graph)" $ computeSize graphs size Containers.Graph.mk
+    , Named "Fgl (Data.Graph.Inductive.PatriciaTree)" $ computeSize graphs size Fgl.PatriciaTree.mk
+    , Named "Fgl (Data.Graph.Inductive.Tree)" $ computeSize graphs size Fgl.Tree.mk
+    , Named "Hash-Graph (Data.HashGraph.Strict)" $ computeSize graphs size HashGraph.Gr.mk
     ]
   let res' = concatMap sequence res
   mapM_ (printNArr res') $ nub $ map shExtr res'
