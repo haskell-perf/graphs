@@ -1,4 +1,4 @@
-module Abstract
+module BenchGraph.Render.Abstract
   (
     printAbstract
   , average
@@ -14,8 +14,8 @@ import Text.Printf (printf)
 
 import BenchGraph.Named
 
-import Types
-import Common (average)
+import BenchGraph.Render.Types
+import BenchGraph.Render.Common (average)
 
 printAbstract :: String -- ^ A comparative (like "faster")
               -> Grouped [Named Double] -- ^ The actual data

@@ -1,11 +1,11 @@
 {-# OPTIONS_GHC -fno-warn-type-defaults #-}
-module Best
+module BenchGraph.Render.Best
   (
     printBest
   )
 where
 
-import Types
+import BenchGraph.Render.Types
 
 import BenchGraph.Named
 

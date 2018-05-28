@@ -25,13 +25,21 @@ library
                      , BenchGraph.Utils
                      , BenchGraph.Suites
                      , BenchGraph.Named
+                     , BenchGraph.Render.Abstract
+                     , BenchGraph.Render.Best
+                     , BenchGraph.Render.Common
+                     , BenchGraph.Render.Types
   other-extensions:    ExistentialQuantification
-  build-depends:       base      >= 4.7 && < 4.12,
-                       criterion >= 1.3 && < 1.5,
-                       deepseq   >= 1.4 && < 1.5,
-                       weigh     >= 0.0.12,
-                       comonad   >= 5.0.3,
-                       ghc-datasize >= 0.2.0
+  build-depends:       base         >= 4.7 && < 4.12,
+                       criterion    >= 1.3 && < 1.5,
+                       deepseq      >= 1.4 && < 1.5,
+                       weigh        >= 0.0.12,
+                       comonad      >= 5.0.3,
+                       ghc-datasize >= 0.2.0,
+                       -- Render
+                       tabular    >= 0.2.2.7,
+                       html       >= 1.0.1.2,
+                       containers >= 0.5.5.1 && < 0.8
   hs-source-dirs:      src
   default-language:    Haskell2010
 
@@ -45,10 +53,6 @@ benchmark time
                       , Fgl.Tree
                       , HashGraph.Gr
                       , Command
-                      , Types
-                      , Best
-                      , Abstract
-                      , Common
     build-depends:      base             >= 4.7     && < 4.12,
                         fgl              >= 5.5.4.0,
                         containers       >= 0.5.5.1 && < 0.8,
@@ -57,9 +61,8 @@ benchmark time
                         algebraic-graphs >= 0.1.1.1,
                         comonad          >= 5.0.3,
                         tabular          >= 0.2.2.7,
-                        unordered-containers >= 0.2.9.0,
                         weigh            >= 0.0.12,
-                        html,
+                        unordered-containers >= 0.2.9.0,
                         statistics,
                         optparse-applicative,
                         bench-graph
@@ -77,10 +80,6 @@ benchmark space
                       , Fgl.Tree
                       , HashGraph.Gr
                       , Command
-                      , Types
-                      , Best
-                      , Abstract
-                      , Common
     build-depends:      base             >= 4.7     && < 4.12,
                         fgl              >= 5.5.4.0,
                         containers       >= 0.5.5.1 && < 0.8,
@@ -91,7 +90,6 @@ benchmark space
                         comonad          >= 5.0.3,
                         tabular          >= 0.2.2.7,
                         unordered-containers >= 0.2.9.0,
-                        html,
                         optparse-applicative,
                         bench-graph
     default-language:   Haskell2010
@@ -108,8 +106,6 @@ benchmark datasize
                       , Fgl.Tree
                       , HashGraph.Gr
                       , Command
-                      , Types
-                      , Best
     build-depends:      base             >= 4.7     && < 4.12,
                         fgl              >= 5.5.4.0,
                         containers       >= 0.5.5.1 && < 0.8,

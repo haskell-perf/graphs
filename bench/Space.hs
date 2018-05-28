@@ -14,14 +14,15 @@ import qualified Text.Tabular.AsciiArt as TAA
 import Options.Applicative (execParser)
 
 import Command
-import qualified Types as T
-import Best
-import Abstract
 
 import BenchGraph
 import BenchGraph.Named
 import BenchGraph.Utils (mainWeigh)
-import Common
+
+import qualified BenchGraph.Render.Types as T
+import BenchGraph.Render.Best
+import BenchGraph.Render.Abstract
+import BenchGraph.Render.Common
 
 import qualified Alga.Graph
 import qualified Containers.Graph

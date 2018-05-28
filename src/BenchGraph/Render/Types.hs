@@ -1,6 +1,12 @@
 {-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
 
-module Types (Grouped (..), lengthG, IsGrouped, tkSimple, tkGroup, isSimple )
+module BenchGraph.Render.Types
+  ( Grouped (..)
+  , lengthG
+  , IsGrouped
+  , tkSimple
+  , tkGroup
+  , isSimple )
 where
 
 import qualified Weigh as W

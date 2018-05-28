@@ -1,4 +1,4 @@
-module Common where
+module BenchGraph.Render.Common where
 
 import BenchGraph.Named
 import Control.Comonad (extract, extend)

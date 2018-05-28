@@ -33,10 +33,11 @@ import qualified Text.Tabular.AsciiArt as TAA
 import Text.Printf (printf)
 
 import Command
-import Types
-import Best
-import Abstract
-import Common
+
+import BenchGraph.Render.Types
+import BenchGraph.Render.Best
+import BenchGraph.Render.Abstract
+import BenchGraph.Render.Common
 
 -- We consider Benchmark equality using their name
 instance Eq Benchmark where
