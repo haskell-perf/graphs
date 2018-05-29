@@ -9,7 +9,7 @@ import BenchGraph.GenericGraph (Edges,GenericGraph(..))
 import Control.Comonad (extract)
 
 mesh :: GenericGraph
-mesh = Named "Mesh" mkMesh
+mesh = ("Mesh",mkMesh)
 
 -- | Construct a Mesh with @n+1@ vertices
 mkMesh :: Int -> Edges

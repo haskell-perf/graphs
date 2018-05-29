@@ -19,8 +19,6 @@ import BenchGraph.Path
 import BenchGraph.Mesh
 import BenchGraph.Named
 
-import Control.Comonad (extract)
-
 import Weigh (mainWith, Weigh, Grouped, Weight, weighResults)
 import System.Environment (lookupEnv)
 import Control.Monad (unless)
@@ -31,7 +29,7 @@ tenPowers = iterate (10*) 1
 
 -- | Remove given edges from the complete graph
 edgesNotInGraph :: Edges -> Edges
-edgesNotInGraph edgs = (\\) (extract complete  $ extractMaxVertex edgs) edgs
+edgesNotInGraph edgs = (\\) (snd complete  $ extractMaxVertex edgs) edgs
 
 extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
@@ -42,11 +40,11 @@ graphs = mapMaybe (\(x,y) -> (\n -> (defaultGraphs !! n, take y tenPowers)) <$> 
 defaultGraphs :: [GenericGraph]
 defaultGraphs = [path, circuit, mesh, complete]
 
-defaultGr :: [(String,Int)]
+defaultGr :: [Named Int]
 defaultGr = zip defaultGraphsNames defaultSizeGraph
 
 defaultGraphsNames :: [String]
-defaultGraphsNames = map show defaultGraphs
+defaultGraphsNames = map fst defaultGraphs
 
 defaultSizeGraph ::[Int]
 defaultSizeGraph = [3,3,3,2]

@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module BenchGraph.Suites
 
 where
@@ -24,7 +26,7 @@ vertexCount :: NFData o => (g -> o) -> NSuite g
 vertexCount = simpleSuite "vertexCount"
 
 addVertex :: NFData o => SpecialisedSuite Vertex o i g
-addVertex fun genArg = Named "add a new vertex" $ Suite
+addVertex fun genArg = ("add a new vertex",) $ Suite
   { algorithm = fun
   , inputs    = \x -> fmap genArg <$> [nameBy ((++)"new vertex: " . show ) $ getNewV x]
   }
@@ -32,7 +34,7 @@ addVertex fun genArg = Named "add a new vertex" $ Suite
       getNewV x = 1 + extractMaxVertex x
 
 removeVertex :: NFData o => SpecialisedSuite Vertex o i g
-removeVertex fun genArg = Named "remove a vertex" $ Suite
+removeVertex fun genArg = ("remove a vertex",) $ Suite
   { algorithm = fun
   , inputs    = \x -> fmap genArg <$> [nameBy ((++)"vertex: " . show ) $ getOldV x]
   }
@@ -48,19 +50,19 @@ edgeCount :: NFData o => (g -> o) -> NSuite g
 edgeCount = simpleSuite "edgeCount"
 
 hasEdge :: NFData o => SpecialisedSuite Edge o i g
-hasEdge fun genArg = Named "hasEdge" $ Suite
+hasEdge fun genArg = ("hasEdge",) $ Suite
   { algorithm = fun
   , inputs    = map (fmap genArg) . withNames . getDifferents . edgesNotInGraph
   }
 
 addEdge :: NFData o => SpecialisedSuite Edge o i g
-addEdge fun genArg = Named "add a new edge" $ Suite
+addEdge fun genArg = ("add a new edge",) $ Suite
   { algorithm = fun
   , inputs = map (fmap genArg) . withNames . getDifferents . edgesNotInGraph
   }
 
 removeEdge :: NFData o => SpecialisedSuite Edge o i g
-removeEdge fun genArg = Named "remove an edge" $ Suite
+removeEdge fun genArg = ("remove an edge",) $ Suite
   { algorithm = fun
   , inputs    = map (fmap genArg) . withNames . getDifferents
   }
@@ -74,16 +76,16 @@ transpose :: NFData o => (g -> o) -> NSuite g
 transpose = simpleSuite "transpose"
 
 eq :: (NFData g, GraphImpl g) => (g -> g -> Bool) -> NSuite g
-eq fun = Named "equality" $ Suite
+eq fun = ("equality",) $ Suite
   { algorithm = fun
   , inputs    = \x -> fmap mkGraph <$>
     [nameBy ((++)"vertex: " . show . head) [(0,2)]
-    ,Named "Same graph" x
+    ,("Same graph",x)
     ]
   }
 
 context :: NFData o => SpecialisedSuite Edge o i g
-context fun genArg = Named "merge a context" $ Suite
+context fun genArg = ("merge a context",) $ Suite
   { algorithm = fun
   , inputs = map (fmap genArg) . withNames . const [(0,3)]
   }
@@ -97,7 +99,7 @@ topSort :: NFData o => (g -> o) -> NSuite g
 topSort = simpleSuite "topSort"
 
 reachable :: NFData o => SpecialisedSuite Vertex o i g
-reachable fun genArg = Named "reachable" $ Suite
+reachable fun genArg = ("reachable",) $ Suite
   { algorithm = fun
   , inputs    = map (fmap genArg) . withNames . const [0]
   }

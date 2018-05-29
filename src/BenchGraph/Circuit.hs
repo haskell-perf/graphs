@@ -8,7 +8,7 @@ import Control.Comonad (extract)
 import BenchGraph.GenericGraph (Edges,GenericGraph(..))
 
 circuit :: GenericGraph
-circuit = Named "Circuit" mkCircuit
+circuit = ("Circuit",mkCircuit)
 
 mkCircuit :: Int -> Edges
 mkCircuit n = extract path n ++ [(n,0)]

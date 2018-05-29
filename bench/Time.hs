@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-import Data.List (filter, nub, sortBy)
+import Data.List (filter, nub, sortBy, nubBy)
 import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes)
 import Control.Monad (when)
@@ -22,8 +22,6 @@ import qualified Fgl.Tree
 
 import BenchGraph (allBenchs, benchmarkCreation)
 import BenchGraph.Named
-
-import Control.Comonad (extract)
 
 import Options.Applicative (execParser)
 
@@ -56,10 +54,10 @@ genReport :: Int
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_  mapped $ nub arr
+genReport lev flg arr = mapM_  mapped $ nubBy (liftExtract2 (==)) arr
   where
     mapped e = do
-      res <- toPrint lev (staOut flg) arr $ extract e
+      res <- toPrint lev (staOut flg) arr $ snd e
       case fmap (fmap (map (fmap getMean))) res of
         Nothing -> return ()
         Just res'' -> when (sumOut flg) $ do
@@ -77,7 +75,7 @@ toPrint lev flg arr breport = do
         putStrLn ""
         res'@(Just (Group res)) <- doGrp
         let ch = mapMaybe tkGroup res :: [[Grouped [Named Report]]]
-            results = zipWith (curry toNamed) getNOtherGroups $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]]
+            results = zip getNOtherGroups $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]]
             results' = map (fmap (makeAverage . map (map (fmap getMean))) ) results :: [Named [Named Double]]
         printHtml results' secs
         return res'
@@ -93,12 +91,12 @@ toPrint lev flg arr breport = do
               [] -> do
                 when (flg /= Html) $ putStrLn "\nNo data\n"
                 return Nothing
-              real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . extract) real
-    nubOtherGroups = nub otherGroups
-    getNOtherGroups = map (showBenchName . extract) nubOtherGroups
+              real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . snd) real
+    nubOtherGroups = nubBy (liftExtract2 (==)) otherGroups
+    getNOtherGroups = map (showBenchName . snd) nubOtherGroups
     bname = showBenchName breport
     otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here breport
-    here e = filter (liftExtract (== e)) arr
+    here e = filter ((== e) . snd) arr
 
 -- | Bench only if it is possible
 tkSimpleB :: Benchmark -> Maybe Benchmarkable
@@ -113,9 +111,9 @@ tkChilds _ = Nothing
 showSimples :: [Named Report] -> String
 showSimples arr = TAA.render id id id table
   where
-    arr' = sortBy (on compare (liftExtract getMean)) arr
-    arrD = map (\(Named _ r) -> [secs $ getMean r, printf "%.3f" $ getRSquare r ]) arr'
-    libs = map show arr'
+    arr' = sortBy (on compare (getMean . snd)) arr
+    arrD = map (\(_,r) -> [secs $ getMean r, printf "%.3f" $ getRSquare r ]) arr'
+    libs = map fst arr'
     table = T.Table
       (T.Group T.NoLine $ map T.Header libs)
       (T.Group T.SingleLine [T.Header "Time (Mean)", T.Header "R\178"])
@@ -140,7 +138,7 @@ benchmarkWithoutOutput bm = do
 
 -- show a list of benchmarks
 showListN :: [Named Benchmark] -> String
-showListN = unlines . map (showBenchName . extract)
+showListN = unlines . nub . map (showBenchName . snd)
 
 main :: IO ()
 main = execParser commandTime >>= main'
@@ -150,25 +148,25 @@ main' opts
   = case opts of
       List listOpt -> case listOpt of
                         Benchs -> putStr $ showListN $ nub $ grList []
-                        Libs -> putStr $ unlines $ nub $ map show $ grList []
+                        Libs -> putStr $ unlines $ nub $ map fst $ grList []
       Run opt flg libs gr -> do
         let modifyL = case libs of
               Nothing -> id
-              Just libss -> filter (\x -> show x `elem` libss)
-            grList' = nub $ modifyL $ grList gr
+              Just libss -> filter (\x -> fst x `elem` libss)
+            grList' = modifyL $ grList gr
             todo = case opt of
               Nothing -> grList'
               Just opt' -> case opt' of
-                  Only bname -> filter ((==) bname . showBenchName . extract) grList'
+                  Only bname -> filter ((==) bname . showBenchName . snd) grList'
                   Part one' two -> let one = one' + 1
                                        per = length grList' `div` two
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grList'
-            samples = filter (`elem` todo) $ modifyL $ grList gr
+            samples = filter (`elem` todo) grList'
         putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",showListN todo,"----"]
         genReport 2 flg samples
   where
-    grList gr = concatMap (sequence . toNamed) [
+    grList gr = concatMap sequence [
      ("Alga (Algebra.Graph)",allBenchs gr Alga.Graph.functions ++ benchmarkCreation gr Alga.Graph.mk ),
      ("Containers (Data.Graph)",allBenchs gr Containers.Graph.functions ++ benchmarkCreation gr Containers.Graph.mk),
      ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs gr Fgl.PatriciaTree.functions ++ benchmarkCreation gr Fgl.PatriciaTree.mk),

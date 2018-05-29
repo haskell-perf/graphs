@@ -2,69 +2,38 @@ module BenchGraph.Named
   (
     Name,
     Named (..),
+    eq1,
+    compare1,
     nameBy,
-    toNamed,
-    fromNamed,
     nameShow,
-    liftExtract,
     liftExtract2,
     fix
   )
 where
 
 import Control.Comonad
-import Data.Functor.Classes
 
 type Name = String
 
--- | The Named data, a Name and the data
-data Named a = Named Name a
-
--- | Show is defined by the name of the object
-instance Show (Named a) where
-  show (Named name _) = name
-
-instance Functor Named where
-  fmap = liftW
-
--- | Named is a CoMonad
-instance Comonad Named where
-  extract (Named _ obj) = obj
-  extend f named = Named (show named) $ f named
-
-instance Foldable Named where
-  foldMap = liftExtract
-
--- | You can sequence a name
-instance Traversable Named where
-  sequenceA (Named n m) = Named n <$> m
+-- | The Named type
+type Named a = (Name,a)
 
 -- | Named are equals if their data are
-instance Eq a => Eq (Named a) where
-  (==) = liftExtract2 (==)
+eq1 :: Eq a => Named a -> Named a -> Bool
+eq1 = liftExtract2 (==)
 
-instance Ord a => Ord (Named a) where
-  (<=) = liftExtract2 (<=)
+compare1 :: Ord a => Named a -> Named a -> Ordering
+compare1 = liftExtract2 compare
 
 nameShow :: Show a => a -> Named a
 nameShow = nameBy show
 
 nameBy :: (a -> Name) -> a -> Named a
-nameBy f a = Named (f a) a
-
-toNamed :: (Name,a) -> Named a
-toNamed = uncurry Named
-
-fromNamed :: Named a -> (Name,a)
-fromNamed (Named n a) = (n,a)
-
--- | Lifting functions in comonads
-liftExtract :: (Comonad w) => (a -> b) -> w a -> b
-liftExtract f = f . extract
+nameBy f a = (f a, a)
 
 liftExtract2 :: (Comonad w) => (a -> b -> c) -> w a -> w b -> c
 liftExtract2 f a b = f (extract a) (extract b)
 
 -- | Precedence for the first name
 fix :: Named (Named a) -> Named a
-fix (Named n (Named _ a))= Named n a
+fix (n ,(_, a)) = (n,a)

@@ -15,13 +15,13 @@ average lst = sum lst / fromRational (toRational (length lst))
 makeAverage :: [[Named Double]] -> [Named Double]
 makeAverage arr = map (extend (average . mk)) $ head arr
   where
-    mk (Named n _) = map extract $ concatMap (filter ((==) n . show)) arr
+    mk (n,_) = map extract $ concatMap (filter ((==) n . fst)) arr
 
 printHtml :: [Named [Named Double]] -> (Double -> String) -> IO ()
 printHtml arr ren = print $ TH.render stringToHtml stringToHtml stringToHtml table
   where
-    libs = map show $ extract $ head arr
-    cases = map show arr
+    libs = map fst $ extract $ head arr
+    cases = map fst arr
     content = transpose $ map (map (ren . extract) . extract) arr
     table = T.Table
       (T.Group T.NoLine $ map T.Header libs)

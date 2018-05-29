@@ -4,8 +4,6 @@ import Data.Maybe (mapMaybe, catMaybes)
 import Data.Int (Int64)
 import Control.Monad (when, unless, (>=>))
 
-import Control.Comonad (extract)
-
 import Weigh (Grouped (..), Weight (..), Weigh, wgroup, commas)
 
 import qualified Text.Tabular as TA
@@ -55,7 +53,7 @@ useResults (Output su st) todo = mapM_ mapped $ nubBy (liftExtract2 eqG) namedBe
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
     mapped e = do
-      res <- printReport 2 st namedBenchs $ extract e
+      res <- printReport 2 st namedBenchs $ snd e
       case res of
         Nothing -> return ()
         Just res' ->
@@ -80,11 +78,11 @@ printReport lev flg arr act = do
         putStrLn ""
         res'@(Just (T.Group res)) <- doGrp
         let ch = mapMaybe T.tkGroup res :: [[T.Grouped [Named Int64]]]
-            results = zipWith (curry toNamed) getNOtherGroups $ map (mapMaybe T.tkSimple) ch :: [Named [[Named Int64]]]
+            results = zip getNOtherGroups $ map (mapMaybe T.tkSimple) ch :: [Named [[Named Int64]]]
             results' = map (fmap (makeAverage . map (map (fmap (fromRational . toRational)))) ) results :: [Named [Named Double]]
         printHtml results' ((commas :: Integer -> String) . round)
         return res'
-    (Grouped _ (Singleton{}:_)) -> Just . T.Group <$> mapM (printSimples (lev+1) flg semiSimples . extract) (nubBy (liftExtract2 eqW) semiSimples)
+    (Grouped _ (Singleton{}:_)) -> Just . T.Group <$> mapM (printSimples (lev+1) flg semiSimples . snd) (nubBy (liftExtract2 eqW) semiSimples)
     Grouped{} -> doGrp
     Singleton{} -> error "A single singleton of a WeighResult, this should not happen"
     where
@@ -94,10 +92,10 @@ printReport lev flg arr act = do
                 [] -> do
                   when (flg /= Html) $ putStrLn "\nNo data\n"
                   return Nothing
-                real -> Just . T.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . extract) real
-      here e = filter (eqG e . extract) arr
+                real -> Just . T.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . snd) real
+      here e = filter (eqG e . snd) arr
       nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
-      getNOtherGroups = map (showGrouped . extract) nubOtherGroups
+      getNOtherGroups = map (showGrouped . snd) nubOtherGroups
       otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
       semiSimples = mapMaybe (traverse T.tkSimple) otherGroups
 
@@ -111,11 +109,11 @@ printSimples lev flg arr act = do
   where
     bname = takeLastAfterBk $ weightLabel $ fst act
     -- filter by the 'act' argument, and sort
-    filtered = sortBy (liftExtract2 $ \(x,_) (y,_) -> weightAllocatedBytes x `compare` weightAllocatedBytes y) $ filter (liftExtract (eqW act)) arr
+    filtered = sortBy (liftExtract2 $ \(x,_) (y,_) -> weightAllocatedBytes x `compare` weightAllocatedBytes y) $ filter (eqW act . snd) arr
     table = TA.Table
-      (TA.Group TA.NoLine $ map (TA.Header . show) filtered)
+      (TA.Group TA.NoLine $ map (TA.Header . fst) filtered)
       (TA.Group TA.SingleLine [TA.Header "AllocatedBytes", TA.Header "GCs"])
-      (map ((\(x,y) -> maybe (showWeight x) (\y'->["Errored: "++y']) y) . extract) filtered)
+      (map ((\(x,y) -> maybe (showWeight x) (\y'->["Errored: "++y']) y) . snd) filtered)
 
 -- | Convert a @Weight@ to a list of @String@ for tabular representation
 showWeight :: Weight -> [String]
@@ -123,31 +121,31 @@ showWeight w = [commas (weightAllocatedBytes w),show (weightGCs w)]
 
 -- | Name from grouped, necessary for the first level of Grouped for Weigh
 groupedToNamed :: Grouped a -> Maybe (Named [Grouped a])
-groupedToNamed (Grouped n rst) = Just $ Named n rst
+groupedToNamed (Grouped n rst) = Just (n,rst)
 groupedToNamed _ = Nothing
 
 -- | Get the childs of a BenchGroup, inserting the name of the library
 tkChilds :: Grouped WeighResult -> Maybe [Grouped WeighResult]
-tkChilds = groupedToNamed >=> Just . extract
+tkChilds = groupedToNamed >=> Just . snd
 
 main :: IO ()
 main = execParser runSpace >>= main'
 
 main' :: CommandSpace -> IO ()
 main' (ListS opt) = case opt of
-                    Benchs -> putStr $ unlines $ nub $ map show Alga.Graph.functions ++ map show Containers.Graph.functions ++ map show Fgl.PatriciaTree.functions ++ map show HashGraph.Gr.functions ++ map show Fgl.Tree.functions ++ map show weighCreationList
-                    Libs -> putStr $ unlines $ map show $ namedWeigh Nothing
+                    Benchs -> putStr $ unlines $ nub $ map fst Alga.Graph.functions ++ map fst Containers.Graph.functions ++ map fst Fgl.PatriciaTree.functions ++ map fst HashGraph.Gr.functions ++ map fst Fgl.Tree.functions ++ map fst weighCreationList
+                    Libs -> putStr $ unlines $ map fst $ namedWeigh Nothing
 main' (RunS only flg libs) = mainWeigh benchs (useResults flg)
   where
-    benchs = mapM_ (uncurry wgroup . fromNamed) $ maybe id (\libs' -> filter (flip elem libs' . show)) libs $ namedWeigh only
+    benchs = mapM_ (uncurry wgroup) $ maybe id (\libs' -> filter (flip elem libs' . fst)) libs $ namedWeigh only
 
 namedWeigh :: Maybe String -> [Named (Weigh ())]
 namedWeigh only =
-  [ Named "Alga (Algebra.Graph)" $ allWeighs (select Alga.Graph.functions) >> weighCreation only Alga.Graph.mk
-  , Named "Containers (Data.Graph)" $ allWeighs (select Containers.Graph.functions) >> weighCreation only Containers.Graph.mk
-  , Named "Fgl (Data.Graph.Inductive.PatriciaTree)" $ allWeighs (select Fgl.PatriciaTree.functions) >> weighCreation only Fgl.PatriciaTree.mk
-  , Named "Fgl (Data.Graph.Inductive.Tree)" $ allWeighs (select Fgl.Tree.functions) >> weighCreation only Fgl.Tree.mk
-  , Named "Hash-Graph (Data.HashGraph.Strict)" $ allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk
+  [ ("Alga (Algebra.Graph)" , allWeighs (select Alga.Graph.functions) >> weighCreation only Alga.Graph.mk)
+  , ("Containers (Data.Graph)" , allWeighs (select Containers.Graph.functions) >> weighCreation only Containers.Graph.mk)
+  , ("Fgl (Data.Graph.Inductive.PatriciaTree)" , allWeighs (select Fgl.PatriciaTree.functions) >> weighCreation only Fgl.PatriciaTree.mk)
+  , ("Fgl (Data.Graph.Inductive.Tree)" , allWeighs (select Fgl.Tree.functions) >> weighCreation only Fgl.Tree.mk)
+  , ("Hash-Graph (Data.HashGraph.Strict)" , allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk)
   ]
   where
-    select funcs = maybe funcs (\x -> filter ((==) x . show) funcs) only
+    select funcs = maybe funcs (\x -> filter ((==) x . fst) funcs) only

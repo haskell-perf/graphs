@@ -1,8 +1,7 @@
 import BenchGraph (computeSize)
 import BenchGraph.Named
 
-import Control.Comonad (extract)
-import Data.List (nub, sort)
+import Data.List (nub, sortBy)
 
 import Options.Applicative (execParser)
 
@@ -28,18 +27,18 @@ printNArr' :: [Named (Named Word)] -- ^ Array of all benchs
           -> IO ()
 printNArr' arr selected = do
   putStrLn $ replicate 3 '#' ++ selected
-  mapM_ printN $ sort here
+  mapM_ printN $ sortBy compare1 here
   where
     here = map fix $ filter (eqDeepSelected selected) arr
 
 printN :: Named Word -> IO ()
-printN (Named n a) = putStrLn $ unwords [" *", n, ":",show a]
+printN (n,a) = putStrLn $ unwords [" *", n, ":",show a]
 
 eqDeepSelected :: String -> Named (Named a) -> Bool
 eqDeepSelected s = (==) s . shExtr
 
 shExtr :: Named (Named a) -> String
-shExtr = show . extract
+shExtr = fst . snd
 
 main :: IO ()
 main = execParser runDataSize >>= main'
@@ -47,11 +46,11 @@ main = execParser runDataSize >>= main'
 main' :: CommandDataSize -> IO ()
 main' (RunD gr) = do
   res <- mapM sequence
-    [ Named "Alga (Algebra.Graph)" $ computeSize gr Alga.Graph.mk
-    , Named "Containers (Data.Graph)" $ computeSize gr Containers.Graph.mk
-    , Named "Fgl (Data.Graph.Inductive.PatriciaTree)" $ computeSize gr Fgl.PatriciaTree.mk
-    , Named "Fgl (Data.Graph.Inductive.Tree)" $ computeSize gr Fgl.Tree.mk
-    , Named "Hash-Graph (Data.HashGraph.Strict)" $ computeSize gr HashGraph.Gr.mk
+    [ ("Alga (Algebra.Graph)", computeSize gr Alga.Graph.mk)
+    , ("Containers (Data.Graph)", computeSize gr Containers.Graph.mk)
+    , ("Fgl (Data.Graph.Inductive.PatriciaTree)", computeSize gr Fgl.PatriciaTree.mk)
+    , ("Fgl (Data.Graph.Inductive.Tree)", computeSize gr Fgl.Tree.mk)
+    , ("Hash-Graph (Data.HashGraph.Strict)", computeSize gr HashGraph.Gr.mk)
     ]
   let res' = concatMap sequence res
   mapM_ (printNArr res') $ nub $ map shExtr res'
