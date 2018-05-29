@@ -1,4 +1,6 @@
-# Compare benchmarks
+# Compare benchmark
+
+// Obtained with: `time run --graphs '[("Mesh",3),("Complete",2)]' -d Html  > RESULTS_TIME.md`
 
 Doing:
 

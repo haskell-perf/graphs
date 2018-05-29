@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Fgl.PatriciaTree
-  (functions, mk)
+  (functions, mk, chromaticPolynomial)
 where
 
 import BenchGraph
@@ -13,6 +13,10 @@ import qualified BenchGraph.Suites as S
 import Data.Graph.Inductive.Graph
 import Data.Graph.Inductive.PatriciaTree
 import Data.Graph.Inductive.Query.DFS
+
+import Data.List (uncons)
+import Data.Tuple (swap)
+import Common
 
 instance GraphImpl UGr where
   mkGraph = mk
@@ -39,3 +43,16 @@ functions =
   , S.reachable reachable id
   ]
 
+-- | The graph MUST be undirected (ie if (1,2) is in the graph, then (2,1) is)
+chromaticPolynomial :: Gr a b -> [Int]
+chromaticPolynomial gr = case getEdge of
+  Nothing -> case order gr of
+               0 -> [0]
+               el -> replicate el 0 ++ [1]
+  Just e -> substractPoly (chromaticPolynomial (deleted e)) (chromaticPolynomial (contracted e))
+  where
+    getEdge = uncons (edges gr) >>= Just . fst
+    deleted e = delEdge (swap e) $ delEdge e gr
+    contracted (x1,y1) = insEdges (map (\(l,n) -> (n,y1,l)) $ filter ((/=) y1 . snd) prev) $ insEdges (map (\(l,n) -> (y1,n,l)) $ filter ((/=) y1 . snd) next) ngr
+      where
+        (Just (prev,_,_,next), ngr) = match x1 gr
