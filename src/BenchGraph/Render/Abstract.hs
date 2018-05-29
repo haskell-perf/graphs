@@ -10,7 +10,7 @@ where
 
 import Data.Map.Strict (Map, unionWith, empty, toList, fromList)
 import qualified Data.Map.Strict as M
-import Data.List (find, sort)
+import Data.List (find, sortBy)
 import Data.Maybe (mapMaybe)
 import Text.Printf (printf)
 
@@ -36,7 +36,7 @@ rearrange na@(n,arr) =
              else rearrange (n',(n,recip db) : map (fmap (recip db *)) (tail sorted))
     else na
   where
-    sorted = sort arr
+    sorted = sortBy compare1 arr
     (n',db) = head sorted
 
 printMap :: String -> Named [Named Double] -> IO ()

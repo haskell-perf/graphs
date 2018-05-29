@@ -9,7 +9,7 @@ import BenchGraph.Render.Types
 
 import BenchGraph.Named
 
-import Data.List (sortBy, sort)
+import Data.List (sortBy)
 import Control.Monad (void, when)
 import Data.Map.Strict (Map, alter, unionWith, empty, toList)
 
@@ -32,11 +32,11 @@ getBest lst = (lengthG lst - foldr (\x act -> act + snd x) 0 res,res)
     res = sortBy (flip compare1) $ toList $ getBest' empty lst
 
 getBest' :: Map String Int -> Grouped [Named Double] -> Map String Int
-getBest' m (Simple a) = maybe m (\x -> alter (Just . maybe 1 (+ 1)) (fst x) m) $ takeVeryBest $ sort a
+getBest' m (Simple a) = maybe m (\x -> alter (Just . maybe 1 (+ 1)) (fst x) m) $ takeVeryBest $ sortBy compare1 a
 getBest' m (Group grp) = foldr (unionWith (+) . getBest' m) empty grp
 
 takeVeryBest :: [Named Double] -> Maybe (Named Double)
-takeVeryBest (x1:x2:_) = if (x1 == x2) || (snd x2 / snd x1) <= 1.1
+takeVeryBest (x1:x2:_) = if (snd x1 == snd x2) || (snd x2 / snd x1) <= 1.1
                             then Nothing
                             else Just x1
 takeVeryBest h         = Just $ head h
