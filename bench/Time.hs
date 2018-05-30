@@ -136,9 +136,9 @@ benchmarkWithoutOutput bm = do
   where
     defaultConfig' = defaultConfig {verbosity = Quiet}
 
--- show a list of benchmarks
-showListN :: [Named Benchmark] -> String
-showListN = unlines . nub . map (showBenchName . snd)
+-- | Get names of the benchs
+getListN :: [Named Benchmark] -> [String]
+getListN = nub . map (showBenchName . snd)
 
 main :: IO ()
 main = execParser commandTime >>= main'
@@ -147,7 +147,7 @@ main' :: Command -> IO ()
 main' opts
   = case opts of
       List listOpt -> case listOpt of
-                        Benchs -> putStr $ showListN $ nub $ grList []
+                        Benchs -> putStr $ unlines grNames
                         Libs -> putStr $ unlines $ nub $ map fst $ grList []
       Run opt flg libs gr -> do
         let modifyL = case libs of
@@ -155,17 +155,18 @@ main' opts
               Just libss -> filter (\x -> fst x `elem` libss)
             grList' = modifyL $ grList gr
             todo = case opt of
-              Nothing -> grList'
+              Nothing -> grNames
               Just opt' -> case opt' of
-                  Only bname -> filter ((==) bname . showBenchName . snd) grList'
+                  Only bname -> [bname]
                   Part one' two -> let one = one' + 1
-                                       per = length grList' `div` two
+                                       per = length grNames `div` two
                                        f   = if one' + 1 == two then id else take (one*per)
-                                    in drop ((one-1)*per) $ f grList'
-            samples = filter (`elem` todo) grList'
-        putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",showListN todo,"----"]
+                                    in drop ((one-1)*per) $ f grNames
+            samples = filter (\(_,n) -> showBenchName n `elem` todo) grList'
+        putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",unlines todo,"----"]
         genReport 2 flg samples
   where
+    grNames = getListN $ grList []
     grList gr = concatMap sequence [
      ("Alga (Algebra.Graph)",allBenchs gr Alga.Graph.functions ++ benchmarkCreation gr Alga.Graph.mk ),
      ("Containers (Data.Graph)",allBenchs gr Containers.Graph.functions ++ benchmarkCreation gr Containers.Graph.mk),
