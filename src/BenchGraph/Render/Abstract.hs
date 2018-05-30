@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 module BenchGraph.Render.Abstract
   (
     printAbstract
@@ -11,8 +9,9 @@ where
 import Data.Map.Strict (Map, unionWith, empty, toList, fromList)
 import qualified Data.Map.Strict as M
 import Data.List (find, sortBy)
-import Data.Maybe (mapMaybe)
+import Data.Maybe (mapMaybe, fromMaybe)
 import Text.Printf (printf)
+import Control.Monad (unless)
 
 import BenchGraph.Named
 
@@ -40,21 +39,26 @@ rearrange na@(n,arr) =
     (n',db) = head sorted
 
 printMap :: String -> Named [Named Double] -> IO ()
-printMap superlative (ref,res) = do
+printMap superlative (ref,res) = unless (null res) $ do
   putStrLn "\nABSTRACT:\n"
   mapM_ (\(name,av) -> putStrLn $ unwords [" *",name,"was",printf "%.2f" av,"times",superlative,"than",ref]) res
   putStrLn ""
 
 -- | The first Name given is the reference name for comparison, the others are the comparison themselves
 getComparison :: Grouped [Named Double] -> Named [Named Double]
-getComparison grp = (ref grp,) $ toList $ M.map average $ getComparison' (ref grp) start grp
-  where
-    ref = fst . head . getRef
-    getRef grp' = case grp' of
-                   (Simple a) -> a
-                   (Group (x:_)) -> getRef x
-                   Group{} -> error "Empty Group, should not happen"
-    start = fromList $ map (\x -> (fst x, [])) $ tail $ getRef grp
+getComparison grp = case getRef grp of
+                      Nothing -> ("",[])
+                      Just ref -> let refinedRef = fst ref
+                                      start = fromList $ map (\x -> (x, [])) $ snd ref
+                                  in (refinedRef, toList $ M.map average $ getComparison' refinedRef start grp)
+
+-- | Return a "reference": A library for wich there is a non-0 time
+getRef :: Grouped [Named Double] -> Maybe (String,[String])
+getRef (Simple a) = (\x -> (x, filter (x /=) $ map fst a)) . fst <$> find (\(_,x) -> x /= 0) a
+getRef (Group (x:xs)) = case getRef x of
+                          Nothing -> getRef $ Group xs
+                          a -> a
+getRef (Group []) = Nothing
 
 getComparison' :: String -> Map String [Double] -> Grouped [Named Double] -> Map String [Double]
 getComparison' ref m (Simple arr) =
