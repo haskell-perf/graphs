@@ -139,7 +139,7 @@ main' (RunS only flg libs) = mainWeigh benchs (useResults flg)
   where
     benchs = mapM_ (uncurry wgroup) $ maybe id (\libs' -> filter (flip elem libs' . fst)) libs $ namedWeigh only
 
-namedWeigh :: Maybe String -> [Named (Weigh ())]
+namedWeigh :: Maybe [String] -> [Named (Weigh ())]
 namedWeigh only =
   [ ("Alga (Algebra.Graph)" , allWeighs (select Alga.Graph.functions) >> weighCreation only Alga.Graph.mk)
   , ("Containers (Data.Graph)" , allWeighs (select Containers.Graph.functions) >> weighCreation only Containers.Graph.mk)
@@ -148,4 +148,4 @@ namedWeigh only =
   , ("Hash-Graph (Data.HashGraph.Strict)" , allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk)
   ]
   where
-    select funcs = maybe funcs (\x -> filter ((==) x . fst) funcs) only
+    select funcs = maybe funcs (\ols -> filter (\x -> fst x `elem` ols) funcs) only

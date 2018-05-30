@@ -18,7 +18,7 @@ import Options.Applicative
 import Data.Semigroup ((<>))
 import Data.Maybe (fromMaybe)
 
-data Option = Part Int Int | Only String
+data Option = Part Int Int | Only Only
   deriving (Show, Eq)
 
 data StaOut = Ascii | Html | Null deriving (Read, Show, Eq)
@@ -29,7 +29,7 @@ data Output = Output {
   }
   deriving (Read, Show, Eq)
 
-type Only = String
+type Only = [String]
 type Lib = String
 type Graph = String
 
@@ -49,8 +49,8 @@ partOpt = Part <$> rpart <*> rof
     rpart = option auto (long "part")
     rof = option auto (long "of")
 
-onlyOpt :: Parser String
-onlyOpt = strOption (long "only" <> short 'o' <> metavar "NAME")
+onlyOpt :: Parser [String]
+onlyOpt = some $ strOption (long "only" <> short 'o' <> metavar "NAME")
 
 libOpt :: Parser Lib
 libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME")

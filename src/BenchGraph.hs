@@ -93,12 +93,10 @@ allWeighs = mapM_ (weigh $ graphs defaultGr)
 
 -- | Use the list from weighCreationList
 weighCreation :: (NFData g)
-              => Maybe String -- ^ Maybe a selected bench to do
+              => Maybe [String] -- ^ Maybe selected benchs to do
               -> (Edges -> g) -- ^ A graph-creator function, typically from the GraphImpl class
               -> Weigh ()
-weighCreation name mk = sequence_ [when (todo str) $ wgroup str $ mapM_ (\i -> func (show i) mk $ grf i ) ss | (str,((n,grf), ss)) <- weighCreationList ]
-  where
-    todo str  = maybe True (str ==) name
+weighCreation names mk = mapM_ (\(str,((n,grf), ss)) -> wgroup str $ mapM_ (\i -> func (show i) mk $ grf i ) ss ) $ maybe id (\ols -> filter (\x -> fst x `elem` ols)) names weighCreationList
 
 -- | List of generic graph with their case-name
 weighCreationList :: [Named (GenericGraph, [Int])]

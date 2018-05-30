@@ -52,7 +52,7 @@ edgeCount = simpleSuite "edgeCount"
 hasEdge :: NFData o => SpecialisedSuite Edge o i g
 hasEdge fun genArg = ("hasEdge",) $ Suite
   { algorithm = fun
-  , inputs    = map (fmap genArg) . withNames . getDifferents . edgesNotInGraph
+  , inputs    = map (fmap genArg) . withNames . getDifferents
   }
 
 addEdge :: NFData o => SpecialisedSuite Edge o i g

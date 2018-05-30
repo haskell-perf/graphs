@@ -159,7 +159,7 @@ main' opts
             todo = case opt of
               Nothing -> grNames
               Just opt' -> case opt' of
-                  Only bname -> [bname]
+                  Only bname -> bname
                   Part one' two -> let one = one' + 1
                                        per = length grNames `div` two
                                        f   = if one' + 1 == two then id else take (one*per)
