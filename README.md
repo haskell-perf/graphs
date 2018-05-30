@@ -32,12 +32,15 @@ The benchmark suite `datasize` will use `ghc-datasize` to calculate size of grap
 
 ### Arguments
 
-Command-line arguments are self-explaining, but the `--graphs "[(String,Int)...]` requires some explanations:
+Command-line arguments are self-explaining, but the `--graph "(String,Int)` requires some explanations:
 We test functions against standards graphs, and they are built with ten-powers vertex (plus one). the Int supplied is the upper-bound of the ten-powers. So `"(Path,100)"` will generate the `Path` with `2`, `11` and `101` vertices. We add a vertex, so even the smallest graph (a Path with 2 vertices) contains an edge.
+You can specify several graphs
+
+The default is: `[("Path",3),("Circuit",3),("Mesh",3),("Complete",2)]`
 
 #### Graphs name
 
-The following graphs are supported.
+The following graphs are supported:
 
 * Path
 * Circuit

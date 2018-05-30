@@ -47,7 +47,7 @@ defaultGraphsNames :: [String]
 defaultGraphsNames = map fst defaultGraphs
 
 defaultSizeGraph ::[Int]
-defaultSizeGraph = [2,2,2,2]
+defaultSizeGraph = [3,3,3,2]
 
 vertices :: Edges -> [Vertex]
 vertices = nub . uncurry (++) . unzip

@@ -13,6 +13,8 @@ import qualified Fgl.PatriciaTree
 import qualified Fgl.Tree
 import qualified HashGraph.Gr
 
+import BenchGraph.Utils (defaultGr)
+
 printNArr :: [Named (Named [Named Word])] -- ^ Array of all benchs
           -> String -- ^ A selected func
           -> IO ()
@@ -44,7 +46,7 @@ main :: IO ()
 main = execParser runDataSize >>= main'
 
 main' :: CommandDataSize -> IO ()
-main' (RunD gr) = do
+main' (RunD gr') = do
   res <- mapM sequence
     [ ("Alga (Algebra.Graph)", computeSize gr Alga.Graph.mk)
     , ("Containers (Data.Graph)", computeSize gr Containers.Graph.mk)
@@ -54,3 +56,7 @@ main' (RunD gr) = do
     ]
   let res' = concatMap sequence res
   mapM_ (printNArr res') $ nub $ map shExtr res'
+  where
+    gr = case gr' of
+           [] -> defaultGr
+           g -> g

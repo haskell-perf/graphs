@@ -22,6 +22,7 @@ import qualified Fgl.Tree
 
 import BenchGraph (allBenchs, benchmarkCreation)
 import BenchGraph.Named
+import BenchGraph.Utils (defaultGr)
 
 import Options.Applicative (execParser)
 
@@ -149,10 +150,11 @@ main' opts
       List listOpt -> case listOpt of
                         Benchs -> putStr $ unlines grNames
                         Libs -> putStr $ unlines $ nub $ map fst $ grList []
-      Run opt flg libs gr -> do
+      Run opt flg libs gr' -> do
         let modifyL = case libs of
               Nothing -> id
               Just libss -> filter (\x -> fst x `elem` libss)
+            gr = mkGr gr'
             grList' = modifyL $ grList gr
             todo = case opt of
               Nothing -> grNames
@@ -163,7 +165,7 @@ main' opts
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grNames
             samples = filter (\(_,n) -> showBenchName n `elem` todo) grList'
-        putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",unlines todo,"----"]
+        putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",unlines todo,"----",unwords ["Using",show gr,"as graphs"]]
         genReport 2 flg samples
   where
     grNames = getListN $ grList []
@@ -173,3 +175,6 @@ main' opts
      ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs gr Fgl.PatriciaTree.functions ++ benchmarkCreation gr Fgl.PatriciaTree.mk),
      ("Fgl (Data.Graph.Inductive.Tree)", allBenchs gr Fgl.Tree.functions ++ benchmarkCreation gr Fgl.Tree.mk),
      ("Hash-Graph (Data.HashGraph.Strict)", allBenchs gr HashGraph.Gr.functions ++ benchmarkCreation gr HashGraph.Gr.mk)]
+    mkGr gr' = case gr' of
+                 [] -> defaultGr
+                 g -> g

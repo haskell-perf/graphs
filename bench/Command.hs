@@ -18,8 +18,6 @@ import Options.Applicative
 import Data.Semigroup ((<>))
 import Data.Maybe (fromMaybe)
 
-import BenchGraph.Utils (defaultGr)
-
 data Option = Part Int Int | Only String
   deriving (Show, Eq)
 
@@ -57,8 +55,11 @@ onlyOpt = strOption (long "only" <> short 'o' <> metavar "NAME")
 libOpt :: Parser Lib
 libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME")
 
-graphOpt :: Parser [(Graph,Int)]
-graphOpt = option auto (long "graphs" <> short 'g' <> metavar "GRAPHNAMES" <> value defaultGr <> showDefault <> help "graphs to be tested")
+graphOpt :: Parser (Graph,Int)
+graphOpt = option auto (long "graphs" <> short 'g' <> metavar "GRAPH" <> help "graph to be tested")
+
+graphsOpt :: Parser [(Graph,Int)]
+graphsOpt = many graphOpt
 
 options :: Parser Option
 options = partOpt <|> ( Only <$> onlyOpt)
@@ -73,7 +74,7 @@ output :: Parser Output
 output = Output <$> sumFlag <*> staFlag
 
 runCom :: Parser Command
-runCom = Run <$> optional options <*> output <*> optional (some libOpt) <*> graphOpt
+runCom = Run <$> optional options <*> output <*> optional (some libOpt) <*> graphsOpt
 
 listOpt :: Parser ListOption
 listOpt = flag' Benchs (long "benchs") <|> flag' Libs (long "libs")
@@ -126,7 +127,7 @@ runSpace = info ( semiOptional <**> helper)
     semiOptional = pure (fromMaybe (RunS Nothing (Output True Ascii) Nothing)) <*> optional space'
 
 runDataSize :: ParserInfo CommandDataSize
-runDataSize = info ((RunD <$> graphOpt) <**> helper)
+runDataSize = info ((RunD <$> graphsOpt) <**> helper)
      ( fullDesc
      <> progDesc "Benchmark datasize on different graphs representations"
      <> header "Help")
