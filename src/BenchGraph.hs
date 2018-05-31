@@ -68,7 +68,7 @@ allBench :: (GraphImpl g, NFData g) => [(String,Int)] -> Suite g -> Benchmark
 allBench gr = benchmark (graphs gr)
 
 benchmarkCreation :: (NFData g) => [(String,Int)] -> (Edges -> g) -> [Benchmark]
-benchmarkCreation gr mk = [ bgroup ("make a " ++  n ++ " from a list") $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | ((n,grf), ss) <- graphs gr ]
+benchmarkCreation gr mk = [ bgroup ("make a " ++  n ++ " from a list of edges") $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | ((n,grf), ss) <- graphs gr ]
 
 ---- Weigh
 weigh :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Weigh ()
@@ -100,7 +100,7 @@ weighCreation names mk = mapM_ (\(str,((n,grf), ss)) -> wgroup str $ mapM_ (\i -
 weighCreationList :: [Named (GenericGraph, [Int])]
 weighCreationList = [ (str n,t) | t@((n, _), _) <- graphs defaultGr]
   where
-    str n = "make a " ++ n ++ " from a list"
+    str n = "make a " ++ n ++ " from a list of edges"
 
 ---- DataSize
 computeSize :: (NFData g) => [(String,Int)] -> (Edges -> g) -> IO [Named [Named Word]]

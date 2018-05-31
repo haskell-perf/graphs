@@ -1,4 +1,4 @@
-module BenchGraph.Complete (
+module BenchGraph.GenericGraph.Complete (
   complete
 ) where
 

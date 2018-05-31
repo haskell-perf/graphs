@@ -17,11 +17,12 @@ source-repository head
 
 library
   exposed-modules:     BenchGraph
-                     , BenchGraph.Path
-                     , BenchGraph.Mesh
-                     , BenchGraph.Circuit
                      , BenchGraph.GenericGraph
-                     , BenchGraph.Complete
+                     , BenchGraph.GenericGraph.Path
+                     , BenchGraph.GenericGraph.Mesh
+                     , BenchGraph.GenericGraph.Circuit
+                     , BenchGraph.GenericGraph.Complete
+                     , BenchGraph.GenericGraph.Clique
                      , BenchGraph.Utils
                      , BenchGraph.Suites
                      , BenchGraph.Named

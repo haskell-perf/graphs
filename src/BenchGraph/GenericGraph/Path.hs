@@ -1,4 +1,4 @@
-module BenchGraph.Path (
+module BenchGraph.GenericGraph.Path (
   path
 ) where
 

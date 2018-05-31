@@ -46,7 +46,7 @@ script:
 # Build the package, its tests, and its docs and run the tests
 - stack --no-terminal bench --no-run-benchmarks
 - PREFIX=.stack-work/dist/x86_64-linux/Cabal-2.0.1.0/build
-- if [ $DO = DATASIZE ]; then travis_wait $PREFIX/datasize/datasize; else if [ $DO = SPACE ]; then travis_wait 30 $PREFIX/space/space; else $PREFIX/time/time run --part $STEP --of 3  -g '("Mesh",3)' -g '("Complete",3)' ; fi; fi;
+- if [ $DO = DATASIZE ]; then travis_wait $PREFIX/datasize/datasize; else if [ $DO = SPACE ]; then travis_wait 30 $PREFIX/space/space; else $PREFIX/time/time run --part $STEP --of 3  -g '("Mesh",3)' -g '("Clique",3)' ; fi; fi;
 
 
 before_install:

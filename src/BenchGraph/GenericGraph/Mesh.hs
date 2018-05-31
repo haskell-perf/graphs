@@ -1,9 +1,9 @@
-module BenchGraph.Mesh (
+module BenchGraph.GenericGraph.Mesh (
   mesh
 ) where
 
 import BenchGraph.Named
-import BenchGraph.Path
+import BenchGraph.GenericGraph.Path
 import BenchGraph.GenericGraph (Edges,GenericGraph(..))
 
 import Control.Comonad (extract)

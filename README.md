@@ -46,6 +46,7 @@ The following graphs are supported:
 * Circuit
 * Mesh
 * Complete
+* Clique
 
 ## About implementation
 
