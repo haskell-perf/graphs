@@ -2,18 +2,20 @@
 {-# LANGUAGE TupleSections #-}
 
 module BenchGraph (
+  ShadowedS (..),
   Suite (..),
   simpleSuite,
   GraphImpl,
   mkGraph,
   benchmark,
   weigh,
-  allBenchs,
+  allBench,
   allWeighs,
   benchmarkCreation,
   weighCreation,
   weighCreationList,
-  computeSize
+  computeSize,
+  extractDescription
 ) where
 
 import Criterion.Main
@@ -27,6 +29,8 @@ import Control.Monad (when)
 import BenchGraph.GenericGraph
 import BenchGraph.Utils (graphs, defaultGr)
 import BenchGraph.Named
+
+data ShadowedS = forall g. (GraphImpl g, NFData g) => Shadow (Suite g)
 
 -- A graph algorithm operates on a graph type @g@, which takes an input of
 -- type @i@ and produces an output of type @o@. Algorithms come with a list of
@@ -60,8 +64,8 @@ benchSuite algorithm inputs gfunc size = bgroup (show size) cases
     graph = mkGraph edges
     cases = [ bench name $ nf (algorithm i) $!! graph | (name,i) <- inputs edges ]
 
-allBenchs :: (GraphImpl g, NFData g) => [(String,Int)] -> [Suite g] -> [Benchmark]
-allBenchs gr = map (benchmark $ graphs gr)
+allBench :: (GraphImpl g, NFData g) => [(String,Int)] -> Suite g -> Benchmark
+allBench gr = benchmark (graphs gr)
 
 benchmarkCreation :: (NFData g) => [(String,Int)] -> (Edges -> g) -> [Benchmark]
 benchmarkCreation gr mk = [ bgroup ("make a " ++  n ++ " from a list") $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | ((n,grf), ss) <- graphs gr ]
@@ -102,3 +106,7 @@ weighCreationList = [ (str n,t) | t@((n, _), _) <- graphs defaultGr]
 computeSize :: (NFData g) => [(String,Int)] -> (Edges -> g) -> IO [Named [Named Word]]
 computeSize gr fun = mapM (\((gname, gfunc),ss) -> sequence $ (gname,) $ mapM (\s -> sequence $ (show s,) $ recursiveSize $!! fun $ gfunc s) ss) $ graphs gr
 
+---- Utils
+
+extractDescription :: Suite a -> Named String
+extractDescription (Suite name desc _ _) = (name,desc)

@@ -19,7 +19,7 @@ import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
 
-import BenchGraph (allBenchs, benchmarkCreation)
+import BenchGraph (allBench, benchmarkCreation, extractDescription, ShadowedS (..) )
 import BenchGraph.Named
 import BenchGraph.Utils (defaultGr)
 
@@ -66,7 +66,9 @@ genReport lev flg arr = mapM_  mapped $ nubBy (liftExtract2 (==)) arr
 
 toPrint :: Int -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = do
-  when (not (null bname) && (flg == Ascii || lev == 2)) pTitle
+  if lev == 2
+     then pTitle >> maybe (return ()) (putStrLn . (++) "\nDescritpion: ") (lookup bname descs)
+     else when (not (null bname) && flg == Ascii) pTitle
   case breport of
     (BenchGroup _ (BenchGroup _ (Benchmark{}:_):_)) -> if flg /= Html
       then doGrp
@@ -136,10 +138,6 @@ benchmarkWithoutOutput bm = do
   where
     defaultConfig' = defaultConfig {verbosity = Quiet}
 
--- | Get names of the benchs
-getListN :: [Named Benchmark] -> [String]
-getListN = nub . map (showBenchName . snd)
-
 main :: IO ()
 main = execParser commandTime >>= main'
 
@@ -167,12 +165,28 @@ main' opts
         putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",unlines todo,"----",unwords ["Using",show gr,"as graphs"]]
         genReport 2 flg samples
   where
-    grNames = getListN $ grList []
-    grList gr = concatMap sequence [
-     ("Alga",allBenchs gr Alga.Graph.functions ++ benchmarkCreation gr Alga.Graph.mk ),
-     ("Containers",allBenchs gr Containers.Graph.functions ++ benchmarkCreation gr Containers.Graph.mk),
-     ("Fgl", allBenchs gr Fgl.PatriciaTree.functions ++ benchmarkCreation gr Fgl.PatriciaTree.mk),
-     ("Hash-Graph", allBenchs gr HashGraph.Gr.functions ++ benchmarkCreation gr HashGraph.Gr.mk)]
+    grNames = nub $ map (showBenchName . snd) $ grList []
+    grList gr = map (fmap (\(Shadow s) -> allBench gr s)) listOfSuites ++ listOfCreation gr
     mkGr gr' = case gr' of
                  [] -> defaultGr
                  g -> g
+
+descs :: [Named String]
+descs = nubBy eq1 $ map ((\(Shadow s) -> extractDescription s) . snd) listOfSuites
+
+listOfSuites :: [Named ShadowedS]
+listOfSuites = concatMap sequence
+  [ ("Alga", map Shadow Alga.Graph.functions )
+  , ("Containers", map Shadow Containers.Graph.functions)
+  , ("Fgl", map Shadow Fgl.PatriciaTree.functions)
+  , ("Hash-Graph", map Shadow HashGraph.Gr.functions)
+  ]
+
+listOfCreation :: [(String,Int)] -> [Named Benchmark]
+listOfCreation gr = concatMap sequence
+  [ ("Alga", benchmarkCreation gr Alga.Graph.mk )
+  , ("Containers", benchmarkCreation gr Containers.Graph.mk)
+  , ("Fgl", benchmarkCreation gr Fgl.PatriciaTree.mk)
+  , ("Hash-Graph", benchmarkCreation gr HashGraph.Gr.mk)
+  ]
+
