@@ -10,7 +10,6 @@ import Command
 import qualified Alga.Graph
 import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
-import qualified Fgl.Tree
 import qualified HashGraph.Gr
 
 import BenchGraph.Utils (defaultGr)
@@ -51,7 +50,6 @@ main' (RunD gr') = do
     [ ("Alga (Algebra.Graph)", computeSize gr Alga.Graph.mk)
     , ("Containers (Data.Graph)", computeSize gr Containers.Graph.mk)
     , ("Fgl (Data.Graph.Inductive.PatriciaTree)", computeSize gr Fgl.PatriciaTree.mk)
-    , ("Fgl (Data.Graph.Inductive.Tree)", computeSize gr Fgl.Tree.mk)
     , ("Hash-Graph (Data.HashGraph.Strict)", computeSize gr HashGraph.Gr.mk)
     ]
   let res' = concatMap sequence res
