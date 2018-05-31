@@ -56,7 +56,7 @@ libOpt :: Parser Lib
 libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME")
 
 graphOpt :: Parser (Graph,Int)
-graphOpt = option auto (long "graphs" <> short 'g' <> metavar "GRAPH" <> help "graph to be tested")
+graphOpt = option auto (long "graph" <> short 'g' <> metavar "GRAPH" <> help "graph to be tested")
 
 graphsOpt :: Parser [(Graph,Int)]
 graphsOpt = many graphOpt
