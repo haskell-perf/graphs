@@ -140,10 +140,10 @@ main' (RunS only flg libs) = mainWeigh benchs (useResults flg)
 
 namedWeigh :: Maybe [String] -> [Named (Weigh ())]
 namedWeigh only =
-  [ ("Alga (Algebra.Graph)" , allWeighs (select Alga.Graph.functions) >> weighCreation only Alga.Graph.mk)
-  , ("Containers (Data.Graph)" , allWeighs (select Containers.Graph.functions) >> weighCreation only Containers.Graph.mk)
-  , ("Fgl (Data.Graph.Inductive.PatriciaTree)" , allWeighs (select Fgl.PatriciaTree.functions) >> weighCreation only Fgl.PatriciaTree.mk)
-  , ("Hash-Graph (Data.HashGraph.Strict)" , allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk)
+  [ ("Alga" , allWeighs (select Alga.Graph.functions) >> weighCreation only Alga.Graph.mk)
+  , ("Containers" , allWeighs (select Containers.Graph.functions) >> weighCreation only Containers.Graph.mk)
+  , ("Fgl" , allWeighs (select Fgl.PatriciaTree.functions) >> weighCreation only Fgl.PatriciaTree.mk)
+  , ("Hash-Graph" , allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk)
   ]
   where
     select funcs = maybe funcs (\ols -> filter (\x -> fst x `elem` ols) funcs) only

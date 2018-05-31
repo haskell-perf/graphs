@@ -47,10 +47,10 @@ main = execParser runDataSize >>= main'
 main' :: CommandDataSize -> IO ()
 main' (RunD gr') = do
   res <- mapM sequence
-    [ ("Alga (Algebra.Graph)", computeSize gr Alga.Graph.mk)
-    , ("Containers (Data.Graph)", computeSize gr Containers.Graph.mk)
-    , ("Fgl (Data.Graph.Inductive.PatriciaTree)", computeSize gr Fgl.PatriciaTree.mk)
-    , ("Hash-Graph (Data.HashGraph.Strict)", computeSize gr HashGraph.Gr.mk)
+    [ ("Alga", computeSize gr Alga.Graph.mk)
+    , ("Containers", computeSize gr Containers.Graph.mk)
+    , ("Fgl", computeSize gr Fgl.PatriciaTree.mk)
+    , ("Hash-Graph", computeSize gr HashGraph.Gr.mk)
     ]
   let res' = concatMap sequence res
   mapM_ (printNArr res') $ nub $ map shExtr res'

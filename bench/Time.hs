@@ -169,10 +169,10 @@ main' opts
   where
     grNames = getListN $ grList []
     grList gr = concatMap sequence [
-     ("Alga (Algebra.Graph)",allBenchs gr Alga.Graph.functions ++ benchmarkCreation gr Alga.Graph.mk ),
-     ("Containers (Data.Graph)",allBenchs gr Containers.Graph.functions ++ benchmarkCreation gr Containers.Graph.mk),
-     ("Fgl (Data.Graph.Inductive.PatriciaTree)", allBenchs gr Fgl.PatriciaTree.functions ++ benchmarkCreation gr Fgl.PatriciaTree.mk),
-     ("Hash-Graph (Data.HashGraph.Strict)", allBenchs gr HashGraph.Gr.functions ++ benchmarkCreation gr HashGraph.Gr.mk)]
+     ("Alga",allBenchs gr Alga.Graph.functions ++ benchmarkCreation gr Alga.Graph.mk ),
+     ("Containers",allBenchs gr Containers.Graph.functions ++ benchmarkCreation gr Containers.Graph.mk),
+     ("Fgl", allBenchs gr Fgl.PatriciaTree.functions ++ benchmarkCreation gr Fgl.PatriciaTree.mk),
+     ("Hash-Graph", allBenchs gr HashGraph.Gr.functions ++ benchmarkCreation gr HashGraph.Gr.mk)]
     mkGr gr' = case gr' of
                  [] -> defaultGr
                  g -> g
