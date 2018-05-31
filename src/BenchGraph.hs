@@ -10,7 +10,7 @@ module BenchGraph (
   benchmark,
   weigh,
   allBench,
-  allWeighs,
+  allWeigh,
   benchmarkCreation,
   weighCreation,
   weighCreationList,
@@ -86,8 +86,8 @@ weighSuite algorithm inputs gfunc size = wgroup (show size) cases
     cases = mapM_ (uncurry wFunc) $ inputs edges
     wFunc name i = func name (algorithm i) $!! graph
 
-allWeighs :: (GraphImpl g, NFData g) => [Suite g] -> Weigh ()
-allWeighs = mapM_ (weigh $ graphs defaultGr)
+allWeigh :: (GraphImpl g, NFData g) => Suite g -> Weigh ()
+allWeigh = weigh (graphs defaultGr)
 
 -- | Use the list from weighCreationList
 weighCreation :: (NFData g)

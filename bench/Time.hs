@@ -19,7 +19,7 @@ import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
 
-import BenchGraph (allBench, benchmarkCreation, extractDescription, ShadowedS (..) )
+import BenchGraph (allBench, benchmarkCreation, ShadowedS (..) )
 import BenchGraph.Named
 import BenchGraph.Utils (defaultGr)
 
@@ -31,6 +31,7 @@ import qualified Text.Tabular.AsciiArt as TAA
 import Text.Printf (printf)
 
 import Command
+import ListS (listOfSuites, descs)
 
 import BenchGraph.Render.Types
 import BenchGraph.Render.Best
@@ -67,7 +68,7 @@ genReport lev flg arr = mapM_  mapped $ nubBy (liftExtract2 (==)) arr
 toPrint :: Int -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = do
   if lev == 2
-     then pTitle >> maybe (return ()) (putStrLn . (++) "\nDescritpion: ") (lookup bname descs)
+     then pTitle >> maybe (return ()) (putStrLn . (++) "\nDescritpion: ") (lookup bname descs) >> putStrLn ""
      else when (not (null bname) && flg == Ascii) pTitle
   case breport of
     (BenchGroup _ (BenchGroup _ (Benchmark{}:_):_)) -> if flg /= Html
@@ -170,17 +171,6 @@ main' opts
     mkGr gr' = case gr' of
                  [] -> defaultGr
                  g -> g
-
-descs :: [Named String]
-descs = nubBy eq1 $ map ((\(Shadow s) -> extractDescription s) . snd) listOfSuites
-
-listOfSuites :: [Named ShadowedS]
-listOfSuites = concatMap sequence
-  [ ("Alga", map Shadow Alga.Graph.functions )
-  , ("Containers", map Shadow Containers.Graph.functions)
-  , ("Fgl", map Shadow Fgl.PatriciaTree.functions)
-  , ("Hash-Graph", map Shadow HashGraph.Gr.functions)
-  ]
 
 listOfCreation :: [(String,Int)] -> [Named Benchmark]
 listOfCreation gr = concatMap sequence

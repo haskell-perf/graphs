@@ -12,6 +12,7 @@ import qualified Text.Tabular.AsciiArt as TAA
 import Options.Applicative (execParser)
 
 import Command
+import ListS (listOfSuites, descs)
 
 import BenchGraph
 import BenchGraph.Named
@@ -68,7 +69,9 @@ printReport :: Int -- ^ The number of # to write
             -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (T.Grouped [Named Int64])) -- Maybe if there was actual data
 printReport lev flg arr act = do
-  when (not (null bname) && (flg == Ascii || lev == 2)) pTitle
+  if lev == 2
+     then pTitle >> maybe (return ()) (putStrLn . (++) "\nDescritpion: ") (lookup bname descs) >> putStrLn ""
+     else when (not (null bname) && flg == Ascii) pTitle
   case act of
     (Grouped _ (Grouped _ (Singleton{}:_):_)) -> if flg /= Html
       then doGrp
@@ -133,17 +136,23 @@ main = execParser runSpace >>= main'
 main' :: CommandSpace -> IO ()
 main' (ListS opt) = case opt of
                     Benchs -> putStr $ unlines $ nub $ map name Alga.Graph.functions ++ map name Containers.Graph.functions ++ map name Fgl.PatriciaTree.functions ++ map name HashGraph.Gr.functions ++ map fst weighCreationList
-                    Libs -> putStr $ unlines $ map fst $ namedWeigh Nothing
+                    Libs -> putStr $ unlines $ map fst listOfSuites
 main' (RunS only flg libs) = mainWeigh benchs (useResults flg)
   where
     benchs = mapM_ (uncurry wgroup) $ maybe id (\libs' -> filter (flip elem libs' . fst)) libs $ namedWeigh only
 
 namedWeigh :: Maybe [String] -> [Named (Weigh ())]
-namedWeigh only =
-  [ ("Alga" , allWeighs (select Alga.Graph.functions) >> weighCreation only Alga.Graph.mk)
-  , ("Containers" , allWeighs (select Containers.Graph.functions) >> weighCreation only Containers.Graph.mk)
-  , ("Fgl" , allWeighs (select Fgl.PatriciaTree.functions) >> weighCreation only Fgl.PatriciaTree.mk)
-  , ("Hash-Graph" , allWeighs (select HashGraph.Gr.functions) >> weighCreation only HashGraph.Gr.mk)
-  ]
+namedWeigh only = map (fmap (\(Shadow s) -> allWeigh s)) listOfSuites' ++ listOfCreation only
   where
-    select funcs = maybe funcs (\ols -> filter (\x -> name x `elem` ols) funcs) only
+    listOfSuites' = case only of
+                      Nothing -> listOfSuites
+                      Just e -> mapMaybe (traverse (\su@(Shadow s) -> if name s `elem` e then Just su else Nothing )) listOfSuites
+
+listOfCreation :: Maybe [String] -> [Named (Weigh ())]
+listOfCreation only =
+  [ ("Alga" , weighCreation only Alga.Graph.mk)
+  , ("Containers" , weighCreation only Containers.Graph.mk)
+  , ("Fgl" , weighCreation only Fgl.PatriciaTree.mk)
+  , ("Hash-Graph" , weighCreation only HashGraph.Gr.mk)
+  ]
+
