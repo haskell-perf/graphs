@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 module BenchGraph.Suites
 
 where
@@ -15,27 +13,31 @@ import Data.List (nub)
 -- | Type to express the common interface between Specialised suites
 type SpecialisedSuite u o i g = (i -> g -> o) -- ^ The actual function to test.
   -> (u -> i) -- ^ A function to create the tested function argument
-  -> NSuite g
+  -> Suite g
 
 -- Vertex work
 
-vertexList :: NFData o => (g -> o) -> NSuite g
-vertexList = simpleSuite "vertexList"
+vertexList :: NFData o => (g -> o) -> Suite g
+vertexList = simpleSuite "vertexList" "DESC"
 
-vertexCount :: NFData o => (g -> o) -> NSuite g
-vertexCount = simpleSuite "vertexCount"
+vertexCount :: NFData o => (g -> o) -> Suite g
+vertexCount = simpleSuite "vertexCount" "DESC"
 
 addVertex :: NFData o => SpecialisedSuite Vertex o i g
-addVertex fun genArg = ("add a new vertex",) $ Suite
-  { algorithm = fun
+addVertex fun genArg = Suite
+  { name = "addVertex"
+  , desc = "DESC"
+  , algorithm = fun
   , inputs    = \x -> fmap genArg <$> [nameBy ((++)"new vertex: " . show ) $ getNewV x]
   }
     where
       getNewV x = 1 + extractMaxVertex x
 
 removeVertex :: NFData o => SpecialisedSuite Vertex o i g
-removeVertex fun genArg = ("remove a vertex",) $ Suite
-  { algorithm = fun
+removeVertex fun genArg = Suite
+  { name = "removeVertex"
+  , desc = "DESC"
+  , algorithm = fun
   , inputs    = \x -> fmap genArg <$> [nameBy ((++)"vertex: " . show ) $ getOldV x]
   }
     where
@@ -43,41 +45,49 @@ removeVertex fun genArg = ("remove a vertex",) $ Suite
 
 -- Edge work
 
-edgeList :: NFData o => (g -> o) -> NSuite g
-edgeList = simpleSuite "edgeList"
+edgeList :: NFData o => (g -> o) -> Suite g
+edgeList = simpleSuite "edgeList" "DESC"
 
-edgeCount :: NFData o => (g -> o) -> NSuite g
-edgeCount = simpleSuite "edgeCount"
+edgeCount :: NFData o => (g -> o) -> Suite g
+edgeCount = simpleSuite "edgeCount" "DESC"
 
 hasEdge :: NFData o => SpecialisedSuite Edge o i g
-hasEdge fun genArg = ("hasEdge",) $ Suite
-  { algorithm = fun
+hasEdge fun genArg = Suite
+  { name = "hasEdge"
+  , desc = "DESC"
+  , algorithm = fun
   , inputs    = map (fmap genArg) . withNames . getDifferents
   }
 
 addEdge :: NFData o => SpecialisedSuite Edge o i g
-addEdge fun genArg = ("add a new edge",) $ Suite
-  { algorithm = fun
+addEdge fun genArg = Suite
+  { name = "addEdge"
+  , desc = "DESC"
+  , algorithm = fun
   , inputs = map (fmap genArg) . withNames . getDifferents . edgesNotInGraph
   }
 
 removeEdge :: NFData o => SpecialisedSuite Edge o i g
-removeEdge fun genArg = ("remove an edge",) $ Suite
-  { algorithm = fun
+removeEdge fun genArg = Suite
+  { name = "removeEdge"
+  , desc = "DESC"
+  , algorithm = fun
   , inputs    = map (fmap genArg) . withNames . getDifferents
   }
 
 -- Graph work
 
-isEmpty :: NFData o => (g -> o) -> NSuite g
-isEmpty = simpleSuite "isEmpty"
+isEmpty :: NFData o => (g -> o) -> Suite g
+isEmpty = simpleSuite "isEmpty" "DESC"
 
-transpose :: NFData o => (g -> o) -> NSuite g
-transpose = simpleSuite "transpose"
+transpose :: NFData o => (g -> o) -> Suite g
+transpose = simpleSuite "transpose" "DESC"
 
-eq :: (NFData g, GraphImpl g) => (g -> g -> Bool) -> NSuite g
-eq fun = ("equality",) $ Suite
-  { algorithm = fun
+eq :: (NFData g, GraphImpl g) => (g -> g -> Bool) -> Suite g
+eq fun = Suite
+  { name = "equality"
+  , desc = "DESC"
+  , algorithm = fun
   , inputs    = \x -> fmap mkGraph <$>
     [nameBy ((++)"vertex: " . show . head) [(0,2)]
     ,("Same graph",x)
@@ -85,22 +95,26 @@ eq fun = ("equality",) $ Suite
   }
 
 context :: NFData o => SpecialisedSuite Edge o i g
-context fun genArg = ("merge a context",) $ Suite
-  { algorithm = fun
+context fun genArg = Suite
+  { name = "mergeContext"
+  , desc = "DESC"
+  , algorithm = fun
   , inputs = map (fmap genArg) . withNames . const [(0,3)]
   }
 
 -- Algorithms
 
-dff :: NFData o => (g -> o) -> NSuite g
-dff = simpleSuite "dff"
+dff :: NFData o => (g -> o) -> Suite g
+dff = simpleSuite "dff" "DESC"
 
-topSort :: NFData o => (g -> o) -> NSuite g
-topSort = simpleSuite "topSort"
+topSort :: NFData o => (g -> o) -> Suite g
+topSort = simpleSuite "topSort" "DESC"
 
 reachable :: NFData o => SpecialisedSuite Vertex o i g
-reachable fun genArg = ("reachable",) $ Suite
-  { algorithm = fun
+reachable fun genArg = Suite
+  { name = "reachable"
+  , desc = "DESC"
+  , algorithm = fun
   , inputs    = map (fmap genArg) . withNames . const [0]
   }
 

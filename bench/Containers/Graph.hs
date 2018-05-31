@@ -25,7 +25,7 @@ instance GraphImpl Graph where
 mk :: Edges -> Graph
 mk e = buildG (0,extractMaxVertex e) e
 
-functions :: [NSuite Graph]
+functions :: [Suite Graph]
 functions =
   [ S.edgeList edges
   , S.vertexList vertices

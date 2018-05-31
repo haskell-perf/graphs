@@ -6,6 +6,7 @@ module BenchGraph.Named
     compare1,
     nameBy,
     nameShow,
+    withNames,
     liftExtract2,
     fix
   )
@@ -24,6 +25,10 @@ eq1 = liftExtract2 (==)
 
 compare1 :: Ord a => Named a -> Named a -> Ordering
 compare1 = liftExtract2 compare
+
+-- Show items in a list
+withNames :: Show a => [a] -> [Named a]
+withNames = map nameShow
 
 nameShow :: Show a => a -> Named a
 nameShow = nameBy show
