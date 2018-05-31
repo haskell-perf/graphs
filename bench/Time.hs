@@ -166,7 +166,7 @@ main' opts
         putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",unlines todo,"----",unwords ["Using",show gr,"as graphs"]]
         genReport 2 flg samples
   where
-    grNames = nub $ map (showBenchName . snd) $ grList []
+    grNames = nub $ map (showBenchName . snd) $ grList defaultGr
     grList gr = map (fmap (\(Shadow s) -> allBench gr s)) listOfSuites ++ listOfCreation gr
     mkGr gr' = case gr' of
                  [] -> defaultGr
