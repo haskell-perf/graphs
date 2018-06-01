@@ -32,11 +32,11 @@ The benchmark suite `datasize` will use `ghc-datasize` to calculate size of grap
 
 ### Arguments
 
-Command-line arguments are self-explaining, but the `--graph "(String,Int)` requires some explanations:
+Command-line arguments are self-explaining, but the `--graph "(String,Int)"` requires some explanations:
 We test functions against standards graphs, and they are built with ten-powers vertex (plus one). the Int supplied is the upper-bound of the ten-powers. So `"(Path,100)"` will generate the `Path` with `2`, `11` and `101` vertices. We add a vertex, so even the smallest graph (a Path with 2 vertices) contains an edge.
 You can specify several graphs
 
-The default is: `[("Path",3),("Circuit",3),("Mesh",3),("Complete",2)]`
+The default is: `[("Mesh",3),("Clique",2)]`
 
 #### Graphs name
 
@@ -74,34 +74,36 @@ data Named a = Named String a
 All functions to bench are encapsulated inside a `Suite` data:
 ```Haskell
 data Suite g = forall i o. NFData o => Suite
-    { algorithm :: i -> g -> o
-    , inputs    :: Edges -> [Named i] }
+  { name :: String
+  , desc :: String
+  , algorithm :: i -> g -> o
+  , inputs    :: Edges -> [Named i] }
 
-type NSuite g = Named (Suite g)
 ```
 
-* `suiteName` _identify_ the benchmarked function. Same function from different libraries (for example `hasEdge`) will be given the same `name` to allow comparison.
+* `name` _identify_ the benchmarked function. Same function from different libraries (for example `hasEdge`) will be given the same `name` to allow comparison.
+* `desc` describe the Suite, will be used only in the output.
 * `algorithm` is the actual function to be benchmarked. It take an argument, a graph, and produce something.
 * `inputs` will receive the actual graph, and will be used to generate inputs for the algorithm.
 
 ### BenchGraph.Suites
 
-This module defines common builder for `Suites`, and particularly provide a stable name for standard operations on graphs, and thus allow simpler comparison (remember, benchmarks are identified by their _name_).
+This module defines common builder for `Suite`, and particularly provide a stable name for standard operations on graphs, and thus allow simpler comparison (remember, benchmarks are identified by their _name_).
 
 ### And if I don't care and only want to add a benchmark ?
 
 The main function for `Criterion` is:
 ```Haskell
-allBenchs :: (GraphImpl g, NFData g) => (Int,Int,Int) -> [Suite g] -> [Benchmark]
+allBench :: (GraphImpl g, NFData g) => [(String,Int)] -> Suite g -> Benchmark
 ```
 
-It takes size arguments for graphs, a list of suite, and produce a list of benchmark.
+It takes a list of graphs names and their size, a suite, and produce a benchmark.
 
 The main function for `Weigh` is very similar:
 ```Haskell
-allWeighs :: (GraphImpl g, NFData g) => [Suite g] -> Weigh ()
+allWeigh :: (GraphImpl g, NFData g) => Suite g -> Weigh ()
 ```
 
-It use the default size arguments ( `(3,3,2)` ) and return the correct `Weigh` monad.
+It use the default graphs and return the correct `Weigh` monad.
 
 You can always see the living code inside the `benchs/` directory.
