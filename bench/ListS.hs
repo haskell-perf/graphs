@@ -14,7 +14,7 @@ import BenchGraph.Named
 
 -- | List of descs
 descs :: [Named String]
-descs = nubBy eq1 $ map ((\(Shadow s) -> extractDescription s) . snd) listOfSuites
+descs = ("creation","Create a graph from a list of edges") : (nubBy eq1 $ map ((\(Shadow s) -> extractDescription s) . snd) listOfSuites)
 
 -- | List of queued Suite, "Shadowized"
 listOfSuites :: [Named ShadowedS]

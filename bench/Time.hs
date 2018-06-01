@@ -173,7 +173,7 @@ main' opts
                  g -> g
 
 listOfCreation :: [(String,Int)] -> [Named Benchmark]
-listOfCreation gr = concatMap sequence
+listOfCreation gr =
   [ ("Alga", benchmarkCreation gr Alga.Graph.mk )
   , ("Containers", benchmarkCreation gr Containers.Graph.mk)
   , ("Fgl", benchmarkCreation gr Fgl.PatriciaTree.mk)
