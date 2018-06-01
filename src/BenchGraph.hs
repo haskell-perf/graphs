@@ -30,9 +30,10 @@ import BenchGraph.GenericGraph
 import BenchGraph.Utils (graphs, defaultGr)
 import BenchGraph.Named
 
+-- | Type to shadow the argument of a Suite
 data ShadowedS = forall g. (GraphImpl g, NFData g) => Shadow (Suite g)
 
--- A graph algorithm operates on a graph type @g@, which takes an input of
+-- | A graph algorithm operates on a graph type @g@, which takes an input of
 -- type @i@ and produces an output of type @o@. Algorithms come with a list of
 -- named inputs, all of which will be tried during benchmarking.
 data Suite g = forall i o. NFData o => Suite
@@ -41,8 +42,7 @@ data Suite g = forall i o. NFData o => Suite
   , algorithm :: i -> g -> o
   , inputs    :: Edges -> [Named i] }
 
--- Not the best name, but still better than "consumer", since all algorithms
--- are consumers.
+-- A suite that don't take arguments apart a graph
 simpleSuite :: NFData o => Name -> String -> (g -> o) -> Suite g
 simpleSuite name desc algorithm = Suite name desc (const algorithm) (const [("",())])
 
@@ -51,6 +51,7 @@ class GraphImpl g where
     mkGraph :: Edges -> g
 
 ---- Criterion
+-- | Main function, will benchmark the given suite against the given graphs
 benchmark :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Benchmark
 benchmark graphs (Suite sname _ algo inputs) = bgroup sname cases
   where
@@ -71,6 +72,7 @@ benchmarkCreation :: (NFData g) => [(String,Int)] -> (Edges -> g) -> [Benchmark]
 benchmarkCreation gr mk = [ bgroup ("make a " ++  n ++ " from a list of edges") $ map (\i -> bench (show i) $ nf mk $ grf i ) ss | ((n,grf), ss) <- graphs gr ]
 
 ---- Weigh
+-- | Main function, will benchmark the given suite against the given graphs
 weigh :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Weigh ()
 weigh graphs (Suite sname _ algo inputs) = wgroup sname cases
   where

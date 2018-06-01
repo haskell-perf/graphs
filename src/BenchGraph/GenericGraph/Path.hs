@@ -5,6 +5,7 @@ module BenchGraph.GenericGraph.Path (
 import BenchGraph.Named
 import BenchGraph.GenericGraph (Edges,GenericGraph(..))
 
+-- | A path is a graph like [(0,1),(1,2),(2,3)..(n,n+1)]
 path :: GenericGraph
 path = ("Path",mkPath)
 

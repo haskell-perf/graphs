@@ -6,6 +6,7 @@ import BenchGraph.GenericGraph.Path
 import BenchGraph.Named
 import BenchGraph.GenericGraph (Edges,GenericGraph(..))
 
+-- | A circuit is a path closed on himself
 circuit :: GenericGraph
 circuit = ("Circuit",mkCircuit)
 

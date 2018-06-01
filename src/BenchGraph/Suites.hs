@@ -1,3 +1,7 @@
+{-|
+This module describe main suites to be used
+-}
+
 module BenchGraph.Suites
 
 where

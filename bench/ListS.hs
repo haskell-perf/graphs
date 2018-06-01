@@ -16,7 +16,7 @@ import BenchGraph.Named
 descs :: [Named String]
 descs = nubBy eq1 $ map ((\(Shadow s) -> extractDescription s) . snd) listOfSuites
 
--- | List of sueued Suite, "Shadowized"
+-- | List of queued Suite, "Shadowized"
 listOfSuites :: [Named ShadowedS]
 listOfSuites = concatMap sequence
   [ ("Alga", map Shadow Alga.Graph.functions )

@@ -13,6 +13,7 @@ import Data.List (sortBy)
 import Control.Monad (void, when)
 import Data.Map.Strict (Map, alter, unionWith, empty, toList)
 
+-- | Will print the best libraries
 printBest :: String -- ^ An infix for the output (like "was the fastest")
           -> Grouped [Named Double] -- ^ The datas
           -> IO ()

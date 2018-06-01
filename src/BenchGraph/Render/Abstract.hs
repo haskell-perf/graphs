@@ -18,6 +18,7 @@ import BenchGraph.Named
 import BenchGraph.Render.Types
 import BenchGraph.Render.Common (average)
 
+-- | Will print an abstract, comparing libraries by their average time
 printAbstract :: String -- ^ A comparative (like "faster")
               -> Grouped [Named Double] -- ^ The actual data
               -> IO ()
