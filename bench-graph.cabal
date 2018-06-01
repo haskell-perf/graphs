@@ -32,7 +32,7 @@ library
                      , BenchGraph.Render.Types
   other-extensions:    ExistentialQuantification
   build-depends:       base         >= 4.7 && < 4.12,
-                       criterion    >= 1.3 && < 1.5,
+                       criterion    >= 1.4 && < 1.5,
                        deepseq      >= 1.4 && < 1.5,
                        weigh        >= 0.0.12,
                        comonad      >= 5.0.3,
@@ -58,7 +58,7 @@ benchmark time
     build-depends:      base             >= 4.7     && < 4.12,
                         fgl              >= 5.5.4.0,
                         containers       >= 0.5.5.1 && < 0.8,
-                        criterion        >= 1.3     && < 1.5,
+                        criterion        >= 1.4     && < 1.5,
                         hash-graph       >= 0.1.0.0,
                         algebraic-graphs >= 0.1.1.1,
                         tabular          >= 0.2.2.7,

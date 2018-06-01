@@ -1,12 +1,15 @@
-# Don't use stack for benchmark on travis: https://github.com/commercialhaskell/stack/issues/2279
 resolver: lts-11.11
+
 packages:
   - '.'
+
 extra-deps:
   - git: https://github.com/patrickdoc/hash-graph.git
     commit: e1c197c4399864053eb1d206164b459f183dbaee
   - ghc-datasize-0.2.0
   - ghc-heap-view-0.5.10
+  - criterion-1.4.0.0
+  - base-compat-batteries-0.10.1
 
 flags:
   ghc-heap-view:
