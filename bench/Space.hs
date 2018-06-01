@@ -76,8 +76,6 @@ printReport lev flg arr act = do
     (Grouped _ (Grouped _ (Singleton{}:_):_)) -> if flg /= Html
       then doGrp
       else do
-        pTitle
-        putStrLn ""
         res'@(Just (T.Group res)) <- doGrp
         let ch = mapMaybe T.tkGroup res :: [[T.Grouped [Named Int64]]]
             results = zip getNOtherGroups $ map (mapMaybe T.tkSimple) ch :: [Named [[Named Int64]]]
