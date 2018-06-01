@@ -43,7 +43,7 @@ defaultGraphs :: [GenericGraph]
 defaultGraphs = [path, circuit, mesh, complete, clique]
 
 defaultGr :: [Named Int]
-defaultGr = [("Mesh",4),("Clique",4)]
+defaultGr = [("Mesh",3),("Clique",2)]
 
 graphsNames :: [String]
 graphsNames = map fst defaultGraphs
