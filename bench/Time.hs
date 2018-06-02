@@ -74,6 +74,7 @@ toPrint lev flg arr breport = do
     (BenchGroup _ (BenchGroup _ (Benchmark{}:_):_)) -> if flg /= Html
       then doGrp
       else do
+        when (lev == 3) pTitle
         res'@(Just (Group res)) <- doGrp
         let ch = mapMaybe tkGroup res :: [[Grouped [Named Report]]]
             results = zip getNOtherGroups $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]]
