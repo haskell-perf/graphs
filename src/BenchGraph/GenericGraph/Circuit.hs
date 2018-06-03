@@ -11,5 +11,5 @@ circuit :: GenericGraph
 circuit = ("Circuit",mkCircuit)
 
 mkCircuit :: Int -> Edges
-mkCircuit n = snd path n ++ [(n,0)]
+mkCircuit n = snd path n ++ [(n-1,0)]
 

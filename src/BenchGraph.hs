@@ -59,7 +59,7 @@ benchmark graphs (Suite sname _ algo inputs) = bgroup sname cases
 
 benchSuite :: (GraphImpl g, NFData g, NFData o)
            => (i -> g -> o) -> (Edges -> [Named i]) -> (Size -> Edges) -> Size -> Benchmark
-benchSuite algorithm inputs gfunc size = bgroup (show $ size + 1) cases
+benchSuite algorithm inputs gfunc size = bgroup (show size) cases
   where
     edges = gfunc size
     graph = mkGraph edges
@@ -81,7 +81,7 @@ weigh graphs (Suite sname _ algo inputs) = wgroup sname cases
 
 weighSuite :: (GraphImpl g, NFData g, NFData o)
            => (i -> g -> o) -> (Edges -> [Named i]) -> (Size -> Edges) -> Size -> Weigh ()
-weighSuite algorithm inputs gfunc size = wgroup (show $ size + 1) cases
+weighSuite algorithm inputs gfunc size = wgroup (show size) cases
   where
     edges = gfunc size
     graph = mkGraph edges

@@ -33,7 +33,7 @@ The functions are benchmarked against two generic graphs:
 [(0,1),(0,2),(0,3),(0,4),(1,2),(1,3),(1,4),(2,3),(2,4),(3,4)]
 ```
 
-Graphs are built with successive ten powers vertices plus one. Here, with 2, 11, 101 and 1001 vertices.
+Graphs are built with successive ten powers vertices. Here, with 1, 10, 100 and 1000 vertices.
 
 ## About arguments
 All the functions are tested with arguments in the _domain_ of the graph, where applicable: unless it is mentioned, edges and vertices generated for the test can be in the complete graph with the same number of vertices.
