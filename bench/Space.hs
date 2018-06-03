@@ -63,29 +63,34 @@ useResults (Output su st) todo = mapM_ mapped $ nubBy (liftExtract2 eqG) namedBe
                 printAbstract "lighter" res''
 
 -- | Print a report from the lists of benchmarks
-printReport :: Int -- ^ The number of # to write
+printReport :: Int -- ^ The number of # to write, must start with 2
             -> StaOut -- ^ Output infos
             -> [Named (Grouped WeighResult)] -- ^ The list of benchs
             -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (T.Grouped [Named Int64])) -- Maybe if there was actual data
-printReport lev flg arr act = do
-  if lev == 2
-     then pTitle >> maybe (return ()) (putStrLn . (++) "\nDescritpion: ") (lookup bname descs) >> putStrLn ""
-     else when (not (null bname) && flg == Ascii) pTitle
-  case act of
-    (Grouped _ (Grouped _ (Singleton{}:_):_)) -> if flg /= Html
-      then doGrp
-      else do
-        when (lev == 3) pTitle
-        res'@(Just (T.Group res)) <- doGrp
-        let ch = mapMaybe T.tkGroup res :: [[T.Grouped [Named Int64]]]
-            results = zip getNOtherGroups $ map (mapMaybe T.tkSimple) ch :: [Named [[Named Int64]]]
-            results' = map (fmap (makeAverage . map (map (fmap (fromRational . toRational)))) ) results :: [Named [Named Double]]
-        printHtml results' ((commas :: Integer -> String) . round)
-        return res'
-    (Grouped _ (Singleton{}:_)) -> Just . T.Group <$> mapM (printSimples (lev+1) flg semiSimples . snd) (nubBy (liftExtract2 eqW) semiSimples)
-    Grouped{} -> doGrp
-    Singleton{} -> error "A single singleton of a WeighResult, this should not happen"
+printReport lev flg arr act = case lev of
+  2 -> do
+    pTitle
+    maybe (return ()) (putStrLn . (++) "\nDescritpion: ") (lookup bname descs)
+    putStrLn ""
+    doGrp
+  3 -> do
+    pTitle
+    if flg /= Html
+       then doGrp
+       else do
+         res'@(Just (T.Group res)) <- doGrp
+         let ch = mapMaybe T.tkGroup res :: [[T.Grouped [Named Int64]]]
+             results = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe T.tkSimple) ch :: [Named [[Named Int64]]] -- Double reverse is necessary, since it can lack some data in the front of ch
+             results' = map (fmap (makeAverage . map (map (fmap (fromRational . toRational)))) ) results :: [Named [Named Double]]
+         printHtml results' ((commas :: Integer -> String) . round)
+         return res'
+  _ -> do
+    when (not (null bname) && flg == Ascii) pTitle
+    case act of
+      (Grouped _ (Singleton{}:_)) -> Just . T.Group <$> mapM (printSimples (lev+1) flg semiSimples . snd) (nubBy (liftExtract2 eqW) semiSimples)
+      Grouped{} -> doGrp
+      Singleton{} -> error "A single singleton of a WeighResult, this should not happen"
     where
       pTitle = putStrLn $ unwords [replicate lev '#',bname]
       bname = showGrouped act
@@ -96,7 +101,7 @@ printReport lev flg arr act = do
                 real -> Just . T.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . snd) real
       here e = filter (eqG e . snd) arr
       nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
-      getNOtherGroups = map (showGrouped . snd) nubOtherGroups
+      getNOtherGroups = resverse $ map (showGrouped . snd) nubOtherGroups
       otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
       semiSimples = mapMaybe (traverse T.tkSimple) otherGroups
 

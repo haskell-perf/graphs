@@ -17,7 +17,9 @@ makeAverage arr = map (extend (average . mk)) $ head arr
   where
     mk (n,_) = map extract $ concatMap (filter ((==) n . fst)) arr
 
-printHtml :: [Named [Named Double]] -> (Double -> String) -> IO ()
+printHtml :: [Named [Named Double]]
+          -> (Double -> String)
+          -> IO ()
 printHtml arr ren = print $ TH.render stringToHtml stringToHtml stringToHtml table
   where
     libs = map fst $ extract $ head arr

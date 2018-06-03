@@ -65,28 +65,34 @@ genReport lev flg arr = mapM_  mapped $ nubBy (liftExtract2 (==)) arr
           printBest "was the fastest" res''
           printAbstract "faster" res''
 
-toPrint :: Int -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
-toPrint lev flg arr breport = do
-  if lev == 2
-     then pTitle >> maybe (return ()) (putStrLn . (++) "\nDescritpion: ") (lookup bname descs) >> putStrLn ""
-     else when (not (null bname) && flg == Ascii) pTitle
-  case breport of
-    (BenchGroup _ (BenchGroup _ (Benchmark{}:_):_)) -> if flg /= Html
-      then doGrp
-      else do
-        when (lev == 3) pTitle
-        res'@(Just (Group res)) <- doGrp
-        let ch = mapMaybe tkGroup res :: [[Grouped [Named Report]]]
-            results = zip getNOtherGroups $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]]
-            results' = map (fmap (makeAverage . map (map (fmap getMean))) ) results :: [Named [Named Double]]
-        printHtml results' secs
-        return res'
-    BenchGroup{} -> doGrp
-    Benchmark{} -> do
-      simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimpleB) $ here breport
-      when (flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
-      return $ Just $ Simple simples
-    Environment{} -> error "Not wanted environnement"
+toPrint :: Int -- ^ Must start with 2
+        -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
+toPrint lev flg arr breport = case lev of
+  2 -> do
+    pTitle
+    maybe (return ()) (putStrLn . (++) "\nDescritpion: ") (lookup bname descs)
+    putStrLn ""
+    doGrp
+  3 -> do
+    pTitle
+    if flg /= Html
+       then doGrp
+       else do
+         res'@(Just (Group res)) <- doGrp
+         let ch = mapMaybe tkGroup res :: [[Grouped [Named Report]]]
+             results = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]] -- Double reverse is necessary, since it can lack some data in the front of ch
+             results' = map (fmap (makeAverage . map (map (fmap getMean))) ) results :: [Named [Named Double]]
+         printHtml results' secs
+         return res'
+  _ -> do
+    when (not (null bname) && flg == Ascii) pTitle
+    case breport of
+      BenchGroup{} -> doGrp
+      Benchmark{} -> do
+        simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimpleB) $ here breport
+        when (flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
+        return $ Just $ Simple simples
+      Environment{} -> error "Not wanted environnement"
   where
     pTitle = putStrLn $ unwords [replicate lev '#',bname]
     doGrp = case nubOtherGroups of
@@ -95,7 +101,7 @@ toPrint lev flg arr breport = do
                 return Nothing
               real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . snd) real
     nubOtherGroups = nubBy (liftExtract2 (==)) otherGroups
-    getNOtherGroups = map (showBenchName . snd) nubOtherGroups
+    getNOtherGroups = reverse $ map (showBenchName . snd) nubOtherGroups
     bname = showBenchName breport
     otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here breport
     here e = filter ((== e) . snd) arr
