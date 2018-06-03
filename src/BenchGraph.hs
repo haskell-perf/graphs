@@ -5,8 +5,7 @@ module BenchGraph (
   ShadowedS (..),
   Suite (..),
   simpleSuite,
-  GraphImpl,
-  mkGraph,
+  GraphImpl (..),
   benchmark,
   weigh,
   allBench,
@@ -48,7 +47,8 @@ simpleSuite name desc algorithm = Suite name desc (const algorithm) (const [("",
 
 -- An interface between our generic graphs and others
 class GraphImpl g where
-    mkGraph :: Edges -> g
+  mkGraph :: Edges -> g
+  mkVertex :: Int -> g
 
 ---- Criterion
 -- | Main function, will benchmark the given suite against the given graphs
@@ -62,7 +62,9 @@ benchSuite :: (GraphImpl g, NFData g, NFData o)
 benchSuite algorithm inputs gfunc size = bgroup (show size) cases
   where
     edges = gfunc size
-    graph = mkGraph edges
+    graph = case edges of
+              [] -> mkVertex 0
+              edgs -> mkGraph edgs
     cases = [ bench name $ nf (algorithm i) $!! graph | (name,i) <- inputs edges ]
 
 allBench :: (GraphImpl g, NFData g) => [(String,Int)] -> Suite g -> Benchmark
@@ -84,7 +86,9 @@ weighSuite :: (GraphImpl g, NFData g, NFData o)
 weighSuite algorithm inputs gfunc size = wgroup (show size) cases
   where
     edges = gfunc size
-    graph = mkGraph edges
+    graph = case edges of
+              [] -> mkVertex 0
+              edgs -> mkGraph edgs
     cases = mapM_ (uncurry wFunc) $ inputs edges
     wFunc name i = func name (algorithm i) $!! graph
 

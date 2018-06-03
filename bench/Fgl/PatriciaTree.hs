@@ -20,6 +20,7 @@ import Common
 
 instance GraphImpl UGr where
   mkGraph = mk
+  mkVertex i = mkUGraph [i] []
 
 mk :: Edges -> UGr
 mk e = mkUGraph (vertices e) e

@@ -16,6 +16,7 @@ import Algebra.Graph
 
 instance GraphImpl (Graph Int) where
   mkGraph = edges
+  mkVertex = vertex
 
 mk :: Edges -> Graph Int
 mk = edges

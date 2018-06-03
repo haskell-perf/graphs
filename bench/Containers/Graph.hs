@@ -21,6 +21,7 @@ import Data.Array
 -- For example with alga
 instance GraphImpl Graph where
   mkGraph = mk
+  mkVertex i = buildG (0,i) []
 
 mk :: Edges -> Graph
 mk e = buildG (0,extractMaxVertex e) e
