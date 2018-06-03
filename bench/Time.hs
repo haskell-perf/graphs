@@ -168,7 +168,7 @@ main' opts
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grNames
             samples = filter (\(_,n) -> showBenchName n `elem` todo) grList'
-        putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",unlines todo,"----",unwords ["Using",show gr,"as graphs"]]
+        putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",unlines $ map ("* " ++) todo,"----",unwords ["Using",show gr,"as graphs"]]
         genReport 2 flg samples
   where
     grNames = nub $ map (showBenchName . snd) $ grList defaultGr
