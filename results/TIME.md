@@ -3,30 +3,32 @@
 Doing:
 
 ----
-isEmpty
-vertexList
-vertexCount
-edgeCount
-edgeList
-hasEdge
-add a new edge
-add a new vertex
-remove a vertex
-equality
-remove an edge
-transpose
-make a Mesh from a list
-make a Complete from a list
-dff
-topSort
-reachable
-merge a context
+* isEmpty
+* vertexList
+* vertexCount
+* edgeCount
+* edgeList
+* hasEdge
+* addEdge
+* addVertex
+* removeVertex
+* removeEdge
+* transpose
+* dff
+* topSort
+* reachable
+* mergeContext
+* creation
 
 ----
 
-## isEmpty
-### Mesh
+Using [("Mesh",4),("Clique",4)] as graphs
 
+## isEmpty
+
+Descritpion: Test if the graph is empty
+
+### Mesh
 <TABLE>
    <TR>
       <TH>
@@ -37,123 +39,133 @@ merge a context
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         36.69 ns
+         23.68 ns
       </TD>
       <TD CLASS = "thinright">
-         43.41 ns
+         29.41 ns
+      </TD>
+      <TD CLASS = "thinright">
+         30.67 ns
       </TD>
       <TD>
-         43.40 ns
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         30.08 ns
-      </TD>
-      <TD CLASS = "thinright">
-         30.60 ns
-      </TD>
-      <TD>
-         30.33 ns
+         29.58 ns
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         31.56 ns
+         19.37 ns
       </TD>
       <TD CLASS = "thinright">
-         30.37 ns
+         20.62 ns
+      </TD>
+      <TD CLASS = "thinright">
+         20.29 ns
       </TD>
       <TD>
+         19.99 ns
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         20.61 ns
+      </TD>
+      <TD CLASS = "thinright">
+         19.43 ns
+      </TD>
+      <TD CLASS = "thinright">
+         20.03 ns
+      </TD>
+      <TD>
+         19.13 ns
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         21.96 ns
+      </TD>
+      <TD CLASS = "thinright">
+         29.86 ns
+      </TD>
+      <TD CLASS = "thinright">
          30.13 ns
       </TD>
+      <TD>
+         30.89 ns
+      </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         30.82 ns
+         19.78 ns
       </TD>
       <TD CLASS = "thinright">
-         30.48 ns
+         20.61 ns
+      </TD>
+      <TD CLASS = "thinright">
+         20.23 ns
       </TD>
       <TD>
-         31.60 ns
+         20.48 ns
       </TD>
    </TR>
-</TABLE>
-
-### Complete
-
-<TABLE>
    <TR>
       <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH>
-         10
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         42.79 ns
+         19.40 ns
       </TD>
-      <TD>
-         43.57 ns
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
       <TD CLASS = "thinright">
-         30.34 ns
+         20.80 ns
       </TD>
-      <TD>
-         30.21 ns
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
       <TD CLASS = "thinright">
-         30.06 ns
+         21.01 ns
       </TD>
       <TD>
-         29.88 ns
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         30.20 ns
-      </TD>
-      <TD>
-         30.19 ns
+         20.11 ns
       </TD>
    </TR>
 </TABLE>
@@ -161,18 +173,19 @@ merge a context
 
 SUMMARY:
 
-There was 5 ex-aequo
+There was 8 ex-aequo
 
 
 ABSTRACT:
 
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 1.38 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.Tree) was 1.38 times faster than Alga (Algebra.Graph)
- * Hash-Graph (Data.HashGraph.Strict) was 1.37 times faster than Alga (Algebra.Graph)
+ * Hash-Graph was 1.41 times faster than Alga
+ * Fgl was 1.40 times faster than Alga
 
 ## vertexList
-### Mesh
 
+Descritpion: Produce a list of the vertices in the graph
+
+### Mesh
 <TABLE>
    <TR>
       <TH>
@@ -183,84 +196,84 @@ ABSTRACT:
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         134.3 ns
+         47.90 ns
       </TD>
       <TD CLASS = "thinright">
-         1.833 μs
+         1.748 μs
+      </TD>
+      <TD CLASS = "thinright">
+         46.80 μs
       </TD>
       <TD>
-         46.59 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers (Data.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         56.91 ns
-      </TD>
-      <TD CLASS = "thinright">
-         159.3 ns
-      </TD>
-      <TD>
-         1.078 μs
+         1.035 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         95.20 ns
+         32.28 ns
       </TD>
       <TD CLASS = "thinright">
-         482.9 ns
+         148.5 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.065 μs
       </TD>
       <TD>
-         4.290 μs
+         10.51 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         146.4 ns
+         51.75 ns
       </TD>
       <TD CLASS = "thinright">
-         579.3 ns
+         412.0 ns
+      </TD>
+      <TD CLASS = "thinright">
+         4.358 μs
       </TD>
       <TD>
-         5.259 μs
+         44.86 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         67.75 ns
+         25.22 ns
       </TD>
       <TD CLASS = "thinright">
-         226.4 ns
+         191.6 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.224 μs
       </TD>
       <TD>
-         2.225 μs
+         23.34 μs
       </TD>
    </TR>
 </TABLE>
 
-### Complete
-
+### Clique
 <TABLE>
    <TR>
       <TH>
@@ -268,63 +281,82 @@ ABSTRACT:
       <TH CLASS = "thinright">
          1
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          10
       </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         299.1 ns
+         48.22 ns
       </TD>
-      <TD>
-         12.99 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers (Data.Graph)
-      </TH>
       <TD CLASS = "thinright">
-         56.75 ns
+         5.102 μs
       </TD>
-      <TD>
-         154.2 ns
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
       <TD CLASS = "thinright">
-         94.21 ns
+         1.556 ms
       </TD>
       <TD>
-         461.7 ns
+         739.7 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         132.5 ns
+         32.28 ns
+      </TD>
+      <TD CLASS = "thinright">
+         148.0 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.091 μs
       </TD>
       <TD>
-         576.6 ns
+         10.61 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         66.35 ns
+         51.69 ns
+      </TD>
+      <TD CLASS = "thinright">
+         415.7 ns
+      </TD>
+      <TD CLASS = "thinright">
+         4.246 μs
       </TD>
       <TD>
-         220.3 ns
+         47.23 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         25.57 ns
+      </TD>
+      <TD CLASS = "thinright">
+         197.8 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.238 μs
+      </TD>
+      <TD>
+         24.04 μs
       </TD>
    </TR>
 </TABLE>
@@ -332,19 +364,21 @@ ABSTRACT:
 
 SUMMARY:
 
- * Containers (Data.Graph) was the fastest 5 times
+ * Containers was the fastest 6 times
+ * Hash-Graph was the fastest 2 times
 
 
 ABSTRACT:
 
- * Containers (Data.Graph) was 29.32 times faster than Alga (Algebra.Graph)
- * Hash-Graph (Data.HashGraph.Strict) was 18.90 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 9.48 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.Tree) was 7.55 times faster than Alga (Algebra.Graph)
+ * Containers was 8914.65 times faster than Alga
+ * Hash-Graph was 3947.00 times faster than Alga
+ * Fgl was 2009.95 times faster than Alga
 
 ## vertexCount
-### Mesh
 
+Descritpion: Count the vertices of the graph
+
+### Mesh
 <TABLE>
    <TR>
       <TH>
@@ -355,70 +389,84 @@ ABSTRACT:
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         177.7 ns
+         67.71 ns
       </TD>
       <TD CLASS = "thinright">
-         3.189 μs
+         3.034 μs
+      </TD>
+      <TD CLASS = "thinright">
+         81.34 μs
       </TD>
       <TD>
-         78.70 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         41.66 ns
-      </TD>
-      <TD CLASS = "thinright">
-         110.9 ns
-      </TD>
-      <TD>
-         855.5 ns
+         1.677 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         31.26 ns
+         20.40 ns
       </TD>
       <TD CLASS = "thinright">
-         31.20 ns
+         19.62 ns
+      </TD>
+      <TD CLASS = "thinright">
+         20.26 ns
       </TD>
       <TD>
-         31.05 ns
+         19.31 ns
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         47.10 ns
+         21.82 ns
       </TD>
       <TD CLASS = "thinright">
-         105.8 ns
+         100.2 ns
+      </TD>
+      <TD CLASS = "thinright">
+         845.1 ns
       </TD>
       <TD>
-         767.5 ns
+         8.660 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         23.25 ns
+      </TD>
+      <TD CLASS = "thinright">
+         89.03 ns
+      </TD>
+      <TD CLASS = "thinright">
+         761.5 ns
+      </TD>
+      <TD>
+         7.992 μs
       </TD>
    </TR>
 </TABLE>
 
-### Complete
-
+### Clique
 <TABLE>
    <TR>
       <TH>
@@ -426,52 +474,82 @@ ABSTRACT:
       <TH CLASS = "thinright">
          1
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          10
       </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         505.5 ns
+         67.51 ns
       </TD>
-      <TD>
-         23.57 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
       <TD CLASS = "thinright">
-         43.40 ns
+         9.328 μs
       </TD>
-      <TD>
-         109.5 ns
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
       <TD CLASS = "thinright">
-         30.86 ns
+         2.593 ms
       </TD>
       <TD>
-         30.74 ns
+         967.5 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         47.49 ns
+         19.33 ns
+      </TD>
+      <TD CLASS = "thinright">
+         19.59 ns
+      </TD>
+      <TD CLASS = "thinright">
+         19.15 ns
       </TD>
       <TD>
-         102.7 ns
+         19.13 ns
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         21.23 ns
+      </TD>
+      <TD CLASS = "thinright">
+         99.40 ns
+      </TD>
+      <TD CLASS = "thinright">
+         863.5 ns
+      </TD>
+      <TD>
+         9.353 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         23.05 ns
+      </TD>
+      <TD CLASS = "thinright">
+         85.91 ns
+      </TD>
+      <TD CLASS = "thinright">
+         752.6 ns
+      </TD>
+      <TD>
+         7.837 μs
       </TD>
    </TR>
 </TABLE>
@@ -479,427 +557,21 @@ ABSTRACT:
 
 SUMMARY:
 
- * Fgl (Data.Graph.Inductive.Tree) was the fastest 5 times
-
-
-ABSTRACT:
-
- * Fgl (Data.Graph.Inductive.Tree) was 685.14 times faster than Alga (Algebra.Graph)
- * Hash-Graph (Data.HashGraph.Strict) was 75.32 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 70.40 times faster than Alga (Algebra.Graph)
-
-## edgeCount
-### Mesh
-
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         373.7 ns
-      </TD>
-      <TD CLASS = "thinright">
-         9.677 μs
-      </TD>
-      <TD>
-         194.8 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         84.10 ns
-      </TD>
-      <TD CLASS = "thinright">
-         693.5 ns
-      </TD>
-      <TD>
-         8.912 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
-      <TD CLASS = "thinright">
-         86.12 ns
-      </TD>
-      <TD CLASS = "thinright">
-         536.3 ns
-      </TD>
-      <TD>
-         5.887 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         173.8 ns
-      </TD>
-      <TD CLASS = "thinright">
-         815.1 ns
-      </TD>
-      <TD>
-         8.116 μs
-      </TD>
-   </TR>
-</TABLE>
-
-### Complete
-
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH>
-         10
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         1.766 μs
-      </TD>
-      <TD>
-         89.85 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         208.7 ns
-      </TD>
-      <TD>
-         4.763 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
-      <TD CLASS = "thinright">
-         151.2 ns
-      </TD>
-      <TD>
-         2.228 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         200.7 ns
-      </TD>
-      <TD>
-         1.381 μs
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Fgl (Data.Graph.Inductive.Tree) was the fastest 3 times
- * Hash-Graph (Data.HashGraph.Strict) was the fastest 1 times
-There was 1 ex-aequo
-
-
-ABSTRACT:
-
- * Hash-Graph (Data.HashGraph.Strict) was 22.38 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.Tree) was 21.50 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 13.52 times faster than Alga (Algebra.Graph)
-
-## edgeList
-### Mesh
-
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         367.9 ns
-      </TD>
-      <TD CLASS = "thinright">
-         9.770 μs
-      </TD>
-      <TD>
-         191.8 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers (Data.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         83.72 ns
-      </TD>
-      <TD CLASS = "thinright">
-         427.1 ns
-      </TD>
-      <TD>
-         4.223 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         101.3 ns
-      </TD>
-      <TD CLASS = "thinright">
-         954.2 ns
-      </TD>
-      <TD>
-         12.24 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
-      <TD CLASS = "thinright">
-         125.9 ns
-      </TD>
-      <TD CLASS = "thinright">
-         879.6 ns
-      </TD>
-      <TD>
-         10.74 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         101.7 ns
-      </TD>
-      <TD CLASS = "thinright">
-         735.8 ns
-      </TD>
-      <TD>
-         9.534 μs
-      </TD>
-   </TR>
-</TABLE>
-
-### Complete
-
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH>
-         10
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         1.794 μs
-      </TD>
-      <TD>
-         88.44 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers (Data.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         135.4 ns
-      </TD>
-      <TD>
-         2.037 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         289.0 ns
-      </TD>
-      <TD>
-         7.186 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
-      <TD CLASS = "thinright">
-         274.9 ns
-      </TD>
-      <TD>
-         5.280 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         224.8 ns
-      </TD>
-      <TD>
-         4.370 μs
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Containers (Data.Graph) was the fastest 5 times
-
-
-ABSTRACT:
-
- * Containers (Data.Graph) was 25.88 times faster than Alga (Algebra.Graph)
- * Hash-Graph (Data.HashGraph.Strict) was 13.05 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.Tree) was 11.03 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 9.61 times faster than Alga (Algebra.Graph)
-
-## hasEdge
-### Mesh
-
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         1.618 μs
-      </TD>
-      <TD CLASS = "thinright">
-         7.540 μs
-      </TD>
-      <TD>
-         79.07 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         243.5 ns
-      </TD>
-      <TD CLASS = "thinright">
-         464.1 ns
-      </TD>
-      <TD>
-         652.0 ns
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
-      <TD CLASS = "thinright">
-         149.0 ns
-      </TD>
-      <TD CLASS = "thinright">
-         211.4 ns
-      </TD>
-      <TD>
-         291.9 ns
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         150.9 ns
-      </TD>
-      <TD CLASS = "thinright">
-         150.3 ns
-      </TD>
-      <TD>
-         154.1 ns
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Hash-Graph (Data.HashGraph.Strict) was the fastest 5 times
- * Fgl (Data.Graph.Inductive.Tree) was the fastest 1 times
+ * Containers was the fastest 6 times
 There was 2 ex-aequo
 
 
 ABSTRACT:
 
- * Hash-Graph (Data.HashGraph.Strict) was 213.84 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.Tree) was 121.92 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 66.23 times faster than Alga (Algebra.Graph)
+ * Containers was 6350546.25 times faster than Alga
+ * Hash-Graph was 15919.91 times faster than Alga
+ * Fgl was 13358.26 times faster than Alga
 
-## add a new edge
+## edgeCount
+
+Descritpion: Count the edges of the graph
+
 ### Mesh
-
 <TABLE>
    <TR>
       <TH>
@@ -910,64 +582,167 @@ ABSTRACT:
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         89.99 ns
+         62.00 ns
       </TD>
       <TD CLASS = "thinright">
-         417.3 ns
+         9.543 μs
+      </TD>
+      <TD CLASS = "thinright">
+         194.2 μs
       </TD>
       <TD>
-         5.012 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         219.6 ns
-      </TD>
-      <TD CLASS = "thinright">
-         996.6 ns
-      </TD>
-      <TD>
-         9.322 μs
+         3.698 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         530.1 ns
+         30.08 ns
       </TD>
       <TD CLASS = "thinright">
-         1.279 μs
+         134.4 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.266 μs
       </TD>
       <TD>
-         6.614 μs
+         12.92 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         410.2 ns
+         34.98 ns
       </TD>
       <TD CLASS = "thinright">
-         1.687 μs
+         695.8 ns
+      </TD>
+      <TD CLASS = "thinright">
+         9.087 μs
       </TD>
       <TD>
-         19.29 μs
+         97.88 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         37.37 ns
+      </TD>
+      <TD CLASS = "thinright">
+         675.3 ns
+      </TD>
+      <TD CLASS = "thinright">
+         8.172 μs
+      </TD>
+      <TD>
+         106.4 μs
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         61.92 ns
+      </TD>
+      <TD CLASS = "thinright">
+         36.00 μs
+      </TD>
+      <TD CLASS = "thinright">
+         9.097 ms
+      </TD>
+      <TD>
+         1.357 s
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         29.18 ns
+      </TD>
+      <TD CLASS = "thinright">
+         253.7 ns
+      </TD>
+      <TD CLASS = "thinright">
+         25.87 μs
+      </TD>
+      <TD>
+         24.19 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         34.81 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.023 μs
+      </TD>
+      <TD CLASS = "thinright">
+         206.4 μs
+      </TD>
+      <TD>
+         105.5 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         40.88 ns
+      </TD>
+      <TD CLASS = "thinright">
+         899.6 ns
+      </TD>
+      <TD CLASS = "thinright">
+         52.48 μs
+      </TD>
+      <TD>
+         6.414 ms
       </TD>
    </TR>
 </TABLE>
@@ -975,18 +750,21 @@ ABSTRACT:
 
 SUMMARY:
 
- * Alga (Algebra.Graph) was the fastest 8 times
+ * Containers was the fastest 7 times
+ * Hash-Graph was the fastest 1 times
 
 
 ABSTRACT:
 
- * Alga (Algebra.Graph) was 4.08 times faster than Hash-Graph (Data.HashGraph.Strict)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 1.88 times faster than Hash-Graph (Data.HashGraph.Strict)
- * Fgl (Data.Graph.Inductive.Tree) was 1.85 times faster than Hash-Graph (Data.HashGraph.Strict)
+ * Containers was 133.06 times faster than Alga
+ * Hash-Graph was 62.59 times faster than Alga
+ * Fgl was 18.89 times faster than Alga
 
-## add a new vertex
+## edgeList
+
+Descritpion: Produce a list of the edges in the graph
+
 ### Mesh
-
 <TABLE>
    <TR>
       <TH>
@@ -997,70 +775,84 @@ ABSTRACT:
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         57.02 ns
+         56.00 ns
       </TD>
       <TD CLASS = "thinright">
-         405.1 ns
+         10.08 μs
+      </TD>
+      <TD CLASS = "thinright">
+         200.6 μs
       </TD>
       <TD>
-         4.905 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         131.5 ns
-      </TD>
-      <TD CLASS = "thinright">
-         848.5 ns
-      </TD>
-      <TD>
-         9.305 μs
+         3.788 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         162.2 ns
+         38.37 ns
       </TD>
       <TD CLASS = "thinright">
-         636.9 ns
+         417.9 ns
+      </TD>
+      <TD CLASS = "thinright">
+         4.641 μs
       </TD>
       <TD>
-         5.452 μs
+         48.46 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         280.9 ns
+         34.64 ns
       </TD>
       <TD CLASS = "thinright">
-         1.470 μs
+         970.1 ns
+      </TD>
+      <TD CLASS = "thinright">
+         13.47 μs
       </TD>
       <TD>
-         19.02 μs
+         146.4 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         33.86 ns
+      </TD>
+      <TD CLASS = "thinright">
+         697.3 ns
+      </TD>
+      <TD CLASS = "thinright">
+         9.970 μs
+      </TD>
+      <TD>
+         150.5 μs
       </TD>
    </TR>
 </TABLE>
 
-### Complete
-
+### Clique
 <TABLE>
    <TR>
       <TH>
@@ -1068,52 +860,82 @@ ABSTRACT:
       <TH CLASS = "thinright">
          1
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          10
       </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         154.7 ns
+         58.88 ns
       </TD>
-      <TD>
-         3.227 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
       <TD CLASS = "thinright">
-         252.7 ns
+         37.14 μs
       </TD>
-      <TD>
-         4.941 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
       <TD CLASS = "thinright">
-         214.0 ns
+         9.119 ms
       </TD>
       <TD>
-         1.880 μs
+         1.318 s
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         503.7 ns
+         37.72 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.011 μs
+      </TD>
+      <TD CLASS = "thinright">
+         90.58 μs
       </TD>
       <TD>
-         7.581 μs
+         25.73 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         33.56 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.943 μs
+      </TD>
+      <TD CLASS = "thinright">
+         355.5 μs
+      </TD>
+      <TD>
+         118.4 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         33.46 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.854 μs
+      </TD>
+      <TD CLASS = "thinright">
+         313.9 μs
+      </TD>
+      <TD>
+         228.4 ms
       </TD>
    </TR>
 </TABLE>
@@ -1121,19 +943,14 @@ ABSTRACT:
 
 SUMMARY:
 
- * Alga (Algebra.Graph) was the fastest 4 times
- * Fgl (Data.Graph.Inductive.Tree) was the fastest 1 times
+ * Containers was the fastest 6 times
+There was 2 ex-aequo
 
+## hasEdge
 
-ABSTRACT:
+Descritpion: Test if the given edge is in the graph (with arguments both in the graph and not in the graph (where applicable))
 
- * Alga (Algebra.Graph) was 3.40 times faster than Hash-Graph (Data.HashGraph.Strict)
- * Fgl (Data.Graph.Inductive.Tree) was 2.95 times faster than Hash-Graph (Data.HashGraph.Strict)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 1.84 times faster than Hash-Graph (Data.HashGraph.Strict)
-
-## remove a vertex
 ### Mesh
-
 <TABLE>
    <TR>
       <TH>
@@ -1144,144 +961,84 @@ ABSTRACT:
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         76.08 ns
+         655.5 ns
       </TD>
       <TD CLASS = "thinright">
-         1.075 μs
+         8.040 μs
+      </TD>
+      <TD CLASS = "thinright">
+         80.06 μs
       </TD>
       <TD>
-         14.76 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         147.3 ns
-      </TD>
-      <TD CLASS = "thinright">
-         872.5 ns
-      </TD>
-      <TD>
-         9.260 μs
+         992.4 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         185.2 ns
+         27.35 ns
       </TD>
       <TD CLASS = "thinright">
-         633.5 ns
+         48.05 ns
+      </TD>
+      <TD CLASS = "thinright">
+         48.96 ns
       </TD>
       <TD>
-         5.460 μs
+         49.45 ns
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         391.5 ns
+         111.0 ns
       </TD>
       <TD CLASS = "thinright">
-         1.870 μs
+         418.9 ns
+      </TD>
+      <TD CLASS = "thinright">
+         526.8 ns
       </TD>
       <TD>
-         19.05 μs
+         648.5 ns
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         99.97 ns
+      </TD>
+      <TD CLASS = "thinright">
+         144.5 ns
+      </TD>
+      <TD CLASS = "thinright">
+         156.8 ns
+      </TD>
+      <TD>
+         168.5 ns
       </TD>
    </TR>
 </TABLE>
 
-### Complete
-
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH>
-         10
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         367.7 ns
-      </TD>
-      <TD>
-         10.06 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         224.0 ns
-      </TD>
-      <TD>
-         5.317 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
-      <TD CLASS = "thinright">
-         346.7 ns
-      </TD>
-      <TD>
-         7.030 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         877.5 ns
-      </TD>
-      <TD>
-         13.70 μs
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Fgl (Data.Graph.Inductive.PatriciaTree) was the fastest 2 times
- * Fgl (Data.Graph.Inductive.Tree) was the fastest 2 times
- * Alga (Algebra.Graph) was the fastest 1 times
-
-
-ABSTRACT:
-
- * Fgl (Data.Graph.Inductive.Tree) was 2.71 times faster than Hash-Graph (Data.HashGraph.Strict)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 2.55 times faster than Hash-Graph (Data.HashGraph.Strict)
- * Alga (Algebra.Graph) was 1.85 times faster than Hash-Graph (Data.HashGraph.Strict)
-
-## equality
-### Mesh
-
+### Clique
 <TABLE>
    <TR>
       <TH>
@@ -1292,361 +1049,101 @@ ABSTRACT:
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         966.8 ns
+         664.1 ns
       </TD>
       <TD CLASS = "thinright">
-         15.05 μs
+         24.94 μs
+      </TD>
+      <TD CLASS = "thinright">
+         3.112 ms
       </TD>
       <TD>
-         290.7 μs
+         326.3 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Containers (Data.Graph)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         46.20 ns
+         26.54 ns
       </TD>
       <TD CLASS = "thinright">
-         135.0 ns
+         136.3 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.268 μs
       </TD>
       <TD>
-         1.095 μs
+         14.41 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         638.9 ns
+         111.8 ns
       </TD>
       <TD CLASS = "thinright">
-         4.816 μs
+         1.224 μs
+      </TD>
+      <TD CLASS = "thinright">
+         18.93 μs
       </TD>
       <TD>
-         58.92 μs
+         455.1 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         756.4 ns
+         99.70 ns
       </TD>
       <TD CLASS = "thinright">
-         6.636 μs
+         145.2 ns
+      </TD>
+      <TD CLASS = "thinright">
+         162.4 ns
       </TD>
       <TD>
-         98.99 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         238.7 ns
-      </TD>
-      <TD CLASS = "thinright">
-         1.629 μs
-      </TD>
-      <TD>
-         19.81 μs
-      </TD>
-   </TR>
-</TABLE>
-
-### Complete
-
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH>
-         10
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         3.087 μs
-      </TD>
-      <TD>
-         131.4 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers (Data.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         54.71 ns
-      </TD>
-      <TD>
-         548.3 ns
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         1.483 μs
-      </TD>
-      <TD>
-         31.87 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
-      <TD CLASS = "thinright">
-         1.781 μs
-      </TD>
-      <TD>
-         41.72 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         470.9 ns
-      </TD>
-      <TD>
-         7.945 μs
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Containers (Data.Graph) was the fastest 10 times
-
-
-ABSTRACT:
-
- * Containers (Data.Graph) was 875.06 times faster than Alga (Algebra.Graph)
- * Hash-Graph (Data.HashGraph.Strict) was 215.82 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 21.11 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.Tree) was 16.56 times faster than Alga (Algebra.Graph)
-
-## remove an edge
-### Mesh
-
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         563.1 ns
-      </TD>
-      <TD CLASS = "thinright">
-         4.938 μs
-      </TD>
-      <TD>
-         67.24 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         346.0 ns
-      </TD>
-      <TD CLASS = "thinright">
-         1.477 μs
-      </TD>
-      <TD>
-         10.01 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
-      <TD CLASS = "thinright">
-         345.3 ns
-      </TD>
-      <TD CLASS = "thinright">
-         1.202 μs
-      </TD>
-      <TD>
-         6.342 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         220.0 ns
-      </TD>
-      <TD CLASS = "thinright">
-         1.566 μs
-      </TD>
-      <TD>
-         18.97 μs
-      </TD>
-   </TR>
-</TABLE>
-
-### Complete
-
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH>
-         10
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         2.131 μs
-      </TD>
-      <TD>
-         40.95 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         655.6 ns
-      </TD>
-      <TD>
-         9.833 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
-      <TD CLASS = "thinright">
-         651.6 ns
-      </TD>
-      <TD>
-         9.052 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph (Data.HashGraph.Strict)
-      </TH>
-      <TD CLASS = "thinright">
-         492.0 ns
-      </TD>
-      <TD>
-         7.273 μs
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Hash-Graph (Data.HashGraph.Strict) was the fastest 7 times
- * Fgl (Data.Graph.Inductive.Tree) was the fastest 6 times
-
-
-ABSTRACT:
-
- * Fgl (Data.Graph.Inductive.Tree) was 5.33 times faster than Alga (Algebra.Graph)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 4.16 times faster than Alga (Algebra.Graph)
- * Hash-Graph (Data.HashGraph.Strict) was 4.04 times faster than Alga (Algebra.Graph)
-
-## transpose
-### Mesh
-
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga (Algebra.Graph)
-      </TH>
-      <TD CLASS = "thinright">
-         69.64 ns
-      </TD>
-      <TD CLASS = "thinright">
-         793.7 ns
-      </TD>
-      <TD>
-         11.22 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers (Data.Graph)
-      </TH>
-      <TD CLASS = "thinright">
          174.5 ns
       </TD>
-      <TD CLASS = "thinright">
-         943.2 ns
-      </TD>
-      <TD>
-         9.410 μs
-      </TD>
    </TR>
 </TABLE>
 
-### Complete
 
+SUMMARY:
+
+ * Containers was the fastest 16 times
+ * Hash-Graph was the fastest 10 times
+
+
+ABSTRACT:
+
+ * Hash-Graph was 304119.51 times faster than Alga
+ * Containers was 7344.65 times faster than Alga
+ * Fgl was 407.31 times faster than Alga
+
+## addEdge
+
+Descritpion: Add an edge (not already in the graph)
+
+### Mesh
 <TABLE>
    <TR>
       <TH>
@@ -1654,30 +1151,211 @@ ABSTRACT:
       <TH CLASS = "thinright">
          1
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          10
       </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Alga (Algebra.Graph)
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         261.9 ns
+         53.88 ns
+      </TD>
+      <TD CLASS = "thinright">
+         359.1 ns
+      </TD>
+      <TD CLASS = "thinright">
+         4.219 μs
       </TD>
       <TD>
-         7.377 μs
+         46.35 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Containers (Data.Graph)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         278.6 ns
+         121.5 ns
+      </TD>
+      <TD CLASS = "thinright">
+         974.1 ns
+      </TD>
+      <TD CLASS = "thinright">
+         9.480 μs
       </TD>
       <TD>
-         4.869 μs
+         95.79 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         164.8 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.614 μs
+      </TD>
+      <TD CLASS = "thinright">
+         18.17 μs
+      </TD>
+      <TD>
+         215.3 μs
+      </TD>
+   </TR>
+</TABLE>
+
+## addVertex
+
+Descritpion: Add a vertex (not already in the graph)
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         38.28 ns
+      </TD>
+      <TD CLASS = "thinright">
+         342.1 ns
+      </TD>
+      <TD CLASS = "thinright">
+         4.220 μs
+      </TD>
+      <TD>
+         44.44 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         78.63 ns
+      </TD>
+      <TD CLASS = "thinright">
+         814.9 ns
+      </TD>
+      <TD CLASS = "thinright">
+         9.366 μs
+      </TD>
+      <TD>
+         98.83 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         102.6 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.384 μs
+      </TD>
+      <TD CLASS = "thinright">
+         18.54 μs
+      </TD>
+      <TD>
+         236.3 μs
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         37.62 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.063 μs
+      </TD>
+      <TD CLASS = "thinright">
+         114.8 μs
+      </TD>
+      <TD>
+         15.13 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         80.16 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.001 μs
+      </TD>
+      <TD CLASS = "thinright">
+         205.4 μs
+      </TD>
+      <TD>
+         33.27 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         107.0 ns
+      </TD>
+      <TD CLASS = "thinright">
+         3.548 μs
+      </TD>
+      <TD CLASS = "thinright">
+         349.6 μs
+      </TD>
+      <TD>
+         43.75 ms
       </TD>
    </TR>
 </TABLE>
@@ -1685,46 +1363,442 @@ ABSTRACT:
 
 SUMMARY:
 
- * Alga (Algebra.Graph) was the fastest 2 times
- * Containers (Data.Graph) was the fastest 2 times
-There was 1 ex-aequo
+ * Alga was the fastest 8 times
 
 
 ABSTRACT:
 
- * Alga (Algebra.Graph) was 1.02 times faster than Containers (Data.Graph)
+ * Alga was 3.39 times faster than Hash-Graph
+ * Fgl was 1.62 times faster than Hash-Graph
 
-## make a Mesh from a list
+## removeVertex
+
+Descritpion: Remove a vertex of the graph
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         35.75 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.177 μs
+      </TD>
+      <TD CLASS = "thinright">
+         15.36 μs
+      </TD>
+      <TD>
+         166.0 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         43.72 ns
+      </TD>
+      <TD CLASS = "thinright">
+         906.3 ns
+      </TD>
+      <TD CLASS = "thinright">
+         9.478 μs
+      </TD>
+      <TD>
+         95.70 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         52.55 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.230 μs
+      </TD>
+      <TD CLASS = "thinright">
+         20.55 μs
+      </TD>
+      <TD>
+         244.2 μs
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         36.77 ns
+      </TD>
+      <TD CLASS = "thinright">
+         3.976 μs
+      </TD>
+      <TD CLASS = "thinright">
+         460.5 μs
+      </TD>
+      <TD>
+         44.59 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         45.39 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.309 μs
+      </TD>
+      <TD CLASS = "thinright">
+         222.6 μs
+      </TD>
+      <TD>
+         31.15 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         51.88 ns
+      </TD>
+      <TD CLASS = "thinright">
+         6.530 μs
+      </TD>
+      <TD CLASS = "thinright">
+         417.4 μs
+      </TD>
+      <TD>
+         44.49 ms
+      </TD>
+   </TR>
+</TABLE>
+
 
 SUMMARY:
 
- * Containers (Data.Graph) was the fastest 3 times
+ * Fgl was the fastest 6 times
+ * Alga was the fastest 2 times
 
 
 ABSTRACT:
 
- * Containers (Data.Graph) was 21.86 times faster than Fgl (Data.Graph.Inductive.Tree)
- * Alga (Algebra.Graph) was 6.58 times faster than Fgl (Data.Graph.Inductive.Tree)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 1.95 times faster than Fgl (Data.Graph.Inductive.Tree)
- * Hash-Graph (Data.HashGraph.Strict) was 1.81 times faster than Fgl (Data.Graph.Inductive.Tree)
+ * Fgl was 1.90 times faster than Hash-Graph
+ * Alga was 1.32 times faster than Hash-Graph
 
-## make a Complete from a list
+ABSTRACT:
+
+ * Containers was 42.15 times faster than Alga
+ * Hash-Graph was 14.75 times faster than Alga
+ * Fgl was 12.99 times faster than Alga
+
+## removeEdge
+
+Descritpion: Remove an edge of the graph
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         5.298 μs
+      </TD>
+      <TD CLASS = "thinright">
+         71.81 μs
+      </TD>
+      <TD>
+         1.879 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         1.478 μs
+      </TD>
+      <TD CLASS = "thinright">
+         10.22 μs
+      </TD>
+      <TD>
+         94.81 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         1.430 μs
+      </TD>
+      <TD CLASS = "thinright">
+         16.85 μs
+      </TD>
+      <TD>
+         204.0 μs
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         17.40 μs
+      </TD>
+      <TD CLASS = "thinright">
+         7.691 ms
+      </TD>
+      <TD>
+         1.070 s
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         4.381 μs
+      </TD>
+      <TD CLASS = "thinright">
+         230.6 μs
+      </TD>
+      <TD>
+         33.68 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         3.527 μs
+      </TD>
+      <TD CLASS = "thinright">
+         324.1 μs
+      </TD>
+      <TD>
+         37.65 ms
+      </TD>
+   </TR>
+</TABLE>
+
 
 SUMMARY:
 
- * Containers (Data.Graph) was the fastest 2 times
+ * Fgl was the fastest 12 times
+ * Hash-Graph was the fastest 4 times
+There was 2 ex-aequo
 
 
 ABSTRACT:
 
- * Containers (Data.Graph) was 41.24 times faster than Fgl (Data.Graph.Inductive.Tree)
- * Alga (Algebra.Graph) was 7.37 times faster than Fgl (Data.Graph.Inductive.Tree)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 3.41 times faster than Fgl (Data.Graph.Inductive.Tree)
- * Hash-Graph (Data.HashGraph.Strict) was 2.88 times faster than Fgl (Data.Graph.Inductive.Tree)
+ * Fgl was 16.59 times faster than Alga
+ * Hash-Graph was 12.37 times faster than Alga
+
+## transpose
+
+Descritpion: Transpose (invert all the edges) the graph
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         27.02 ns
+      </TD>
+      <TD CLASS = "thinright">
+         769.5 ns
+      </TD>
+      <TD CLASS = "thinright">
+         10.75 μs
+      </TD>
+      <TD>
+         114.0 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         90.67 ns
+      </TD>
+      <TD CLASS = "thinright">
+         903.6 ns
+      </TD>
+      <TD CLASS = "thinright">
+         10.01 μs
+      </TD>
+      <TD>
+         120.1 μs
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         27.45 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.706 μs
+      </TD>
+      <TD CLASS = "thinright">
+         297.8 μs
+      </TD>
+      <TD>
+         28.54 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         91.75 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.289 μs
+      </TD>
+      <TD CLASS = "thinright">
+         277.8 μs
+      </TD>
+      <TD>
+         77.08 ms
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Alga was the fastest 4 times
+ * Containers was the fastest 1 times
+There was 3 ex-aequo
+
+
+ABSTRACT:
+
+ * Alga was 1.31 times faster than Containers
 
 ## dff
-### Mesh
 
+Descritpion: Produce a forest, obtainened from a DFS (Deep First Search) of each vertex
+
+### Mesh
 <TABLE>
    <TR>
       <TH>
@@ -1735,70 +1809,67 @@ ABSTRACT:
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Containers (Data.Graph)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         257.0 ns
+         124.8 ns
       </TD>
       <TD CLASS = "thinright">
-         1.551 μs
+         1.405 μs
+      </TD>
+      <TD CLASS = "thinright">
+         14.35 μs
       </TD>
       <TD>
-         14.86 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         547.5 ns
-      </TD>
-      <TD CLASS = "thinright">
-         5.417 μs
-      </TD>
-      <TD>
-         75.60 μs
+         160.9 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         684.8 ns
+         202.0 ns
       </TD>
       <TD CLASS = "thinright">
-         6.196 μs
+         4.319 μs
+      </TD>
+      <TD CLASS = "thinright">
+         68.50 μs
       </TD>
       <TD>
-         77.94 μs
+         902.5 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         174.1 ns
+         64.75 ns
       </TD>
       <TD CLASS = "thinright">
-         2.352 μs
+         2.601 μs
+      </TD>
+      <TD CLASS = "thinright">
+         49.77 μs
       </TD>
       <TD>
-         48.89 μs
+         1.662 ms
       </TD>
    </TR>
 </TABLE>
 
-### Complete
-
+### Clique
 <TABLE>
    <TR>
       <TH>
@@ -1806,52 +1877,65 @@ ABSTRACT:
       <TH CLASS = "thinright">
          1
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          10
       </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Containers (Data.Graph)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         368.2 ns
+         122.1 ns
       </TD>
-      <TD>
-         4.768 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
       <TD CLASS = "thinright">
-         625.8 ns
+         2.419 μs
       </TD>
-      <TD>
-         12.61 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
       <TD CLASS = "thinright">
-         719.4 ns
+         171.3 μs
       </TD>
       <TD>
-         32.65 μs
+         32.25 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         423.2 ns
+         208.5 ns
+      </TD>
+      <TD CLASS = "thinright">
+         5.713 μs
+      </TD>
+      <TD CLASS = "thinright">
+         561.3 μs
       </TD>
       <TD>
-         12.15 μs
+         119.5 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         64.42 ns
+      </TD>
+      <TD CLASS = "thinright">
+         5.581 μs
+      </TD>
+      <TD CLASS = "thinright">
+         558.4 μs
+      </TD>
+      <TD>
+         104.5 ms
       </TD>
    </TR>
 </TABLE>
@@ -1859,19 +1943,20 @@ ABSTRACT:
 
 SUMMARY:
 
- * Containers (Data.Graph) was the fastest 4 times
- * Hash-Graph (Data.HashGraph.Strict) was the fastest 1 times
+ * Containers was the fastest 6 times
+ * Hash-Graph was the fastest 2 times
 
 
 ABSTRACT:
 
- * Containers (Data.Graph) was 3.39 times faster than Fgl (Data.Graph.Inductive.Tree)
- * Hash-Graph (Data.HashGraph.Strict) was 2.51 times faster than Fgl (Data.Graph.Inductive.Tree)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 1.30 times faster than Fgl (Data.Graph.Inductive.Tree)
+ * Containers was 2.74 times faster than Fgl
+ * Hash-Graph was 1.99 times faster than Fgl
 
 ## topSort
-### Mesh
 
+Descritpion: Topological sorting of the vertices
+
+### Mesh
 <TABLE>
    <TR>
       <TH>
@@ -1882,56 +1967,50 @@ ABSTRACT:
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Containers (Data.Graph)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         289.7 ns
+         140.7 ns
       </TD>
       <TD CLASS = "thinright">
-         1.750 μs
+         1.554 μs
+      </TD>
+      <TD CLASS = "thinright">
+         15.47 μs
       </TD>
       <TD>
-         15.35 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         921.5 ns
-      </TD>
-      <TD CLASS = "thinright">
-         8.139 μs
-      </TD>
-      <TD>
-         120.5 μs
+         178.8 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         997.7 ns
+         339.5 ns
       </TD>
       <TD CLASS = "thinright">
-         8.234 μs
+         6.850 μs
+      </TD>
+      <TD CLASS = "thinright">
+         111.4 μs
       </TD>
       <TD>
-         117.1 μs
+         2.657 ms
       </TD>
    </TR>
 </TABLE>
 
-### Complete
-
+### Clique
 <TABLE>
    <TR>
       <TH>
@@ -1939,41 +2018,48 @@ ABSTRACT:
       <TH CLASS = "thinright">
          1
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          10
       </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Containers (Data.Graph)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         387.5 ns
+         141.0 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.498 μs
+      </TD>
+      <TD CLASS = "thinright">
+         173.6 μs
       </TD>
       <TD>
-         5.076 μs
+         28.26 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         1.229 μs
+         343.2 ns
       </TD>
-      <TD>
-         16.29 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
       <TD CLASS = "thinright">
-         1.200 μs
+         9.157 μs
+      </TD>
+      <TD CLASS = "thinright">
+         805.3 μs
       </TD>
       <TD>
-         36.65 μs
+         141.4 ms
       </TD>
    </TR>
 </TABLE>
@@ -1981,17 +2067,18 @@ ABSTRACT:
 
 SUMMARY:
 
- * Containers (Data.Graph) was the fastest 5 times
+ * Containers was the fastest 8 times
 
 
 ABSTRACT:
 
- * Containers (Data.Graph) was 4.56 times faster than Fgl (Data.Graph.Inductive.Tree)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 1.17 times faster than Fgl (Data.Graph.Inductive.Tree)
+ * Containers was 4.11 times faster than Fgl
 
 ## reachable
-### Mesh
 
+Descritpion: Produce a list of reachable vertices from a given one
+
+### Mesh
 <TABLE>
    <TR>
       <TH>
@@ -2002,56 +2089,50 @@ ABSTRACT:
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Containers (Data.Graph)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         242.1 ns
+         136.4 ns
       </TD>
       <TD CLASS = "thinright">
-         1.003 μs
+         1.079 μs
+      </TD>
+      <TD CLASS = "thinright">
+         10.78 μs
       </TD>
       <TD>
-         10.47 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
-      </TH>
-      <TD CLASS = "thinright">
-         709.3 ns
-      </TD>
-      <TD CLASS = "thinright">
-         5.261 μs
-      </TD>
-      <TD>
-         81.12 μs
+         120.3 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.Tree)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         692.4 ns
+         269.2 ns
       </TD>
       <TD CLASS = "thinright">
-         5.536 μs
+         5.828 μs
+      </TD>
+      <TD CLASS = "thinright">
+         83.01 μs
       </TD>
       <TD>
-         80.18 μs
+         1.282 ms
       </TD>
    </TR>
 </TABLE>
 
-### Complete
-
+### Clique
 <TABLE>
    <TR>
       <TH>
@@ -2059,41 +2140,48 @@ ABSTRACT:
       <TH CLASS = "thinright">
          1
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          10
       </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Containers (Data.Graph)
+         Containers
       </TH>
       <TD CLASS = "thinright">
-         343.4 ns
+         127.0 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.064 μs
+      </TD>
+      <TD CLASS = "thinright">
+         169.2 μs
       </TD>
       <TD>
-         4.391 μs
+         26.35 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         928.1 ns
+         268.8 ns
       </TD>
-      <TD>
-         15.24 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl (Data.Graph.Inductive.Tree)
-      </TH>
       <TD CLASS = "thinright">
-         997.4 ns
+         7.591 μs
+      </TD>
+      <TD CLASS = "thinright">
+         614.0 μs
       </TD>
       <TD>
-         34.41 μs
+         120.9 ms
       </TD>
    </TR>
 </TABLE>
@@ -2101,17 +2189,18 @@ ABSTRACT:
 
 SUMMARY:
 
- * Containers (Data.Graph) was the fastest 5 times
+ * Containers was the fastest 8 times
 
 
 ABSTRACT:
 
- * Containers (Data.Graph) was 4.41 times faster than Fgl (Data.Graph.Inductive.Tree)
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 1.16 times faster than Fgl (Data.Graph.Inductive.Tree)
+ * Containers was 3.72 times faster than Fgl
 
-## merge a context
+## mergeContext
+
+Descritpion: Merge an FGL context in the graph
+
 ### Mesh
-
 <TABLE>
    <TR>
       <TH>
@@ -2122,42 +2211,50 @@ ABSTRACT:
       <TH CLASS = "thinright">
          10
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          100
       </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         147.6 ns
+         91.31 ns
       </TD>
       <TD CLASS = "thinright">
-         910.0 ns
+         900.6 ns
+      </TD>
+      <TD CLASS = "thinright">
+         9.417 μs
       </TD>
       <TD>
-         9.259 μs
+         92.04 μs
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         201.0 ns
+         75.16 ns
       </TD>
       <TD CLASS = "thinright">
-         1.461 μs
+         1.314 μs
+      </TD>
+      <TD CLASS = "thinright">
+         16.77 μs
       </TD>
       <TD>
-         19.03 μs
+         215.5 μs
       </TD>
    </TR>
 </TABLE>
 
-### Complete
-
+### Clique
 <TABLE>
    <TR>
       <TH>
@@ -2165,30 +2262,48 @@ ABSTRACT:
       <TH CLASS = "thinright">
          1
       </TH>
-      <TH>
+      <TH CLASS = "thinright">
          10
       </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
    </TR>
    <TR>
       <TH>
-         Fgl (Data.Graph.Inductive.PatriciaTree)
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         213.9 ns
+         93.34 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.908 μs
+      </TD>
+      <TD CLASS = "thinright">
+         185.5 μs
       </TD>
       <TD>
-         4.552 μs
+         28.26 ms
       </TD>
    </TR>
    <TR>
       <TH>
-         Hash-Graph (Data.HashGraph.Strict)
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         331.6 ns
+         75.35 ns
+      </TD>
+      <TD CLASS = "thinright">
+         3.140 μs
+      </TD>
+      <TD CLASS = "thinright">
+         325.5 μs
       </TD>
       <TD>
-         6.753 μs
+         36.61 ms
       </TD>
    </TR>
 </TABLE>
@@ -2196,10 +2311,203 @@ ABSTRACT:
 
 SUMMARY:
 
- * Fgl (Data.Graph.Inductive.PatriciaTree) was the fastest 5 times
+ * Fgl was the fastest 6 times
+ * Hash-Graph was the fastest 2 times
 
 
 ABSTRACT:
 
- * Fgl (Data.Graph.Inductive.PatriciaTree) was 1.58 times faster than Hash-Graph (Data.HashGraph.Strict)
+ * Fgl was 1.32 times faster than Hash-Graph
 
+## creation
+
+Descritpion: Create a graph from a list of edges
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         26.05 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.893 μs
+      </TD>
+      <TD CLASS = "thinright">
+         26.86 μs
+      </TD>
+      <TD>
+         290.0 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         64.49 ns
+      </TD>
+      <TD CLASS = "thinright">
+         525.6 ns
+      </TD>
+      <TD CLASS = "thinright">
+         6.530 μs
+      </TD>
+      <TD>
+         72.01 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         37.43 ns
+      </TD>
+      <TD CLASS = "thinright">
+         5.812 μs
+      </TD>
+      <TD CLASS = "thinright">
+         202.5 μs
+      </TD>
+      <TD>
+         18.12 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         27.07 ns
+      </TD>
+      <TD CLASS = "thinright">
+         6.542 μs
+      </TD>
+      <TD CLASS = "thinright">
+         209.0 μs
+      </TD>
+      <TD>
+         18.29 ms
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         25.82 ns
+      </TD>
+      <TD CLASS = "thinright">
+         6.982 μs
+      </TD>
+      <TD CLASS = "thinright">
+         800.3 μs
+      </TD>
+      <TD>
+         75.43 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         61.57 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.272 μs
+      </TD>
+      <TD CLASS = "thinright">
+         121.2 μs
+      </TD>
+      <TD>
+         78.72 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         37.12 ns
+      </TD>
+      <TD CLASS = "thinright">
+         18.16 μs
+      </TD>
+      <TD CLASS = "thinright">
+         9.142 ms
+      </TD>
+      <TD>
+         3.367 s
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         26.57 ns
+      </TD>
+      <TD CLASS = "thinright">
+         21.93 μs
+      </TD>
+      <TD CLASS = "thinright">
+         7.525 ms
+      </TD>
+      <TD>
+         3.691 s
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Containers was the fastest 5 times
+There was 3 ex-aequo
+
+
+ABSTRACT:
+
+ * Containers was 10.85 times faster than Fgl
+ * Alga was 3.39 times faster than Fgl
+ * Hash-Graph was 1.19 times faster than Fgl
