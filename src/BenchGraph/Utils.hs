@@ -31,7 +31,7 @@ tenPowers = iterate (10*) 1
 
 -- | Remove given edges from the complete graph
 edgesNotInGraph :: Edges -> Edges
-edgesNotInGraph edgs = (\\) (snd complete  $ extractMaxVertex edgs) edgs
+edgesNotInGraph edgs = (\\) (snd complete $ extractMaxVertex edgs + 1) edgs
 
 extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
