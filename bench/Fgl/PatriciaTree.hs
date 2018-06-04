@@ -21,7 +21,7 @@ import Common
 
 instance GraphImpl UGr where
   mkGraph = mk
-  mkVertex i = mkUGraph [i] []
+  mkVertex = mkUGraph [0] []
 
 mk :: Edges -> UGr
 mk e = mkUGraph (vertices e) e

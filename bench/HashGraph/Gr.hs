@@ -21,7 +21,7 @@ type Gr = HG.Gr () Int
 
 instance GraphImpl Gr where
   mkGraph = mk
-  mkVertex = HG.mkGraph [] . return
+  mkVertex = HG.mkGraph [] [0]
 
 mkEdge :: (Int,Int) -> HG.Edge () Int
 mkEdge (x,y) = HG.Edge x () y

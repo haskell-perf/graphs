@@ -48,7 +48,7 @@ simpleSuite name desc algorithm = Suite name desc (const algorithm) (const [("",
 -- An interface between our generic graphs and others
 class GraphImpl g where
   mkGraph :: Edges -> g
-  mkVertex :: Int -> g
+  mkVertex :: g -- | A single vertex
 
 ---- Criterion
 -- | Main function, will benchmark the given suite against the given graphs
@@ -63,7 +63,7 @@ benchSuite algorithm inputs gfunc size = bgroup (show size) cases
   where
     edges = gfunc size
     graph = case edges of
-              [] -> mkVertex 0
+              [] -> mkVertex
               edgs -> mkGraph edgs
     cases = [ bench name $ nf (algorithm i) $!! graph | (name,i) <- inputs edges ]
 
@@ -87,7 +87,7 @@ weighSuite algorithm inputs gfunc size = wgroup (show size) cases
   where
     edges = gfunc size
     graph = case edges of
-              [] -> mkVertex 0
+              [] -> mkVertex
               edgs -> mkGraph edgs
     cases = mapM_ (uncurry wFunc) $ inputs edges
     wFunc name i = func name (algorithm i) $!! graph
