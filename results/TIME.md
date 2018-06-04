@@ -1166,16 +1166,16 @@ Descritpion: Add an edge (not already in the graph)
          Alga
       </TH>
       <TD CLASS = "thinright">
-         53.88 ns
+         59.98 ns
       </TD>
       <TD CLASS = "thinright">
-         359.1 ns
+         365.5 ns
       </TD>
       <TD CLASS = "thinright">
-         4.219 μs
+         4.282 μs
       </TD>
       <TD>
-         46.35 μs
+         45.25 μs
       </TD>
    </TR>
    <TR>
@@ -1183,16 +1183,16 @@ Descritpion: Add an edge (not already in the graph)
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         121.5 ns
+         120.4 ns
       </TD>
       <TD CLASS = "thinright">
-         974.1 ns
+         1.031 μs
       </TD>
       <TD CLASS = "thinright">
-         9.480 μs
+         10.12 μs
       </TD>
       <TD>
-         95.79 μs
+         103.8 μs
       </TD>
    </TR>
    <TR>
@@ -1200,19 +1200,101 @@ Descritpion: Add an edge (not already in the graph)
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         164.8 ns
+         153.4 ns
       </TD>
       <TD CLASS = "thinright">
-         1.614 μs
+         1.755 μs
       </TD>
       <TD CLASS = "thinright">
-         18.17 μs
+         19.12 μs
       </TD>
       <TD>
-         215.3 μs
+         222.7 μs
       </TD>
    </TR>
 </TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         58.52 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.101 μs
+      </TD>
+      <TD CLASS = "thinright">
+         115.1 μs
+      </TD>
+      <TD>
+         16.16 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         119.8 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.280 μs
+      </TD>
+      <TD CLASS = "thinright">
+         235.7 μs
+      </TD>
+      <TD>
+         33.68 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         153.6 ns
+      </TD>
+      <TD CLASS = "thinright">
+         3.809 μs
+      </TD>
+      <TD CLASS = "thinright">
+         329.2 μs
+      </TD>
+      <TD>
+         39.06 ms
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Alga was the fastest 26 times
+
+
+ABSTRACT:
+
+ * Alga was 3.46 times faster than Hash-Graph
+ * Fgl was 1.55 times faster than Hash-Graph
 
 ## addVertex
 
