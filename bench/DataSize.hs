@@ -1,4 +1,4 @@
-import BenchGraph (computeSize)
+import BenchGraph.DataSize (computeSize)
 import BenchGraph.Named
 
 import Data.List (nub, sortBy)

@@ -19,7 +19,8 @@ import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
 
-import BenchGraph (allBench, benchmarkCreation, ShadowedS (..) )
+import BenchGraph.Types (ShadowedS (..))
+import BenchGraph.Time (allBench, benchmarkCreation)
 import BenchGraph.Named
 import BenchGraph.Utils (defaultGr)
 

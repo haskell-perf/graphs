@@ -5,7 +5,7 @@ module Fgl.PatriciaTree
   (functions, mk, chromaticPolynomial)
 where
 
-import BenchGraph
+import BenchGraph.Types
 import BenchGraph.GenericGraph (Edges)
 import BenchGraph.Utils
 import qualified BenchGraph.Suites as S

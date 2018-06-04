@@ -5,7 +5,7 @@ module Containers.Graph
   (functions, mk)
 where
 
-import BenchGraph
+import BenchGraph.Types
 import BenchGraph.Utils (extractMaxVertex)
 import qualified BenchGraph.Suites as S
 import BenchGraph.GenericGraph (Edges)

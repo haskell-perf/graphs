@@ -5,7 +5,7 @@ module Alga.Graph
   (functions, mk, chromaticPolynomial)
 where
 
-import BenchGraph
+import BenchGraph.Types
 import qualified BenchGraph.Suites as S
 import BenchGraph.GenericGraph (Edges)
 

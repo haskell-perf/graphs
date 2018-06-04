@@ -6,7 +6,7 @@ module BenchGraph.Suites
 
 where
 
-import BenchGraph
+import BenchGraph.Types
 import BenchGraph.GenericGraph
 import BenchGraph.Utils
 import BenchGraph.Named

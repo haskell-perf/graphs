@@ -14,7 +14,8 @@ import Options.Applicative (execParser)
 import Command
 import ListS (listOfSuites, descs)
 
-import BenchGraph
+import BenchGraph.Types
+import BenchGraph.Space
 import BenchGraph.Named
 import BenchGraph.Utils (mainWeigh, defaultGr)
 
@@ -148,7 +149,7 @@ main' (RunS only flg libs) = do
   mainWeigh benchs (useResults flg)
   where
     bN = benchsNames only
-    addCrea = if "creation" `elem` bN then (++) listOfCreation else id
+    addCrea = if "creation" `elem` bN then (++ listOfCreation) else id
     benchs = mapM_ (uncurry wgroup) $ maybe id (\lbs -> filter (\(n,_) -> n `elem` lbs)) libs $ addCrea $ map (fmap (\(Shadow s) -> allWeigh s)) $ filter filterLN listOfSuites
     filterLN (_,Shadow s) = name s `elem` bN
 

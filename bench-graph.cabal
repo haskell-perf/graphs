@@ -15,14 +15,23 @@ source-repository head
   type:     git
   location: https://github.com/haskell-perf/graphs.git
 
+Flag Time
+  Description: Enable time benchmarks using Criterion
+
+Flag Space
+  Description: Enable space benchmarks using Weigh
+
+Flag Datasize
+  Description: Enable datasize benchmarks using ghc-datasize
+
 library
-  exposed-modules:     BenchGraph
-                     , BenchGraph.GenericGraph
+  exposed-modules:     BenchGraph.GenericGraph
                      , BenchGraph.GenericGraph.Path
                      , BenchGraph.GenericGraph.Mesh
                      , BenchGraph.GenericGraph.Circuit
                      , BenchGraph.GenericGraph.Complete
                      , BenchGraph.GenericGraph.Clique
+                     , BenchGraph.Types
                      , BenchGraph.Utils
                      , BenchGraph.Suites
                      , BenchGraph.Named
@@ -32,17 +41,26 @@ library
                      , BenchGraph.Render.Types
   other-extensions:    ExistentialQuantification
   build-depends:       base         >= 4.7 && < 4.12,
-                       criterion    >= 1.4 && < 1.5,
                        deepseq      >= 1.4 && < 1.5,
-                       weigh        >= 0.0.12,
                        comonad      >= 5.0.3,
-                       ghc-datasize >= 0.2.0,
                        -- Render
                        tabular    >= 0.2.2.7,
                        html       >= 1.0.1.2,
                        containers >= 0.5.5.1 && < 0.8
   hs-source-dirs:      src
   default-language:    Haskell2010
+
+  if flag(Time)
+    exposed-modules:   BenchGraph.Time
+    build-depends:     criterion    >= 1.4 && < 1.5
+
+  if flag(Space)
+    exposed-modules:   BenchGraph.Space
+    build-depends:     weigh        >= 0.0.12
+
+  if flag (DataSize)
+    exposed-modules:   BenchGraph.DataSize
+    build-depends:     ghc-datasize >= 0.2.0
 
 benchmark time 
     hs-source-dirs:     bench

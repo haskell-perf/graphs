@@ -9,7 +9,7 @@ import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
 
-import BenchGraph
+import BenchGraph.Types
 import BenchGraph.Named
 
 -- | List of descs
