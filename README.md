@@ -9,6 +9,8 @@ Feel free to open an issue anyway :)
 ## Results
 Current results of `cabal bench time` and `cabal bench space` can be found here: https://travis-ci.org/haskell-perf/graphs
 
+Results on bigger graphs and with more beautiful output can be found here: https://github.com/haskell-perf/graphs/tree/master/results
+
 ## Usage
 
 ### Time

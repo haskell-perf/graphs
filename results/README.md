@@ -15,6 +15,11 @@ In this folder, you will find the lastest benchmarks of 4 haskell graphs librari
 
 * Data size benchmarks were run using [ghc-datasize v0.2.0](http://hackage.haskell.org/package/ghc-datasize-0.2.0)
 
+## Results
+
+* Time: https://github.com/haskell-perf/graphs/blob/master/results/TIME.md
+* Space: https://github.com/haskell-perf/graphs/blob/master/results/SPACE.md
+
 ## Some words about graphs
 The functions are benchmarked against two generic graphs:
 
