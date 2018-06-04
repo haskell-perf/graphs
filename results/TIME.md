@@ -6,6 +6,7 @@ Doing:
 * isEmpty
 * vertexList
 * vertexCount
+* hasVertex
 * edgeCount
 * edgeList
 * hasEdge
@@ -567,6 +568,165 @@ ABSTRACT:
  * Containers was 6350546.25 times faster than Alga
  * Hash-Graph was 15919.91 times faster than Alga
  * Fgl was 13358.26 times faster than Alga
+
+## hasVertex
+
+Descritpion: Test if the given vertex is in the graph
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         28.22 ns
+      </TD>
+      <TD CLASS = "thinright">
+         167.6 ns
+      </TD>
+      <TD CLASS = "thinright">
+         2.822 μs
+      </TD>
+      <TD>
+         30.71 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         83.16 ns
+      </TD>
+      <TD CLASS = "thinright">
+         289.8 ns
+      </TD>
+      <TD CLASS = "thinright">
+         426.8 ns
+      </TD>
+      <TD>
+         621.1 ns
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         26.69 ns
+      </TD>
+      <TD CLASS = "thinright">
+         36.42 ns
+      </TD>
+      <TD CLASS = "thinright">
+         43.84 ns
+      </TD>
+      <TD>
+         45.68 ns
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         28.30 ns
+      </TD>
+      <TD CLASS = "thinright">
+         179.2 ns
+      </TD>
+      <TD CLASS = "thinright">
+         1.458 μs
+      </TD>
+      <TD>
+         15.75 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         84.93 ns
+      </TD>
+      <TD CLASS = "thinright">
+         798.9 ns
+      </TD>
+      <TD CLASS = "thinright">
+         13.50 μs
+      </TD>
+      <TD>
+         392.5 μs
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         27.06 ns
+      </TD>
+      <TD CLASS = "thinright">
+         36.23 ns
+      </TD>
+      <TD CLASS = "thinright">
+         41.01 ns
+      </TD>
+      <TD>
+         45.06 ns
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Hash-Graph was the fastest 12 times
+There was 8 ex-aequo
+
+
+ABSTRACT:
+
+ * Hash-Graph was 169.29 times faster than Alga
+ * Fgl was 9.68 times faster than Alga
+
 
 ## edgeCount
 
