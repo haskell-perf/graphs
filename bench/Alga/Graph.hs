@@ -15,7 +15,7 @@ import Data.List (uncons)
 import Algebra.Graph
 
 instance GraphImpl (Graph Int) where
-  mkGraph = edges
+  mkGraph = mk
   mkVertex = vertex 0
 
 mk :: Edges -> Graph Int
