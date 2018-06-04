@@ -18,7 +18,7 @@ printNArr :: [Named (Named [Named Word])] -- ^ Array of all benchs
           -> String -- ^ A selected func
           -> IO ()
 printNArr arr selected = do
-  putStrLn $ replicate 2 '#' ++ " " ++ selected
+  putStrLn $ replicate 2 '#' ++ " " ++ selected ++ "\n"
   mapM_ (printNArr' here) $ nub $ map shExtr here
   where
     here = concatMap (sequence . fix) $ filter (eqDeepSelected selected) arr
@@ -27,8 +27,9 @@ printNArr' :: [Named (Named Word)] -- ^ Array of all benchs
           -> String -- ^ A selected func
           -> IO ()
 printNArr' arr selected = do
-  putStrLn $ replicate 3 '#' ++ selected
+  putStrLn $ replicate 3 '#' ++ " " ++ selected ++ "\n"
   mapM_ printN $ sortBy compare1 here
+  putStrLn ""
   where
     here = map fix $ filter (eqDeepSelected selected) arr
 
@@ -53,6 +54,7 @@ main' (RunD gr') = do
     , ("Hash-Graph", computeSize gr HashGraph.Gr.mk)
     ]
   let res' = concatMap sequence res
+  putStrLn "Note: Results are in bytes\n"
   mapM_ (printNArr res') $ nub $ map shExtr res'
   where
     gr = case gr' of
