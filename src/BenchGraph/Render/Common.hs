@@ -8,6 +8,7 @@ import qualified Text.Tabular.Html as TH
 
 import Text.Html (stringToHtml)
 import Data.List (transpose, intersperse)
+import Data.Char (toLower)
 
 average :: Fractional a => [a] -> a
 average lst = sum lst / fromRational (toRational (length lst))
@@ -31,5 +32,5 @@ printHtml arr ren = print $ TH.render stringToHtml stringToHtml stringToHtml tab
       content
 
 printHeader :: [Named Int] -> [String] -> IO ()
-printHeader gr todo = putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",unlines $ map (\x ->"* [" ++ x ++"](#"++ unwords (intersperse "-" $ words x) ++")") todo ++ ["----"],unwords ["Using",show gr,"as graphs"]]
+printHeader gr todo = putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",unlines $ map (\x ->"* [" ++ x ++"](#"++ unwords (intersperse "-" $ words $ map toLower x) ++")") todo ++ ["----"],unwords ["Using",show gr,"as graphs"]]
 

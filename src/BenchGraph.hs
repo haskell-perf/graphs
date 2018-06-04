@@ -103,9 +103,7 @@ weighCreation mk = wgroup "creation" $ mapM_ (\(str,((n,grf), ss)) -> wgroup str
 
 -- | List of generic graph with their case-name
 weighCreationList :: [Named (GenericGraph, [Int])]
-weighCreationList = [ (str n,t) | t@((n, _), _) <- graphs defaultGr]
-  where
-    str n = "make a " ++ n ++ " from a list of edges"
+weighCreationList = [ (n,t) | t@((n, _), _) <- graphs defaultGr]
 
 ---- DataSize
 computeSize :: (NFData g) => [(String,Int)] -> (Edges -> g) -> IO [Named [Named Word]]

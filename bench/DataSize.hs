@@ -18,7 +18,7 @@ printNArr :: [Named (Named [Named Word])] -- ^ Array of all benchs
           -> String -- ^ A selected func
           -> IO ()
 printNArr arr selected = do
-  putStrLn $ replicate 2 '#' ++ selected
+  putStrLn $ replicate 2 '#' ++ " " ++ selected
   mapM_ (printNArr' here) $ nub $ map shExtr here
   where
     here = concatMap (sequence . fix) $ filter (eqDeepSelected selected) arr

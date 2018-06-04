@@ -49,7 +49,9 @@ takeLastAfterBk w = case elemIndices '/' w of
                           x -> drop (1+last x) w
 
 useResults :: Output -> [Grouped WeighResult] -> IO ()
-useResults (Output su st) todo = mapM_ mapped $ nubBy (liftExtract2 eqG) namedBenchs
+useResults (Output su st) todo = do
+  putStrLn "Note: results are in bytes"
+  mapM_ mapped $ nubBy (liftExtract2 eqG) namedBenchs
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
     mapped e = do
