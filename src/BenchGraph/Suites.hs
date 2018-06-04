@@ -35,7 +35,7 @@ hasVertex fun genArg = Suite
   , inputs    = map (fmap genArg) . withNames . vertices
   }
     where
-      vertices x = nub $ 0 : maxV x `div` 2 : [maxV x]
+      vertices x = nub $ 0 : maxV x `div` 2 : [maxV x + 1]
       maxV = extractMaxVertex
 
 addVertex :: NFData o => SpecialisedSuite Vertex o i g

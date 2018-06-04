@@ -16,6 +16,7 @@ import Data.Graph.Inductive.Query.DFS
 
 import Data.List (uncons)
 import Data.Tuple (swap)
+import Data.Maybe (isJust)
 import Common
 
 instance GraphImpl UGr where
@@ -32,6 +33,7 @@ functions =
   , S.edgeCount size
   , S.vertexCount order
   , S.vertexList nodes
+  , S.hasVertex (\x y -> isJust $ lab y x) id -- lab is the only function not erroring if tested with a vertex not in the graph
   , S.hasEdge (flip hasEdge) id
   , S.addVertex insNode (\x -> (x,()))
   , S.removeVertex delNode id

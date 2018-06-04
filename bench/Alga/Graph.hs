@@ -26,6 +26,7 @@ functions =
   [ S.isEmpty isEmpty
   , S.vertexList vertexList
   , S.vertexCount vertexCount
+  , S.hasVertex hasVertex id
   , S.edgeCount edgeCount
   , S.edgeList edgeList
   , S.hasEdge (uncurry hasEdge) id

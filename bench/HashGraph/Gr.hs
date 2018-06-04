@@ -36,6 +36,7 @@ functions =
   , S.edgeCount HG.size
   , S.vertexCount HG.order
   , S.vertexList HG.nodes
+  , S.hasVertex HG.member id
   , S.hasEdge HG.hasEdge mkEdge
   , S.addVertex HG.insNode id
   , S.removeVertex HG.delNode id
