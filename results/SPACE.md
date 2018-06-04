@@ -53,10 +53,10 @@ Descritpion: Test if the graph is empty
          0
       </TD>
       <TD CLASS = "thinright">
-         0
+         80
       </TD>
       <TD>
-         0
+         80
       </TD>
    </TR>
    <TR>
@@ -81,10 +81,10 @@ Descritpion: Test if the graph is empty
          0
       </TD>
       <TD CLASS = "thinright">
-         80
+         0
       </TD>
       <TD>
-         80
+         0
       </TD>
    </TR>
 </TABLE>
@@ -112,10 +112,10 @@ Descritpion: Test if the graph is empty
          0
       </TD>
       <TD CLASS = "thinright">
-         0
+         80
       </TD>
       <TD>
-         0
+         80
       </TD>
    </TR>
    <TR>
@@ -140,10 +140,10 @@ Descritpion: Test if the graph is empty
          0
       </TD>
       <TD CLASS = "thinright">
-         80
+         0
       </TD>
       <TD>
-         80
+         0
       </TD>
    </TR>
 </TABLE>
@@ -174,30 +174,16 @@ Descritpion: Produce a list of the vertices in the graph
    </TR>
    <TR>
       <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         24
-      </TD>
-      <TD CLASS = "thinright">
-         736
-      </TD>
-      <TD>
-         8,016
-      </TD>
-   </TR>
-   <TR>
-      <TH>
          Alga
       </TH>
       <TD CLASS = "thinright">
          96
       </TD>
       <TD CLASS = "thinright">
-         816
+         3,200
       </TD>
       <TD>
-         8,240
+         87,400
       </TD>
    </TR>
    <TR>
@@ -208,10 +194,10 @@ Descritpion: Produce a list of the vertices in the graph
          96
       </TD>
       <TD CLASS = "thinright">
-         1,800
+         816
       </TD>
       <TD>
-         18,360
+         8,016
       </TD>
    </TR>
    <TR>
@@ -222,10 +208,24 @@ Descritpion: Produce a list of the vertices in the graph
          152
       </TD>
       <TD CLASS = "thinright">
-         3,200
+         1,800
       </TD>
       <TD>
-         87,400
+         18,360
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         24
+      </TD>
+      <TD CLASS = "thinright">
+         736
+      </TD>
+      <TD>
+         8,240
       </TD>
    </TR>
 </TABLE>
@@ -247,30 +247,16 @@ Descritpion: Produce a list of the vertices in the graph
    </TR>
    <TR>
       <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         24
-      </TD>
-      <TD CLASS = "thinright">
-         736
-      </TD>
-      <TD>
-         8,016
-      </TD>
-   </TR>
-   <TR>
-      <TH>
          Alga
       </TH>
       <TD CLASS = "thinright">
          96
       </TD>
       <TD CLASS = "thinright">
-         816
+         5,760
       </TD>
       <TD>
-         8,240
+         1,815,096
       </TD>
    </TR>
    <TR>
@@ -281,10 +267,10 @@ Descritpion: Produce a list of the vertices in the graph
          96
       </TD>
       <TD CLASS = "thinright">
-         1,800
+         816
       </TD>
       <TD>
-         18,360
+         8,016
       </TD>
    </TR>
    <TR>
@@ -295,10 +281,24 @@ Descritpion: Produce a list of the vertices in the graph
          152
       </TD>
       <TD CLASS = "thinright">
-         5,760
+         1,800
       </TD>
       <TD>
-         1,815,096
+         18,360
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         24
+      </TD>
+      <TD CLASS = "thinright">
+         736
+      </TD>
+      <TD>
+         8,240
       </TD>
    </TR>
 </TABLE>
@@ -337,6 +337,20 @@ Descritpion: Count the vertices of the graph
    </TR>
    <TR>
       <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         120
+      </TD>
+      <TD CLASS = "thinright">
+         3,296
+      </TD>
+      <TD>
+         88,216
+      </TD>
+   </TR>
+   <TR>
+      <TH>
          Containers
       </TH>
       <TD CLASS = "thinright">
@@ -375,20 +389,6 @@ Descritpion: Count the vertices of the graph
       </TD>
       <TD>
          32
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         120
-      </TD>
-      <TD CLASS = "thinright">
-         3,296
-      </TD>
-      <TD>
-         88,216
       </TD>
    </TR>
 </TABLE>
@@ -410,6 +410,20 @@ Descritpion: Count the vertices of the graph
    </TR>
    <TR>
       <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         120
+      </TD>
+      <TD CLASS = "thinright">
+         5,856
+      </TD>
+      <TD>
+         1,914,216
+      </TD>
+   </TR>
+   <TR>
+      <TH>
          Containers
       </TH>
       <TD CLASS = "thinright">
@@ -448,20 +462,6 @@ Descritpion: Count the vertices of the graph
       </TD>
       <TD>
          32
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         120
-      </TD>
-      <TD CLASS = "thinright">
-         5,856
-      </TD>
-      <TD>
-         1,914,216
       </TD>
    </TR>
 </TABLE>
@@ -513,20 +513,6 @@ Descritpion: Test if the given vertex is in the graph
    </TR>
    <TR>
       <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         8
-      </TD>
-      <TD CLASS = "thinright">
-         11
-      </TD>
-      <TD>
-         11
-      </TD>
-   </TR>
-   <TR>
-      <TH>
          Fgl
       </TH>
       <TD CLASS = "thinright">
@@ -537,6 +523,20 @@ Descritpion: Test if the given vertex is in the graph
       </TD>
       <TD>
          1,056
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         8
+      </TD>
+      <TD CLASS = "thinright">
+         11
+      </TD>
+      <TD>
+         11
       </TD>
    </TR>
 </TABLE>
@@ -572,20 +572,6 @@ Descritpion: Test if the given vertex is in the graph
    </TR>
    <TR>
       <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         8
-      </TD>
-      <TD CLASS = "thinright">
-         11
-      </TD>
-      <TD>
-         11
-      </TD>
-   </TR>
-   <TR>
-      <TH>
          Fgl
       </TH>
       <TD CLASS = "thinright">
@@ -596,6 +582,20 @@ Descritpion: Test if the given vertex is in the graph
       </TD>
       <TD>
          22,635
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         8
+      </TD>
+      <TD CLASS = "thinright">
+         11
+      </TD>
+      <TD>
+         11
       </TD>
    </TR>
 </TABLE>
@@ -632,6 +632,20 @@ Descritpion: Count the edges of the graph
    </TR>
    <TR>
       <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         312
+      </TD>
+      <TD CLASS = "thinright">
+         20,984
+      </TD>
+      <TD>
+         381,888
+      </TD>
+   </TR>
+   <TR>
+      <TH>
          Containers
       </TH>
       <TD CLASS = "thinright">
@@ -652,10 +666,10 @@ Descritpion: Count the edges of the graph
          48
       </TD>
       <TD CLASS = "thinright">
-         1,856
+         2,584
       </TD>
       <TD>
-         20,592
+         33,960
       </TD>
    </TR>
    <TR>
@@ -666,24 +680,10 @@ Descritpion: Count the edges of the graph
          64
       </TD>
       <TD CLASS = "thinright">
-         2,584
+         1,856
       </TD>
       <TD>
-         33,960
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         312
-      </TD>
-      <TD CLASS = "thinright">
-         20,984
-      </TD>
-      <TD>
-         381,888
+         20,592
       </TD>
    </TR>
 </TABLE>
@@ -705,6 +705,20 @@ Descritpion: Count the edges of the graph
    </TR>
    <TR>
       <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         312
+      </TD>
+      <TD CLASS = "thinright">
+         74,232
+      </TD>
+      <TD>
+         11,851,496
+      </TD>
+   </TR>
+   <TR>
+      <TH>
          Containers
       </TH>
       <TD CLASS = "thinright">
@@ -725,10 +739,10 @@ Descritpion: Count the edges of the graph
          48
       </TD>
       <TD CLASS = "thinright">
-         1,856
+         8,176
       </TD>
       <TD>
-         20,592
+         873,616
       </TD>
    </TR>
    <TR>
@@ -739,24 +753,10 @@ Descritpion: Count the edges of the graph
          64
       </TD>
       <TD CLASS = "thinright">
-         8,176
+         1,856
       </TD>
       <TD>
-         873,616
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         312
-      </TD>
-      <TD CLASS = "thinright">
-         74,232
-      </TD>
-      <TD>
-         11,851,496
+         20,592
       </TD>
    </TR>
 </TABLE>
@@ -794,10 +794,24 @@ Descritpion: Produce a list of the edges in the graph
    </TR>
    <TR>
       <TH>
-         Hash-Graph
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         16
+         296
+      </TD>
+      <TD CLASS = "thinright">
+         20,968
+      </TD>
+      <TD>
+         381,872
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         160
       </TD>
       <TD CLASS = "thinright">
          1,920
@@ -814,20 +828,6 @@ Descritpion: Produce a list of the edges in the graph
          32
       </TD>
       <TD CLASS = "thinright">
-         2,232
-      </TD>
-      <TD>
-         30,376
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         160
-      </TD>
-      <TD CLASS = "thinright">
          4,024
       </TD>
       <TD>
@@ -836,16 +836,16 @@ Descritpion: Produce a list of the edges in the graph
    </TR>
    <TR>
       <TH>
-         Alga
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         296
+         16
       </TD>
       <TD CLASS = "thinright">
-         20,968
+         2,232
       </TD>
       <TD>
-         381,872
+         30,376
       </TD>
    </TR>
 </TABLE>
@@ -867,10 +867,24 @@ Descritpion: Produce a list of the edges in the graph
    </TR>
    <TR>
       <TH>
-         Hash-Graph
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         16
+         296
+      </TD>
+      <TD CLASS = "thinright">
+         74,216
+      </TD>
+      <TD>
+         11,851,480
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         160
       </TD>
       <TD CLASS = "thinright">
          4,480
@@ -887,20 +901,6 @@ Descritpion: Produce a list of the edges in the graph
          32
       </TD>
       <TD CLASS = "thinright">
-         7,144
-      </TD>
-      <TD>
-         775,168
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         160
-      </TD>
-      <TD CLASS = "thinright">
          13,200
       </TD>
       <TD>
@@ -909,16 +909,16 @@ Descritpion: Produce a list of the edges in the graph
    </TR>
    <TR>
       <TH>
-         Alga
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         296
+         16
       </TD>
       <TD CLASS = "thinright">
-         74,216
+         7,144
       </TD>
       <TD>
-         11,851,480
+         775,168
       </TD>
    </TR>
 </TABLE>
@@ -957,6 +957,20 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
    </TR>
    <TR>
       <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         2,112
+      </TD>
+      <TD CLASS = "thinright">
+         17,244
+      </TD>
+      <TD>
+         174,284
+      </TD>
+   </TR>
+   <TR>
+      <TH>
          Containers
       </TH>
       <TD CLASS = "thinright">
@@ -967,20 +981,6 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
       </TD>
       <TD>
          0
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         208
-      </TD>
-      <TD CLASS = "thinright">
-         252
-      </TD>
-      <TD>
-         252
       </TD>
    </TR>
    <TR>
@@ -999,16 +999,16 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
    </TR>
    <TR>
       <TH>
-         Alga
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         2,112
+         208
       </TD>
       <TD CLASS = "thinright">
-         17,244
+         252
       </TD>
       <TD>
-         174,284
+         252
       </TD>
    </TR>
 </TABLE>
@@ -1030,6 +1030,20 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
    </TR>
    <TR>
       <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         2,112
+      </TD>
+      <TD CLASS = "thinright">
+         55,566
+      </TD>
+      <TD>
+         5,189,622
+      </TD>
+   </TR>
+   <TR>
+      <TH>
          Containers
       </TH>
       <TD CLASS = "thinright">
@@ -1040,20 +1054,6 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
       </TD>
       <TD>
          0
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         208
-      </TD>
-      <TD CLASS = "thinright">
-         252
-      </TD>
-      <TD>
-         252
       </TD>
    </TR>
    <TR>
@@ -1072,16 +1072,16 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
    </TR>
    <TR>
       <TH>
-         Alga
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         2,112
+         208
       </TD>
       <TD CLASS = "thinright">
-         55,566
+         252
       </TD>
       <TD>
-         5,189,622
+         252
       </TD>
    </TR>
 </TABLE>
@@ -1133,10 +1133,10 @@ Descritpion: Add an edge (not already in the graph)
    </TR>
    <TR>
       <TH>
-         Hash-Graph
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         448
+         480
       </TD>
       <TD CLASS = "thinright">
          920
@@ -1147,10 +1147,10 @@ Descritpion: Add an edge (not already in the graph)
    </TR>
    <TR>
       <TH>
-         Fgl
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         480
+         448
       </TD>
       <TD CLASS = "thinright">
          1,386
@@ -1192,10 +1192,10 @@ Descritpion: Add an edge (not already in the graph)
    </TR>
    <TR>
       <TH>
-         Hash-Graph
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         448
+         480
       </TD>
       <TD CLASS = "thinright">
          940
@@ -1206,10 +1206,10 @@ Descritpion: Add an edge (not already in the graph)
    </TR>
    <TR>
       <TH>
-         Fgl
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         480
+         448
       </TD>
       <TD CLASS = "thinright">
          1,380
@@ -1385,6 +1385,20 @@ Descritpion: Remove a vertex of the graph
    </TR>
    <TR>
       <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         48
+      </TD>
+      <TD CLASS = "thinright">
+         2,616
+      </TD>
+      <TD>
+         37,144
+      </TD>
+   </TR>
+   <TR>
+      <TH>
          Fgl
       </TH>
       <TD CLASS = "thinright">
@@ -1399,7 +1413,7 @@ Descritpion: Remove a vertex of the graph
    </TR>
    <TR>
       <TH>
-         Alga
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
          48
@@ -1409,20 +1423,6 @@ Descritpion: Remove a vertex of the graph
       </TD>
       <TD>
          6,752
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         48
-      </TD>
-      <TD CLASS = "thinright">
-         2,616
-      </TD>
-      <TD>
-         37,144
       </TD>
    </TR>
 </TABLE>
@@ -1444,6 +1444,20 @@ Descritpion: Remove a vertex of the graph
    </TR>
    <TR>
       <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         48
+      </TD>
+      <TD CLASS = "thinright">
+         9,160
+      </TD>
+      <TD>
+         1,027,960
+      </TD>
+   </TR>
+   <TR>
+      <TH>
          Fgl
       </TH>
       <TD CLASS = "thinright">
@@ -1458,7 +1472,7 @@ Descritpion: Remove a vertex of the graph
    </TR>
    <TR>
       <TH>
-         Alga
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
          48
@@ -1468,20 +1482,6 @@ Descritpion: Remove a vertex of the graph
       </TD>
       <TD>
          106,280
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         48
-      </TD>
-      <TD CLASS = "thinright">
-         9,160
-      </TD>
-      <TD>
-         1,027,960
       </TD>
    </TR>
 </TABLE>
@@ -1518,6 +1518,20 @@ Descritpion: Test if two graphs are equals
    </TR>
    <TR>
       <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         1,056
+      </TD>
+      <TD CLASS = "thinright">
+         32,696
+      </TD>
+      <TD>
+         581,572
+      </TD>
+   </TR>
+   <TR>
+      <TH>
          Containers
       </TH>
       <TD CLASS = "thinright">
@@ -1532,24 +1546,10 @@ Descritpion: Test if two graphs are equals
    </TR>
    <TR>
       <TH>
-         Hash-Graph
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         796
-      </TD>
-      <TD CLASS = "thinright">
-         11,516
-      </TD>
-      <TD>
-         176,136
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         1,056
+         1,360
       </TD>
       <TD CLASS = "thinright">
          21,464
@@ -1560,16 +1560,16 @@ Descritpion: Test if two graphs are equals
    </TR>
    <TR>
       <TH>
-         Fgl
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         1,360
+         796
       </TD>
       <TD CLASS = "thinright">
-         32,696
+         11,516
       </TD>
       <TD>
-         581,572
+         176,136
       </TD>
    </TR>
 </TABLE>
@@ -1591,6 +1591,20 @@ Descritpion: Test if two graphs are equals
    </TR>
    <TR>
       <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         1,056
+      </TD>
+      <TD CLASS = "thinright">
+         115,128
+      </TD>
+      <TD>
+         18,167,664
+      </TD>
+   </TR>
+   <TR>
+      <TH>
          Containers
       </TH>
       <TD CLASS = "thinright">
@@ -1605,24 +1619,10 @@ Descritpion: Test if two graphs are equals
    </TR>
    <TR>
       <TH>
-         Hash-Graph
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         796
-      </TD>
-      <TD CLASS = "thinright">
-         35,044
-      </TD>
-      <TD>
-         5,330,248
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         1,056
+         1,360
       </TD>
       <TD CLASS = "thinright">
          60,944
@@ -1633,16 +1633,16 @@ Descritpion: Test if two graphs are equals
    </TR>
    <TR>
       <TH>
-         Fgl
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         1,360
+         796
       </TD>
       <TD CLASS = "thinright">
-         115,128
+         35,044
       </TD>
       <TD>
-         18,167,664
+         5,330,248
       </TD>
    </TR>
 </TABLE>
@@ -1678,13 +1678,13 @@ Descritpion: Remove an edge of the graph
    </TR>
    <TR>
       <TH>
-         Hash-Graph
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         1,056
+         10,899
       </TD>
       <TD>
-         3,397
+         142,443
       </TD>
    </TR>
    <TR>
@@ -1695,18 +1695,18 @@ Descritpion: Remove an edge of the graph
          2,523
       </TD>
       <TD>
-         5,723
+         3,397
       </TD>
    </TR>
    <TR>
       <TH>
-         Alga
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         10,899
+         1,056
       </TD>
       <TD>
-         142,443
+         5,723
       </TD>
    </TR>
 </TABLE>
@@ -1725,13 +1725,13 @@ Descritpion: Remove an edge of the graph
    </TR>
    <TR>
       <TH>
-         Hash-Graph
+         Alga
       </TH>
       <TD CLASS = "thinright">
-         1,237
+         37,629
       </TD>
       <TD>
-         6,109
+         4,040,133
       </TD>
    </TR>
    <TR>
@@ -1747,13 +1747,13 @@ Descritpion: Remove an edge of the graph
    </TR>
    <TR>
       <TH>
-         Alga
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         37,629
+         1,237
       </TD>
       <TD>
-         4,040,133
+         6,109
       </TD>
    </TR>
 </TABLE>
@@ -1895,30 +1895,16 @@ Descritpion: Produce a forest, obtainened from a DFS (Deep First Search) of each
    </TR>
    <TR>
       <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         272
-      </TD>
-      <TD CLASS = "thinright">
-         5,704
-      </TD>
-      <TD>
-         64,552
-      </TD>
-   </TR>
-   <TR>
-      <TH>
          Containers
       </TH>
       <TD CLASS = "thinright">
          424
       </TD>
       <TD CLASS = "thinright">
-         6,048
+         5,704
       </TD>
       <TD>
-         118,576
+         64,552
       </TD>
    </TR>
    <TR>
@@ -1933,6 +1919,20 @@ Descritpion: Produce a forest, obtainened from a DFS (Deep First Search) of each
       </TD>
       <TD>
          175,776
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         272
+      </TD>
+      <TD CLASS = "thinright">
+         6,048
+      </TD>
+      <TD>
+         118,576
       </TD>
    </TR>
 </TABLE>
@@ -1951,20 +1951,6 @@ Descritpion: Produce a forest, obtainened from a DFS (Deep First Search) of each
       <TH>
          100
       </TH>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         272
-      </TD>
-      <TD CLASS = "thinright">
-         8,944
-      </TD>
-      <TD>
-         486,464
-      </TD>
    </TR>
    <TR>
       <TH>
@@ -1992,6 +1978,20 @@ Descritpion: Produce a forest, obtainened from a DFS (Deep First Search) of each
       </TD>
       <TD>
          1,231,320
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         272
+      </TD>
+      <TD CLASS = "thinright">
+         8,944
+      </TD>
+      <TD>
+         486,464
       </TD>
    </TR>
 </TABLE>
@@ -2238,10 +2238,10 @@ Descritpion: Merge a FGL context in the graph
    </TR>
    <TR>
       <TH>
-         Hash-Graph
+         Fgl
       </TH>
       <TD CLASS = "thinright">
-         96
+         184
       </TD>
       <TD CLASS = "thinright">
          640
@@ -2252,10 +2252,10 @@ Descritpion: Merge a FGL context in the graph
    </TR>
    <TR>
       <TH>
-         Fgl
+         Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         184
+         96
       </TD>
       <TD CLASS = "thinright">
          688
@@ -2283,20 +2283,6 @@ Descritpion: Merge a FGL context in the graph
    </TR>
    <TR>
       <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         96
-      </TD>
-      <TD CLASS = "thinright">
-         688
-      </TD>
-      <TD>
-         1,008
-      </TD>
-   </TR>
-   <TR>
-      <TH>
          Fgl
       </TH>
       <TD CLASS = "thinright">
@@ -2304,6 +2290,20 @@ Descritpion: Merge a FGL context in the graph
       </TD>
       <TD CLASS = "thinright">
          768
+      </TD>
+      <TD>
+         1,008
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         96
+      </TD>
+      <TD CLASS = "thinright">
+         688
       </TD>
       <TD>
          5,184
@@ -2350,6 +2350,20 @@ Descritpion: Create a graph from a list of edges
          16
       </TD>
       <TD CLASS = "thinright">
+         6,304
+      </TD>
+      <TD>
+         80,440
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         256
+      </TD>
+      <TD CLASS = "thinright">
          3,792
       </TD>
       <TD>
@@ -2364,10 +2378,10 @@ Descritpion: Create a graph from a list of edges
          16
       </TD>
       <TD CLASS = "thinright">
-         6,304
+         19,448
       </TD>
       <TD>
-         80,440
+         303,560
       </TD>
    </TR>
    <TR>
@@ -2382,20 +2396,6 @@ Descritpion: Create a graph from a list of edges
       </TD>
       <TD>
          290,376
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         256
-      </TD>
-      <TD CLASS = "thinright">
-         19,448
-      </TD>
-      <TD>
-         303,560
       </TD>
    </TR>
 </TABLE>
@@ -2423,6 +2423,20 @@ Descritpion: Create a graph from a list of edges
          16
       </TD>
       <TD CLASS = "thinright">
+         19,744
+      </TD>
+      <TD>
+         2,108,104
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         256
+      </TD>
+      <TD CLASS = "thinright">
          8,016
       </TD>
       <TD>
@@ -2437,10 +2451,10 @@ Descritpion: Create a graph from a list of edges
          16
       </TD>
       <TD CLASS = "thinright">
-         19,744
+         60,640
       </TD>
       <TD>
-         2,108,104
+         8,294,120
       </TD>
    </TR>
    <TR>
@@ -2452,20 +2466,6 @@ Descritpion: Create a graph from a list of edges
       </TD>
       <TD CLASS = "thinright">
          56,992
-      </TD>
-      <TD>
-         8,294,120
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         256
-      </TD>
-      <TD CLASS = "thinright">
-         60,640
       </TD>
       <TD>
          9,258,088

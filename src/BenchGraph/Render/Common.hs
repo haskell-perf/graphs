@@ -7,7 +7,7 @@ import qualified Text.Tabular as T
 import qualified Text.Tabular.Html as TH
 
 import Text.Html (stringToHtml)
-import Data.List (transpose, intersperse)
+import Data.List (transpose, intersperse, sortBy)
 import Data.Char (toLower)
 
 average :: Fractional a => [a] -> a
@@ -21,8 +21,9 @@ makeAverage arr = map (extend (average . mk)) $ head arr
 printHtml :: [Named [Named Double]]
           -> (Double -> String)
           -> IO ()
-printHtml arr ren = print $ TH.render stringToHtml stringToHtml stringToHtml table
+printHtml arr' ren = print $ TH.render stringToHtml stringToHtml stringToHtml table
   where
+    arr = map (fmap (sortBy (\(x,_) (y,_) -> x `compare` y))) arr'
     libs = map fst $ extract $ head arr
     cases = map fst arr
     content = transpose $ map (map (ren . extract) . extract) arr
