@@ -27,6 +27,17 @@ vertexList = simpleSuite "vertexList" "Produce a list of the vertices in the gra
 vertexCount :: NFData o => (g -> o) -> Suite g
 vertexCount = simpleSuite "vertexCount" "Count the vertices of the graph"
 
+hasVertex :: NFData o => SpecialisedSuite Vertex o i g
+hasVertex fun genArg = Suite
+  { name = "hasVertex"
+  , desc = "Test if the given vertex is in the graph"
+  , algorithm = fun
+  , inputs    = map (fmap genArg) . withNames . vertices
+  }
+    where
+      vertices x = nub $ 0 : maxV x `div` 2 : [maxV x]
+      maxV = extractMaxVertex
+
 addVertex :: NFData o => SpecialisedSuite Vertex o i g
 addVertex fun genArg = Suite
   { name = "addVertex"
@@ -68,7 +79,7 @@ addEdge fun genArg = Suite
   { name = "addEdge"
   , desc = "Add an edge (not already in the graph)"
   , algorithm = fun
-  , inputs = map (fmap genArg) . withNames . getDifferents . edgesNotInGraph
+  , inputs = map (fmap genArg) . withNames . take 4 . edgesNotInGraph
   }
 
 removeEdge :: NFData o => SpecialisedSuite Edge o i g
@@ -101,7 +112,7 @@ eq fun = Suite
 context :: NFData o => SpecialisedSuite Edge o i g
 context fun genArg = Suite
   { name = "mergeContext"
-  , desc = "Merge an FGL context in the graph"
+  , desc = "Merge a FGL context in the graph"
   , algorithm = fun
   , inputs = map (fmap genArg) . withNames . const [(0,3)]
   }
