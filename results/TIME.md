@@ -3,25 +3,24 @@
 Doing:
 
 ----
-* isEmpty
-* vertexList
-* vertexCount
-* hasVertex
-* edgeCount
-* edgeList
-* hasEdge
-* addEdge
-* addVertex
-* removeVertex
-* equality
-* removeEdge
-* transpose
-* dff
-* topSort
-* reachable
-* mergeContext
-* creation
-
+* [isEmpty](#isEmpty)
+* [vertexList](#vertexList)
+* [vertexCount](#vertexCount)
+* [hasVertex](#hasVertex)
+* [edgeCount](#edgeCount)
+* [edgeList](#edgeList)
+* [hasEdge](#hasEdge)
+* [addEdge](#addEdge)
+* [addVertex](#addVertex)
+* [removeVertex](#removeVertex)
+* [equality](#equality)
+* [removeEdge](#removeEdge)
+* [transpose](#transpose)
+* [dff](#dff)
+* [topSort](#topSort)
+* [reachable](#reachable)
+* [mergeContext](#mergeContext)
+* [creation](#creation)
 ----
 
 Using [("Mesh",4),("Clique",4)] as graphs

@@ -16,7 +16,7 @@ import ListS (listOfSuites, descs)
 
 import BenchGraph
 import BenchGraph.Named
-import BenchGraph.Utils (mainWeigh)
+import BenchGraph.Utils (mainWeigh, defaultGr)
 
 import qualified BenchGraph.Render.Types as T
 import BenchGraph.Render.Best
@@ -139,24 +139,29 @@ main = execParser runSpace >>= main'
 
 main' :: CommandSpace -> IO ()
 main' (ListS opt) = case opt of
-                    Benchs -> putStr $ unlines $ nub $ map name Alga.Graph.functions ++ map name Containers.Graph.functions ++ map name Fgl.PatriciaTree.functions ++ map name HashGraph.Gr.functions ++ map fst weighCreationList
-                    Libs -> putStr $ unlines $ map fst listOfSuites
-main' (RunS only flg libs) = mainWeigh benchs (useResults flg)
+                    Benchs -> putStr $ unlines $ benchsNames Nothing
+                    Libs -> putStr $ unlines $ nub $ map fst listOfSuites
+main' (RunS only flg libs) = do
+  printHeader defaultGr bN
+  mainWeigh benchs (useResults flg)
   where
-    benchs = mapM_ (uncurry wgroup) $ maybe id (\libs' -> filter (flip elem libs' . fst)) libs $ namedWeigh only
+    bN = benchsNames only
+    addCrea = if "creation" `elem` bN then (++) listOfCreation else id
+    benchs = mapM_ (uncurry wgroup) $ maybe id (\lbs -> filter (\(n,_) -> n `elem` lbs)) libs $ addCrea $ map (fmap (\(Shadow s) -> allWeigh s)) $ filter filterLN listOfSuites
+    filterLN (_,Shadow s) = name s `elem` bN
 
-namedWeigh :: Maybe [String] -> [Named (Weigh ())]
-namedWeigh only = map (fmap (\(Shadow s) -> allWeigh s)) listOfSuites' ++ listOfCreation only
+benchsNames :: Maybe [String] -> [String]
+benchsNames only = nub (map (\(_,Shadow s) -> name s)  (maybe id (\e -> filter (\(_,Shadow s) -> name s `elem` e)) only listOfSuites)) ++ listOfCreation'
   where
-    listOfSuites' = case only of
-                      Nothing -> listOfSuites
-                      Just e -> mapMaybe (traverse (\su@(Shadow s) -> if name s `elem` e then Just su else Nothing )) listOfSuites
+    listOfCreation' = case only of
+                        Nothing -> ["creation"]
+                        Just e -> [ "creation" | "creation" `elem` e]
 
-listOfCreation :: Maybe [String] -> [Named (Weigh ())]
-listOfCreation only =
-  [ ("Alga" , weighCreation only Alga.Graph.mk)
-  , ("Containers" , weighCreation only Containers.Graph.mk)
-  , ("Fgl" , weighCreation only Fgl.PatriciaTree.mk)
-  , ("Hash-Graph" , weighCreation only HashGraph.Gr.mk)
+listOfCreation :: [Named (Weigh ())]
+listOfCreation  =
+  [ ("Alga" , weighCreation Alga.Graph.mk)
+  , ("Containers" , weighCreation Containers.Graph.mk)
+  , ("Fgl" , weighCreation Fgl.PatriciaTree.mk)
+  , ("Hash-Graph" , weighCreation HashGraph.Gr.mk)
   ]
 
