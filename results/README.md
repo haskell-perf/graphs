@@ -20,6 +20,8 @@ In this folder, you will find the lastest benchmarks of 4 haskell graphs librari
 * Time: https://github.com/haskell-perf/graphs/blob/master/results/TIME.md
 * Space: https://github.com/haskell-perf/graphs/blob/master/results/SPACE.md
 
+Note: Some functions of Data.Graph was not in the original library (edgeCount, hasEdge, vertexCount), their defintion can be found in `bench/Containers/Graph.hs`
+
 ## Some words about graphs
 The functions are benchmarked against two generic graphs:
 
