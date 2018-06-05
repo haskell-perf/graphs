@@ -8,7 +8,6 @@ where
 import BenchGraph.Types
 import qualified BenchGraph.Suites as S
 import BenchGraph.GenericGraph (Edges)
-import BenchGraph.Utils (extractMaxVertex)
 
 import Common
 import Data.List (uncons)
