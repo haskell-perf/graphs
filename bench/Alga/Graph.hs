@@ -20,7 +20,7 @@ instance GraphImpl (Graph Int) where
   mkVertex = vertex 0
 
 mk :: Edges -> Graph Int
-mk lst = clique [0..(extractMaxVertex lst)]
+mk = edges
 
 functions :: [Suite (Graph Int)]
 functions =
