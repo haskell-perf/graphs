@@ -18,7 +18,6 @@ import Data.Array
 -- >>> let path10 = mk $ snd path 9
 -- >>> let fiveVertices = buildG (0,4) []
 
--- For example with alga
 instance GraphImpl Graph where
   mkGraph = mk
   mkVertex = buildG (0,0) []
