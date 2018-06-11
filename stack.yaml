@@ -6,6 +6,8 @@ packages:
 extra-deps:
   - git: https://github.com/patrickdoc/hash-graph.git
     commit: e1c197c4399864053eb1d206164b459f183dbaee
+  - git: https://github.com/snowleopard/alga.git
+    commit: 64e4d908c15d5e79138c6445684b9bef27987e8c
   - ghc-datasize-0.2.0
   - ghc-heap-view-0.5.10
   - criterion-1.4.0.0

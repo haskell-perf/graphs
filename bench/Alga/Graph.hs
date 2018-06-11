@@ -8,6 +8,7 @@ where
 import BenchGraph.Types
 import qualified BenchGraph.Suites as S
 import BenchGraph.GenericGraph (Edges)
+import BenchGraph.Utils (extractMaxVertex)
 
 import Common
 import Data.List (uncons)
@@ -20,6 +21,9 @@ instance GraphImpl (Graph Int) where
 
 mk :: Edges -> Graph Int
 mk = edges
+
+mkSpecClique :: Edges -> Graph Int
+mkSpecClique edgs = clique [0..(extractMaxVertex edgs)]
 
 functions :: [Suite (Graph Int)]
 functions =
