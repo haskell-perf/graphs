@@ -2,7 +2,7 @@
 
 import Data.List (filter, nub, sortBy, nubBy)
 import Data.Function (on)
-import Data.Maybe (mapMaybe, catMaybes)
+import Data.Maybe (mapMaybe, catMaybes, fromMaybe)
 import Control.Monad (when)
 
 import Criterion (Benchmarkable)
@@ -11,6 +11,8 @@ import Criterion.Internal (runAndAnalyseOne)
 import Criterion.Main.Options (defaultConfig)
 import Criterion.Measurement (initializeTime, secs)
 import Criterion.Monad (withConfig)
+
+import qualified Data.Map as Map
 
 import Statistics.Types (estPoint)
 
@@ -60,7 +62,7 @@ genReport lev flg arr = mapM_  mapped $ nubBy (liftExtract2 (==)) arr
   where
     mapped e = do
       res <- toPrint lev (staOut flg) arr $ snd e
-      case fmap (fmap (map (fmap getMean))) res of
+      case fmap (fmap (map (fmap getCriterionTime))) res of
         Nothing -> return ()
         Just res'' -> when (sumOut flg) $ do
           printBest "was the fastest" res''
@@ -82,7 +84,7 @@ toPrint lev flg arr breport = case lev of
          res'@(Just (Group res)) <- doGrp
          let ch = mapMaybe tkGroup res :: [[Grouped [Named Report]]]
              results = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]] -- Double reverse is necessary, since it can lack some data in the front of ch
-             results' = map (fmap (makeAverage . map (map (fmap getMean))) ) results :: [Named [Named Double]]
+             results' = map (fmap (makeAverage . map (map (fmap getCriterionTime))) ) results :: [Named [Named Double]]
          printHtml results' secs
          return res'
   _ -> do
@@ -120,18 +122,20 @@ tkChilds _ = Nothing
 showSimples :: [Named Report] -> String
 showSimples arr = TAA.render id id id table
   where
-    arr' = sortBy (on compare (getMean . snd)) arr
-    arrD = map (\(_,r) -> [secs $ getMean r, printf "%.3f" $ getRSquare r ]) arr'
+    arr' = sortBy (on compare (getCriterionTime . snd)) arr
+    arrD = map (\(_,r) -> [secs $ getCriterionTime r, printf "%.3f" $ getRSquare r ]) arr'
     libs = map fst arr'
     table = T.Table
       (T.Group T.NoLine $ map T.Header libs)
-      (T.Group T.SingleLine [T.Header "Time (Mean)", T.Header "R\178"])
+      (T.Group T.SingleLine [T.Header "Time", T.Header "R\178"])
       arrD
 
-getMean :: Report -> Double
-getMean = estPoint . anMean . reportAnalysis
+-- Return the regressed time or the mean if the other is not avaible
+getCriterionTime :: Report -> Double
+getCriterionTime t = estPoint $ lReg $ regCoeffs $ head $ anRegress $ reportAnalysis t
+  where
+    lReg = fromMaybe (anMean $ reportAnalysis t) . Map.lookup "iters"
 
--- head ?
 getRSquare :: Report -> Double
 getRSquare = estPoint . regRSquare . head . anRegress . reportAnalysis
 
