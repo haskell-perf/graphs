@@ -10,7 +10,6 @@ module BenchGraph.GenericGraph
 
 where
 
-import Data.List (nub)
 import BenchGraph.Named
 
 type Vertex = Int

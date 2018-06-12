@@ -2,8 +2,7 @@ module BenchGraph.GenericGraph.Clique (
   clique
 ) where
 
-import BenchGraph.Named
-import BenchGraph.GenericGraph (Edges,GenericGraph(..))
+import BenchGraph.GenericGraph (Edges,GenericGraph)
 
 -- | A clique is a graph such that every two distinct vertices are adjacent
 clique :: GenericGraph

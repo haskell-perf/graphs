@@ -21,7 +21,7 @@ import BenchGraph.GenericGraph.Mesh
 import BenchGraph.GenericGraph.Clique
 import BenchGraph.Named
 
-import Weigh (mainWith, Weigh, Grouped, Weight, weighResults)
+import Weigh (Weigh, Grouped, Weight, weighResults)
 import System.Environment (lookupEnv)
 import Control.Monad (unless)
 import Data.Maybe (isJust, mapMaybe)
@@ -47,9 +47,6 @@ defaultGr = [("Mesh",3),("Clique",3)]
 
 graphsNames :: [String]
 graphsNames = map fst defaultGraphs
-
-defaultSizeGraph ::[Int]
-defaultSizeGraph = [3,3,3,2]
 
 vertices :: Edges -> [Vertex]
 vertices = nub . uncurry (++) . unzip

@@ -8,11 +8,9 @@ module BenchGraph.Types (
   extractDescription
 ) where
 
-import Control.DeepSeq (NFData, ($!!))
-import Control.Monad (when)
+import Control.DeepSeq (NFData)
 
 import BenchGraph.GenericGraph
-import BenchGraph.Utils (graphs, defaultGr)
 import BenchGraph.Named
 
 -- | Type to shadow the argument of a Suite
@@ -29,7 +27,7 @@ data Suite g = forall i o. NFData o => Suite
 
 -- A suite that don't take arguments apart a graph
 simpleSuite :: NFData o => Name -> String -> (g -> o) -> Suite g
-simpleSuite name desc algorithm = Suite name desc (const algorithm) (const [("",())])
+simpleSuite name' desc' algorithm' = Suite name' desc' (const algorithm') (const [("",())])
 
 -- An interface between our generic graphs and others
 class GraphImpl g where
@@ -37,4 +35,4 @@ class GraphImpl g where
   mkVertex :: g -- | A single vertex
 
 extractDescription :: Suite a -> Named String
-extractDescription (Suite name desc _ _) = (name,desc)
+extractDescription (Suite name' desc' _ _) = (name',desc')

@@ -8,7 +8,7 @@ where
 
 import BenchGraph.Types
 import BenchGraph.GenericGraph
-import BenchGraph.Utils
+import BenchGraph.Utils hiding (vertices)
 import BenchGraph.Named
 
 import Control.DeepSeq (NFData)

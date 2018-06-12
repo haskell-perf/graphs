@@ -7,10 +7,9 @@ module BenchGraph.DataSize (
 import GHC.DataSize
 
 import Control.DeepSeq (NFData, ($!!))
-import Control.Monad (when)
 
 import BenchGraph.GenericGraph
-import BenchGraph.Utils (graphs, defaultGr)
+import BenchGraph.Utils (graphs)
 import BenchGraph.Named
 
 computeSize :: (NFData g) => [(String,Int)] -> (Edges -> g) -> IO [Named [Named Word]]

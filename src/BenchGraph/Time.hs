@@ -8,29 +8,28 @@ import Criterion.Main
 import Criterion.Types (Benchmark (..))
 
 import Control.DeepSeq (NFData, ($!!))
-import Control.Monad (when)
 
 import BenchGraph.GenericGraph
-import BenchGraph.Utils (graphs, defaultGr)
+import BenchGraph.Utils (graphs)
 import BenchGraph.Named
 import BenchGraph.Types
 
 ---- Criterion
 -- | Main function, will benchmark the given suite against the given graphs
 benchmark :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Benchmark
-benchmark graphs (Suite sname _ algo inputs) = bgroup sname cases
+benchmark graphs' (Suite sname _ algo inputs') = bgroup sname cases
   where
-    cases = [ bgroup gname $ map (benchSuite algo inputs gfunc) ss | ((gname,gfunc), ss) <- graphs ]
+    cases = [ bgroup gname $ map (benchSuite algo inputs' gfunc) ss | ((gname,gfunc), ss) <- graphs' ]
 
 benchSuite :: (GraphImpl g, NFData g, NFData o)
            => (i -> g -> o) -> (Edges -> [Named i]) -> (Size -> Edges) -> Size -> Benchmark
-benchSuite algorithm inputs gfunc size = bgroup (show size) cases
+benchSuite algorithm' inputs' gfunc size = bgroup (show size) cases
   where
     edges = gfunc size
     graph = case edges of
               [] -> mkVertex
               edgs -> mkGraph edgs
-    cases = [ bench name $ nf (algorithm i) $!! graph | (name,i) <- inputs edges ]
+    cases = [ bench name' $ nf (algorithm' i) $!! graph | (name',i) <- inputs' edges ]
 
 allBench :: (GraphImpl g, NFData g) => [(String,Int)] -> Suite g -> Benchmark
 allBench gr = benchmark (graphs gr)

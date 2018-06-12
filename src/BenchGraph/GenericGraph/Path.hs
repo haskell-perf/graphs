@@ -2,8 +2,7 @@ module BenchGraph.GenericGraph.Path (
   path
 ) where
 
-import BenchGraph.Named
-import BenchGraph.GenericGraph (Edges,GenericGraph(..))
+import BenchGraph.GenericGraph (Edges,GenericGraph)
 
 -- | A path is a graph like [(0,1),(1,2),(2,3)..(n,n+1)]
 path :: GenericGraph

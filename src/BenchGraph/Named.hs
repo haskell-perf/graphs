@@ -1,7 +1,7 @@
 module BenchGraph.Named
   (
     Name,
-    Named (..),
+    Named,
     eq1,
     compare1,
     nameBy,

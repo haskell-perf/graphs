@@ -3,8 +3,7 @@ module BenchGraph.GenericGraph.Circuit (
 ) where
 
 import BenchGraph.GenericGraph.Path
-import BenchGraph.Named
-import BenchGraph.GenericGraph (Edges,GenericGraph(..))
+import BenchGraph.GenericGraph (Edges,GenericGraph)
 
 -- | A circuit is a path closed on himself
 circuit :: GenericGraph
