@@ -2,16 +2,13 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Alga.Graph
-  (functions, mk, chromaticPolynomial, mkSpecClique)
+  (functions, mk, mkSpecClique)
 where
 
 import BenchGraph.Types
 import qualified BenchGraph.Suites as S
 import BenchGraph.GenericGraph (Edges)
 import BenchGraph.Utils (extractMaxVertex)
-
-import Common
-import Data.List (uncons)
 
 import Algebra.Graph
 
@@ -42,14 +39,3 @@ functions =
   , S.transpose transpose
   ]
 
--- | The graph MUST be undirected (ie if (1,2) is in the graph, then (2,1) is)
-chromaticPolynomial :: Graph Int -> [Int]
-chromaticPolynomial gr = case getEdge of
-  Nothing -> case vertexCount gr of
-               0 -> [0]
-               el -> replicate el 0 ++ [1]
-  Just e -> substractPoly (chromaticPolynomial (deleted e)) (chromaticPolynomial (contracted e))
-  where
-    getEdge = uncons (edgeList gr) >>= Just . fst
-    deleted (x1,y1) = removeEdge y1 x1 $ removeEdge x1 y1 gr
-    contracted (x1,y1) = removeEdge y1 y1 $ replaceVertex x1 y1 gr
