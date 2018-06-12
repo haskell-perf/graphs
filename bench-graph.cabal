@@ -62,6 +62,9 @@ library
     exposed-modules:   BenchGraph.DataSize
     build-depends:     ghc-datasize >= 0.2.0
 
+  GHC-options:        -O2
+                      -Wall
+
 benchmark time 
     hs-source-dirs:     bench
     type:               exitcode-stdio-1.0

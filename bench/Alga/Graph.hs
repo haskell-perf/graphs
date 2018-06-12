@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Alga.Graph
-  (functions, mk, chromaticPolynomial)
+  (functions, mk, chromaticPolynomial, mkSpecClique)
 where
 
 import BenchGraph.Types

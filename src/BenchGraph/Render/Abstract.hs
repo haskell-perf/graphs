@@ -20,7 +20,7 @@ import BenchGraph.Render.Common (average)
 printAbstract :: String -- ^ A comparative (like "faster")
               -> Grouped [Named Double] -- ^ The actual data
               -> IO ()
-printAbstract comparative = printMap comparative . rearrange . removeNaN . getComparison
+printAbstract comparative = printMap comparative  . fmap reverse . rearrange . removeNaN . getComparison
 
 removeNaN :: Named [Named Double] -> Named [Named Double]
 removeNaN = fmap (mapMaybe (\n -> if isNaN (snd n) then Nothing else Just n))
