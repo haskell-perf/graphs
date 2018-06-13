@@ -6,21 +6,30 @@ module BenchGraph.Render.Types
   , IsGrouped
   , tkSimple
   , tkGroup
-  , isSimple )
+  , isSimple
+  , setBGroup
+  )
 where
 
 import qualified Weigh as W
 
-data Grouped a = Simple a | Group [Grouped a] deriving (Show)
+-- | The Bool is here to tell if we get it into the benchs
+data Grouped a = Simple Bool a | Group [Grouped a] deriving (Show)
 
 instance Functor Grouped where
-  fmap f (Simple a) = Simple $ f a
+  fmap f (Simple b a) = Simple b $ f a
   fmap f (Group lst) = Group $ map (fmap f) lst
 
 lengthG :: Grouped a -> Int
 lengthG a = case a of
               Simple{} -> 1
               Group a' -> sum $ map lengthG a'
+
+setBGroup :: Bool -> Grouped a -> Grouped a
+setBGroup b (Simple _ a) = Simple b a
+setBGroup b (Group lst@(Group (Simple True _:_):_)) = Group $ map (setBGroup (not b)) (init lst) ++ [setBGroup b $ last lst]
+setBGroup b (Group lst) = Group $ map (setBGroup b) lst
+
 
 class IsGrouped f where
   isSimple :: f a -> Bool
@@ -35,7 +44,7 @@ class IsGrouped f where
 instance IsGrouped Grouped where
   isSimple Simple{} = True
   isSimple _ = False
-  simple_ (Simple e) = e
+  simple_ (Simple _ e) = e
   group_ (Group e) = e
 
 -- | Weigh Grouped isGrouped

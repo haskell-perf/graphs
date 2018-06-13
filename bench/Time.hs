@@ -64,9 +64,9 @@ genReport lev flg arr = mapM_  mapped $ nubBy (liftExtract2 (==)) arr
       res <- toPrint lev (staOut flg) arr $ snd e
       case fmap (fmap (map (fmap getCriterionTime))) res of
         Nothing -> return ()
-        Just res'' -> when (sumOut flg) $ do
-          printBest "was the fastest" res''
-          printAbstract "faster" res''
+        Just res' -> when (sumOut flg) $ do
+          printBest "was the fastest" res'
+          printAbstract "faster" $ setBGroup True res'
 
 toPrint :: Int -- ^ Must start with 2
         -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
@@ -94,7 +94,7 @@ toPrint lev flg arr breport = case lev of
       Benchmark{} -> do
         simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimpleB) $ here breport
         when (flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
-        return $ Just $ Simple simples
+        return $ Just $ Simple (null bname) simples -- False by default, changed after
       Environment{} -> error "Not wanted environnement"
   where
     pTitle = putStrLn $ unwords [replicate lev '#',bname]
