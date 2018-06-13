@@ -43,7 +43,7 @@ rearrange na@(n,arr) =
 
 printMap :: String -> Named [Named Double] -> IO ()
 printMap superlative (ref,res) = unless (null res) $ do
-  putStrLn $ unlines ["\nABSTRACT:","(It is an average of the ratio between largest benchmarks)"]
+  putStrLn $ unlines ["\nABSTRACT:","(Based on an average of the ratio between largest benchmarks)"]
   mapM_ (\(name,av) -> putStrLn $ unwords [" *",name,"was",printf "%.2f" av,"times",superlative,"than",ref]) res
   putStrLn ""
 

@@ -63,7 +63,7 @@ useResults (Output su st) todo = do
           let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
               in when su $ do
                 printBest "used the least amount of memory" res''
-                printAbstract "lighter" res''
+                printAbstract "lighter" $ T.setBGroup True res''
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write, must start with 2
@@ -114,7 +114,7 @@ printSimples lev flg arr act = do
   when (flg == Ascii) $ do
     unless (null bname) $ putStrLn $ unwords [replicate lev '#',bname]
     putStrLn $ TAA.render id id id table
-  return $ T.Simple False $ map (fmap $ weightAllocatedBytes . fst) filtered -- False by default, changed after
+  return $ T.Simple (null bname) $ map (fmap $ weightAllocatedBytes . fst) filtered -- False by default, changed after
   where
     bname = takeLastAfterBk $ weightLabel $ fst act
     -- filter by the 'act' argument, and sort
