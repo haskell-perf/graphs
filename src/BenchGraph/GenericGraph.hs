@@ -58,7 +58,7 @@ mesh :: GenericGraph
 mesh = ("Mesh",mkMesh)
 
 mkMesh :: Int -> (Edges,Int)
-mkMesh n = if n == 1
+mkMesh n = if n' == 1
               then ([],1)
            else (filter (\(x,y) -> x < n' && y < n') $ concatMap
               (\x -> let first = if (x+1) `mod` sq == 0 then [] else [(x,x+1)]
@@ -69,7 +69,7 @@ mkMesh n = if n == 1
   where
     sq = 1 + sq'
     sq' = round (sqrt $ fromRational $ toRational n :: Double)
-    n' = n^(10 :: Int)
+    n' = 10^n :: Int
 
 -- | A path is a graph like [(0,1),(1,2),(2,3)..(n,n+1)]
 path :: GenericGraph
