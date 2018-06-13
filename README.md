@@ -108,3 +108,7 @@ allWeigh :: (GraphImpl g, NFData g) => Suite g -> Weigh ()
 It use the default graphs and return the correct `Weigh` monad.
 
 You can always see the living code inside the `benchs/` directory.
+
+## ReaLife graphs
+
+To force the haskell-graph representation to be re-generated, you can _safely_ delete `src/BenchGraph/ReaLife/Generated.hs`
