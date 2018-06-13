@@ -22,10 +22,10 @@ benchmark graphs' (Suite sname _ algo inputs') = bgroup sname cases
     cases = [ bgroup gname $ map (benchSuite algo inputs' gfunc) ss | ((gname,gfunc), ss) <- graphs' ]
 
 benchSuite :: (GraphImpl g, NFData g, NFData o)
-           => (i -> g -> o) -> (Edges -> [Named i]) -> (Size -> Edges) -> Size -> Benchmark
-benchSuite algorithm' inputs' gfunc size = bgroup (show size) cases
+           => (i -> g -> o) -> (Edges -> [Named i]) -> (Size -> (Edges,Int)) -> Size -> Benchmark
+benchSuite algorithm' inputs' gfunc size = bgroup (show sizeName) cases
   where
-    edges = gfunc size
+    (edges, sizeName) = gfunc size
     graph = case edges of
               [] -> mkVertex
               edgs -> mkGraph edgs
@@ -35,5 +35,5 @@ allBench :: (GraphImpl g, NFData g) => [(String,Int)] -> Suite g -> Benchmark
 allBench gr = benchmark (graphs gr)
 
 benchmarkCreation :: (NFData g) => [(String,Int)] -> (Edges -> g) -> Benchmark
-benchmarkCreation gr mk = bgroup "creation" [ bgroup n $ map (\i -> bgroup (show i) [bench "" $ nf mk $ grf i] ) ss | ((n,grf), ss) <- graphs gr ]
+benchmarkCreation gr mk = bgroup "creation" [ bgroup n $ map (\i -> bgroup (show i) [bench "" $ nf mk $ fst $ grf i] ) ss | ((n,grf), ss) <- graphs gr ]
 

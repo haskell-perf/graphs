@@ -22,10 +22,10 @@ weigh graphs' (Suite sname _ algo inputs') = wgroup sname cases
     mkGroup (gname, gfunc) ss = wgroup gname $ mapM_ (weighSuite algo inputs' gfunc) ss
 
 weighSuite :: (GraphImpl g, NFData g, NFData o)
-           => (i -> g -> o) -> (Edges -> [Named i]) -> (Size -> Edges) -> Size -> Weigh ()
-weighSuite algorithm' inputs' gfunc size = wgroup (show size) cases
+           => (i -> g -> o) -> (Edges -> [Named i]) -> (Size -> (Edges,Int)) -> Size -> Weigh ()
+weighSuite algorithm' inputs' gfunc size = wgroup (show sizeName) cases
   where
-    edges = gfunc size
+    (edges,sizeName) = gfunc size
     graph = case edges of
               [] -> mkVertex
               edgs -> mkGraph edgs
@@ -39,7 +39,7 @@ allWeigh = weigh (graphs defaultGr)
 weighCreation :: (NFData g)
               => (Edges -> g) -- ^ A graph-creator function, typically from the GraphImpl class
               -> Weigh ()
-weighCreation mk = wgroup "creation" $ mapM_ (\(str,((_,grf), ss)) -> wgroup str $ mapM_ (\i -> wgroup (show i) $ func "" mk $ grf i ) ss ) weighCreationList
+weighCreation mk = wgroup "creation" $ mapM_ (\(str,((_,grf), ss)) -> wgroup str $ mapM_ (\i -> wgroup (show i) $ func "" mk $ fst $ grf i ) ss ) weighCreationList
 
 -- | List of generic graph with their case-name
 weighCreationList :: [Named (GenericGraph, [Int])]

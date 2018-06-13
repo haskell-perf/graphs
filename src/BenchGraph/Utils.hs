@@ -1,6 +1,5 @@
 module BenchGraph.Utils
   (
-  tenPowers,
   edgesNotInGraph,
   extractMaxVertex,
   graphs,
@@ -15,27 +14,25 @@ where
 import Data.List ((\\), nub, elemIndex)
 import BenchGraph.GenericGraph
 import BenchGraph.Named
+import BenchGraph.RealLife.Graphs
 
 import Weigh (Weigh, Grouped, Weight, weighResults)
 import System.Environment (lookupEnv)
 import Control.Monad (unless)
 import Data.Maybe (isJust, mapMaybe)
 
-tenPowers :: [Int]
-tenPowers = iterate (10*) 1
-
 -- | Remove given edges from the complete graph
 edgesNotInGraph :: Edges -> Edges
-edgesNotInGraph edgs = (\\) (snd complete $ extractMaxVertex edgs + 1) edgs
+edgesNotInGraph edgs = (\\) (fst (snd complete $ extractMaxVertex edgs + 1)) edgs
 
 extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
 
 graphs :: [(String, Int)] -> [(GenericGraph, [Int])]
-graphs = mapMaybe (\(x,y) -> (\n -> (defaultGraphs !! n, take y tenPowers)) <$> elemIndex x graphsNames)
+graphs = mapMaybe (\(x,y) -> (\n -> (defaultGraphs !! n,[0..(y-1)])) <$> elemIndex x graphsNames)
 
 defaultGraphs :: [GenericGraph]
-defaultGraphs = [path, circuit, mesh, complete, clique]
+defaultGraphs = [path, circuit, mesh, complete, clique, realLife]
 
 defaultGr :: [Named Int]
 defaultGr = [("Mesh",3),("Clique",3)]
