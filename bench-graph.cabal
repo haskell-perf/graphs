@@ -26,11 +26,6 @@ Flag Datasize
 
 library
   exposed-modules:     BenchGraph.GenericGraph
-                     , BenchGraph.GenericGraph.Path
-                     , BenchGraph.GenericGraph.Mesh
-                     , BenchGraph.GenericGraph.Circuit
-                     , BenchGraph.GenericGraph.Complete
-                     , BenchGraph.GenericGraph.Clique
                      , BenchGraph.Types
                      , BenchGraph.Utils
                      , BenchGraph.Suites

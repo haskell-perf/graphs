@@ -14,11 +14,6 @@ where
 
 import Data.List ((\\), nub, elemIndex)
 import BenchGraph.GenericGraph
-import BenchGraph.GenericGraph.Complete
-import BenchGraph.GenericGraph.Circuit
-import BenchGraph.GenericGraph.Path
-import BenchGraph.GenericGraph.Mesh
-import BenchGraph.GenericGraph.Clique
 import BenchGraph.Named
 
 import Weigh (Weigh, Grouped, Weight, weighResults)
