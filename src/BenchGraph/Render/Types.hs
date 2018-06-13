@@ -27,9 +27,8 @@ lengthG a = case a of
 
 setBGroup :: Bool -> Grouped a -> Grouped a
 setBGroup b (Simple _ a) = Simple b a
-setBGroup b (Group lst@(Group (Simple True _:_):_)) = Group $ map (setBGroup (not b)) (init lst) ++ [setBGroup b $ last lst]
+setBGroup b (Group lst@(Group (Simple _ _:_):_)) = Group $ map (setBGroup (not b)) (init lst) ++ [setBGroup b $ last lst]
 setBGroup b (Group lst) = Group $ map (setBGroup b) lst
-
 
 class IsGrouped f where
   isSimple :: f a -> Bool

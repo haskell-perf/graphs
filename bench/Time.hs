@@ -94,7 +94,7 @@ toPrint lev flg arr breport = case lev of
       Benchmark{} -> do
         simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimpleB) $ here breport
         when (flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
-        return $ Just $ Simple (null bname) simples -- False by default, changed after
+        return $ Just $ Simple False simples -- False by default, changed after
       Environment{} -> error "Not wanted environnement"
   where
     pTitle = putStrLn $ unwords [replicate lev '#',bname]
