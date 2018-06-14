@@ -73,7 +73,7 @@ toPrint :: Int -- ^ Must start with 2
 toPrint lev flg arr breport = case lev of
   2 -> do
     pTitle
-    maybe (return ()) (putStrLn . (++) "\nDescritpion: ") (lookup bname descs)
+    maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
     putStrLn ""
     doGrp
   3 -> do

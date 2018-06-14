@@ -74,7 +74,7 @@ printReport :: Int -- ^ The number of # to write, must start with 2
 printReport lev flg arr act = case lev of
   2 -> do
     pTitle
-    maybe (return ()) (putStrLn . (++) "\nDescritpion: ") (lookup bname descs)
+    maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
     putStrLn ""
     doGrp
   3 -> do
