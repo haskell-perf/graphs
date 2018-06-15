@@ -1,10 +1,13 @@
+{-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
+
 import Data.List (nub, nubBy, sortBy, elemIndices)
 import Data.Function (on)
-import Data.Maybe (mapMaybe, catMaybes)
+import Data.Maybe (mapMaybe, catMaybes, isJust)
 import Data.Int (Int64)
 import Control.Monad (when, unless, (>=>))
+import System.Environment (lookupEnv)
 
-import Weigh (Grouped (..), Weight (..), Weigh, wgroup, commas)
+import Weigh (Grouped (..), Weight (..), Weigh, wgroup, commas, weighResults)
 
 import qualified Text.Tabular as TA
 import qualified Text.Tabular.AsciiArt as TAA
