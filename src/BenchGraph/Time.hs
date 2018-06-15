@@ -1,9 +1,7 @@
 module BenchGraph.Time (
   benchmark,
   allBench,
-  benchmarkCreation,
-  benchmarkWithCreation,
-  benchmarkWithoutCreation
+  benchmarkCreation
 ) where
 
 import Criterion.Main
@@ -18,12 +16,6 @@ import BenchGraph.Types
 
 ---- Criterion
 -- | Main function, will benchmark the given suite against the given graphs
-
-benchmarkWithCreation :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Benchmark
-benchmarkWithCreation = benchmark True
-
-benchmarkWithoutCreation :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Benchmark
-benchmarkWithoutCreation = benchmark False
 
 benchmark :: (GraphImpl g, NFData g) 
           => Bool -- ^ Set to False, it will force the graph, using deepseq, before passing it to the benched function

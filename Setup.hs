@@ -11,14 +11,15 @@ main = do
   b <- doesFileExist "src/BenchGraph/RealLife/Generated.hs"
   unless b generateRealLifeGraphs
 
-  args <- getArgs
+  modified <- modif <$> getArgs
 
-  change args "bench/Time.hs"
-  change args "bench/ListS.hs"
-  change args "bench/Space.hs"
+  mapM_ (change modified) ["bench/ListS.hs","bench/Time.hs", "bench/Space.hs"]
 
   defaultMain
+  where
+    modif args = [T.pack "Alga.Graph" | "--flags=-alga" `elem` args] ++ [T.pack "Fgl.PatriciaTree" | "--flags=-fgl" `elem` args ] ++ [T.pack "HashGraph.Gr" | "--flags=-hashgraph" `elem` args ]
 
+-- | generate real life graphs from a text file
 generateRealLifeGraphs :: IO ()
 generateRealLifeGraphs = do
   gr <- delete "README.md" <$> listDirectory prefixDir
@@ -39,13 +40,10 @@ generateRealLifeGraphs = do
       , "generated = ["
       ]
 
-change :: [String] -> String -> IO ()
-change args pref = do
-  let rmAlga = if "--flags=-alga" `elem` args then [T.pack "Alga.Graph"] else []
-  let rmFgl = if "--flags=-fgl" `elem` args then [T.pack "Fgl.PatriciaTree"] else []
-  let rmHashGraph = if "--flags=-hashgraph" `elem` args then [T.pack "HashGraph.Gr"] else []
-  
+-- | Will remove from a file the desired parts
+change :: [T.Text] -> String -> IO ()
+change modified pref = do
   fil <- T.readFile pref
-  let todo = T.unlines $ filter (\x -> not $ any (`T.isInfixOf` x) $ rmAlga ++ rmFgl ++ rmHashGraph) $ T.lines fil 
+  let todo = T.unlines $ filter (\x -> not $ any (`T.isInfixOf` x) modified) $ T.lines fil 
   unless (fil == todo) $ T.writeFile pref todo
 

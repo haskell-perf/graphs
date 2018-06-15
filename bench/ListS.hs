@@ -26,4 +26,3 @@ listOfSuites = concatMap sequence
   , ("Hash-Graph", map Shadow HashGraph.Gr.functions)
   ]
 
-

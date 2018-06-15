@@ -16,11 +16,6 @@ import qualified Data.Map as Map
 
 import Statistics.Types (estPoint)
 
-import qualified Alga.Graph
-import qualified Containers.Graph
-import qualified Fgl.PatriciaTree
-import qualified HashGraph.Gr
-
 import BenchGraph.Types (ShadowedS (..))
 import BenchGraph.Time (allBench, benchmarkCreation)
 import BenchGraph.Named
@@ -35,6 +30,11 @@ import Text.Printf (printf)
 
 import Command
 import ListS (listOfSuites, descs)
+
+import qualified Alga.Graph
+import qualified Containers.Graph
+import qualified Fgl.PatriciaTree
+import qualified HashGraph.Gr
 
 import BenchGraph.Render.Types
 import BenchGraph.Render.Best
