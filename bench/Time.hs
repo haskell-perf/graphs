@@ -100,7 +100,7 @@ toPrint lev flg arr breport = case lev of
     pTitle = putStrLn $ unwords [replicate lev '#',bname]
     doGrp = case nubOtherGroups of
               [] -> do
-                when (flg /= Html) $ putStrLn "\nNo data\n"
+                when (flg == Ascii) $ putStrLn "\nNo data\n"
                 return Nothing
               real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . snd) real
     nubOtherGroups = nubBy (liftExtract2 (==)) otherGroups

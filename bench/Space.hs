@@ -102,7 +102,7 @@ printReport lev flg arr act = case lev of
     bname = showGrouped act
     doGrp = case nubOtherGroups of
               [] -> do
-                when (flg /= Html) $ putStrLn "\nNo data\n"
+                when (flg == Ascii) $ putStrLn "\nNo data\n"
                 return Nothing
               real -> Just . T.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . snd) real
     here e = filter (eqG e . snd) arr
