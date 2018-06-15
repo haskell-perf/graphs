@@ -1,17 +1,8 @@
 {-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
 
 module BenchGraph.Render.Types
-  ( Grouped (..)
-  , lengthG
-  , IsGrouped
-  , tkSimple
-  , tkGroup
-  , isSimple
-  , setBGroup
-  )
-where
 
-import qualified Weigh as W
+where
 
 -- | The Bool is here to tell if we get it into the benchs
 data Grouped a = Simple Bool a | Group [Grouped a] deriving (Show)
@@ -45,11 +36,3 @@ instance IsGrouped Grouped where
   isSimple _ = False
   simple_ (Simple _ e) = e
   group_ (Group e) = e
-
--- | Weigh Grouped isGrouped
-instance IsGrouped W.Grouped where
-  isSimple W.Singleton{} = True
-  isSimple _ = False
-  simple_ (W.Singleton e) = e
-  group_ (W.Grouped _ e) = e
-

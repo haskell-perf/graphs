@@ -3,7 +3,6 @@ module BenchGraph.Utils
   edgesNotInGraph,
   extractMaxVertex,
   graphs,
-  mainWeigh,
   vertices,
   defaultGr,
   graphsNames
@@ -16,10 +15,7 @@ import BenchGraph.GenericGraph
 import BenchGraph.Named
 import BenchGraph.RealLife.Graphs
 
-import Weigh (Weigh, Grouped, Weight, weighResults)
-import System.Environment (lookupEnv)
-import Control.Monad (unless)
-import Data.Maybe (isJust, mapMaybe)
+import Data.Maybe (mapMaybe)
 
 -- | Remove given edges from the complete graph
 edgesNotInGraph :: Edges -> Edges
@@ -43,8 +39,3 @@ graphsNames = map fst defaultGraphs
 vertices :: Edges -> [Vertex]
 vertices = nub . uncurry (++) . unzip
 
-mainWeigh :: Weigh () -> ([Grouped (Weight, Maybe String)] -> IO ()) -> IO ()
-mainWeigh wei f = do
-  args <- lookupEnv "WEIGH_CASE"
-  (results,_) <- weighResults wei
-  unless (isJust args) $ f results

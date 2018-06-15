@@ -182,10 +182,11 @@ main' opts
                  [] -> defaultGr
                  g -> g
 
+-- Note: The layout of the list is important
 listOfCreation :: [(String,Int)] -> [Named Benchmark]
 listOfCreation gr =
-  [ ("Alga", benchmarkCreation gr Alga.Graph.mk )
-  , ("Containers", benchmarkCreation gr Containers.Graph.mk)
+  [ ("Containers", benchmarkCreation gr Containers.Graph.mk)
+  , ("Alga", benchmarkCreation gr Alga.Graph.mk )
   , ("Fgl", benchmarkCreation gr Fgl.PatriciaTree.mk)
   , ("Hash-Graph", benchmarkCreation gr HashGraph.Gr.mk)
   ]

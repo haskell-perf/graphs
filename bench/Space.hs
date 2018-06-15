@@ -17,7 +17,7 @@ import ListS (listOfSuites, descs)
 import BenchGraph.Types
 import BenchGraph.Space
 import BenchGraph.Named
-import BenchGraph.Utils (mainWeigh, defaultGr)
+import BenchGraph.Utils (defaultGr)
 
 import qualified BenchGraph.Render.Types as T
 import BenchGraph.Render.Best
@@ -167,4 +167,17 @@ listOfCreation  =
   , ("Fgl" , weighCreation Fgl.PatriciaTree.mk)
   , ("Hash-Graph" , weighCreation HashGraph.Gr.mk)
   ]
+
+mainWeigh :: Weigh () -> ([Grouped (Weight, Maybe String)] -> IO ()) -> IO ()
+mainWeigh wei f = do
+  args <- lookupEnv "WEIGH_CASE"
+  (results,_) <- weighResults wei
+  unless (isJust args) $ f results
+
+-- | Weigh Grouped isGrouped
+instance T.IsGrouped Grouped where
+  isSimple Singleton{} = True
+  isSimple _ = False
+  simple_ (Singleton e) = e
+  group_ (Grouped _ e) = e
 

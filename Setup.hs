@@ -1,12 +1,24 @@
 import Distribution.Simple
 import System.Directory
-import Data.List (intercalate, delete)
+import Data.List (intercalate, delete, isInfixOf)
 import Control.Monad (unless)
+import System.Environment (getArgs)
+import qualified Data.Text as T
+import qualified Data.Text.IO as T
 
 main :: IO ()
 main = do
   b <- doesFileExist "src/BenchGraph/RealLife/Generated.hs"
   unless b generateRealLifeGraphs
+
+  args <- getArgs
+
+  let timeStr = "bench/Time.hs"
+  let listSStr = "bench/ListS.hs"
+
+  change args timeStr 
+  change args listSStr 
+
   defaultMain
 
 generateRealLifeGraphs :: IO ()
@@ -28,3 +40,15 @@ generateRealLifeGraphs = do
       , "generated :: [[(Int,Int)]]"
       , "generated = ["
       ]
+
+change :: [String] -> String -> IO ()
+change args pref = do
+  let rmAlga = if "--flags=-alga" `elem` args then [T.pack "Alga.Graph"] else []
+  let rmFgl = if "--flags=-fgl" `elem` args then [T.pack "Fgl.PatriciaTree"] else []
+  let rmHashGraph = if "--flags=-hashgraph" `elem` args then [T.pack "HashGraph.Gr"] else []
+  
+  fil <- T.readFile pref
+
+  T.writeFile pref $ T.unlines $ filter (\x -> not $ any (`T.isInfixOf` x) $ rmAlga ++ rmFgl ++ rmHashGraph) $ T.lines fil 
+
+
