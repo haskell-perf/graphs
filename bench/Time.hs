@@ -77,7 +77,7 @@ toPrint lev flg arr breport = case lev of
     putStrLn ""
     doGrp
   3 -> do
-    pTitle
+    when (flg /= Null) pTitle
     if flg /= Html
        then doGrp
        else do
