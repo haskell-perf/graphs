@@ -162,8 +162,8 @@ benchsNames only = nub (map (\(_,Shadow s) -> name s)  (maybe id (\e -> filter (
 
 listOfCreation :: [Named (Weigh ())]
 listOfCreation  =
-  [ ("Alga" , weighCreation Alga.Graph.mk)
-  , ("Containers" , weighCreation Containers.Graph.mk)
+  [ ("Containers" , weighCreation Containers.Graph.mk)
+  , ("Alga" , weighCreation Alga.Graph.mk)
   , ("Fgl" , weighCreation Fgl.PatriciaTree.mk)
   , ("Hash-Graph" , weighCreation HashGraph.Gr.mk)
   ]

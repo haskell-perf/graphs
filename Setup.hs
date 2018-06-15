@@ -13,11 +13,9 @@ main = do
 
   args <- getArgs
 
-  let timeStr = "bench/Time.hs"
-  let listSStr = "bench/ListS.hs"
-
-  change args timeStr 
-  change args listSStr 
+  change args "bench/Time.hs"
+  change args "bench/ListS.hs"
+  change args "bench/Space.hs"
 
   defaultMain
 
