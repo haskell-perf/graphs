@@ -1,7 +1,9 @@
 module BenchGraph.Time (
   benchmark,
   allBench,
-  benchmarkCreation
+  benchmarkCreation,
+  benchmarkWithCreation,
+  benchmarkWithoutCreation
 ) where
 
 import Criterion.Main
@@ -17,16 +19,18 @@ import BenchGraph.Types
 ---- Criterion
 -- | Main function, will benchmark the given suite against the given graphs
 
-benchmarkWithCreation :: [(GenericGraph, [Size])] -> Suite g -> Benchmark
+benchmarkWithCreation :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Benchmark
 benchmarkWithCreation = benchmark True
 
-benchmarkWithoutCreation :: [(GenericGraph, [Size])] -> Suite g -> Benchmark
+benchmarkWithoutCreation :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Benchmark
 benchmarkWithoutCreation = benchmark False
 
-benchmark :: (GraphImpl g, NFData g) => Bool -> [(GenericGraph, [Size])] -> Suite g -> Benchmark
+benchmark :: (GraphImpl g, NFData g) 
+          => Bool -- ^ Set to False, it will force the graph, using deepseq, before passing it to the benched function
+          -> [(GenericGraph, [Size])] -> Suite g -> Benchmark
 benchmark benchCreation graphs' (Suite sname _ algo inputs') = bgroup sname cases
   where
-    cases = [ bgroup gname $ map (benchSuite algo inputs' gfunc) ss | ((gname,gfunc), ss) <- graphs' ]
+    cases = [ bgroup gname $ map (benchSuite benchCreation algo inputs' gfunc) ss | ((gname,gfunc), ss) <- graphs' ]
 
 benchSuite :: (GraphImpl g, NFData g, NFData o)
            => Bool -> (i -> g -> o) -> (Edges -> [Named i]) -> (Size -> (Edges,Int)) -> Size -> Benchmark
@@ -40,8 +44,10 @@ benchSuite benchCreation algorithm' inputs' gfunc size = bgroup (show sizeName) 
                then [ bench name' $ nf (algorithm' i . graph) $!! edges | (name',i) <- inputs' edges ]
                else [ bench name' $ nf (algorithm' i) $!! graph edges | (name',i) <- inputs' edges ]
 
-allBench :: (GraphImpl g, NFData g) => [(String,Int)] -> Suite g -> Benchmark
-allBench gr = benchmark (graphs gr)
+allBench :: (GraphImpl g, NFData g)
+         => Bool -- ^ Do we bench creation of the graph ?
+         -> [(String,Int)] -> Suite g -> Benchmark
+allBench benchCreation gr = benchmark benchCreation (graphs gr)
 
 benchmarkCreation :: (NFData g) => [(String,Int)] -> (Edges -> g) -> Benchmark
 benchmarkCreation gr mk = bgroup "creation" [ bgroup n $ map (\i -> let (gr',sizeName) = grf i in bgroup (show sizeName) [bench "" $ nf mk gr'] ) ss | ((n,grf), ss) <- graphs gr ]

@@ -177,7 +177,7 @@ main' opts
         genReport 2 flg samples
   where
     grNames = nub $ map (showBenchName . snd) $ grList defaultGr
-    grList gr = map (fmap (\(Shadow s) -> allBench gr s)) listOfSuites ++ listOfCreation gr
+    grList gr = map (fmap (\(Shadow s) -> allBench False gr s)) listOfSuites ++ listOfCreation gr
     mkGr gr' = case gr' of
                  [] -> defaultGr
                  g -> g
