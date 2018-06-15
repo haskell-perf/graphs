@@ -157,13 +157,13 @@ main' opts
   = case opts of
       List listOpt -> case listOpt of
                         Benchs -> putStr $ unlines grNames
-                        Libs -> putStr $ unlines $ nub $ map fst $ grList []
-      Run opt flg libs gr' -> do
+                        Libs -> putStr $ unlines $ nub $ map fst listOfSuites ++ map fst (listOfCreation [])
+      Run opt flg libs benchWithCreation gr' -> do
         let modifyL = case libs of
               Nothing -> id
               Just libss -> filter (\x -> fst x `elem` libss)
             gr = mkGr gr'
-            grList' = modifyL $ grList gr
+            grList' = modifyL $ grList benchWithCreation gr
             todo = case opt of
               Nothing -> grNames
               Just opt' -> case opt' of
@@ -176,8 +176,8 @@ main' opts
         printHeader gr $ nub $ map (showBenchName . snd) samples
         genReport 2 flg samples
   where
-    grNames = nub $ map (showBenchName . snd) $ grList defaultGr
-    grList gr = map (fmap (\(Shadow s) -> allBench False gr s)) listOfSuites ++ listOfCreation gr
+    grNames = nub $ map (showBenchName . snd) $ grList False defaultGr
+    grList benchWithCreation gr = map (fmap (\(Shadow s) -> allBench benchWithCreation gr s)) listOfSuites ++ listOfCreation gr
     mkGr gr' = case gr' of
                  [] -> defaultGr
                  g -> g

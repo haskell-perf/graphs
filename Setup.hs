@@ -46,7 +46,6 @@ change args pref = do
   let rmHashGraph = if "--flags=-hashgraph" `elem` args then [T.pack "HashGraph.Gr"] else []
   
   fil <- T.readFile pref
-
-  T.writeFile pref $ T.unlines $ filter (\x -> not $ any (`T.isInfixOf` x) $ rmAlga ++ rmFgl ++ rmHashGraph) $ T.lines fil 
-
+  let todo = T.unlines $ filter (\x -> not $ any (`T.isInfixOf` x) $ rmAlga ++ rmFgl ++ rmHashGraph) $ T.lines fil 
+  unless (fil == todo) $ T.writeFile pref todo
 
