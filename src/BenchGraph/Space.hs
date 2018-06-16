@@ -33,7 +33,7 @@ weighSuite algorithm' inputs' gfunc size = wgroup (show sizeName) cases
     wFunc n i = func n (algorithm' i) $!! graph
 
 allWeigh :: (GraphImpl g, NFData g) => Suite g -> Weigh ()
-allWeigh = weigh (graphs defaultGr)
+allWeigh = weigh (graphs False defaultGr)
 
 -- | Use the list from weighCreationList
 weighCreation :: (NFData g)
@@ -43,4 +43,4 @@ weighCreation mk = wgroup "creation" $ mapM_ (\(str,((_,grf), ss)) -> wgroup str
 
 -- | List of generic graph with their case-name
 weighCreationList :: [Named (GenericGraph, [Int])]
-weighCreationList = [ (n,t) | t@((n, _), _) <- graphs defaultGr]
+weighCreationList = [ (n,t) | t@((n, _), _) <- graphs False defaultGr]

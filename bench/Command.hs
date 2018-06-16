@@ -36,7 +36,7 @@ type Graph = String
 data ListOption = Benchs | Libs
   deriving (Show, Eq)
 
-data CommandTime = List ListOption | Run (Maybe Option) Output (Maybe [Lib]) Bool [(Graph,Int)]
+data CommandTime = List ListOption | Run (Maybe Option) Output (Maybe [Lib]) Bool Bool [(Graph,Int)]
   deriving (Show, Eq)
 
 data CommandSpace = ListS ListOption | RunS (Maybe Only) Output (Maybe [Lib])
@@ -70,6 +70,9 @@ sumFlag = flag True False $ long "noSummarize" <> short 's'
 benchWithCreation :: Parser Bool
 benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b'
 
+benchLittleOne :: Parser Bool
+benchLittleOne = flag False True $ long "dont-bench-little-ones" <> short 'i'
+
 staFlag :: Parser StaOut
 staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii
 
@@ -77,7 +80,7 @@ output :: Parser Output
 output = Output <$> sumFlag <*> staFlag
 
 runCom :: Parser CommandTime
-runCom = Run <$> optional options <*> output <*> optional (some libOpt) <*> benchWithCreation <*> graphsOpt
+runCom = Run <$> optional options <*> output <*> optional (some libOpt) <*> benchWithCreation <*> benchLittleOne <*> graphsOpt
 
 listOpt :: Parser ListOption
 listOpt = flag' Benchs (long "benchs") <|> flag' Libs (long "libs")

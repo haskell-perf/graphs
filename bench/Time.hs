@@ -166,13 +166,13 @@ main' opts
   = case opts of
       List listOpt -> case listOpt of
                         Benchs -> putStr $ unlines grNames
-                        Libs -> putStr $ unlines $ nub $ map fst listOfSuites ++ map fst (listOfCreation [])
-      Run opt flg libs benchWithCreation gr' -> do
+                        Libs -> putStr $ unlines $ nub $ map fst listOfSuites ++ map fst (listOfCreation False [])
+      Run opt flg libs benchWithCreation dontBenchLittleOnes gr' -> do
         let modifyL = case libs of
               Nothing -> id
               Just libss -> filter (\x -> fst x `elem` libss)
             gr = mkGr gr'
-            grList' = modifyL $ grList benchWithCreation gr
+            grList' = modifyL $ grList benchWithCreation dontBenchLittleOnes gr
             todo = case opt of
               Nothing -> grNames
               Just opt' -> case opt' of
@@ -185,18 +185,18 @@ main' opts
         printHeader gr $ nub $ map (showBenchName . snd) samples
         genReport 2 flg samples
   where
-    grNames = nub $ map (showBenchName . snd) $ grList False defaultGr
-    grList benchWithCreation gr = map (fmap (\(Shadow s) -> allBench benchWithCreation gr s)) listOfSuites ++ listOfCreation gr
+    grNames = nub $ map (showBenchName . snd) $ grList False False defaultGr
+    grList benchWithCreation dontBenchLittleOnes gr = map (fmap (\(Shadow s) -> allBench benchWithCreation dontBenchLittleOnes gr s)) listOfSuites ++ listOfCreation dontBenchLittleOnes gr
     mkGr gr' = case gr' of
                  [] -> defaultGr
                  g -> g
 
 -- Note: The layout of the list is important
-listOfCreation :: [(String,Int)] -> [Named Benchmark]
-listOfCreation gr =
-  [ ("Containers", benchmarkCreation gr Containers.Graph.mk)
-  , ("Alga", benchmarkCreation gr Alga.Graph.mk )
-  , ("Fgl", benchmarkCreation gr Fgl.PatriciaTree.mk)
-  , ("Hash-Graph", benchmarkCreation gr HashGraph.Gr.mk)
+listOfCreation :: Bool -> [(String,Int)] -> [Named Benchmark]
+listOfCreation dontBenchLittleOnes gr =
+  [ ("Containers", benchmarkCreation dontBenchLittleOnes gr Containers.Graph.mk)
+  , ("Alga", benchmarkCreation dontBenchLittleOnes gr Alga.Graph.mk )
+  , ("Fgl", benchmarkCreation dontBenchLittleOnes gr Fgl.PatriciaTree.mk)
+  , ("Hash-Graph", benchmarkCreation dontBenchLittleOnes gr HashGraph.Gr.mk)
   ]
 

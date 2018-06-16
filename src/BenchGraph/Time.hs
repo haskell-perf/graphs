@@ -38,9 +38,10 @@ benchSuite benchCreation algorithm' inputs' gfunc size = bgroup (show sizeName) 
 
 allBench :: (GraphImpl g, NFData g)
          => Bool -- ^ Do we bench creation of the graph ?
+         -> Bool -- ^ Do we use only bigger graphs ?
          -> [(String,Int)] -> Suite g -> Benchmark
-allBench benchCreation gr = benchmark benchCreation (graphs gr)
+allBench benchCreation b gr = benchmark benchCreation (graphs b gr)
 
-benchmarkCreation :: (NFData g) => [(String,Int)] -> (Edges -> g) -> Benchmark
-benchmarkCreation gr mk = bgroup "creation" [ bgroup n $ map (\i -> let (gr',sizeName) = grf i in bgroup (show sizeName) [bench "" $ nf mk gr'] ) ss | ((n,grf), ss) <- graphs gr ]
+benchmarkCreation :: (NFData g) => Bool -> [(String,Int)] -> (Edges -> g) -> Benchmark
+benchmarkCreation b gr mk = bgroup "creation" [ bgroup n $ map (\i -> let (gr',sizeName) = grf i in bgroup (show sizeName) [bench "" $ nf mk gr'] ) ss | ((n,grf), ss) <- graphs b gr ]
 

@@ -24,8 +24,8 @@ edgesNotInGraph edgs = (\\) (fst (snd complete $ extractMaxVertex edgs + 1)) edg
 extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0
 
-graphs :: [(String, Int)] -> [(GenericGraph, [Int])]
-graphs = mapMaybe (\(x,y) -> (\n -> (defaultGraphs !! n,[0..(y-1)])) <$> elemIndex x graphsNames)
+graphs :: Bool -> [(String, Int)] -> [(GenericGraph, [Int])]
+graphs b = mapMaybe (\(x,y) -> (\n -> (defaultGraphs !! n,[(if b then y-1 else 0)..(y-1)])) <$> elemIndex x graphsNames)
 
 defaultGraphs :: [GenericGraph]
 defaultGraphs = [path, circuit, mesh, complete, clique, realLife]
