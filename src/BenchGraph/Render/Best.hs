@@ -23,7 +23,7 @@ printMap :: String -> (Int,[Named Int]) -> IO ()
 printMap str (diff,m) = do
   putStrLn "\nSUMMARY:\n"
   void $ foldMap (\(k,v) -> putStrLn $ unwords [" *",k,str,show v,"times"]) m
-  when (diff /= 0) $ putStrLn $ unwords ["There was",show diff,"ex-aequo"]
+  when (diff /= 0) $ putStrLn $ unwords ["\n","There was",show diff,"ex-aequo"]
   putStrLn ""
 
 -- | get fastests libraries, sorted, retun the number of case where it was not possible to find a "better" one (where the ration between the two best times was inferior to 1.1)
