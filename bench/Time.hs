@@ -3,7 +3,7 @@
 import Data.List (filter, nub, sortBy, nubBy)
 import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes, fromMaybe)
-import Control.Monad (when)
+import Control.Monad (when, unless)
 
 import Criterion (Benchmarkable)
 import Criterion.Types (Benchmark (..), Report (..), DataRecord( Analysed ), Config (..), SampleAnalysis (..), Verbosity (..), Regression (..))
@@ -59,7 +59,7 @@ genReport :: Int
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
 genReport lev flg arr = do
-  when notquickComp $ putStrLn $ unwords ["Comparing",head libNames,"to",head $ tail libNames]
+  unless notquickComp $ putStrLn $ unwords ["Comparing",head libNames,"to",head $ tail libNames]
   mapM_ mapped $ nubBy (liftExtract2 (==)) arr
   where
     mapped e = do
