@@ -53,31 +53,40 @@ showBenchName Environment{}    = error "Cannot show the bench name of an Env"
 genReport :: Int
            -- ^ The number of '#' to write
            -> Output
-           -- ^ Output options ?
+           -- ^ Output options
            -> [Named Benchmark]
            -- ^ The list of benchmarks with their library name
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = mapM_  mapped $ nubBy (liftExtract2 (==)) arr
+genReport lev flg arr = do
+  when notquickComp $ putStrLn $ unwords ["Comparing",head libNames,"to",head $ tail libNames]
+  mapM_ mapped $ nubBy (liftExtract2 (==)) arr
   where
     mapped e = do
       res <- toPrint lev (staOut flg) arr $ snd e
       case fmap (fmap (map (fmap getCriterionTime))) res of
         Nothing -> return ()
-        Just res' -> when (sumOut flg) $ do
-          printBest "was the fastest" res'
-          printAbstract "faster" $ setBGroup True res'
+        Just res' -> when (sumOut flg) $ if notquickComp
+          then do
+            printBest "was the fastest" res'
+            printAbstract "faster" $ setBGroup True res'
+          else printQuick (head libNames) $ setBGroup True res'
+    libNames = nub $ map fst arr
+    notquickComp = staOut flg /= QuickComparison
 
 toPrint :: Int -- ^ Must start with 2
         -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = case lev of
   2 -> do
-    pTitle
-    maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
-    putStrLn ""
+    if flg /= QuickComparison
+       then do
+         pTitle
+         maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
+         putStrLn ""
+        else putStr $ bname ++ ": "
     doGrp
   3 -> do
-    when (flg /= Null) pTitle
+    when (flg == Ascii || flg == Html) pTitle
     if flg /= Html
        then doGrp
        else do
@@ -152,7 +161,7 @@ benchmarkWithoutOutput bm = do
 main :: IO ()
 main = execParser commandTime >>= main'
 
-main' :: Command -> IO ()
+main' :: CommandTime -> IO ()
 main' opts
   = case opts of
       List listOpt -> case listOpt of

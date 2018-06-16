@@ -1,6 +1,7 @@
 module BenchGraph.Render.Abstract
   (
     printAbstract
+  , printQuick
   , average
   )
 
@@ -10,6 +11,7 @@ import Data.List (find, sortBy)
 import Text.Printf (printf)
 import Control.Monad (unless)
 import Data.Bitraversable (bisequence)
+import Control.Applicative ((<|>))
 
 import BenchGraph.Named
 
@@ -20,7 +22,16 @@ import BenchGraph.Render.Common (average)
 printAbstract :: String -- ^ A comparative (like "faster")
               -> Grouped [Named Double] -- ^ The actual data
               -> IO ()
-printAbstract comparative = printMap comparative . fmap reverse . rearrange . removeNaN . getComparison . getSimples
+printAbstract comparative = printMap comparative . fmap reverse . rearrange . removeNaN . getComparison Nothing . getSimples
+
+printQuick :: String -- ^ To compare with
+           -> Grouped [Named Double] -- ^ data
+           -> IO ()
+printQuick name = printQuickMap . removeNaN . getComparison (Just name) . getSimples
+
+printQuickMap :: Named [Named Double] -> IO ()
+printQuickMap (_,(_,x):_) = putStrLn $ printf "%.2f" x
+printQuickMap _ = putStrLn "ERROR"
 
 removeNaN :: Named [Named Double] -> Named [Named Double]
 removeNaN = fmap (filter (not . isNaN . snd))
@@ -48,23 +59,17 @@ printMap superlative (ref,res) = unless (null res) $ do
   putStrLn ""
 
 -- | The first Name given is the reference name for comparison, the others are the comparison themselves
-getComparison :: [[Named Double]] -> Named [Named Double]
-getComparison grp = case getRef grp of
+getComparison :: Maybe String -> [[Named Double]] -> Named [Named Double]
+getComparison mref grp = case mref <|> getRef grp of
                       Nothing -> ("",[])
-                      Just ref -> let refinedRef = fst ref
-                                      start = snd ref
+                      Just ref -> let refinedRef = ref
+                                      start = map fst $ filter (\(n,_) -> n /= ref) $ head grp
                                   in (refinedRef, map (\x -> (x,getComparison' grp refinedRef x)) start)
 
 -- | Return a "reference": A library for wich there is a non-0 value
-getRef :: [[Named Double]] -> Maybe (String,[String])
+getRef :: [[Named Double]] -> Maybe String
 getRef [] = Nothing
-getRef (x:xs) = case td of
-                  Nothing -> getRef xs
-                  a -> a
-  where
-    td = do
-      val <- fst <$> find (\(_,y) -> y /= 0) x
-      return (val, map fst $ filter (\(n,_) -> n /= val) x)
+getRef (x:xs) = maybe (getRef xs) (Just . fst) $ find (\(_,y) -> y /= 0) x
 
 getComparison' :: [[Named Double]] -> String -> String -> Double
 getComparison' grp ref todo = average $ map (\lst ->

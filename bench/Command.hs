@@ -2,7 +2,7 @@ module Command
   (
   Option (..),
   Output (..),
-  Command (..),
+  CommandTime (..),
   ListOption (..),
   CommandSpace (..),
   StaOut (..),
@@ -21,7 +21,7 @@ import Data.Maybe (fromMaybe)
 data Option = Part Int Int | Only Only
   deriving (Show, Eq)
 
-data StaOut = Ascii | Html | Null deriving (Read, Show, Eq)
+data StaOut = Ascii | Html | Null | QuickComparison deriving (Read, Show, Eq)
 
 data Output = Output {
   sumOut :: Bool, -- ^ Output summary ?
@@ -36,7 +36,7 @@ type Graph = String
 data ListOption = Benchs | Libs
   deriving (Show, Eq)
 
-data Command = List ListOption | Run (Maybe Option) Output (Maybe [Lib]) Bool [(Graph,Int)]
+data CommandTime = List ListOption | Run (Maybe Option) Output (Maybe [Lib]) Bool [(Graph,Int)]
   deriving (Show, Eq)
 
 data CommandSpace = ListS ListOption | RunS (Maybe Only) Output (Maybe [Lib])
@@ -76,16 +76,16 @@ staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii
 output :: Parser Output
 output = Output <$> sumFlag <*> staFlag
 
-runCom :: Parser Command
+runCom :: Parser CommandTime
 runCom = Run <$> optional options <*> output <*> optional (some libOpt) <*> benchWithCreation <*> graphsOpt
 
 listOpt :: Parser ListOption
 listOpt = flag' Benchs (long "benchs") <|> flag' Libs (long "libs")
 
-listCom :: Parser Command
+listCom :: Parser CommandTime
 listCom = List <$> listOpt
 
-command' :: Parser Command
+command' :: Parser CommandTime
 command' = subparser
   ( command "list" list
     <> command "run" run
@@ -100,7 +100,7 @@ command' = subparser
      <> progDesc "List benchmarks"
      <> header "Help" )
 
-commandTime :: ParserInfo Command
+commandTime :: ParserInfo CommandTime
 commandTime = info (command' <**> helper)
       ( fullDesc
      <> progDesc "Benchmark time of functions on different graphs libraries"
