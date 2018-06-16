@@ -4,8 +4,10 @@ where
 
 import Data.List (nubBy)
 
+import qualified Alga.Graph
 import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
+import qualified HashGraph.Gr
 
 import BenchGraph.Types
 import BenchGraph.Named

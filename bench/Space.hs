@@ -27,8 +27,10 @@ import BenchGraph.Render.Best
 import BenchGraph.Render.Abstract
 import BenchGraph.Render.Common
 
+import qualified Alga.Graph
 import qualified Containers.Graph
 import qualified Fgl.PatriciaTree
+import qualified HashGraph.Gr
 
 type WeighResult = (Weight,Maybe String)
 
