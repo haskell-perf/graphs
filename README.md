@@ -11,10 +11,34 @@ Current results of `cabal bench time` and `cabal bench space` can be found here:
 
 Results on bigger graphs and with more beautiful output can be found here: https://github.com/haskell-perf/graphs/tree/master/results
 
+## Build
+
+We support both `cabal` and `stack` to build the project. Please note that using `stack` will allow to download and build libraries not yet on Hackage.
+
+You can customize your build using several cabal flags (all of them are on by default).
+
+### Suites
+
+* Time: will produce a benchmark suite using `Criterion`
+* Space: will produce a benchmark suite using `Weigh`
+* Datasize: will produce a benchmark suite using `Ghc-Datasize`
+
+### Libraries
+
+By default, we bench against `Fgl, `alga`, `hash-graph` and `containers`
+
+You can disable the three first (and thus avoid depending on them) by disabling the flags:
+
+* Fgl
+* Alga
+* HashGraph
+
+WARNING: Disabling a library is _PERMANENT_ . Feel free to do a `git reset --hard` to reset the original state.
+
 ## Usage
 
 ### Time
-The benchmark suite `time` will run all queued benchmark using `Criterion`.
+The benchmark suite `time` will run all queued benchmark using [Criterion](https://hackage.haskell.org/package/criterion).
 
 To run benchmarks, use `time run`. It came with several options to customize the run (you can select libraries to compare, etc...).
 
@@ -22,10 +46,10 @@ To list benchmarks, use `time list`.
 
 ### Space
 
-The benchmark suite `space` will run all queued benchmark using `Weigh`.
+The benchmark suite `space` will run all queued benchmark using [Weigh](https://hackage.haskell.org/package/weigh).
 
-To run benchmarks, use `space run`. It came with several options to customiez the run (you can select libraries to compare, etc...).
-Please note that the benchmarks will all run before any print, so it can takes a long time before anything is print on-screen, mostly with big graphs.
+To run benchmarks, use `space run`. It came with several options to customize the run (you can select libraries to compare, etc...).
+Please note that the benchmarks will all run before any print, so it can take a long time before anything is print on-screen, mostly with big graphs.
 
 To list benchmarks, use `space list`.
 
@@ -39,6 +63,14 @@ We test functions against standards graphs, and they are built with ten-powers v
 
 The default is: `[("Mesh",3),("Clique",2)]`
 
+#### ReaLife graphs
+
+We also provide a set of "real-life" graphs.
+
+They are generated from a text file for the first compilation, so it can take some time.
+
+To force the haskell-graph representation to be re-generated, you can _safely_ delete `src/BenchGraph/ReaLife/Generated.hs`. This will trigger the re-build.
+
 #### Graphs name
 
 The following graphs are supported:
@@ -48,6 +80,8 @@ The following graphs are supported:
 * Mesh
 * Complete
 * Clique
+* RealLife (Note that because we have a limited set, you cannot request more than 4 real-life graphs)
+
 
 ## About implementation
 
@@ -63,12 +97,12 @@ class GraphImpl g where
 
 It allows to convert `Edges` ( a traditional list of edges ) to the graph representation of the library.
 
-### The Named data
+### The Named type 
 
 ```Haskell
-data Named a = Named String a
+type Named a = (String,a)
 ```
-`Named a` data is used to allow a lighter syntax, and can be viewed as a `(String,a)`
+We highly use this type, don't be surprised
 
 ### The `Suite g` data
 
@@ -91,24 +125,22 @@ data Suite g = forall i o. NFData o => Suite
 
 This module defines common builder for `Suite`, and particularly provide a stable name for standard operations on graphs, and thus allow simpler comparison (remember, benchmarks are identified by their _name_).
 
+
+### Benchmarking with creation ?
+
+We provide two way of benchmarking:
+
+* By default, we build a graph, then use `DeepSeq` to force it to Normal Form, and then pass it to the benchmarked function.
+* Either, with the `-b` option, you will also benchmark the creation, that is we will only force a generic representation (a list of edges), and then pass it to the creation function.
+
+In fact, we have:
+
+```Haskell
+if benchCreation
+   then nf (algorithm argument . mkGraph) $!! edges
+   else nf (algorithm argument) $!! mkGraph edges
+```
+
 ### And if I don't care and only want to add a benchmark ?
 
-The main function for `Criterion` is:
-```Haskell
-allBench :: (GraphImpl g, NFData g) => [(String,Int)] -> Suite g -> Benchmark
-```
-
-It takes a list of graphs names and their size, a suite, and produce a benchmark.
-
-The main function for `Weigh` is very similar:
-```Haskell
-allWeigh :: (GraphImpl g, NFData g) => Suite g -> Weigh ()
-```
-
-It use the default graphs and return the correct `Weigh` monad.
-
-You can always see the living code inside the `benchs/` directory.
-
-## ReaLife graphs
-
-To force the haskell-graph representation to be re-generated, you can _safely_ delete `src/BenchGraph/ReaLife/Generated.hs`
+Copy/paste a library file (like `bench/Alga/Graph.hs`), adapt it, and add it to `bench/ListS.hs`.
