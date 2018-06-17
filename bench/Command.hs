@@ -50,10 +50,10 @@ partOpt = Part <$> rpart <*> rof
     rof = option auto (long "of")
 
 onlyOpt :: Parser [String]
-onlyOpt = some $ strOption (long "only" <> short 'o' <> metavar "NAME")
+onlyOpt = some $ strOption (long "only" <> short 'o' <> metavar "NAME" <> help "Benchmark only the function with NAME. Can be used multiple times")
 
 libOpt :: Parser Lib
-libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME")
+libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME" <> help "Benchmark only the library with LIBNAME. Can be used multiple times")
 
 graphOpt :: Parser (Graph,Int)
 graphOpt = option auto (long "graph" <> short 'g' <> metavar "GRAPH" <> help "graph to be tested")
@@ -65,16 +65,16 @@ options :: Parser Option
 options = partOpt <|> ( Only <$> onlyOpt)
 
 sumFlag :: Parser Bool
-sumFlag = flag True False $ long "noSummarize" <> short 's'
+sumFlag = flag True False $ long "noSummarize" <> short 's' <> help "When set, disable SUMMARIZE and ABSTRACT output"
 
 benchWithCreation :: Parser Bool
-benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b'
+benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b' <> help "When set, will benchmark also the graph-creation function. See README"
 
 benchLittleOne :: Parser Bool
-benchLittleOne = flag False True $ long "dont-bench-little-ones" <> short 'i'
+benchLittleOne = flag False True $ long "dont-bench-little-ones" <> short 'i' <> help "When set, will only benchmark the largest graphs"
 
 staFlag :: Parser StaOut
-staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii
+staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii <> help "The standard output, can be: Ascii | Html | Null | QuickComparison"
 
 output :: Parser Output
 output = Output <$> sumFlag <*> staFlag
