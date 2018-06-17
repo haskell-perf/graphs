@@ -28,7 +28,14 @@ graphs :: Bool -> [(String, Int)] -> [(GenericGraph, [Int])]
 graphs b = mapMaybe (\(x,y) -> (\n -> (defaultGraphs !! n,[(if b then y-1 else 0)..(y-1)])) <$> elemIndex x graphsNames)
 
 defaultGraphs :: [GenericGraph]
-defaultGraphs = [path, circuit, mesh, complete, clique, realLife]
+defaultGraphs = 
+  [ path
+  , circuit
+  , mesh
+  , complete
+  , clique
+  , realLife
+  ]
 
 defaultGr :: [Named Int]
 defaultGr = [("Mesh",3),("Clique",3)]

@@ -1,30 +1,34 @@
 import Distribution.Simple
 import System.Directory
 import Data.List (intercalate, delete, isInfixOf)
-import Control.Monad (unless)
+import Control.Monad (unless, when)
 import System.Environment (getArgs)
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 
 main :: IO ()
 main = do
-  b <- doesFileExist "src/BenchGraph/RealLife/Generated.hs"
-  unless b generateRealLifeGraphs
+  args <- getArgs
+  exis <- doesFileExist "src/BenchGraph/RealLife/Generated.hs"
+  let doWeCreateGenerated = not $ hasNotFlag "reallife" args
 
-  modified <- modif <$> getArgs
+  unless exis $ generateRealLifeGraphs doWeCreateGenerated
 
-  mapM_ (change modified) ["bench/ListS.hs","bench/Time.hs", "bench/Space.hs"]
+  mapM_ (change (modif args)) ["bench/ListS.hs","bench/Time.hs", "bench/Space.hs"]
 
   defaultMain
   where
-    modif args = [T.pack "Alga.Graph" | "--flags=-alga" `elem` args] ++ [T.pack "Fgl.PatriciaTree" | "--flags=-fgl" `elem` args ] ++ [T.pack "HashGraph.Gr" | "--flags=-hashgraph" `elem` args ]
+    modif args = [T.pack "Alga.Graph" | hasNotFlag "alga" args] ++ [T.pack "Fgl.PatriciaTree" | hasNotFlag "fgl" args ] ++ [T.pack "HashGraph.Gr" | hasNotFlag "hashgraph" args ]
+    hasNotFlag str = any (isInfixOf ('-':str))
 
 -- | generate real life graphs from a text file
-generateRealLifeGraphs :: IO ()
-generateRealLifeGraphs = do
-  gr <- delete "README.md" <$> listDirectory prefixDir
-  str <- foldl accumF (return start) gr
-  writeFile generatedFile $ init (init str) ++ "\n  ]"
+generateRealLifeGraphs :: Bool -> IO ()
+generateRealLifeGraphs b = if b
+  then do
+    gr <- delete "README.md" <$> listDirectory prefixDir
+    str <- foldl accumF (return start) gr
+    writeFile generatedFile $ init (init str) ++ "\n  ]"
+  else writeFile generatedFile $ start ++ "  ]"
   where
     accumF str' filegr = str' >>= \str -> do
       edges <- readFile $ prefixDir ++ filegr
@@ -44,6 +48,6 @@ generateRealLifeGraphs = do
 change :: [T.Text] -> String -> IO ()
 change modified pref = do
   fil <- T.readFile pref
-  let todo = T.unlines $ filter (\x -> not $ any (`T.isInfixOf` x) modified) $ T.lines fil 
+  let todo = T.unlines $ filter (\x -> not $ any (`T.isInfixOf` x) modified) $ T.lines fil
   unless (fil == todo) $ T.writeFile pref todo
 

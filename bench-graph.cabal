@@ -40,6 +40,10 @@ Flag Fgl
 Flag HashGraph
   Description: Enable benchmarking HashGraph
 
+-- Used only in Setup.hs
+Flag RealLife
+  Description: Enable realLife graphs
+
 library
   exposed-modules:     BenchGraph.GenericGraph
                      , BenchGraph.Types
@@ -51,6 +55,7 @@ library
                      , BenchGraph.Render.Common
                      , BenchGraph.Render.Types
                      , BenchGraph.RealLife.Graphs
+
   other-modules:       BenchGraph.RealLife.Generated
   other-extensions:    ExistentialQuantification
   build-depends:       base         >= 4.7 && < 4.12,
@@ -71,7 +76,7 @@ library
     exposed-modules:   BenchGraph.Space
     build-depends:     weigh        >= 0.0.12
 
-  if flag (DataSize)
+  if flag(DataSize)
     exposed-modules:   BenchGraph.DataSize
     build-depends:     ghc-datasize >= 0.2.0
 
