@@ -182,7 +182,7 @@ main' opts
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grNames
             samples = filter (\(_,n) -> showBenchName n `elem` todo) grList'
-        printHeader gr $ nub $ map (showBenchName . snd) samples
+        unless (staOut flg == QuickComparison) $ printHeader gr $ nub $ map (showBenchName . snd) samples
         genReport 2 flg samples
   where
     grNames = nub $ map (showBenchName . snd) $ grList False False defaultGr
