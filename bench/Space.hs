@@ -66,7 +66,7 @@ useResults (Output su st) todo = do
           let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
               in when su $ do
                 printBest "used the least amount of memory" res''
-                printAbstract "lighter" $ T.setBGroup True res''
+                printAbstract "lighter" $ T.setBGroupT res''
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write, must start with 2

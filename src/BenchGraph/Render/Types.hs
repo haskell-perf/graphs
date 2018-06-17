@@ -2,6 +2,12 @@
 
 module BenchGraph.Render.Types
 
+  ( Grouped (..)
+  , lengthG
+  , setBGroupT
+  , IsGrouped (..)
+  )
+
 where
 
 -- | The Bool is here to tell if we get it into the benchs
@@ -15,6 +21,9 @@ lengthG :: Grouped a -> Int
 lengthG a = case a of
               Simple{} -> 1
               Group a' -> sum $ map lengthG a'
+
+setBGroupT :: Grouped a -> Grouped a
+setBGroupT = setBGroup True
 
 setBGroup :: Bool -> Grouped a -> Grouped a
 setBGroup b (Simple _ a) = Simple b a

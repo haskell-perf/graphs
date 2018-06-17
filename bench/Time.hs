@@ -69,8 +69,8 @@ genReport lev flg arr = do
         Just res' -> when (sumOut flg) $ if notquickComp
           then do
             printBest "was the fastest" res'
-            printAbstract "faster" $ setBGroup True res'
-          else printQuick (head libNames) $ setBGroup True res'
+            printAbstract "faster" $ setBGroupT res'
+          else printQuick (head libNames) $ setBGroupT res'
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
 
