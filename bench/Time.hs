@@ -156,7 +156,7 @@ benchmarkWithoutOutput bm = do
     Analysed rpt <- runAndAnalyseOne 0 "function" bm
     return rpt
   where
-    defaultConfig' = defaultConfig {verbosity = Quiet}
+    defaultConfig' = defaultConfig {verbosity = Quiet, timeLimit = 10}
 
 main :: IO ()
 main = execParser commandTime >>= main'
