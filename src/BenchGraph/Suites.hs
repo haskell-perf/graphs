@@ -54,11 +54,11 @@ removeVertex fun genArg = Suite
   { name = "removeVertex"
   , desc = "Remove a vertex of the graph"
   , algorithm = fun
-  , inputs    = map (fmap genArg . nameBy ((++)"new vertex: " . show)) . oldV
+  , inputs    = map (fmap genArg . nameBy ((++)"vertex: " . show)) . oldV
   }
     where
       oldV x = let getOldV = extractMaxVertex x - 1
-                   in nub [getOldV, getOldV `div` 2]
+                   in nub [if getOldV < 0 then 0 else getOldV, getOldV `div` 2]
 
 
 -- Edge work
