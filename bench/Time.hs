@@ -59,7 +59,9 @@ genReport :: Int
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
 genReport lev flg arr = do
-  unless notquickComp $ putStrLn $ unwords ["Comparing",head libNames,"to",head $ tail libNames]
+  unless notquickComp $ putStrLn $ let comp = head libNames 
+                                       oth =  head $ tail libNames
+                                   in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
   mapM_ mapped $ nubBy (liftExtract2 (==)) arr
   where
     mapped e = do
