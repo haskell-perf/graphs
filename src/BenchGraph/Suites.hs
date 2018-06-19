@@ -35,28 +35,31 @@ hasVertex fun genArg = Suite
   , inputs    = map (fmap genArg) . withNames . vertices
   }
     where
-      vertices x = nub $ 0 : maxV x `div` 2 : [maxV x + 1]
-      maxV = extractMaxVertex
+      vertices x = let maxV = extractMaxVertex x
+                   in nub $ 0 : maxV `div` 3 : (2 * maxV) `div` 3 : [maxV + 1]
 
 addVertex :: NFData o => SpecialisedSuite Vertex o i g
 addVertex fun genArg = Suite
   { name = "addVertex"
   , desc = "Add a vertex (not already in the graph)"
   , algorithm = fun
-  , inputs    = \x -> fmap genArg <$> [nameBy ((++)"new vertex: " . show ) $ getNewV x]
+  , inputs    = map (fmap genArg . nameBy ((++)"new vertex: " . show)) . newV
   }
     where
-      getNewV x = 1 + extractMaxVertex x
+      newV x = let getNewV = extractMaxVertex x
+                in [getNewV + 1, getNewV + 10]
 
 removeVertex :: NFData o => SpecialisedSuite Vertex o i g
 removeVertex fun genArg = Suite
   { name = "removeVertex"
   , desc = "Remove a vertex of the graph"
   , algorithm = fun
-  , inputs    = \x -> fmap genArg <$> [nameBy ((++)"vertex: " . show ) $ getOldV x]
+  , inputs    = map (fmap genArg . nameBy ((++)"new vertex: " . show)) . oldV
   }
     where
-      getOldV x = extractMaxVertex x - 1
+      oldV x = let getOldV = extractMaxVertex x - 1
+                   in nub [getOldV, getOldV `div` 2]
+
 
 -- Edge work
 
@@ -114,7 +117,7 @@ context fun genArg = Suite
   { name = "mergeContext"
   , desc = "Merge a FGL context in the graph"
   , algorithm = fun
-  , inputs = map (fmap genArg) . withNames . const [(0,3)]
+  , inputs = map (fmap genArg) . withNames . const [(0,3),(1,10),(25,3)]
   }
 
 -- Algorithms
@@ -130,7 +133,7 @@ reachable fun genArg = Suite
   { name = "reachable"
   , desc = "Produce a list of reachable vertices from a given one"
   , algorithm = fun
-  , inputs    = map (fmap genArg) . withNames . const [0]
+  , inputs    = map (fmap genArg) . withNames . const [0,10,100]
   }
 
 -- Utils

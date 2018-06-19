@@ -21,7 +21,8 @@ descs = ("creation","Create a graph from a list of edges") : (nubBy eq1 $ map ((
 listOfSuites :: [Named ShadowedS]
 listOfSuites = concatMap sequence
   [ ("Containers", map Shadow Containers.Graph.functions)
-  , ("Alga", map Shadow Alga.Graph.functions )
+  , ("Alga0", map Shadow Alga.Graph.functions )
+  , ("Alga1", map Shadow Alga.Graph.functions )
   , ("Fgl", map Shadow Fgl.PatriciaTree.functions)
   , ("Hash-Graph", map Shadow HashGraph.Gr.functions)
   ]
