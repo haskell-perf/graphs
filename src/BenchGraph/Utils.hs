@@ -19,7 +19,7 @@ import Data.Maybe (mapMaybe)
 
 -- | Remove given edges from the complete graph
 edgesNotInGraph :: Edges -> Edges
-edgesNotInGraph edgs = (\\) (fst (snd complete $ extractMaxVertex edgs + 1)) edgs
+edgesNotInGraph edgs = (\\) (mkCompleteDir $ extractMaxVertex edgs + 1) edgs
 
 extractMaxVertex :: Edges -> Int
 extractMaxVertex = foldl (\act (v1,v2) -> max act (max v1 v2)) 0

@@ -10,7 +10,8 @@ module BenchGraph.GenericGraph
   circuit,
   clique,
   mesh,
-  complete
+  complete,
+  mkCompleteDir
   )
 
 where
@@ -49,9 +50,12 @@ complete :: GenericGraph
 complete = ("Complete",mkComplete)
 
 mkComplete :: Int -> (Edges,Int)
-mkComplete n = (concatMap (\cur -> (map (\x -> (cur, x)) [0..(n'-1)])) [0..(n'-1)],n')
+mkComplete n = (mkCompleteDir n',n')
   where
     n' = 10^n
+
+mkCompleteDir :: Int -> Edges
+mkCompleteDir n' = concatMap (\cur -> (map (\x -> (cur, x)) [0..(n'-1)])) [0..(n'-1)]
 
 -- | A mesh with @n@ vertices
 mesh :: GenericGraph
