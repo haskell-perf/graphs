@@ -133,7 +133,7 @@ reachable fun genArg = Suite
   { name = "reachable"
   , desc = "Produce a list of reachable vertices from a given one"
   , algorithm = fun
-  , inputs    = map (fmap genArg) . withNames . const [0,10,100]
+  , inputs    = \x -> map (fmap genArg) $ withNames $ nub [0, extractMaxVertex x]
   }
 
 -- Utils
