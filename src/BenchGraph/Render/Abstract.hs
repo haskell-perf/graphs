@@ -30,7 +30,12 @@ printQuick :: String -- ^ To compare with
 printQuick name = printQuickMap . removeNaN . getComparison (Just name) . getSimples
 
 printQuickMap :: Named [Named Double] -> IO ()
-printQuickMap (_,(_,x):_) = putStrLn $ printf "%.2f" x
+printQuickMap (_,(_,x):_) = putStrLn $ printf "%.2f" x ++ " (" ++ fancy ++ ")"
+  where
+    fancy
+      | x < 0.9 = "good"
+      | x >= 0.9 && x <= 1.1 = "OK"
+      | otherwise = "bad"
 printQuickMap _ = putStrLn "ERROR"
 
 removeNaN :: Named [Named Double] -> Named [Named Double]
