@@ -72,7 +72,7 @@ mkMesh n = if n' == 1
               [0..(sq^(2::Int))], n')
   where
     sq = 1 + sq'
-    sq' = round (sqrt $ fromRational $ toRational n :: Double)
+    sq' = round (sqrt $ fromRational $ toRational n' :: Double)
     n' = 10^n :: Int
 
 -- | A path is a graph like [(0,1),(1,2),(2,3)..(n,n+1)]
