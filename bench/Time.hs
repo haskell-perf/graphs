@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# LANGUAGE CPP #-}
 
 import Data.List (filter, nub, sortBy, nubBy)
 import Data.Function (on)
@@ -31,10 +32,16 @@ import Text.Printf (printf)
 import Command
 import ListS (listOfSuites, descs)
 
-import qualified Alga.Graph
 import qualified Containers.Graph
+#ifdef ALGA
+import qualified Alga.Graph
+#endif
+#ifdef FGL
 import qualified Fgl.PatriciaTree
+#endif
+#ifdef HASHGRAPH
 import qualified HashGraph.Gr
+#endif
 
 import BenchGraph.Render.Types
 import BenchGraph.Render.Best
@@ -197,8 +204,14 @@ main' opts
 listOfCreation :: Bool -> [(String,Int)] -> [Named Benchmark]
 listOfCreation dontBenchLittleOnes gr =
   [ ("Containers", benchmarkCreation dontBenchLittleOnes gr Containers.Graph.mk)
+#ifdef ALGA
   , ("Alga", benchmarkCreation dontBenchLittleOnes gr Alga.Graph.mk )
+#endif
+#ifdef FGL
   , ("Fgl", benchmarkCreation dontBenchLittleOnes gr Fgl.PatriciaTree.mk)
+#endif
+#ifdef HASHGRAPH
   , ("Hash-Graph", benchmarkCreation dontBenchLittleOnes gr HashGraph.Gr.mk)
+#endif
   ]
 

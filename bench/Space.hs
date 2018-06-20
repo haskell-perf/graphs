@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
+{-# LANGUAGE CPP #-}
 
 import Data.List (nub, nubBy, sortBy, elemIndices)
 import Data.Function (on)
@@ -27,10 +28,16 @@ import BenchGraph.Render.Best
 import BenchGraph.Render.Abstract
 import BenchGraph.Render.Common
 
-import qualified Alga.Graph
 import qualified Containers.Graph
+#ifdef ALGA
+import qualified Alga.Graph
+#endif
+#ifdef FGL
 import qualified Fgl.PatriciaTree
+#endif
+#ifdef HASHGRAPH
 import qualified HashGraph.Gr
+#endif
 
 type WeighResult = (Weight,Maybe String)
 
@@ -166,9 +173,15 @@ benchsNames only = nub (map (\(_,Shadow s) -> name s)  (maybe id (\e -> filter (
 listOfCreation :: [Named (Weigh ())]
 listOfCreation  =
   [ ("Containers" , weighCreation Containers.Graph.mk)
+#ifdef ALGA
   , ("Alga" , weighCreation Alga.Graph.mk)
+#endif
+#ifdef FGL
   , ("Fgl" , weighCreation Fgl.PatriciaTree.mk)
+#endif
+#ifdef HASHGRAPH
   , ("Hash-Graph" , weighCreation HashGraph.Gr.mk)
+#endif
   ]
 
 mainWeigh :: Weigh () -> ([Grouped (Weight, Maybe String)] -> IO ()) -> IO ()

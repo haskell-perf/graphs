@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 module BenchGraph.Utils
   (
   edgesNotInGraph,
@@ -13,7 +15,10 @@ where
 import Data.List ((\\), nub, elemIndex)
 import BenchGraph.GenericGraph
 import BenchGraph.Named
-import BenchGraph.RealLife.Graphs
+
+#ifdef REALLIFE
+import BenchGraph.RealLife.Graphs (realLife)
+#endif
 
 import Data.Maybe (mapMaybe)
 
@@ -34,7 +39,9 @@ defaultGraphs =
   , mesh
   , complete
   , clique
+#ifdef REALLIFE
   , realLife
+#endif
   ]
 
 defaultGr :: [Named Int]
