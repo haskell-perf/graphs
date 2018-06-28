@@ -74,7 +74,7 @@ hasEdge fun genArg = Suite
   { name = "hasEdge"
   , desc = "Test if the given edge is in the graph (with arguments both in the graph and not in the graph (where applicable))"
   , algorithm = fun
-  , inputs    = \x -> map (fmap genArg) $ withNames $ take 2 x ++ take 2 (edgesNotInGraph x)
+  , inputs    = \x -> map (fmap genArg) $ withNames $ getDifferents x ++ take 3 (edgesNotInGraph x)
   }
 
 addEdge :: NFData o => SpecialisedSuite Edge o i g
