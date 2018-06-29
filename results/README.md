@@ -2,18 +2,20 @@
 
 In this folder, you will find the lastest benchmarks of 4 haskell graphs libraries:
 
-* [Alga (algebraic-graphs) v0.1.1.1](http://hackage.haskell.org/package/algebraic-graphs-0.1.1.1)
-* [Data.Graph from containers v0.5.10.2](https://hackage.haskell.org/package/containers-0.5.10.2)
+* [Alga (algebraic-graphs) v0.2.0.0 (not yet on hackage)](https://github.com/snowleopard/alga)
+* [Data.Graph from containers v0.5.11.0](https://hackage.haskell.org/package/containers-0.5.11.0)
 * [FGL v5.6.0.0](https://hackage.haskell.org/package/fgl-5.6.0.0)
 * [Hash-Graph (not yet on hackage)](https://github.com/patrickdoc/hash-graph)
 
+The benchmarks were realised using `Stack` and the `stack.newest.yaml` configuration
+
 ## Tools
 
-* Time benchmarks were run using [Criterion v1.4.0.0](https://hackage.haskell.org/package/criterion-1.4.0.0) 
+* Time benchmarks were run using [Criterion v1.4.1.0](https://hackage.haskell.org/package/criterion-1.4.0.0) 
 
-* Space benchmarks were run using [Weigh v0.12](https://hackage.haskell.org/package/weigh-0.0.12)
+* ~~Space benchmarks were run using [Weigh v0.12](https://hackage.haskell.org/package/weigh-0.0.12)~~
 
-* Data size benchmarks were run using [ghc-datasize v0.2.0](http://hackage.haskell.org/package/ghc-datasize-0.2.0)
+* ~~Data size benchmarks were run using [ghc-datasize v0.2.0](http://hackage.haskell.org/package/ghc-datasize-0.2.0)~~
 
 ## Results
 
@@ -39,6 +41,8 @@ The functions are benchmarked against two generic graphs:
 ```
 [(0,1),(0,2),(0,3),(0,4),(1,2),(1,3),(1,4),(2,3),(2,4),(3,4)]
 ```
+
+* RealLife graphs are graphs from the real life, please see [https://github.com/haskell-perf/graphs/tree/master/src/BenchGraph/RealLife/Graphs]
 
 Graphs are built with successive ten powers vertices. Here, with 1, 10, 100 and 1000 vertices.
 
