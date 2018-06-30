@@ -3,22 +3,22 @@
 Doing:
 
 ----
-* [isEmpty](#isempty)
-* [vertexList](#vertexlist)
-* [vertexCount](#vertexcount)
-* [hasVertex](#hasvertex)
-* [edgeCount](#edgecount)
 * [edgeList](#edgelist)
-* [hasEdge](#hasedge)
-* [addEdge](#addedge)
-* [addVertex](#addvertex)
-* [removeVertex](#removevertex)
+* [vertexList](#vertexlist)
 * [equality](#equality)
-* [removeEdge](#removeedge)
 * [transpose](#transpose)
 * [dff](#dff)
 * [topSort](#topsort)
 * [reachable](#reachable)
+* [vertexCount](#vertexcount)
+* [edgeCount](#edgecount)
+* [hasEdge](#hasedge)
+* [isEmpty](#isempty)
+* [hasVertex](#hasvertex)
+* [addEdge](#addedge)
+* [addVertex](#addvertex)
+* [removeVertex](#removevertex)
+* [removeEdge](#removeedge)
 * [mergeContext](#mergecontext)
 * [creation](#creation)
 ----
@@ -26,756 +26,9 @@ Doing:
 Using [("Mesh",3),("Clique",3)] as graphs
 
 Note: results are in bytes
-## isEmpty
-
-Descritpion: Test if the graph is empty
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD CLASS = "thinright">
-         80
-      </TD>
-      <TD>
-         80
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD>
-         0
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD>
-         0
-      </TD>
-   </TR>
-</TABLE>
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD CLASS = "thinright">
-         80
-      </TD>
-      <TD>
-         80
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD>
-         0
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD>
-         0
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
-There was 6 ex-aequo
-
-## vertexList
-
-Descritpion: Produce a list of the vertices in the graph
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         96
-      </TD>
-      <TD CLASS = "thinright">
-         3,200
-      </TD>
-      <TD>
-         87,400
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         96
-      </TD>
-      <TD CLASS = "thinright">
-         816
-      </TD>
-      <TD>
-         8,016
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         152
-      </TD>
-      <TD CLASS = "thinright">
-         1,800
-      </TD>
-      <TD>
-         18,360
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         24
-      </TD>
-      <TD CLASS = "thinright">
-         736
-      </TD>
-      <TD>
-         8,240
-      </TD>
-   </TR>
-</TABLE>
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         96
-      </TD>
-      <TD CLASS = "thinright">
-         5,760
-      </TD>
-      <TD>
-         1,815,096
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         96
-      </TD>
-      <TD CLASS = "thinright">
-         816
-      </TD>
-      <TD>
-         8,016
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         152
-      </TD>
-      <TD CLASS = "thinright">
-         1,800
-      </TD>
-      <TD>
-         18,360
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         24
-      </TD>
-      <TD CLASS = "thinright">
-         736
-      </TD>
-      <TD>
-         8,240
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Hash-Graph used the least amount of memory 4 times
-There was 2 ex-aequo
-
-
-ABSTRACT:
-
- * Hash-Graph was 6.27 times lighter than Alga
- * Containers was 4.56 times lighter than Alga
- * Fgl was 2.12 times lighter than Alga
-
-## vertexCount
-
-Descritpion: Count the vertices of the graph
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         120
-      </TD>
-      <TD CLASS = "thinright">
-         3,296
-      </TD>
-      <TD>
-         88,216
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD>
-         16
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD>
-         16
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         32
-      </TD>
-      <TD CLASS = "thinright">
-         32
-      </TD>
-      <TD>
-         32
-      </TD>
-   </TR>
-</TABLE>
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         120
-      </TD>
-      <TD CLASS = "thinright">
-         5,856
-      </TD>
-      <TD>
-         1,914,216
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD>
-         16
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD>
-         16
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         32
-      </TD>
-      <TD CLASS = "thinright">
-         32
-      </TD>
-      <TD>
-         32
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
-There was 6 ex-aequo
-
-
-ABSTRACT:
-
- * Fgl was 21.86 times lighter than Alga
- * Containers was 21.86 times lighter than Alga
- * Hash-Graph was 10.93 times lighter than Alga
-
-## hasVertex
-
-Descritpion: Test if the given vertex is in the graph
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD>
-         16
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         220
-      </TD>
-      <TD CLASS = "thinright">
-         720
-      </TD>
-      <TD>
-         1,056
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         8
-      </TD>
-      <TD CLASS = "thinright">
-         11
-      </TD>
-      <TD>
-         11
-      </TD>
-   </TR>
-</TABLE>
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD CLASS = "thinright">
-         16
-      </TD>
-      <TD>
-         16
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         220
-      </TD>
-      <TD CLASS = "thinright">
-         1,635
-      </TD>
-      <TD>
-         22,635
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         8
-      </TD>
-      <TD CLASS = "thinright">
-         11
-      </TD>
-      <TD>
-         11
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
-There was 16 ex-aequo
-
-
-ABSTRACT:
-
- * Hash-Graph was Infinity times lighter than Alga
- * Fgl was Infinity times lighter than Alga
-
-## edgeCount
-
-Descritpion: Count the edges of the graph
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         312
-      </TD>
-      <TD CLASS = "thinright">
-         20,984
-      </TD>
-      <TD>
-         381,888
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         40
-      </TD>
-      <TD CLASS = "thinright">
-         40
-      </TD>
-      <TD>
-         40
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         48
-      </TD>
-      <TD CLASS = "thinright">
-         2,584
-      </TD>
-      <TD>
-         33,960
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         64
-      </TD>
-      <TD CLASS = "thinright">
-         1,856
-      </TD>
-      <TD>
-         20,592
-      </TD>
-   </TR>
-</TABLE>
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         312
-      </TD>
-      <TD CLASS = "thinright">
-         74,232
-      </TD>
-      <TD>
-         11,851,496
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         40
-      </TD>
-      <TD CLASS = "thinright">
-         40
-      </TD>
-      <TD>
-         40
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         48
-      </TD>
-      <TD CLASS = "thinright">
-         8,176
-      </TD>
-      <TD>
-         873,616
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         64
-      </TD>
-      <TD CLASS = "thinright">
-         1,856
-      </TD>
-      <TD>
-         20,592
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Containers used the least amount of memory 6 times
-
-
-ABSTRACT:
-
- * Containers was 23.17 times lighter than Alga
- * Fgl was 6.52 times lighter than Alga
- * Hash-Graph was 5.01 times lighter than Alga
-
 ## edgeList
 
-Descritpion: Produce a list of the edges in the graph
+Description: Produce a list of the edges in the graph
 
 ### Mesh
 <TABLE>
@@ -797,13 +50,13 @@ Descritpion: Produce a list of the edges in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         296
+         184
       </TD>
       <TD CLASS = "thinright">
-         20,968
+         17,432
       </TD>
       <TD>
-         381,872
+         333,184
       </TD>
    </TR>
    <TR>
@@ -870,13 +123,13 @@ Descritpion: Produce a list of the edges in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         296
+         184
       </TD>
       <TD CLASS = "thinright">
-         74,216
+         61,976
       </TD>
       <TD>
-         11,851,480
+         10,505,080
       </TD>
    </TR>
    <TR>
@@ -931,14 +184,15 @@ SUMMARY:
 
 
 ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
 
- * Containers was 13.67 times lighter than Alga
- * Hash-Graph was 13.16 times lighter than Alga
- * Fgl was 7.02 times lighter than Alga
+ * Containers was 18.92 times lighter than Alga
+ * Hash-Graph was 11.91 times lighter than Alga
+ * Fgl was 6.60 times lighter than Alga
 
-## hasEdge
+## vertexList
 
-Descritpion: Test if the given edge is in the graph (with arguments both in the graph and not in the graph (where applicable))
+Description: Produce a list of the vertices in the graph
 
 ### Mesh
 <TABLE>
@@ -960,13 +214,1121 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
          Alga
       </TH>
       <TD CLASS = "thinright">
-         2,112
+         112
       </TD>
       <TD CLASS = "thinright">
-         17,244
+         6,416
       </TD>
       <TD>
-         174,284
+         175,496
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         96
+      </TD>
+      <TD CLASS = "thinright">
+         816
+      </TD>
+      <TD>
+         8,016
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         152
+      </TD>
+      <TD CLASS = "thinright">
+         1,800
+      </TD>
+      <TD>
+         18,360
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         24
+      </TD>
+      <TD CLASS = "thinright">
+         736
+      </TD>
+      <TD>
+         8,240
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         112
+      </TD>
+      <TD CLASS = "thinright">
+         20,856
+      </TD>
+      <TD>
+         5,013,368
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         96
+      </TD>
+      <TD CLASS = "thinright">
+         816
+      </TD>
+      <TD>
+         8,016
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         152
+      </TD>
+      <TD CLASS = "thinright">
+         1,800
+      </TD>
+      <TD>
+         18,360
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         24
+      </TD>
+      <TD CLASS = "thinright">
+         736
+      </TD>
+      <TD>
+         8,240
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Hash-Graph used the least amount of memory 4 times
+
+ There was 2 ex-aequo
+
+
+ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
+
+ * Containers was 42.31 times lighter than Alga
+ * Hash-Graph was 41.16 times lighter than Alga
+ * Fgl was 18.47 times lighter than Alga
+
+## equality
+
+Description: Test if two graphs are equals
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         724
+      </TD>
+      <TD CLASS = "thinright">
+         26,736
+      </TD>
+      <TD>
+         501,908
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         140
+      </TD>
+      <TD CLASS = "thinright">
+         332
+      </TD>
+      <TD>
+         2,684
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         1,324
+      </TD>
+      <TD CLASS = "thinright">
+         21,248
+      </TD>
+      <TD>
+         284,428
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         772
+      </TD>
+      <TD CLASS = "thinright">
+         11,180
+      </TD>
+      <TD>
+         167,520
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         724
+      </TD>
+      <TD CLASS = "thinright">
+         94,960
+      </TD>
+      <TD>
+         15,969,676
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         140
+      </TD>
+      <TD CLASS = "thinright">
+         716
+      </TD>
+      <TD>
+         59,936
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         1,324
+      </TD>
+      <TD CLASS = "thinright">
+         60,728
+      </TD>
+      <TD>
+         6,958,848
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         772
+      </TD>
+      <TD CLASS = "thinright">
+         33,268
+      </TD>
+      <TD>
+         4,923,880
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Containers used the least amount of memory 10 times
+ * Hash-Graph used the least amount of memory 2 times
+
+
+ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
+
+ * Containers was 295.97 times lighter than Alga
+ * Hash-Graph was 16.41 times lighter than Alga
+ * Fgl was 2.84 times lighter than Alga
+
+## transpose
+
+Description: Transpose (invert all the edges) the graph
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD CLASS = "thinright">
+         1,800
+      </TD>
+      <TD>
+         25,704
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         392
+      </TD>
+      <TD CLASS = "thinright">
+         4,336
+      </TD>
+      <TD>
+         50,112
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD CLASS = "thinright">
+         6,408
+      </TD>
+      <TD>
+         712,728
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         392
+      </TD>
+      <TD CLASS = "thinright">
+         9,968
+      </TD>
+      <TD>
+         889,808
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Alga used the least amount of memory 6 times
+
+
+ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
+
+ * Alga was 1.52 times lighter than Containers
+
+## dff
+
+Description: Produce a forest, obtainened from a DFS (Deep First Search) of each vertex
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         424
+      </TD>
+      <TD CLASS = "thinright">
+         5,704
+      </TD>
+      <TD>
+         64,552
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         784
+      </TD>
+      <TD CLASS = "thinright">
+         12,960
+      </TD>
+      <TD>
+         175,752
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         272
+      </TD>
+      <TD CLASS = "thinright">
+         5,856
+      </TD>
+      <TD>
+         114,592
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         424
+      </TD>
+      <TD CLASS = "thinright">
+         11,080
+      </TD>
+      <TD>
+         866,080
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         784
+      </TD>
+      <TD CLASS = "thinright">
+         17,784
+      </TD>
+      <TD>
+         1,231,296
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         272
+      </TD>
+      <TD CLASS = "thinright">
+         8,752
+      </TD>
+      <TD>
+         482,480
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Hash-Graph used the least amount of memory 4 times
+ * Containers used the least amount of memory 1 times
+
+ There was 1 ex-aequo
+
+
+ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
+
+ * Hash-Graph was 2.20 times lighter than Fgl
+ * Containers was 1.87 times lighter than Fgl
+
+## topSort
+
+Description: Topological sorting of the vertices
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         504
+      </TD>
+      <TD CLASS = "thinright">
+         6,504
+      </TD>
+      <TD>
+         72,552
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         1,184
+      </TD>
+      <TD CLASS = "thinright">
+         18,504
+      </TD>
+      <TD>
+         307,824
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         504
+      </TD>
+      <TD CLASS = "thinright">
+         11,880
+      </TD>
+      <TD>
+         874,080
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         1,184
+      </TD>
+      <TD CLASS = "thinright">
+         28,120
+      </TD>
+      <TD>
+         1,845,616
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Containers used the least amount of memory 6 times
+
+
+ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
+
+ * Containers was 2.82 times lighter than Fgl
+
+## reachable
+
+Description: Produce a list of reachable vertices from a given one
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         448
+      </TD>
+      <TD CLASS = "thinright">
+         2,440
+      </TD>
+      <TD>
+         25,384
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         1,000
+      </TD>
+      <TD CLASS = "thinright">
+         8,732
+      </TD>
+      <TD>
+         104,444
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         448
+      </TD>
+      <TD CLASS = "thinright">
+         5,128
+      </TD>
+      <TD>
+         426,148
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         1,000
+      </TD>
+      <TD CLASS = "thinright">
+         13,256
+      </TD>
+      <TD>
+         665,276
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Containers used the least amount of memory 10 times
+
+
+ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
+
+ * Containers was 2.35 times lighter than Fgl
+
+## vertexCount
+
+Description: Count the vertices of the graph
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         72
+      </TD>
+      <TD CLASS = "thinright">
+         5,872
+      </TD>
+      <TD>
+         169,912
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         16
+      </TD>
+      <TD CLASS = "thinright">
+         16
+      </TD>
+      <TD>
+         16
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         16
+      </TD>
+      <TD CLASS = "thinright">
+         16
+      </TD>
+      <TD>
+         16
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         32
+      </TD>
+      <TD CLASS = "thinright">
+         32
+      </TD>
+      <TD>
+         32
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         72
+      </TD>
+      <TD CLASS = "thinright">
+         20,312
+      </TD>
+      <TD>
+         5,007,784
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         16
+      </TD>
+      <TD CLASS = "thinright">
+         16
+      </TD>
+      <TD>
+         16
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         16
+      </TD>
+      <TD CLASS = "thinright">
+         16
+      </TD>
+      <TD>
+         16
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         32
+      </TD>
+      <TD CLASS = "thinright">
+         32
+      </TD>
+      <TD>
+         32
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+
+ There was 6 ex-aequo
+
+
+ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
+
+ * Fgl was 20542.02 times lighter than Alga
+ * Containers was 20542.02 times lighter than Alga
+ * Hash-Graph was 10271.01 times lighter than Alga
+
+## edgeCount
+
+Description: Count the edges of the graph
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         200
+      </TD>
+      <TD CLASS = "thinright">
+         17,448
+      </TD>
+      <TD>
+         333,200
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         40
+      </TD>
+      <TD CLASS = "thinright">
+         40
+      </TD>
+      <TD>
+         40
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         48
+      </TD>
+      <TD CLASS = "thinright">
+         2,584
+      </TD>
+      <TD>
+         33,960
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         64
+      </TD>
+      <TD CLASS = "thinright">
+         1,856
+      </TD>
+      <TD>
+         20,592
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         200
+      </TD>
+      <TD CLASS = "thinright">
+         61,992
+      </TD>
+      <TD>
+         10,505,096
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         40
+      </TD>
+      <TD CLASS = "thinright">
+         40
+      </TD>
+      <TD>
+         40
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         48
+      </TD>
+      <TD CLASS = "thinright">
+         8,176
+      </TD>
+      <TD>
+         873,616
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         64
+      </TD>
+      <TD CLASS = "thinright">
+         1,856
+      </TD>
+      <TD>
+         20,592
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Containers used the least amount of memory 6 times
+
+
+ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
+
+ * Containers was 16147.82 times lighter than Alga
+ * Hash-Graph was 31.37 times lighter than Alga
+ * Fgl was 9.88 times lighter than Alga
+
+## hasEdge
+
+Description: Test if the given edge is in the graph (with arguments both in the graph and not in the graph (where applicable))
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         1,592
+      </TD>
+      <TD CLASS = "thinright">
+         3,359
+      </TD>
+      <TD>
+         3,596
       </TD>
    </TR>
    <TR>
@@ -991,10 +1353,10 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
          488
       </TD>
       <TD CLASS = "thinright">
-         1,502
+         1,559
       </TD>
       <TD>
-         1,782
+         1,836
       </TD>
    </TR>
    <TR>
@@ -1033,13 +1395,13 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
          Alga
       </TH>
       <TD CLASS = "thinright">
-         2,112
+         1,592
       </TD>
       <TD CLASS = "thinright">
-         55,566
+         6,212
       </TD>
       <TD>
-         5,189,622
+         140,495
       </TD>
    </TR>
    <TR>
@@ -1064,10 +1426,10 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
          488
       </TD>
       <TD CLASS = "thinright">
-         3,910
+         4,135
       </TD>
       <TD>
-         47,298
+         46,728
       </TD>
    </TR>
    <TR>
@@ -1089,18 +1451,282 @@ Descritpion: Test if the given edge is in the graph (with arguments both in the 
 
 SUMMARY:
 
- * Containers used the least amount of memory 18 times
+ * Containers used the least amount of memory 26 times
 
 
 ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
 
  * Containers was Infinity times lighter than Alga
- * Hash-Graph was 64.46 times lighter than Alga
- * Fgl was 8.68 times lighter than Alga
+ * Hash-Graph was 25.86 times lighter than Alga
+ * Fgl was 1.89 times lighter than Alga
+
+## isEmpty
+
+Description: Test if the graph is empty
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD>
+         0
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD>
+         0
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD>
+         0
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD>
+         0
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD>
+         0
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD CLASS = "thinright">
+         0
+      </TD>
+      <TD>
+         0
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+
+ There was 6 ex-aequo
+
+## hasVertex
+
+Description: Test if the given vertex is in the graph
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         24
+      </TD>
+      <TD CLASS = "thinright">
+         24
+      </TD>
+      <TD>
+         24
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         220
+      </TD>
+      <TD CLASS = "thinright">
+         804
+      </TD>
+      <TD>
+         1,136
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         8
+      </TD>
+      <TD CLASS = "thinright">
+         12
+      </TD>
+      <TD>
+         12
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH>
+         100
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         24
+      </TD>
+      <TD CLASS = "thinright">
+         24
+      </TD>
+      <TD>
+         24
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         220
+      </TD>
+      <TD CLASS = "thinright">
+         1,884
+      </TD>
+      <TD>
+         25,654
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         8
+      </TD>
+      <TD CLASS = "thinright">
+         12
+      </TD>
+      <TD>
+         12
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Hash-Graph used the least amount of memory 14 times
+
+ There was 6 ex-aequo
+
+
+ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
+
+ * Hash-Graph was 2.00 times lighter than Alga
 
 ## addEdge
 
-Descritpion: Add an edge (not already in the graph)
+Description: Add an edge (not already in the graph)
 
 ### Mesh
 <TABLE>
@@ -1153,10 +1779,10 @@ Descritpion: Add an edge (not already in the graph)
          448
       </TD>
       <TD CLASS = "thinright">
-         1,386
+         1,308
       </TD>
       <TD>
-         6,058
+         5,938
       </TD>
    </TR>
 </TABLE>
@@ -1212,10 +1838,10 @@ Descritpion: Add an edge (not already in the graph)
          448
       </TD>
       <TD CLASS = "thinright">
-         1,380
+         1,308
       </TD>
       <TD>
-         6,236
+         6,092
       </TD>
    </TR>
 </TABLE>
@@ -1227,13 +1853,14 @@ SUMMARY:
 
 
 ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
 
- * Alga was 19.47 times lighter than Hash-Graph
- * Fgl was 1.67 times lighter than Hash-Graph
+ * Alga was 75.17 times lighter than Hash-Graph
+ * Fgl was 4.93 times lighter than Hash-Graph
 
 ## addVertex
 
-Descritpion: Add a vertex (not already in the graph)
+Description: Add a vertex (not already in the graph)
 
 ### Mesh
 <TABLE>
@@ -1255,13 +1882,13 @@ Descritpion: Add a vertex (not already in the graph)
          Alga
       </TH>
       <TD CLASS = "thinright">
-         24
+         40
       </TD>
       <TD CLASS = "thinright">
-         24
+         40
       </TD>
       <TD>
-         24
+         40
       </TD>
    </TR>
    <TR>
@@ -1269,13 +1896,13 @@ Descritpion: Add a vertex (not already in the graph)
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         96
+         120
       </TD>
       <TD CLASS = "thinright">
-         136
+         140
       </TD>
       <TD>
-         176
+         200
       </TD>
    </TR>
    <TR>
@@ -1286,10 +1913,10 @@ Descritpion: Add a vertex (not already in the graph)
          248
       </TD>
       <TD CLASS = "thinright">
-         744
+         768
       </TD>
       <TD>
-         5,232
+         5,184
       </TD>
    </TR>
 </TABLE>
@@ -1314,13 +1941,13 @@ Descritpion: Add a vertex (not already in the graph)
          Alga
       </TH>
       <TD CLASS = "thinright">
-         24
+         40
       </TD>
       <TD CLASS = "thinright">
-         24
+         40
       </TD>
       <TD>
-         24
+         40
       </TD>
    </TR>
    <TR>
@@ -1328,13 +1955,13 @@ Descritpion: Add a vertex (not already in the graph)
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         96
+         120
       </TD>
       <TD CLASS = "thinright">
-         136
+         140
       </TD>
       <TD>
-         176
+         200
       </TD>
    </TR>
    <TR>
@@ -1345,10 +1972,10 @@ Descritpion: Add a vertex (not already in the graph)
          248
       </TD>
       <TD CLASS = "thinright">
-         744
+         768
       </TD>
       <TD>
-         5,232
+         5,184
       </TD>
    </TR>
 </TABLE>
@@ -1356,17 +1983,18 @@ Descritpion: Add a vertex (not already in the graph)
 
 SUMMARY:
 
- * Alga used the least amount of memory 6 times
+ * Alga used the least amount of memory 12 times
 
 
 ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
 
- * Alga was 22.45 times lighter than Hash-Graph
- * Fgl was 4.21 times lighter than Hash-Graph
+ * Alga was 129.60 times lighter than Hash-Graph
+ * Fgl was 25.92 times lighter than Hash-Graph
 
 ## removeVertex
 
-Descritpion: Remove a vertex of the graph
+Description: Remove a vertex of the graph
 
 ### Mesh
 <TABLE>
@@ -1388,13 +2016,13 @@ Descritpion: Remove a vertex of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         48
+         32
       </TD>
       <TD CLASS = "thinright">
-         2,616
+         572
       </TD>
       <TD>
-         37,144
+         8,528
       </TD>
    </TR>
    <TR>
@@ -1402,13 +2030,13 @@ Descritpion: Remove a vertex of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         0
+         220
       </TD>
       <TD CLASS = "thinright">
-         856
+         1,020
       </TD>
       <TD>
-         1,136
+         1,524
       </TD>
    </TR>
    <TR>
@@ -1416,13 +2044,13 @@ Descritpion: Remove a vertex of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         48
+         96
       </TD>
       <TD CLASS = "thinright">
-         1,880
+         2,092
       </TD>
       <TD>
-         6,752
+         7,324
       </TD>
    </TR>
 </TABLE>
@@ -1447,13 +2075,13 @@ Descritpion: Remove a vertex of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         48
+         32
       </TD>
       <TD CLASS = "thinright">
-         9,160
+         1,952
       </TD>
       <TD>
-         1,027,960
+         333,536
       </TD>
    </TR>
    <TR>
@@ -1461,13 +2089,13 @@ Descritpion: Remove a vertex of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         0
+         220
       </TD>
       <TD CLASS = "thinright">
-         1,912
+         2,252
       </TD>
       <TD>
-         23,672
+         29,652
       </TD>
    </TR>
    <TR>
@@ -1475,13 +2103,13 @@ Descritpion: Remove a vertex of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         48
+         96
       </TD>
       <TD CLASS = "thinright">
-         6,912
+         6,568
       </TD>
       <TD>
-         106,280
+         99,644
       </TD>
    </TR>
 </TABLE>
@@ -1490,179 +2118,20 @@ Descritpion: Remove a vertex of the graph
 SUMMARY:
 
  * Fgl used the least amount of memory 6 times
+ * Alga used the least amount of memory 5 times
+
+ There was 1 ex-aequo
 
 
 ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
 
- * Fgl was Infinity times lighter than Alga
- * Hash-Graph was 3.32 times lighter than Alga
-
-## equality
-
-Descritpion: Test if two graphs are equals
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         1,056
-      </TD>
-      <TD CLASS = "thinright">
-         32,696
-      </TD>
-      <TD>
-         581,572
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         164
-      </TD>
-      <TD CLASS = "thinright">
-         356
-      </TD>
-      <TD>
-         2,708
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         1,360
-      </TD>
-      <TD CLASS = "thinright">
-         21,464
-      </TD>
-      <TD>
-         284,644
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         796
-      </TD>
-      <TD CLASS = "thinright">
-         11,516
-      </TD>
-      <TD>
-         176,136
-      </TD>
-   </TR>
-</TABLE>
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         1,056
-      </TD>
-      <TD CLASS = "thinright">
-         115,128
-      </TD>
-      <TD>
-         18,167,664
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         164
-      </TD>
-      <TD CLASS = "thinright">
-         740
-      </TD>
-      <TD>
-         59,960
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         1,360
-      </TD>
-      <TD CLASS = "thinright">
-         60,944
-      </TD>
-      <TD>
-         6,959,064
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         796
-      </TD>
-      <TD CLASS = "thinright">
-         35,044
-      </TD>
-      <TD>
-         5,330,248
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Containers used the least amount of memory 10 times
- * Hash-Graph used the least amount of memory 2 times
-
-
-ABSTRACT:
-
- * Containers was 14.05 times lighter than Alga
- * Hash-Graph was 4.52 times lighter than Alga
- * Fgl was 1.03 times lighter than Alga
+ * Fgl was 7.47 times lighter than Alga
+ * Hash-Graph was 1.87 times lighter than Alga
 
 ## removeEdge
 
-Descritpion: Remove an edge of the graph
+Description: Remove an edge of the graph
 
 ### Mesh
 <TABLE>
@@ -1681,10 +2150,10 @@ Descritpion: Remove an edge of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         10,899
+         10,691
       </TD>
       <TD>
-         142,443
+         139,576
       </TD>
    </TR>
    <TR>
@@ -1703,10 +2172,10 @@ Descritpion: Remove an edge of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         1,056
+         1,008
       </TD>
       <TD>
-         5,723
+         5,627
       </TD>
    </TR>
 </TABLE>
@@ -1728,10 +2197,10 @@ Descritpion: Remove an edge of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         37,629
+         36,840
       </TD>
       <TD>
-         4,040,133
+         3,960,144
       </TD>
    </TR>
    <TR>
@@ -1750,10 +2219,10 @@ Descritpion: Remove an edge of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         1,237
+         1,157
       </TD>
       <TD>
-         6,109
+         5,957
       </TD>
    </TR>
 </TABLE>
@@ -1766,460 +2235,14 @@ SUMMARY:
 
 
 ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
 
- * Hash-Graph was 23.33 times lighter than Alga
- * Fgl was 14.19 times lighter than Alga
-
-## transpose
-
-Descritpion: Transpose (invert all the edges) the graph
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD CLASS = "thinright">
-         1,800
-      </TD>
-      <TD>
-         25,704
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         416
-      </TD>
-      <TD CLASS = "thinright">
-         4,360
-      </TD>
-      <TD>
-         50,136
-      </TD>
-   </TR>
-</TABLE>
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         0
-      </TD>
-      <TD CLASS = "thinright">
-         6,408
-      </TD>
-      <TD>
-         712,728
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         416
-      </TD>
-      <TD CLASS = "thinright">
-         9,992
-      </TD>
-      <TD>
-         889,832
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Alga used the least amount of memory 6 times
-
-
-ABSTRACT:
-
- * Alga was Infinity times lighter than Containers
-
-## dff
-
-Descritpion: Produce a forest, obtainened from a DFS (Deep First Search) of each vertex
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         424
-      </TD>
-      <TD CLASS = "thinright">
-         5,704
-      </TD>
-      <TD>
-         64,552
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         784
-      </TD>
-      <TD CLASS = "thinright">
-         12,984
-      </TD>
-      <TD>
-         175,776
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         272
-      </TD>
-      <TD CLASS = "thinright">
-         6,048
-      </TD>
-      <TD>
-         118,576
-      </TD>
-   </TR>
-</TABLE>
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         424
-      </TD>
-      <TD CLASS = "thinright">
-         11,080
-      </TD>
-      <TD>
-         866,080
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         784
-      </TD>
-      <TD CLASS = "thinright">
-         17,808
-      </TD>
-      <TD>
-         1,231,320
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         272
-      </TD>
-      <TD CLASS = "thinright">
-         8,944
-      </TD>
-      <TD>
-         486,464
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Hash-Graph used the least amount of memory 4 times
- * Containers used the least amount of memory 1 times
-There was 1 ex-aequo
-
-
-ABSTRACT:
-
- * Hash-Graph was 2.20 times lighter than Fgl
- * Containers was 2.03 times lighter than Fgl
-
-## topSort
-
-Descritpion: Topological sorting of the vertices
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         504
-      </TD>
-      <TD CLASS = "thinright">
-         6,504
-      </TD>
-      <TD>
-         72,552
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         1,184
-      </TD>
-      <TD CLASS = "thinright">
-         18,528
-      </TD>
-      <TD>
-         307,848
-      </TD>
-   </TR>
-</TABLE>
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         504
-      </TD>
-      <TD CLASS = "thinright">
-         11,880
-      </TD>
-      <TD>
-         874,080
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         1,184
-      </TD>
-      <TD CLASS = "thinright">
-         28,144
-      </TD>
-      <TD>
-         1,845,640
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Containers used the least amount of memory 6 times
-
-
-ABSTRACT:
-
- * Containers was 2.57 times lighter than Fgl
-
-## reachable
-
-Descritpion: Produce a list of reachable vertices from a given one
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         448
-      </TD>
-      <TD CLASS = "thinright">
-         4,360
-      </TD>
-      <TD>
-         49,528
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         1,024
-      </TD>
-      <TD CLASS = "thinright">
-         15,832
-      </TD>
-      <TD>
-         207,328
-      </TD>
-   </TR>
-</TABLE>
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH>
-         100
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         448
-      </TD>
-      <TD CLASS = "thinright">
-         9,736
-      </TD>
-      <TD>
-         851,056
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         1,024
-      </TD>
-      <TD CLASS = "thinright">
-         22,760
-      </TD>
-      <TD>
-         1,291,520
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Containers used the least amount of memory 6 times
-
-
-ABSTRACT:
-
- * Containers was 2.42 times lighter than Fgl
+ * Hash-Graph was 356.85 times lighter than Alga
+ * Fgl was 39.52 times lighter than Alga
 
 ## mergeContext
 
-Descritpion: Merge a FGL context in the graph
+Description: Merge a FGL context in the graph
 
 ### Mesh
 <TABLE>
@@ -2241,13 +2264,13 @@ Descritpion: Merge a FGL context in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         184
+         312
       </TD>
       <TD CLASS = "thinright">
-         640
+         616
       </TD>
       <TD>
-         880
+         968
       </TD>
    </TR>
    <TR>
@@ -2255,13 +2278,13 @@ Descritpion: Merge a FGL context in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         96
+         325
       </TD>
       <TD CLASS = "thinright">
-         688
+         843
       </TD>
       <TD>
-         5,184
+         5,261
       </TD>
    </TR>
 </TABLE>
@@ -2286,13 +2309,13 @@ Descritpion: Merge a FGL context in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         184
+         312
       </TD>
       <TD CLASS = "thinright">
-         768
+         659
       </TD>
       <TD>
-         1,008
+         1,080
       </TD>
    </TR>
    <TR>
@@ -2300,13 +2323,13 @@ Descritpion: Merge a FGL context in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         96
+         325
       </TD>
       <TD CLASS = "thinright">
-         688
+         843
       </TD>
       <TD>
-         5,184
+         5,261
       </TD>
    </TR>
 </TABLE>
@@ -2314,18 +2337,20 @@ Descritpion: Merge a FGL context in the graph
 
 SUMMARY:
 
- * Hash-Graph used the least amount of memory 3 times
- * Fgl used the least amount of memory 2 times
-There was 1 ex-aequo
+ * Fgl used the least amount of memory 12 times
+ * Hash-Graph used the least amount of memory 2 times
+
+ There was 4 ex-aequo
 
 
 ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
 
- * Fgl was 2.34 times lighter than Hash-Graph
+ * Fgl was 5.14 times lighter than Hash-Graph
 
 ## creation
 
-Descritpion: Create a graph from a list of edges
+Description: Create a graph from a list of edges
 
 ### Mesh
 <TABLE>
@@ -2347,13 +2372,13 @@ Descritpion: Create a graph from a list of edges
          Alga
       </TH>
       <TD CLASS = "thinright">
-         16
+         0
       </TD>
       <TD CLASS = "thinright">
-         6,304
+         5,360
       </TD>
       <TD>
-         80,440
+         67,544
       </TD>
    </TR>
    <TR>
@@ -2361,13 +2386,13 @@ Descritpion: Create a graph from a list of edges
          Containers
       </TH>
       <TD CLASS = "thinright">
-         256
+         232
       </TD>
       <TD CLASS = "thinright">
-         3,792
+         3,768
       </TD>
       <TD>
-         39,480
+         39,456
       </TD>
    </TR>
    <TR>
@@ -2392,10 +2417,10 @@ Descritpion: Create a graph from a list of edges
          16
       </TD>
       <TD CLASS = "thinright">
-         17,616
+         16,992
       </TD>
       <TD>
-         290,376
+         273,192
       </TD>
    </TR>
 </TABLE>
@@ -2420,13 +2445,13 @@ Descritpion: Create a graph from a list of edges
          Alga
       </TH>
       <TD CLASS = "thinright">
-         16
+         0
       </TD>
       <TD CLASS = "thinright">
-         19,744
+         16,496
       </TD>
       <TD>
-         2,108,104
+         1,751,696
       </TD>
    </TR>
    <TR>
@@ -2434,13 +2459,13 @@ Descritpion: Create a graph from a list of edges
          Containers
       </TH>
       <TD CLASS = "thinright">
-         256
+         232
       </TD>
       <TD CLASS = "thinright">
-         8,016
+         7,992
       </TD>
       <TD>
-         693,096
+         693,072
       </TD>
    </TR>
    <TR>
@@ -2465,10 +2490,10 @@ Descritpion: Create a graph from a list of edges
          16
       </TD>
       <TD CLASS = "thinright">
-         56,992
+         53,488
       </TD>
       <TD>
-         9,258,088
+         8,445,400
       </TD>
    </TR>
 </TABLE>
@@ -2477,12 +2502,13 @@ Descritpion: Create a graph from a list of edges
 SUMMARY:
 
  * Containers used the least amount of memory 4 times
-There was 2 ex-aequo
+ * Alga used the least amount of memory 2 times
 
 
 ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
 
- * Containers was 2.94 times lighter than Fgl
- * Alga was 1.89 times lighter than Fgl
- * Hash-Graph was 1.01 times lighter than Fgl
+ * Containers was 9.37 times lighter than Fgl
+ * Alga was 4.59 times lighter than Fgl
+ * Hash-Graph was 1.06 times lighter than Fgl
 
