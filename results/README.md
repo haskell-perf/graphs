@@ -13,7 +13,7 @@ The benchmarks were realised using `Stack` and the `stack.newest.yaml` configura
 
 * Time benchmarks were run using [Criterion v1.4.1.0](https://hackage.haskell.org/package/criterion-1.4.0.0) 
 
-* ~~Space benchmarks were run using [Weigh v0.12](https://hackage.haskell.org/package/weigh-0.0.12)~~
+* Space benchmarks were run using [Weigh v0.12](https://hackage.haskell.org/package/weigh-0.0.12)
 
 * ~~Data size benchmarks were run using [ghc-datasize v0.2.0](http://hackage.haskell.org/package/ghc-datasize-0.2.0)~~
 
@@ -23,6 +23,15 @@ The benchmarks were realised using `Stack` and the `stack.newest.yaml` configura
 * Space: https://github.com/haskell-perf/graphs/blob/master/results/SPACE.md
 
 Note: Some functions of Data.Graph was not in the original library (edgeCount, hasEdge, vertexCount), their defintion can be found in `bench/Containers/Graph.hs`
+
+### Benchmarking routine
+
+For the main results, we produce a generic list of edges, create a graph from it, fully evaluate this graph to Normal Form, then pass it to then benchmarked function.
+This may not reflect the reality, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-creation.md where, where the creation time (from a list of edges) is taken into account.
+
+### The list of edges
+
+Containers, FGL and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md where we used the alga representation instead of a list of edges.
 
 ## Some words about graphs
 The functions are benchmarked against two generic graphs:
@@ -44,7 +53,7 @@ The functions are benchmarked against two generic graphs:
 
 * RealLife graphs are graphs from the real life, please see [https://github.com/haskell-perf/graphs/tree/master/src/BenchGraph/RealLife/Graphs]
 
-Graphs are built with successive ten powers vertices. Here, with 1, 10, 100 and 1000 vertices.
+The two first graphs are built with successive ten powers vertices. Here, with 1, 10, 100 and 1000 vertices.
 
 ## About arguments
 All the functions are tested with arguments in the _domain_ of the graph, where applicable: unless it is mentioned, edges and vertices generated for the test can be in the complete graph with the same number of vertices.
