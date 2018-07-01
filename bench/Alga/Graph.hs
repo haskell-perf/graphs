@@ -13,7 +13,7 @@ import BenchGraph.Utils (extractMaxVertex)
 import Algebra.Graph
 
 instance GraphImpl (Graph Int) where
-  mkGraph = mk
+  mkGraph = mkSpecClique
   mkVertex = vertex 0
 
 mk :: Edges -> Graph Int
