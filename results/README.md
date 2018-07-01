@@ -34,7 +34,7 @@ This may not reflect the reality, so we produced https://github.com/haskell-perf
 Containers, FGL and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md where we used the alga representation instead of a list of edges.
 
 ## Some words about graphs
-The functions are benchmarked against two generic graphs:
+The functions are benchmarked against:
 
 * A [mesh](https://en.wikipedia.org/wiki/Lattice_graph): This graph can be represented as a regular tiling of a plane, with edges going only right or up. It is a good example of a sparse graph. For example a mesh with nine vertices can be viewed as:
 
@@ -54,6 +54,9 @@ The functions are benchmarked against two generic graphs:
 * RealLife graphs are graphs from the real life, please see [https://github.com/haskell-perf/graphs/tree/master/src/BenchGraph/RealLife/Graphs]
 
 The two first graphs are built with successive ten powers vertices. Here, with 1, 10, 100 and 1000 vertices.
+
+### Types
+Libraries are benchmarked against graphs with *Int* vertices.
 
 ## About arguments
 All the functions are tested with arguments in the _domain_ of the graph, where applicable: unless it is mentioned, edges and vertices generated for the test can be in the complete graph with the same number of vertices.
