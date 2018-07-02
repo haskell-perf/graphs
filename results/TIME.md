@@ -27,6 +27,7 @@ Doing:
 * [mergeContext](#mergecontext)
 * [creation](#creation)
 ----
+
 Using [("Clique",4),("Mesh",4),("RealLife",4)] as graphs
 
 ## edgeList

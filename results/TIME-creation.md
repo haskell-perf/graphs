@@ -57,16 +57,16 @@ Description: Produce a list of the edges in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         51.60 ns
+         51.86 ns
       </TD>
       <TD CLASS = "thinright">
-         41.14 μs
+         42.86 μs
       </TD>
       <TD CLASS = "thinright">
-         9.709 ms
+         9.489 ms
       </TD>
       <TD>
-         1.388 s
+         1.345 s
       </TD>
    </TR>
    <TR>
@@ -74,16 +74,16 @@ Description: Produce a list of the edges in the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         41.48 ns
+         42.18 ns
       </TD>
       <TD CLASS = "thinright">
-         1.713 μs
+         1.774 μs
       </TD>
       <TD CLASS = "thinright">
-         204.1 μs
+         207.9 μs
       </TD>
       <TD>
-         72.94 ms
+         72.91 ms
       </TD>
    </TR>
    <TR>
@@ -91,16 +91,16 @@ Description: Produce a list of the edges in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         37.03 ns
+         39.36 ns
       </TD>
       <TD CLASS = "thinright">
-         18.57 μs
+         18.93 μs
       </TD>
       <TD CLASS = "thinright">
-         9.818 ms
+         9.533 ms
       </TD>
       <TD>
-         3.312 s
+         3.436 s
       </TD>
    </TR>
    <TR>
@@ -108,16 +108,16 @@ Description: Produce a list of the edges in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         41.11 ns
+         40.19 ns
       </TD>
       <TD CLASS = "thinright">
-         20.27 μs
+         21.98 μs
       </TD>
       <TD CLASS = "thinright">
-         8.035 ms
+         7.785 ms
       </TD>
       <TD>
-         3.827 s
+         3.975 s
       </TD>
    </TR>
 </TABLE>
@@ -145,16 +145,16 @@ Description: Produce a list of the edges in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         51.08 ns
+         52.01 ns
       </TD>
       <TD CLASS = "thinright">
-         10.95 μs
+         11.62 μs
       </TD>
       <TD CLASS = "thinright">
-         211.8 μs
+         222.0 μs
       </TD>
       <TD>
-         3.716 ms
+         4.745 ms
       </TD>
    </TR>
    <TR>
@@ -162,16 +162,16 @@ Description: Produce a list of the edges in the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         41.59 ns
+         41.96 ns
       </TD>
       <TD CLASS = "thinright">
-         665.7 ns
+         710.5 ns
       </TD>
       <TD CLASS = "thinright">
-         8.144 μs
+         9.064 μs
       </TD>
       <TD>
-         88.36 μs
+         95.95 μs
       </TD>
    </TR>
    <TR>
@@ -179,16 +179,16 @@ Description: Produce a list of the edges in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         37.49 ns
+         37.11 ns
       </TD>
       <TD CLASS = "thinright">
-         6.122 μs
+         6.165 μs
       </TD>
       <TD CLASS = "thinright">
          216.5 μs
       </TD>
       <TD>
-         19.21 ms
+         23.73 ms
       </TD>
    </TR>
    <TR>
@@ -196,16 +196,16 @@ Description: Produce a list of the edges in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         41.34 ns
+         42.36 ns
       </TD>
       <TD CLASS = "thinright">
-         5.598 μs
+         5.970 μs
       </TD>
       <TD CLASS = "thinright">
-         199.0 μs
+         203.9 μs
       </TD>
       <TD>
-         20.20 ms
+         19.92 ms
       </TD>
    </TR>
 </TABLE>
@@ -233,16 +233,16 @@ Description: Produce a list of the edges in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         93.04 ms
+         20.34 μs
       </TD>
       <TD CLASS = "thinright">
-         19.40 μs
+         600.5 μs
       </TD>
       <TD CLASS = "thinright">
-         571.0 μs
+         7.619 ms
       </TD>
       <TD>
-         7.305 ms
+         91.10 ms
       </TD>
    </TR>
    <TR>
@@ -250,16 +250,16 @@ Description: Produce a list of the edges in the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         3.267 ms
+         1.025 μs
       </TD>
       <TD CLASS = "thinright">
-         1.051 μs
+         17.98 μs
       </TD>
       <TD CLASS = "thinright">
-         17.61 μs
+         158.7 μs
       </TD>
       <TD>
-         158.2 μs
+         3.092 ms
       </TD>
    </TR>
    <TR>
@@ -267,16 +267,16 @@ Description: Produce a list of the edges in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         559.5 ms
+         11.06 μs
       </TD>
       <TD CLASS = "thinright">
-         10.87 μs
+         533.7 μs
       </TD>
       <TD CLASS = "thinright">
-         560.6 μs
+         19.24 ms
       </TD>
       <TD>
-         20.23 ms
+         576.6 ms
       </TD>
    </TR>
    <TR>
@@ -284,16 +284,16 @@ Description: Produce a list of the edges in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         604.7 ms
+         10.96 μs
       </TD>
       <TD CLASS = "thinright">
-         10.88 μs
+         518.7 μs
       </TD>
       <TD CLASS = "thinright">
-         562.5 μs
+         18.84 ms
       </TD>
       <TD>
-         19.54 ms
+         598.4 ms
       </TD>
    </TR>
 </TABLE>
@@ -302,15 +302,17 @@ Description: Produce a list of the edges in the graph
 SUMMARY:
 
  * Containers was the fastest 10 times
- * Fgl was the fastest 2 times
+ * Fgl was the fastest 1 times
+
+ There was 1 ex-aequo
 
 
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Containers was 95.13 times faster than Hash-Graph
- * Alga was 3.11 times faster than Hash-Graph
- * Fgl was 1.09 times faster than Hash-Graph
+ * Containers was 105.90 times faster than Hash-Graph
+ * Alga was 3.83 times faster than Hash-Graph
+ * Fgl was 1.08 times faster than Hash-Graph
 
 ## vertexList
 
@@ -339,16 +341,16 @@ Description: Produce a list of the vertices in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         52.32 ns
+         48.49 ns
       </TD>
       <TD CLASS = "thinright">
-         21.48 μs
+         20.52 μs
       </TD>
       <TD CLASS = "thinright">
-         5.260 ms
+         5.130 ms
       </TD>
       <TD>
-         820.0 ms
+         856.5 ms
       </TD>
    </TR>
    <TR>
@@ -356,16 +358,16 @@ Description: Produce a list of the vertices in the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         35.66 ns
+         35.52 ns
       </TD>
       <TD CLASS = "thinright">
-         964.3 ns
+         960.3 ns
       </TD>
       <TD CLASS = "thinright">
-         89.64 μs
+         105.1 μs
       </TD>
       <TD>
-         72.11 ms
+         81.59 ms
       </TD>
    </TR>
    <TR>
@@ -373,16 +375,16 @@ Description: Produce a list of the vertices in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         56.43 ns
+         63.03 ns
       </TD>
       <TD CLASS = "thinright">
-         14.91 μs
+         15.08 μs
       </TD>
       <TD CLASS = "thinright">
-         7.976 ms
+         10.09 ms
       </TD>
       <TD>
-         3.180 s
+         3.311 s
       </TD>
    </TR>
    <TR>
@@ -390,16 +392,16 @@ Description: Produce a list of the vertices in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         27.71 ns
+         27.74 ns
       </TD>
       <TD CLASS = "thinright">
-         19.86 μs
+         19.85 μs
       </TD>
       <TD CLASS = "thinright">
-         8.758 ms
+         10.36 ms
       </TD>
       <TD>
-         3.648 s
+         3.804 s
       </TD>
    </TR>
 </TABLE>
@@ -427,16 +429,16 @@ Description: Produce a list of the vertices in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         49.69 ns
+         48.75 ns
       </TD>
       <TD CLASS = "thinright">
-         5.692 μs
+         5.687 μs
       </TD>
       <TD CLASS = "thinright">
-         141.6 μs
+         141.3 μs
       </TD>
       <TD>
-         2.587 ms
+         2.394 ms
       </TD>
    </TR>
    <TR>
@@ -444,16 +446,16 @@ Description: Produce a list of the vertices in the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         36.02 ns
+         35.56 ns
       </TD>
       <TD CLASS = "thinright">
-         417.9 ns
+         404.3 ns
       </TD>
       <TD CLASS = "thinright">
-         5.198 μs
+         5.359 μs
       </TD>
       <TD>
-         45.91 μs
+         44.82 μs
       </TD>
    </TR>
    <TR>
@@ -461,16 +463,16 @@ Description: Produce a list of the vertices in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         57.35 ns
+         75.73 ns
       </TD>
       <TD CLASS = "thinright">
-         5.610 μs
+         5.686 μs
       </TD>
       <TD CLASS = "thinright">
-         211.7 μs
+         202.3 μs
       </TD>
       <TD>
-         18.19 ms
+         18.27 ms
       </TD>
    </TR>
    <TR>
@@ -478,16 +480,16 @@ Description: Produce a list of the vertices in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         27.64 ns
+         31.99 ns
       </TD>
       <TD CLASS = "thinright">
-         5.038 μs
+         5.249 μs
       </TD>
       <TD CLASS = "thinright">
-         193.4 μs
+         196.2 μs
       </TD>
       <TD>
-         21.48 ms
+         21.46 ms
       </TD>
    </TR>
 </TABLE>
@@ -515,16 +517,16 @@ Description: Produce a list of the vertices in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         40.62 ms
+         9.681 μs
       </TD>
       <TD CLASS = "thinright">
-         10.31 μs
+         287.1 μs
       </TD>
       <TD CLASS = "thinright">
-         302.4 μs
+         3.387 ms
       </TD>
       <TD>
-         3.742 ms
+         40.55 ms
       </TD>
    </TR>
    <TR>
@@ -532,16 +534,16 @@ Description: Produce a list of the vertices in the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         924.8 μs
+         560.3 ns
       </TD>
       <TD CLASS = "thinright">
-         572.3 ns
+         9.040 μs
       </TD>
       <TD CLASS = "thinright">
-         10.40 μs
+         77.43 μs
       </TD>
       <TD>
-         87.63 μs
+         992.7 μs
       </TD>
    </TR>
    <TR>
@@ -549,16 +551,16 @@ Description: Produce a list of the vertices in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         538.1 ms
+         9.476 μs
       </TD>
       <TD CLASS = "thinright">
-         9.793 μs
+         471.9 μs
       </TD>
       <TD CLASS = "thinright">
-         528.0 μs
+         17.04 ms
       </TD>
       <TD>
-         19.23 ms
+         516.4 ms
       </TD>
    </TR>
    <TR>
@@ -566,16 +568,16 @@ Description: Produce a list of the vertices in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         557.8 ms
+         9.489 μs
       </TD>
       <TD CLASS = "thinright">
-         9.535 μs
+         490.6 μs
       </TD>
       <TD CLASS = "thinright">
-         541.4 μs
+         18.27 ms
       </TD>
       <TD>
-         20.19 ms
+         580.3 ms
       </TD>
    </TR>
 </TABLE>
@@ -590,9 +592,9 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Containers was 114.32 times faster than Hash-Graph
- * Alga was 4.92 times faster than Hash-Graph
- * Fgl was 1.13 times faster than Hash-Graph
+ * Containers was 118.84 times faster than Hash-Graph
+ * Alga was 5.48 times faster than Hash-Graph
+ * Fgl was 1.15 times faster than Hash-Graph
 
 ## equality
 
@@ -621,16 +623,16 @@ Description: Test if two graphs are equals
          Alga
       </TH>
       <TD CLASS = "thinright">
-         200.6 ns
+         194.6 ns
       </TD>
       <TD CLASS = "thinright">
-         61.99 μs
+         63.87 μs
       </TD>
       <TD CLASS = "thinright">
-         13.89 ms
+         13.65 ms
       </TD>
       <TD>
-         2.053 s
+         1.947 s
       </TD>
    </TR>
    <TR>
@@ -638,16 +640,16 @@ Description: Test if two graphs are equals
          Containers
       </TH>
       <TD CLASS = "thinright">
-         35.63 ns
+         33.27 ns
       </TD>
       <TD CLASS = "thinright">
-         1.135 μs
+         1.059 μs
       </TD>
       <TD CLASS = "thinright">
-         124.2 μs
+         122.3 μs
       </TD>
       <TD>
-         89.06 ms
+         89.36 ms
       </TD>
    </TR>
    <TR>
@@ -655,16 +657,16 @@ Description: Test if two graphs are equals
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         170.2 ns
+         167.8 ns
       </TD>
       <TD CLASS = "thinright">
-         30.21 μs
+         30.49 μs
       </TD>
       <TD CLASS = "thinright">
-         10.83 ms
+         10.93 ms
       </TD>
       <TD>
-         3.813 s
+         3.750 s
       </TD>
    </TR>
    <TR>
@@ -672,16 +674,16 @@ Description: Test if two graphs are equals
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         82.88 ns
+         70.81 ns
       </TD>
       <TD CLASS = "thinright">
-         23.60 μs
+         24.83 μs
       </TD>
       <TD CLASS = "thinright">
-         8.433 ms
+         8.072 ms
       </TD>
       <TD>
-         3.757 s
+         3.674 s
       </TD>
    </TR>
 </TABLE>
@@ -709,16 +711,16 @@ Description: Test if two graphs are equals
          Alga
       </TH>
       <TD CLASS = "thinright">
-         203.6 ns
+         195.3 ns
       </TD>
       <TD CLASS = "thinright">
-         17.23 μs
+         17.79 μs
       </TD>
       <TD CLASS = "thinright">
-         329.3 μs
+         331.6 μs
       </TD>
       <TD>
-         6.713 ms
+         6.538 ms
       </TD>
    </TR>
    <TR>
@@ -726,16 +728,16 @@ Description: Test if two graphs are equals
          Containers
       </TH>
       <TD CLASS = "thinright">
-         34.76 ns
+         33.05 ns
       </TD>
       <TD CLASS = "thinright">
-         384.1 ns
+         380.4 ns
       </TD>
       <TD CLASS = "thinright">
-         5.342 μs
+         5.487 μs
       </TD>
       <TD>
-         46.50 μs
+         45.86 μs
       </TD>
    </TR>
    <TR>
@@ -743,16 +745,16 @@ Description: Test if two graphs are equals
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         168.0 ns
+         167.0 ns
       </TD>
       <TD CLASS = "thinright">
-         10.77 μs
+         10.79 μs
       </TD>
       <TD CLASS = "thinright">
-         272.0 μs
+         265.4 μs
       </TD>
       <TD>
-         19.39 ms
+         18.96 ms
       </TD>
    </TR>
    <TR>
@@ -760,16 +762,16 @@ Description: Test if two graphs are equals
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         75.86 ns
+         71.23 ns
       </TD>
       <TD CLASS = "thinright">
-         6.810 μs
+         6.916 μs
       </TD>
       <TD CLASS = "thinright">
-         225.4 μs
+         221.6 μs
       </TD>
       <TD>
-         18.99 ms
+         18.85 ms
       </TD>
    </TR>
 </TABLE>
@@ -797,16 +799,16 @@ Description: Test if two graphs are equals
          Alga
       </TH>
       <TD CLASS = "thinright">
-         142.8 ms
+         29.44 μs
       </TD>
       <TD CLASS = "thinright">
-         29.12 μs
+         844.2 μs
       </TD>
       <TD CLASS = "thinright">
-         878.3 μs
+         11.97 ms
       </TD>
       <TD>
-         11.99 ms
+         139.5 ms
       </TD>
    </TR>
    <TR>
@@ -814,16 +816,16 @@ Description: Test if two graphs are equals
          Containers
       </TH>
       <TD CLASS = "thinright">
-         1.147 ms
+         545.6 ns
       </TD>
       <TD CLASS = "thinright">
-         559.3 ns
+         10.60 μs
       </TD>
       <TD CLASS = "thinright">
-         11.16 μs
+         93.95 μs
       </TD>
       <TD>
-         109.9 μs
+         1.158 ms
       </TD>
    </TR>
    <TR>
@@ -831,16 +833,16 @@ Description: Test if two graphs are equals
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         570.1 ms
+         17.28 μs
       </TD>
       <TD CLASS = "thinright">
-         17.83 μs
+         618.2 μs
       </TD>
       <TD CLASS = "thinright">
-         668.3 μs
+         20.38 ms
       </TD>
       <TD>
-         22.88 ms
+         556.7 ms
       </TD>
    </TR>
    <TR>
@@ -848,16 +850,16 @@ Description: Test if two graphs are equals
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         557.1 ms
+         12.08 μs
       </TD>
       <TD CLASS = "thinright">
-         12.27 μs
+         541.6 μs
       </TD>
       <TD CLASS = "thinright">
-         585.6 μs
+         17.54 ms
       </TD>
       <TD>
-         20.10 ms
+         556.1 ms
       </TD>
    </TR>
 </TABLE>
@@ -873,9 +875,9 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Containers was 96.79 times faster than Fgl
- * Alga was 1.99 times faster than Fgl
- * Hash-Graph was 1.02 times faster than Fgl
+ * Containers was 104.51 times faster than Fgl
+ * Alga was 2.28 times faster than Fgl
+ * Hash-Graph was 1.00 times faster than Fgl
 
 ## transpose
 
@@ -904,16 +906,16 @@ Description: Transpose (invert all the edges) the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         32.30 ns
+         28.75 ns
       </TD>
       <TD CLASS = "thinright">
-         6.038 μs
+         5.666 μs
       </TD>
       <TD CLASS = "thinright">
-         631.4 μs
+         588.6 μs
       </TD>
       <TD>
-         61.20 ms
+         64.89 ms
       </TD>
    </TR>
    <TR>
@@ -921,16 +923,16 @@ Description: Transpose (invert all the edges) the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         102.2 ns
+         92.80 ns
       </TD>
       <TD CLASS = "thinright">
-         3.074 μs
+         2.969 μs
       </TD>
       <TD CLASS = "thinright">
-         519.5 μs
+         497.0 μs
       </TD>
       <TD>
-         163.3 ms
+         141.7 ms
       </TD>
    </TR>
 </TABLE>
@@ -958,16 +960,16 @@ Description: Transpose (invert all the edges) the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         31.38 ns
+         29.42 ns
       </TD>
       <TD CLASS = "thinright">
-         1.680 μs
+         1.670 μs
       </TD>
       <TD CLASS = "thinright">
-         22.31 μs
+         21.25 μs
       </TD>
       <TD>
-         252.2 μs
+         229.7 μs
       </TD>
    </TR>
    <TR>
@@ -975,16 +977,16 @@ Description: Transpose (invert all the edges) the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         99.10 ns
+         100.2 ns
       </TD>
       <TD CLASS = "thinright">
-         1.177 μs
+         1.199 μs
       </TD>
       <TD CLASS = "thinright">
-         14.01 μs
+         14.50 μs
       </TD>
       <TD>
-         201.6 μs
+         197.1 μs
       </TD>
    </TR>
 </TABLE>
@@ -1012,16 +1014,16 @@ Description: Transpose (invert all the edges) the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         3.393 ms
+         2.718 μs
       </TD>
       <TD CLASS = "thinright">
-         2.663 μs
+         49.05 μs
       </TD>
       <TD CLASS = "thinright">
-         51.84 μs
+         382.2 μs
       </TD>
       <TD>
-         405.1 μs
+         3.210 ms
       </TD>
    </TR>
    <TR>
@@ -1029,16 +1031,16 @@ Description: Transpose (invert all the edges) the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         6.443 ms
+         1.730 μs
       </TD>
       <TD CLASS = "thinright">
-         1.761 μs
+         30.11 μs
       </TD>
       <TD CLASS = "thinright">
-         32.72 μs
+         313.8 μs
       </TD>
       <TD>
-         334.3 μs
+         7.580 ms
       </TD>
    </TR>
 </TABLE>
@@ -1053,11 +1055,11 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Alga was 1.43 times faster than Containers
+ * Alga was 1.80 times faster than Containers
 
 ## dff
 
-Description: Produce a forest, obtainened from a DFS (Deep First Search) of each vertex
+Description: Produce a forest, obtained from a DFS (Deep First Search) of each vertex
 
 ### Clique
 <TABLE>
@@ -1082,16 +1084,16 @@ Description: Produce a forest, obtainened from a DFS (Deep First Search) of each
          Containers
       </TH>
       <TD CLASS = "thinright">
-         134.0 ns
+         157.5 ns
       </TD>
       <TD CLASS = "thinright">
-         3.568 μs
+         3.417 μs
       </TD>
       <TD CLASS = "thinright">
-         343.2 μs
+         341.3 μs
       </TD>
       <TD>
-         93.16 ms
+         89.81 ms
       </TD>
    </TR>
    <TR>
@@ -1099,16 +1101,16 @@ Description: Produce a forest, obtainened from a DFS (Deep First Search) of each
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         224.0 ns
+         227.0 ns
       </TD>
       <TD CLASS = "thinright">
-         25.24 μs
+         24.58 μs
       </TD>
       <TD CLASS = "thinright">
-         15.12 ms
+         11.87 ms
       </TD>
       <TD>
-         3.972 s
+         3.750 s
       </TD>
    </TR>
    <TR>
@@ -1116,16 +1118,16 @@ Description: Produce a forest, obtainened from a DFS (Deep First Search) of each
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         69.31 ns
+         67.98 ns
       </TD>
       <TD CLASS = "thinright">
-         26.56 μs
+         26.08 μs
       </TD>
       <TD CLASS = "thinright">
-         7.284 ms
+         7.971 ms
       </TD>
       <TD>
-         4.056 s
+         4.195 s
       </TD>
    </TR>
 </TABLE>
@@ -1153,16 +1155,16 @@ Description: Produce a forest, obtainened from a DFS (Deep First Search) of each
          Containers
       </TH>
       <TD CLASS = "thinright">
-         137.0 ns
+         159.4 ns
       </TD>
       <TD CLASS = "thinright">
-         1.794 μs
+         1.764 μs
       </TD>
       <TD CLASS = "thinright">
-         20.14 μs
+         19.81 μs
       </TD>
       <TD>
-         276.3 μs
+         253.4 μs
       </TD>
    </TR>
    <TR>
@@ -1170,16 +1172,16 @@ Description: Produce a forest, obtainened from a DFS (Deep First Search) of each
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         237.1 ns
+         229.3 ns
       </TD>
       <TD CLASS = "thinright">
-         12.78 μs
+         11.36 μs
       </TD>
       <TD CLASS = "thinright">
-         328.3 μs
+         303.7 μs
       </TD>
       <TD>
-         19.71 ms
+         19.77 ms
       </TD>
    </TR>
    <TR>
@@ -1187,16 +1189,16 @@ Description: Produce a forest, obtainened from a DFS (Deep First Search) of each
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         74.47 ns
+         68.49 ns
       </TD>
       <TD CLASS = "thinright">
-         8.444 μs
+         8.093 μs
       </TD>
       <TD CLASS = "thinright">
-         246.2 μs
+         244.8 μs
       </TD>
       <TD>
-         20.18 ms
+         20.44 ms
       </TD>
    </TR>
 </TABLE>
@@ -1224,16 +1226,16 @@ Description: Produce a forest, obtainened from a DFS (Deep First Search) of each
          Containers
       </TH>
       <TD CLASS = "thinright">
-         7.959 ms
+         2.613 μs
       </TD>
       <TD CLASS = "thinright">
-         2.608 μs
+         32.19 μs
       </TD>
       <TD CLASS = "thinright">
-         36.54 μs
+         312.1 μs
       </TD>
       <TD>
-         301.0 μs
+         8.453 ms
       </TD>
    </TR>
    <TR>
@@ -1241,16 +1243,16 @@ Description: Produce a forest, obtainened from a DFS (Deep First Search) of each
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         578.2 ms
+         18.88 μs
       </TD>
       <TD CLASS = "thinright">
-         20.19 μs
+         688.4 μs
       </TD>
       <TD CLASS = "thinright">
-         794.8 μs
+         22.33 ms
       </TD>
       <TD>
-         23.64 ms
+         582.4 ms
       </TD>
    </TR>
    <TR>
@@ -1258,16 +1260,16 @@ Description: Produce a forest, obtainened from a DFS (Deep First Search) of each
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         553.9 ms
+         14.11 μs
       </TD>
       <TD CLASS = "thinright">
-         15.20 μs
+         568.1 μs
       </TD>
       <TD CLASS = "thinright">
-         644.8 μs
+         17.45 ms
       </TD>
       <TD>
-         18.63 ms
+         554.7 ms
       </TD>
    </TR>
 </TABLE>
@@ -1282,8 +1284,8 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Containers was 59.75 times faster than Fgl
- * Hash-Graph was 1.05 times faster than Fgl
+ * Containers was 61.17 times faster than Hash-Graph
+ * Fgl was 1.05 times faster than Hash-Graph
 
 ## topSort
 
@@ -1312,16 +1314,16 @@ Description: Topological sorting of the vertices
          Containers
       </TH>
       <TD CLASS = "thinright">
-         159.7 ns
+         143.7 ns
       </TD>
       <TD CLASS = "thinright">
-         3.601 μs
+         3.444 μs
       </TD>
       <TD CLASS = "thinright">
-         405.2 μs
+         342.8 μs
       </TD>
       <TD>
-         139.7 ms
+         81.90 ms
       </TD>
    </TR>
    <TR>
@@ -1329,16 +1331,16 @@ Description: Topological sorting of the vertices
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         388.4 ns
+         393.3 ns
       </TD>
       <TD CLASS = "thinright">
-         30.04 μs
+         28.17 μs
       </TD>
       <TD CLASS = "thinright">
-         12.53 ms
+         11.17 ms
       </TD>
       <TD>
-         4.131 s
+         3.778 s
       </TD>
    </TR>
 </TABLE>
@@ -1366,16 +1368,16 @@ Description: Topological sorting of the vertices
          Containers
       </TH>
       <TD CLASS = "thinright">
-         150.7 ns
+         143.8 ns
       </TD>
       <TD CLASS = "thinright">
-         1.833 μs
+         1.928 μs
       </TD>
       <TD CLASS = "thinright">
-         20.70 μs
+         20.47 μs
       </TD>
       <TD>
-         272.0 μs
+         260.3 μs
       </TD>
    </TR>
    <TR>
@@ -1383,16 +1385,16 @@ Description: Topological sorting of the vertices
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         363.1 ns
+         394.4 ns
       </TD>
       <TD CLASS = "thinright">
-         14.29 μs
+         14.13 μs
       </TD>
       <TD CLASS = "thinright">
-         339.8 μs
+         337.6 μs
       </TD>
       <TD>
-         22.81 ms
+         21.70 ms
       </TD>
    </TR>
 </TABLE>
@@ -1420,16 +1422,16 @@ Description: Topological sorting of the vertices
          Containers
       </TH>
       <TD CLASS = "thinright">
-         7.265 ms
+         2.770 μs
       </TD>
       <TD CLASS = "thinright">
-         2.900 μs
+         33.20 μs
       </TD>
       <TD CLASS = "thinright">
-         33.89 μs
+         285.8 μs
       </TD>
       <TD>
-         307.3 μs
+         7.401 ms
       </TD>
    </TR>
    <TR>
@@ -1437,16 +1439,16 @@ Description: Topological sorting of the vertices
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         584.3 ms
+         23.18 μs
       </TD>
       <TD CLASS = "thinright">
-         25.00 μs
+         749.2 μs
       </TD>
       <TD CLASS = "thinright">
-         818.6 μs
+         29.11 ms
       </TD>
       <TD>
-         22.95 ms
+         576.9 ms
       </TD>
    </TR>
 </TABLE>
@@ -1460,7 +1462,8 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Containers was 50.73 times faster than Fgl
+ * Containers was 64.51 times faster than Fgl
+
 
 ## reachable
 
@@ -1489,16 +1492,16 @@ Description: Produce a list of reachable vertices from a given one
          Containers
       </TH>
       <TD CLASS = "thinright">
-         133.4 ns
+         128.4 ns
       </TD>
       <TD CLASS = "thinright">
-         2.017 μs
+         1.941 μs
       </TD>
       <TD CLASS = "thinright">
-         219.1 μs
+         216.8 μs
       </TD>
       <TD>
-         83.72 ms
+         79.34 ms
       </TD>
    </TR>
    <TR>
@@ -1506,16 +1509,16 @@ Description: Produce a list of reachable vertices from a given one
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         255.3 ns
+         271.2 ns
       </TD>
       <TD CLASS = "thinright">
-         22.24 μs
+         21.96 μs
       </TD>
       <TD CLASS = "thinright">
-         9.167 ms
+         8.321 ms
       </TD>
       <TD>
-         3.489 s
+         3.304 s
       </TD>
    </TR>
 </TABLE>
@@ -1543,16 +1546,16 @@ Description: Produce a list of reachable vertices from a given one
          Containers
       </TH>
       <TD CLASS = "thinright">
-         133.7 ns
+         125.1 ns
       </TD>
       <TD CLASS = "thinright">
-         886.6 ns
+         882.6 ns
       </TD>
       <TD CLASS = "thinright">
-         9.531 μs
+         9.750 μs
       </TD>
       <TD>
-         114.1 μs
+         109.5 μs
       </TD>
    </TR>
    <TR>
@@ -1560,16 +1563,16 @@ Description: Produce a list of reachable vertices from a given one
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         256.8 ns
+         277.6 ns
       </TD>
       <TD CLASS = "thinright">
-         9.233 μs
+         8.911 μs
       </TD>
       <TD CLASS = "thinright">
-         246.2 μs
+         240.8 μs
       </TD>
       <TD>
-         19.87 ms
+         19.31 ms
       </TD>
    </TR>
 </TABLE>
@@ -1597,16 +1600,16 @@ Description: Produce a list of reachable vertices from a given one
          Containers
       </TH>
       <TD CLASS = "thinright">
-         2.977 ms
+         1.270 μs
       </TD>
       <TD CLASS = "thinright">
-         1.360 μs
+         26.51 μs
       </TD>
       <TD CLASS = "thinright">
-         27.94 μs
+         160.7 μs
       </TD>
       <TD>
-         171.0 μs
+         2.907 ms
       </TD>
    </TR>
    <TR>
@@ -1614,16 +1617,16 @@ Description: Produce a list of reachable vertices from a given one
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         579.1 ms
+         14.52 μs
       </TD>
       <TD CLASS = "thinright">
-         15.96 μs
+         677.0 μs
       </TD>
       <TD CLASS = "thinright">
-         740.0 μs
+         19.47 ms
       </TD>
       <TD>
-         20.92 ms
+         581.3 ms
       </TD>
    </TR>
 </TABLE>
@@ -1637,288 +1640,7 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Containers was 80.93 times faster than Fgl
-
-## vertexCount
-
-Description: Count the vertices of the graph
-
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH CLASS = "thinright">
-         100
-      </TH>
-      <TH>
-         1000
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         34.47 ns
-      </TD>
-      <TD CLASS = "thinright">
-         20.16 μs
-      </TD>
-      <TD CLASS = "thinright">
-         4.969 ms
-      </TD>
-      <TD>
-         782.3 ms
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         24.00 ns
-      </TD>
-      <TD CLASS = "thinright">
-         812.9 ns
-      </TD>
-      <TD CLASS = "thinright">
-         93.83 μs
-      </TD>
-      <TD>
-         61.00 ms
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         27.44 ns
-      </TD>
-      <TD CLASS = "thinright">
-         13.46 μs
-      </TD>
-      <TD CLASS = "thinright">
-         5.473 ms
-      </TD>
-      <TD>
-         2.782 s
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         28.01 ns
-      </TD>
-      <TD CLASS = "thinright">
-         20.05 μs
-      </TD>
-      <TD CLASS = "thinright">
-         7.549 ms
-      </TD>
-      <TD>
-         3.870 s
-      </TD>
-   </TR>
-</TABLE>
-
-### Mesh
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH CLASS = "thinright">
-         100
-      </TH>
-      <TH>
-         1000
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         35.54 ns
-      </TD>
-      <TD CLASS = "thinright">
-         5.804 μs
-      </TD>
-      <TD CLASS = "thinright">
-         138.7 μs
-      </TD>
-      <TD>
-         2.760 ms
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         24.90 ns
-      </TD>
-      <TD CLASS = "thinright">
-         286.5 ns
-      </TD>
-      <TD CLASS = "thinright">
-         3.259 μs
-      </TD>
-      <TD>
-         33.99 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         27.98 ns
-      </TD>
-      <TD CLASS = "thinright">
-         4.679 μs
-      </TD>
-      <TD CLASS = "thinright">
-         192.6 μs
-      </TD>
-      <TD>
-         19.09 ms
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         30.61 ns
-      </TD>
-      <TD CLASS = "thinright">
-         4.945 μs
-      </TD>
-      <TD CLASS = "thinright">
-         191.6 μs
-      </TD>
-      <TD>
-         20.01 ms
-      </TD>
-   </TR>
-</TABLE>
-
-### RealLife
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         0
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         2
-      </TH>
-      <TH>
-         3
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Alga
-      </TH>
-      <TD CLASS = "thinright">
-         40.44 ms
-      </TD>
-      <TD CLASS = "thinright">
-         10.45 μs
-      </TD>
-      <TD CLASS = "thinright">
-         318.6 μs
-      </TD>
-      <TD>
-         3.826 ms
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         965.7 μs
-      </TD>
-      <TD CLASS = "thinright">
-         389.0 ns
-      </TD>
-      <TD CLASS = "thinright">
-         8.657 μs
-      </TD>
-      <TD>
-         80.75 μs
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         530.7 ms
-      </TD>
-      <TD CLASS = "thinright">
-         8.633 μs
-      </TD>
-      <TD CLASS = "thinright">
-         481.3 μs
-      </TD>
-      <TD>
-         19.32 ms
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Hash-Graph
-      </TH>
-      <TD CLASS = "thinright">
-         581.4 ms
-      </TD>
-      <TD CLASS = "thinright">
-         9.474 μs
-      </TD>
-      <TD CLASS = "thinright">
-         539.3 μs
-      </TD>
-      <TD>
-         19.22 ms
-      </TD>
-   </TR>
-</TABLE>
-
-
-SUMMARY:
-
- * Containers was the fastest 12 times
-
-
-ABSTRACT:
-(Based on an average of the ratio between largest benchmarks)
-
- * Containers was 138.48 times faster than Hash-Graph
- * Alga was 5.14 times faster than Hash-Graph
- * Fgl was 1.29 times faster than Hash-Graph
+ * Containers was 87.99 times faster than Fgl
 
 ## edgeCount
 
@@ -1947,16 +1669,16 @@ Description: Count the edges of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         61.43 ns
+         58.76 ns
       </TD>
       <TD CLASS = "thinright">
-         43.38 μs
+         42.95 μs
       </TD>
       <TD CLASS = "thinright">
-         9.428 ms
+         9.209 ms
       </TD>
       <TD>
-         1.284 s
+         1.298 s
       </TD>
    </TR>
    <TR>
@@ -1964,16 +1686,16 @@ Description: Count the edges of the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         33.62 ns
+         32.66 ns
       </TD>
       <TD CLASS = "thinright">
-         1.117 μs
+         1.066 μs
       </TD>
       <TD CLASS = "thinright">
-         123.9 μs
+         104.8 μs
       </TD>
       <TD>
-         72.52 ms
+         80.94 ms
       </TD>
    </TR>
    <TR>
@@ -1981,16 +1703,16 @@ Description: Count the edges of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         38.94 ns
+         37.68 ns
       </TD>
       <TD CLASS = "thinright">
-         18.46 μs
+         17.73 μs
       </TD>
       <TD CLASS = "thinright">
-         9.808 ms
+         9.106 ms
       </TD>
       <TD>
-         3.402 s
+         3.357 s
       </TD>
    </TR>
    <TR>
@@ -1998,16 +1720,16 @@ Description: Count the edges of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         42.19 ns
+         40.56 ns
       </TD>
       <TD CLASS = "thinright">
-         19.55 μs
+         20.79 μs
       </TD>
       <TD CLASS = "thinright">
-         7.599 ms
+         7.612 ms
       </TD>
       <TD>
-         3.428 s
+         3.634 s
       </TD>
    </TR>
 </TABLE>
@@ -2035,16 +1757,16 @@ Description: Count the edges of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         59.41 ns
+         57.94 ns
       </TD>
       <TD CLASS = "thinright">
-         10.83 μs
+         11.51 μs
       </TD>
       <TD CLASS = "thinright">
-         215.5 μs
+         220.5 μs
       </TD>
       <TD>
-         3.763 ms
+         3.924 ms
       </TD>
    </TR>
    <TR>
@@ -2052,16 +1774,16 @@ Description: Count the edges of the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         34.98 ns
+         32.68 ns
       </TD>
       <TD CLASS = "thinright">
-         386.6 ns
+         407.3 ns
       </TD>
       <TD CLASS = "thinright">
-         4.452 μs
+         5.049 μs
       </TD>
       <TD>
-         58.84 μs
+         46.84 μs
       </TD>
    </TR>
    <TR>
@@ -2069,16 +1791,16 @@ Description: Count the edges of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         40.54 ns
+         39.78 ns
       </TD>
       <TD CLASS = "thinright">
-         5.957 μs
+         6.008 μs
       </TD>
       <TD CLASS = "thinright">
-         233.2 μs
+         213.6 μs
       </TD>
       <TD>
-         19.57 ms
+         18.61 ms
       </TD>
    </TR>
    <TR>
@@ -2086,16 +1808,16 @@ Description: Count the edges of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         42.06 ns
+         42.04 ns
       </TD>
       <TD CLASS = "thinright">
-         5.845 μs
+         6.019 μs
       </TD>
       <TD CLASS = "thinright">
-         208.4 μs
+         208.9 μs
       </TD>
       <TD>
-         18.90 ms
+         19.14 ms
       </TD>
    </TR>
 </TABLE>
@@ -2123,16 +1845,16 @@ Description: Count the edges of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         108.5 ms
+         19.86 μs
       </TD>
       <TD CLASS = "thinright">
-         19.24 μs
+         580.0 μs
       </TD>
       <TD CLASS = "thinright">
-         592.1 μs
+         6.794 ms
       </TD>
       <TD>
-         7.628 ms
+         94.76 ms
       </TD>
    </TR>
    <TR>
@@ -2140,16 +1862,16 @@ Description: Count the edges of the graph
          Containers
       </TH>
       <TD CLASS = "thinright">
-         1.285 ms
+         585.3 ns
       </TD>
       <TD CLASS = "thinright">
-         617.6 ns
+         10.80 μs
       </TD>
       <TD CLASS = "thinright">
-         12.55 μs
+         99.63 μs
       </TD>
       <TD>
-         108.6 μs
+         1.156 ms
       </TD>
    </TR>
    <TR>
@@ -2157,16 +1879,16 @@ Description: Count the edges of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         575.5 ms
+         10.22 μs
       </TD>
       <TD CLASS = "thinright">
-         10.43 μs
+         513.6 μs
       </TD>
       <TD CLASS = "thinright">
-         552.5 μs
+         19.26 ms
       </TD>
       <TD>
-         22.69 ms
+         587.0 ms
       </TD>
    </TR>
    <TR>
@@ -2174,16 +1896,16 @@ Description: Count the edges of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         560.5 ms
+         10.16 μs
       </TD>
       <TD CLASS = "thinright">
-         10.74 μs
+         494.3 μs
       </TD>
       <TD CLASS = "thinright">
-         557.8 μs
+         17.77 ms
       </TD>
       <TD>
-         21.55 ms
+         541.0 ms
       </TD>
    </TR>
 </TABLE>
@@ -2197,9 +1919,9 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Containers was 103.06 times faster than Fgl
- * Alga was 2.97 times faster than Fgl
- * Hash-Graph was 1.01 times faster than Fgl
+ * Containers was 111.69 times faster than Hash-Graph
+ * Alga was 3.22 times faster than Hash-Graph
+ * Fgl was 1.06 times faster than Hash-Graph
 
 ## hasEdge
 
@@ -2228,16 +1950,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Alga
       </TH>
       <TD CLASS = "thinright">
-         768.6 ns
+         696.7 ns
       </TD>
       <TD CLASS = "thinright">
-         13.35 μs
+         12.76 μs
       </TD>
       <TD CLASS = "thinright">
-         1.147 ms
+         1.077 ms
       </TD>
       <TD>
-         290.3 ms
+         274.3 ms
       </TD>
    </TR>
    <TR>
@@ -2245,16 +1967,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Containers
       </TH>
       <TD CLASS = "thinright">
-         35.21 ns
+         30.63 ns
       </TD>
       <TD CLASS = "thinright">
-         958.6 ns
+         900.9 ns
       </TD>
       <TD CLASS = "thinright">
-         98.26 μs
+         87.69 μs
       </TD>
       <TD>
-         71.01 ms
+         74.16 ms
       </TD>
    </TR>
    <TR>
@@ -2262,16 +1984,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         124.2 ns
+         120.8 ns
       </TD>
       <TD CLASS = "thinright">
-         18.76 μs
+         18.16 μs
       </TD>
       <TD CLASS = "thinright">
-         10.41 ms
+         8.749 ms
       </TD>
       <TD>
-         3.513 s
+         3.322 s
       </TD>
    </TR>
    <TR>
@@ -2279,16 +2001,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         128.0 ns
+         107.1 ns
       </TD>
       <TD CLASS = "thinright">
-         19.01 μs
+         19.69 μs
       </TD>
       <TD CLASS = "thinright">
-         8.562 ms
+         7.439 ms
       </TD>
       <TD>
-         3.838 s
+         3.587 s
       </TD>
    </TR>
 </TABLE>
@@ -2316,16 +2038,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Alga
       </TH>
       <TD CLASS = "thinright">
-         669.5 ns
+         718.7 ns
       </TD>
       <TD CLASS = "thinright">
-         4.800 μs
+         4.997 μs
       </TD>
       <TD CLASS = "thinright">
-         40.11 μs
+         39.47 μs
       </TD>
       <TD>
-         422.8 μs
+         420.6 μs
       </TD>
    </TR>
    <TR>
@@ -2333,16 +2055,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Containers
       </TH>
       <TD CLASS = "thinright">
-         34.06 ns
+         31.28 ns
       </TD>
       <TD CLASS = "thinright">
-         302.1 ns
+         321.9 ns
       </TD>
       <TD CLASS = "thinright">
-         3.853 μs
+         3.696 μs
       </TD>
       <TD>
-         37.40 μs
+         44.70 μs
       </TD>
    </TR>
    <TR>
@@ -2350,16 +2072,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         119.1 ns
+         121.6 ns
       </TD>
       <TD CLASS = "thinright">
-         5.462 μs
+         5.550 μs
       </TD>
       <TD CLASS = "thinright">
-         193.6 μs
+         194.1 μs
       </TD>
       <TD>
-         18.39 ms
+         18.14 ms
       </TD>
    </TR>
    <TR>
@@ -2367,16 +2089,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         116.8 ns
+         108.3 ns
       </TD>
       <TD CLASS = "thinright">
-         5.120 μs
+         5.288 μs
       </TD>
       <TD CLASS = "thinright">
-         191.2 μs
+         194.5 μs
       </TD>
       <TD>
-         18.75 ms
+         19.43 ms
       </TD>
    </TR>
 </TABLE>
@@ -2404,16 +2126,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Alga
       </TH>
       <TD CLASS = "thinright">
-         11.22 ms
+         6.451 μs
       </TD>
       <TD CLASS = "thinright">
-         6.592 μs
+         87.08 μs
       </TD>
       <TD CLASS = "thinright">
-         90.01 μs
+         683.4 μs
       </TD>
       <TD>
-         711.5 μs
+         11.32 ms
       </TD>
    </TR>
    <TR>
@@ -2421,16 +2143,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Containers
       </TH>
       <TD CLASS = "thinright">
-         899.9 μs
+         412.2 ns
       </TD>
       <TD CLASS = "thinright">
-         434.2 ns
+         7.962 μs
       </TD>
       <TD CLASS = "thinright">
-         8.455 μs
+         72.64 μs
       </TD>
       <TD>
-         80.69 μs
+         892.6 μs
       </TD>
    </TR>
    <TR>
@@ -2438,16 +2160,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         525.8 ms
+         9.231 μs
       </TD>
       <TD CLASS = "thinright">
-         9.256 μs
+         452.4 μs
       </TD>
       <TD CLASS = "thinright">
-         496.6 μs
+         16.12 ms
       </TD>
       <TD>
-         17.27 ms
+         519.9 ms
       </TD>
    </TR>
    <TR>
@@ -2455,16 +2177,16 @@ Description: Test if the given edge is in the graph (with arguments both in the 
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         546.3 ms
+         9.639 μs
       </TD>
       <TD CLASS = "thinright">
-         9.433 μs
+         488.2 μs
       </TD>
       <TD CLASS = "thinright">
-         519.5 μs
+         19.32 ms
       </TD>
       <TD>
-         18.41 ms
+         539.9 ms
       </TD>
    </TR>
 </TABLE>
@@ -2478,8 +2200,8 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Containers was 120.32 times faster than Hash-Graph
- * Alga was 18.00 times faster than Hash-Graph
+ * Containers was 121.86 times faster than Hash-Graph
+ * Alga was 18.50 times faster than Hash-Graph
  * Fgl was 1.08 times faster than Hash-Graph
 
 ## isEmpty
@@ -2509,16 +2231,16 @@ Description: Test if the graph is empty
          Alga
       </TH>
       <TD CLASS = "thinright">
-         25.54 ns
+         23.62 ns
       </TD>
       <TD CLASS = "thinright">
-         76.01 ns
+         73.74 ns
       </TD>
       <TD CLASS = "thinright">
-         75.89 ns
+         75.52 ns
       </TD>
       <TD>
-         75.84 ns
+         79.23 ns
       </TD>
    </TR>
    <TR>
@@ -2526,16 +2248,16 @@ Description: Test if the graph is empty
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         24.76 ns
+         22.74 ns
       </TD>
       <TD CLASS = "thinright">
-         12.25 μs
+         12.26 μs
       </TD>
       <TD CLASS = "thinright">
-         5.400 ms
+         5.544 ms
       </TD>
       <TD>
-         2.571 s
+         2.652 s
       </TD>
    </TR>
    <TR>
@@ -2543,16 +2265,16 @@ Description: Test if the graph is empty
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         24.41 ns
+         22.38 ns
       </TD>
       <TD CLASS = "thinright">
-         18.64 μs
+         19.48 μs
       </TD>
       <TD CLASS = "thinright">
-         7.264 ms
+         8.421 ms
       </TD>
       <TD>
-         3.839 s
+         3.602 s
       </TD>
    </TR>
 </TABLE>
@@ -2580,16 +2302,16 @@ Description: Test if the graph is empty
          Alga
       </TH>
       <TD CLASS = "thinright">
-         25.26 ns
+         23.59 ns
       </TD>
       <TD CLASS = "thinright">
-         76.90 ns
+         78.80 ns
       </TD>
       <TD CLASS = "thinright">
-         77.24 ns
+         75.80 ns
       </TD>
       <TD>
-         75.90 ns
+         81.41 ns
       </TD>
    </TR>
    <TR>
@@ -2597,16 +2319,16 @@ Description: Test if the graph is empty
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         28.01 ns
+         22.47 ns
       </TD>
       <TD CLASS = "thinright">
-         4.417 μs
+         4.567 μs
       </TD>
       <TD CLASS = "thinright">
-         191.2 μs
+         190.5 μs
       </TD>
       <TD>
-         18.30 ms
+         18.15 ms
       </TD>
    </TR>
    <TR>
@@ -2614,16 +2336,16 @@ Description: Test if the graph is empty
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         24.24 ns
+         21.74 ns
       </TD>
       <TD CLASS = "thinright">
-         4.877 μs
+         5.020 μs
       </TD>
       <TD CLASS = "thinright">
-         193.2 μs
+         195.1 μs
       </TD>
       <TD>
-         18.77 ms
+         18.58 ms
       </TD>
    </TR>
 </TABLE>
@@ -2651,16 +2373,16 @@ Description: Test if the graph is empty
          Alga
       </TH>
       <TD CLASS = "thinright">
-         75.51 ns
+         77.95 ns
       </TD>
       <TD CLASS = "thinright">
-         75.87 ns
+         83.41 ns
       </TD>
       <TD CLASS = "thinright">
-         77.99 ns
+         75.01 ns
       </TD>
       <TD>
-         77.87 ns
+         75.08 ns
       </TD>
    </TR>
    <TR>
@@ -2668,16 +2390,16 @@ Description: Test if the graph is empty
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         538.8 ms
+         7.962 μs
       </TD>
       <TD CLASS = "thinright">
-         7.942 μs
+         442.6 μs
       </TD>
       <TD CLASS = "thinright">
-         500.4 μs
+         15.81 ms
       </TD>
       <TD>
-         17.17 ms
+         528.3 ms
       </TD>
    </TR>
    <TR>
@@ -2685,16 +2407,16 @@ Description: Test if the graph is empty
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         550.9 ms
+         9.400 μs
       </TD>
       <TD CLASS = "thinright">
-         9.090 μs
+         490.3 μs
       </TD>
       <TD CLASS = "thinright">
-         552.6 μs
+         17.49 ms
       </TD>
       <TD>
-         18.59 ms
+         544.4 ms
       </TD>
    </TR>
 </TABLE>
@@ -2710,8 +2432,240 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Alga was 363490.55 times faster than Hash-Graph
- * Fgl was 1.06 times faster than Hash-Graph
+ * Alga was 660643.95 times faster than Hash-Graph
+ * Fgl was 1.03 times faster than Hash-Graph
+
+## vertexCount
+
+Description: Count the vertices of the graph
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         35.49 ns
+      </TD>
+      <TD CLASS = "thinright">
+         19.73 μs
+      </TD>
+      <TD CLASS = "thinright">
+         4.777 ms
+      </TD>
+      <TD>
+         859.9 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         26.27 ns
+      </TD>
+      <TD CLASS = "thinright">
+         12.50 μs
+      </TD>
+      <TD CLASS = "thinright">
+         4.693 ms
+      </TD>
+      <TD>
+         2.799 s
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         27.14 ns
+      </TD>
+      <TD CLASS = "thinright">
+         19.88 μs
+      </TD>
+      <TD CLASS = "thinright">
+         7.467 ms
+      </TD>
+      <TD>
+         4.050 s
+      </TD>
+   </TR>
+</TABLE>
+
+### Mesh
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         34.27 ns
+      </TD>
+      <TD CLASS = "thinright">
+         5.608 μs
+      </TD>
+      <TD CLASS = "thinright">
+         131.4 μs
+      </TD>
+      <TD>
+         2.274 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         25.93 ns
+      </TD>
+      <TD CLASS = "thinright">
+         4.522 μs
+      </TD>
+      <TD CLASS = "thinright">
+         186.6 μs
+      </TD>
+      <TD>
+         17.95 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         26.91 ns
+      </TD>
+      <TD CLASS = "thinright">
+         5.132 μs
+      </TD>
+      <TD CLASS = "thinright">
+         190.7 μs
+      </TD>
+      <TD>
+         18.21 ms
+      </TD>
+   </TR>
+</TABLE>
+
+### RealLife
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         0
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         2
+      </TH>
+      <TH>
+         3
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Alga
+      </TH>
+      <TD CLASS = "thinright">
+         9.614 μs
+      </TD>
+      <TD CLASS = "thinright">
+         301.3 μs
+      </TD>
+      <TD CLASS = "thinright">
+         3.361 ms
+      </TD>
+      <TD>
+         47.35 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         8.147 μs
+      </TD>
+      <TD CLASS = "thinright">
+         446.2 μs
+      </TD>
+      <TD CLASS = "thinright">
+         16.35 ms
+      </TD>
+      <TD>
+         526.1 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         10.79 μs
+      </TD>
+      <TD CLASS = "thinright">
+         498.1 μs
+      </TD>
+      <TD CLASS = "thinright">
+         17.80 ms
+      </TD>
+      <TD>
+         548.2 ms
+      </TD>
+   </TR>
+</TABLE>
+
+
+SUMMARY:
+
+ * Alga was the fastest 6 times
+ * Fgl was the fastest 3 times
+
+ There was 3 ex-aequo
+
+
+ABSTRACT:
+(Based on an average of the ratio between largest benchmarks)
+
+ * Alga was 7.08 times faster than Hash-Graph
+ * Fgl was 1.24 times faster than Hash-Graph
 
 ## hasVertex
 
@@ -2740,16 +2694,16 @@ Description: Test if the given vertex is in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         37.52 ns
+         36.44 ns
       </TD>
       <TD CLASS = "thinright">
-         1.245 μs
+         1.319 μs
       </TD>
       <TD CLASS = "thinright">
-         106.5 μs
+         116.2 μs
       </TD>
       <TD>
-         11.55 ms
+         12.50 ms
       </TD>
    </TR>
    <TR>
@@ -2757,16 +2711,16 @@ Description: Test if the given vertex is in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         57.44 ns
+         62.42 ns
       </TD>
       <TD CLASS = "thinright">
-         16.35 μs
+         16.39 μs
       </TD>
       <TD CLASS = "thinright">
-         8.662 ms
+         8.972 ms
       </TD>
       <TD>
-         3.349 s
+         3.250 s
       </TD>
    </TR>
    <TR>
@@ -2774,16 +2728,16 @@ Description: Test if the given vertex is in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         29.24 ns
+         28.02 ns
       </TD>
       <TD CLASS = "thinright">
-         18.53 μs
+         19.60 μs
       </TD>
       <TD CLASS = "thinright">
-         8.004 ms
+         8.924 ms
       </TD>
       <TD>
-         3.435 s
+         3.471 s
       </TD>
    </TR>
 </TABLE>
@@ -2811,16 +2765,16 @@ Description: Test if the given vertex is in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         39.68 ns
+         34.33 ns
       </TD>
       <TD CLASS = "thinright">
-         558.5 ns
+         615.8 ns
       </TD>
       <TD CLASS = "thinright">
-         7.127 μs
+         7.875 μs
       </TD>
       <TD>
-         80.70 μs
+         88.56 μs
       </TD>
    </TR>
    <TR>
@@ -2828,16 +2782,16 @@ Description: Test if the given vertex is in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         58.47 ns
+         55.02 ns
       </TD>
       <TD CLASS = "thinright">
-         5.013 μs
+         4.956 μs
       </TD>
       <TD CLASS = "thinright">
-         195.3 μs
+         190.6 μs
       </TD>
       <TD>
-         17.91 ms
+         17.96 ms
       </TD>
    </TR>
    <TR>
@@ -2845,16 +2799,16 @@ Description: Test if the given vertex is in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         29.85 ns
+         28.11 ns
       </TD>
       <TD CLASS = "thinright">
-         5.301 μs
+         5.023 μs
       </TD>
       <TD CLASS = "thinright">
-         193.8 μs
+         194.1 μs
       </TD>
       <TD>
-         18.74 ms
+         18.52 ms
       </TD>
    </TR>
 </TABLE>
@@ -2882,16 +2836,16 @@ Description: Test if the given vertex is in the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         660.0 μs
+         944.1 ns
       </TD>
       <TD CLASS = "thinright">
-         831.5 ns
+         13.35 μs
       </TD>
       <TD CLASS = "thinright">
-         11.52 μs
+         144.6 μs
       </TD>
       <TD>
-         134.7 μs
+         700.6 μs
       </TD>
    </TR>
    <TR>
@@ -2899,16 +2853,16 @@ Description: Test if the given vertex is in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         532.1 ms
+         8.636 μs
       </TD>
       <TD CLASS = "thinright">
-         8.778 μs
+         452.4 μs
       </TD>
       <TD CLASS = "thinright">
-         494.1 μs
+         15.79 ms
       </TD>
       <TD>
-         17.24 ms
+         523.3 ms
       </TD>
    </TR>
    <TR>
@@ -2916,16 +2870,16 @@ Description: Test if the given vertex is in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         550.5 ms
+         9.210 μs
       </TD>
       <TD CLASS = "thinright">
-         9.215 μs
+         489.9 μs
       </TD>
       <TD CLASS = "thinright">
-         523.0 μs
+         17.33 ms
       </TD>
       <TD>
-         19.13 ms
+         544.2 ms
       </TD>
    </TR>
 </TABLE>
@@ -2942,8 +2896,8 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Alga was 205.07 times faster than Hash-Graph
- * Fgl was 1.12 times faster than Hash-Graph
+ * Alga was 304.69 times faster than Hash-Graph
+ * Fgl was 1.10 times faster than Hash-Graph
 
 ## addEdge
 
@@ -2972,16 +2926,16 @@ Description: Add an edge (not already in the graph)
          Alga
       </TH>
       <TD CLASS = "thinright">
-         51.82 ns
+         50.69 ns
       </TD>
       <TD CLASS = "thinright">
-         3.460 μs
+         3.691 μs
       </TD>
       <TD CLASS = "thinright">
-         366.6 μs
+         400.5 μs
       </TD>
       <TD>
-         43.15 ms
+         44.97 ms
       </TD>
    </TR>
    <TR>
@@ -2989,16 +2943,16 @@ Description: Add an edge (not already in the graph)
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         126.4 ns
+         123.1 ns
       </TD>
       <TD CLASS = "thinright">
-         19.07 μs
+         19.97 μs
       </TD>
       <TD CLASS = "thinright">
-         9.792 ms
+         10.34 ms
       </TD>
       <TD>
-         3.431 s
+         3.573 s
       </TD>
    </TR>
    <TR>
@@ -3006,16 +2960,16 @@ Description: Add an edge (not already in the graph)
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         207.0 ns
+         172.3 ns
       </TD>
       <TD CLASS = "thinright">
-         23.09 μs
+         25.47 μs
       </TD>
       <TD CLASS = "thinright">
-         7.969 ms
+         8.626 ms
       </TD>
       <TD>
-         3.757 s
+         3.797 s
       </TD>
    </TR>
 </TABLE>
@@ -3043,16 +2997,16 @@ Description: Add an edge (not already in the graph)
          Alga
       </TH>
       <TD CLASS = "thinright">
-         51.75 ns
+         49.85 ns
       </TD>
       <TD CLASS = "thinright">
-         1.098 μs
+         1.130 μs
       </TD>
       <TD CLASS = "thinright">
-         13.44 μs
+         14.60 μs
       </TD>
       <TD>
-         142.8 μs
+         160.3 μs
       </TD>
    </TR>
    <TR>
@@ -3060,16 +3014,16 @@ Description: Add an edge (not already in the graph)
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         121.1 ns
+         121.9 ns
       </TD>
       <TD CLASS = "thinright">
-         6.370 μs
+         6.304 μs
       </TD>
       <TD CLASS = "thinright">
-         212.6 μs
+         208.7 μs
       </TD>
       <TD>
-         19.02 ms
+         19.07 ms
       </TD>
    </TR>
    <TR>
@@ -3077,16 +3031,16 @@ Description: Add an edge (not already in the graph)
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         204.2 ns
+         171.7 ns
       </TD>
       <TD CLASS = "thinright">
-         7.017 μs
+         7.468 μs
       </TD>
       <TD CLASS = "thinright">
-         214.6 μs
+         219.1 μs
       </TD>
       <TD>
-         19.33 ms
+         19.15 ms
       </TD>
    </TR>
 </TABLE>
@@ -3114,16 +3068,16 @@ Description: Add an edge (not already in the graph)
          Alga
       </TH>
       <TD CLASS = "thinright">
-         1.983 ms
+         1.779 μs
       </TD>
       <TD CLASS = "thinright">
-         1.679 μs
+         34.26 μs
       </TD>
       <TD CLASS = "thinright">
-         31.03 μs
+         271.9 μs
       </TD>
       <TD>
-         242.7 μs
+         2.105 ms
       </TD>
    </TR>
    <TR>
@@ -3131,16 +3085,16 @@ Description: Add an edge (not already in the graph)
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         578.6 ms
+         10.70 μs
       </TD>
       <TD CLASS = "thinright">
-         10.95 μs
+         522.0 μs
       </TD>
       <TD CLASS = "thinright">
-         571.4 μs
+         20.16 ms
       </TD>
       <TD>
-         21.05 ms
+         582.8 ms
       </TD>
    </TR>
    <TR>
@@ -3148,16 +3102,16 @@ Description: Add an edge (not already in the graph)
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         565.4 ms
+         12.79 μs
       </TD>
       <TD CLASS = "thinright">
-         12.15 μs
+         525.2 μs
       </TD>
       <TD CLASS = "thinright">
-         575.3 μs
+         19.01 ms
       </TD>
       <TD>
-         20.18 ms
+         579.8 ms
       </TD>
    </TR>
 </TABLE>
@@ -3171,8 +3125,8 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Alga was 96.87 times faster than Hash-Graph
- * Fgl was 1.02 times faster than Hash-Graph
+ * Alga was 125.75 times faster than Hash-Graph
+ * Fgl was 1.03 times faster than Hash-Graph
 
 ## addVertex
 
@@ -3201,16 +3155,16 @@ Description: Add a vertex (not already in the graph)
          Alga
       </TH>
       <TD CLASS = "thinright">
-         41.43 ns
+         38.54 ns
       </TD>
       <TD CLASS = "thinright">
-         3.499 μs
+         3.666 μs
       </TD>
       <TD CLASS = "thinright">
-         369.6 μs
+         391.3 μs
       </TD>
       <TD>
-         39.46 ms
+         40.42 ms
       </TD>
    </TR>
    <TR>
@@ -3218,16 +3172,16 @@ Description: Add a vertex (not already in the graph)
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         74.85 ns
+         77.54 ns
       </TD>
       <TD CLASS = "thinright">
-         18.77 μs
+         18.82 μs
       </TD>
       <TD CLASS = "thinright">
-         11.26 ms
+         12.60 ms
       </TD>
       <TD>
-         3.544 s
+         3.536 s
       </TD>
    </TR>
    <TR>
@@ -3235,16 +3189,16 @@ Description: Add a vertex (not already in the graph)
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         124.4 ns
+         108.0 ns
       </TD>
       <TD CLASS = "thinright">
-         22.72 μs
+         24.70 μs
       </TD>
       <TD CLASS = "thinright">
-         8.439 ms
+         8.503 ms
       </TD>
       <TD>
-         3.564 s
+         3.511 s
       </TD>
    </TR>
 </TABLE>
@@ -3272,16 +3226,16 @@ Description: Add a vertex (not already in the graph)
          Alga
       </TH>
       <TD CLASS = "thinright">
-         41.57 ns
+         39.23 ns
       </TD>
       <TD CLASS = "thinright">
-         1.148 μs
+         1.137 μs
       </TD>
       <TD CLASS = "thinright">
-         14.08 μs
+         14.87 μs
       </TD>
       <TD>
-         148.1 μs
+         157.9 μs
       </TD>
    </TR>
    <TR>
@@ -3289,16 +3243,16 @@ Description: Add a vertex (not already in the graph)
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         72.64 ns
+         77.19 ns
       </TD>
       <TD CLASS = "thinright">
-         6.365 μs
+         6.036 μs
       </TD>
       <TD CLASS = "thinright">
-         217.5 μs
+         207.2 μs
       </TD>
       <TD>
-         20.59 ms
+         19.13 ms
       </TD>
    </TR>
    <TR>
@@ -3306,16 +3260,16 @@ Description: Add a vertex (not already in the graph)
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         125.8 ns
+         106.2 ns
       </TD>
       <TD CLASS = "thinright">
-         7.145 μs
+         7.242 μs
       </TD>
       <TD CLASS = "thinright">
-         216.7 μs
+         217.6 μs
       </TD>
       <TD>
-         20.00 ms
+         19.46 ms
       </TD>
    </TR>
 </TABLE>
@@ -3343,16 +3297,16 @@ Description: Add a vertex (not already in the graph)
          Alga
       </TH>
       <TD CLASS = "thinright">
-         2.050 ms
+         1.739 μs
       </TD>
       <TD CLASS = "thinright">
-         1.605 μs
+         32.48 μs
       </TD>
       <TD CLASS = "thinright">
-         30.96 μs
+         256.7 μs
       </TD>
       <TD>
-         254.1 μs
+         2.079 ms
       </TD>
    </TR>
    <TR>
@@ -3360,16 +3314,16 @@ Description: Add a vertex (not already in the graph)
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         616.7 ms
+         10.84 μs
       </TD>
       <TD CLASS = "thinright">
-         11.04 μs
+         524.4 μs
       </TD>
       <TD CLASS = "thinright">
-         586.7 μs
+         19.86 ms
       </TD>
       <TD>
-         22.42 ms
+         599.5 ms
       </TD>
    </TR>
    <TR>
@@ -3377,16 +3331,16 @@ Description: Add a vertex (not already in the graph)
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         562.0 ms
+         12.60 μs
       </TD>
       <TD CLASS = "thinright">
-         12.30 μs
+         536.7 μs
       </TD>
       <TD CLASS = "thinright">
-         576.0 μs
+         18.78 ms
       </TD>
       <TD>
-         20.41 ms
+         556.0 ms
       </TD>
    </TR>
 </TABLE>
@@ -3400,8 +3354,8 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Alga was 101.15 times faster than Fgl
- * Hash-Graph was 1.04 times faster than Fgl
+ * Alga was 129.50 times faster than Fgl
+ * Hash-Graph was 1.01 times faster than Fgl
 
 ## removeVertex
 
@@ -3430,16 +3384,16 @@ Description: Remove a vertex of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         38.39 ns
+         36.30 ns
       </TD>
       <TD CLASS = "thinright">
-         5.877 μs
+         6.547 μs
       </TD>
       <TD CLASS = "thinright">
-         1.035 ms
+         1.074 ms
       </TD>
       <TD>
-         328.7 ms
+         294.6 ms
       </TD>
    </TR>
    <TR>
@@ -3447,16 +3401,16 @@ Description: Remove a vertex of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         66.47 ns
+         67.90 ns
       </TD>
       <TD CLASS = "thinright">
-         19.56 μs
+         19.49 μs
       </TD>
       <TD CLASS = "thinright">
-         11.78 ms
+         10.40 ms
       </TD>
       <TD>
-         3.383 s
+         3.414 s
       </TD>
    </TR>
    <TR>
@@ -3464,16 +3418,16 @@ Description: Remove a vertex of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         83.50 ns
+         74.52 ns
       </TD>
       <TD CLASS = "thinright">
-         26.45 μs
+         28.04 μs
       </TD>
       <TD CLASS = "thinright">
-         8.612 ms
+         8.298 ms
       </TD>
       <TD>
-         3.834 s
+         3.668 s
       </TD>
    </TR>
 </TABLE>
@@ -3501,16 +3455,16 @@ Description: Remove a vertex of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         39.18 ns
+         35.98 ns
       </TD>
       <TD CLASS = "thinright">
-         1.722 μs
+         1.875 μs
       </TD>
       <TD CLASS = "thinright">
-         24.50 μs
+         26.71 μs
       </TD>
       <TD>
-         318.4 μs
+         335.1 μs
       </TD>
    </TR>
    <TR>
@@ -3518,16 +3472,16 @@ Description: Remove a vertex of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         67.09 ns
+         66.92 ns
       </TD>
       <TD CLASS = "thinright">
-         6.830 μs
+         6.304 μs
       </TD>
       <TD CLASS = "thinright">
-         216.1 μs
+         209.2 μs
       </TD>
       <TD>
-         19.67 ms
+         19.34 ms
       </TD>
    </TR>
    <TR>
@@ -3535,16 +3489,16 @@ Description: Remove a vertex of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         82.79 ns
+         75.04 ns
       </TD>
       <TD CLASS = "thinright">
-         8.100 μs
+         8.172 μs
       </TD>
       <TD CLASS = "thinright">
-         222.5 μs
+         218.8 μs
       </TD>
       <TD>
-         20.96 ms
+         20.76 ms
       </TD>
    </TR>
 </TABLE>
@@ -3572,16 +3526,16 @@ Description: Remove a vertex of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         14.78 ms
+         2.992 μs
       </TD>
       <TD CLASS = "thinright">
-         2.849 μs
+         59.31 μs
       </TD>
       <TD CLASS = "thinright">
-         55.11 μs
+         600.4 μs
       </TD>
       <TD>
-         589.5 μs
+         13.27 ms
       </TD>
    </TR>
    <TR>
@@ -3589,16 +3543,16 @@ Description: Remove a vertex of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         567.5 ms
+         10.91 μs
       </TD>
       <TD CLASS = "thinright">
-         11.49 μs
+         525.3 μs
       </TD>
       <TD CLASS = "thinright">
-         584.4 μs
+         19.57 ms
       </TD>
       <TD>
-         22.63 ms
+         545.7 ms
       </TD>
    </TR>
    <TR>
@@ -3606,16 +3560,16 @@ Description: Remove a vertex of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         562.5 ms
+         13.63 μs
       </TD>
       <TD CLASS = "thinright">
-         13.49 μs
+         542.7 μs
       </TD>
       <TD CLASS = "thinright">
-         579.4 μs
+         18.77 ms
       </TD>
       <TD>
-         21.58 ms
+         543.0 ms
       </TD>
    </TR>
 </TABLE>
@@ -3629,8 +3583,8 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Alga was 23.32 times faster than Hash-Graph
- * Fgl was 1.08 times faster than Hash-Graph
+ * Alga was 24.81 times faster than Hash-Graph
+ * Fgl was 1.06 times faster than Hash-Graph
 
 ## removeEdge
 
@@ -3656,13 +3610,13 @@ Description: Remove an edge of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         23.20 μs
+         22.65 μs
       </TD>
       <TD CLASS = "thinright">
-         9.932 ms
+         9.755 ms
       </TD>
       <TD>
-         1.307 s
+         1.204 s
       </TD>
    </TR>
    <TR>
@@ -3670,13 +3624,13 @@ Description: Remove an edge of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         22.51 μs
+         22.04 μs
       </TD>
       <TD CLASS = "thinright">
-         10.41 ms
+         10.61 ms
       </TD>
       <TD>
-         3.607 s
+         3.490 s
       </TD>
    </TR>
    <TR>
@@ -3684,13 +3638,13 @@ Description: Remove an edge of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         23.24 μs
+         24.42 μs
       </TD>
       <TD CLASS = "thinright">
-         8.386 ms
+         8.459 ms
       </TD>
       <TD>
-         3.690 s
+         3.648 s
       </TD>
    </TR>
 </TABLE>
@@ -3715,13 +3669,13 @@ Description: Remove an edge of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         6.911 μs
+         6.824 μs
       </TD>
       <TD CLASS = "thinright">
-         94.98 μs
+         93.62 μs
       </TD>
       <TD>
-         2.903 ms
+         3.084 ms
       </TD>
    </TR>
    <TR>
@@ -3729,13 +3683,13 @@ Description: Remove an edge of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         7.314 μs
+         7.195 μs
       </TD>
       <TD CLASS = "thinright">
-         213.9 μs
+         210.8 μs
       </TD>
       <TD>
-         18.68 ms
+         18.12 ms
       </TD>
    </TR>
    <TR>
@@ -3743,13 +3697,13 @@ Description: Remove an edge of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         6.630 μs
+         7.007 μs
       </TD>
       <TD CLASS = "thinright">
-         212.3 μs
+         216.7 μs
       </TD>
       <TD>
-         18.76 ms
+         18.61 ms
       </TD>
    </TR>
 </TABLE>
@@ -3777,16 +3731,16 @@ Description: Remove an edge of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         64.16 ms
+         10.73 μs
       </TD>
       <TD CLASS = "thinright">
-         10.96 μs
+         222.6 μs
       </TD>
       <TD CLASS = "thinright">
-         228.8 μs
+         5.626 ms
       </TD>
       <TD>
-         5.759 ms
+         61.31 ms
       </TD>
    </TR>
    <TR>
@@ -3794,16 +3748,16 @@ Description: Remove an edge of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         549.5 ms
+         11.72 μs
       </TD>
       <TD CLASS = "thinright">
-         11.98 μs
+         530.1 μs
       </TD>
       <TD CLASS = "thinright">
-         576.8 μs
+         20.56 ms
       </TD>
       <TD>
-         20.32 ms
+         545.6 ms
       </TD>
    </TR>
    <TR>
@@ -3811,16 +3765,16 @@ Description: Remove an edge of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         547.1 ms
+         12.40 μs
       </TD>
       <TD CLASS = "thinright">
-         11.78 μs
+         526.5 μs
       </TD>
       <TD CLASS = "thinright">
-         558.8 μs
+         17.44 ms
       </TD>
       <TD>
-         18.58 ms
+         543.2 ms
       </TD>
    </TR>
 </TABLE>
@@ -3828,8 +3782,8 @@ Description: Remove an edge of the graph
 
 SUMMARY:
 
- * Alga was the fastest 19 times
- * Hash-Graph was the fastest 3 times
+ * Alga was the fastest 20 times
+ * Hash-Graph was the fastest 2 times
 
  There was 8 ex-aequo
 
@@ -3837,8 +3791,8 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Alga was 3.74 times faster than Fgl
- * Hash-Graph was 1.02 times faster than Fgl
+ * Alga was 4.93 times faster than Hash-Graph
+ * Fgl was 1.03 times faster than Hash-Graph
 
 ## mergeContext
 
@@ -3867,16 +3821,16 @@ Description: Merge a FGL context in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         112.5 ns
+         112.0 ns
       </TD>
       <TD CLASS = "thinright">
-         18.36 μs
+         18.50 μs
       </TD>
       <TD CLASS = "thinright">
-         11.46 ms
+         11.18 ms
       </TD>
       <TD>
-         3.496 s
+         3.502 s
       </TD>
    </TR>
    <TR>
@@ -3884,16 +3838,16 @@ Description: Merge a FGL context in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         133.7 ns
+         117.7 ns
       </TD>
       <TD CLASS = "thinright">
-         22.38 μs
+         24.46 μs
       </TD>
       <TD CLASS = "thinright">
-         8.699 ms
+         8.564 ms
       </TD>
       <TD>
-         3.719 s
+         3.622 s
       </TD>
    </TR>
 </TABLE>
@@ -3921,16 +3875,16 @@ Description: Merge a FGL context in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         111.8 ns
+         113.1 ns
       </TD>
       <TD CLASS = "thinright">
-         6.185 μs
+         6.089 μs
       </TD>
       <TD CLASS = "thinright">
-         211.7 μs
+         208.3 μs
       </TD>
       <TD>
-         18.49 ms
+         18.19 ms
       </TD>
    </TR>
    <TR>
@@ -3938,16 +3892,16 @@ Description: Merge a FGL context in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         132.2 ns
+         115.5 ns
       </TD>
       <TD CLASS = "thinright">
-         6.636 μs
+         7.144 μs
       </TD>
       <TD CLASS = "thinright">
-         212.1 μs
+         218.3 μs
       </TD>
       <TD>
-         18.67 ms
+         18.77 ms
       </TD>
    </TR>
 </TABLE>
@@ -3975,16 +3929,16 @@ Description: Merge a FGL context in the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         550.2 ms
+         10.58 μs
       </TD>
       <TD CLASS = "thinright">
-         10.88 μs
+         521.7 μs
       </TD>
       <TD CLASS = "thinright">
-         574.7 μs
+         19.25 ms
       </TD>
       <TD>
-         21.33 ms
+         544.5 ms
       </TD>
    </TR>
    <TR>
@@ -3992,16 +3946,16 @@ Description: Merge a FGL context in the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         549.3 ms
+         12.40 μs
       </TD>
       <TD CLASS = "thinright">
-         11.78 μs
+         528.3 μs
       </TD>
       <TD CLASS = "thinright">
-         575.7 μs
+         17.47 ms
       </TD>
       <TD>
-         18.96 ms
+         544.7 ms
       </TD>
    </TR>
 </TABLE>
@@ -4009,15 +3963,14 @@ Description: Merge a FGL context in the graph
 
 SUMMARY:
 
- * Fgl was the fastest 8 times
- * Hash-Graph was the fastest 6 times
+ * Fgl was the fastest 11 times
+ * Hash-Graph was the fastest 7 times
 
- There was 22 ex-aequo
+ There was 18 ex-aequo
 
 
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Hash-Graph was 1.02 times faster than Fgl
-
+ * Fgl was 1.02 times faster than Hash-Graph
 
