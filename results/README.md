@@ -27,11 +27,11 @@ Note: Some functions of Data.Graph was not in the original library (`edgeCount` 
 ### Benchmarking routine
 
 For the main results, we produce a generic list of edges, create a graph from it, fully evaluate this graph to Normal Form, then pass it to then benchmarked function.
-This may not reflect the reality, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-creation.md where, where the creation time (from a list of edges) is taken into account.
+This may not reflect the reality, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-creation.md where the creation time (from a list of edges) is taken into account.
 
 ### The list of edges
 
-Containers, FGL and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md where we used the alga representation instead of a list of edges.
+Containers, Fgl and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md where we used the alga representation instead of a list of edges.
 
 ## Some words about graphs
 The functions are benchmarked against:
