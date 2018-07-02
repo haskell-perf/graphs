@@ -33,5 +33,5 @@ printHtml arr' ren = print $ TH.render stringToHtml stringToHtml stringToHtml ta
       content
 
 printHeader :: [Named Int] -> [String] -> IO ()
-printHeader gr todo = putStrLn $ unlines ["# Compare benchmarks\n","Doing:","\n----",unlines $ map (\x ->"* [" ++ x ++"](#"++ unwords (intersperse "-" $ words $ map toLower x) ++")") todo ++ ["----"],unwords ["Using",show gr,"as graphs"]]
+printHeader gr todo = putStrLn $ unlines ["# Benchmarks\n","Doing:","\n----",unlines $ map (\x ->"* [" ++ x ++"](#"++ unwords (intersperse "-" $ words $ map toLower x) ++")") todo ++ ["----"],unwords ["Using",show gr,"as graphs"]]
 

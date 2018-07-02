@@ -1,4 +1,15 @@
-# Compare benchmarks
+The content of this fil was obtained with **modified** sources: `bench/Alga/Graph.hs` was modified, replacing:
+```Haskell
+instance GraphImpl (Graph Int) where
+  mkGraph = mk
+```
+by
+
+```Haskell
+instance GraphImpl (Graph Int) where
+  mkGraph = mkSpecClique
+```
+# Benchmarks
 
 Doing:
 

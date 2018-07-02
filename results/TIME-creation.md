@@ -1,4 +1,9 @@
-# Compare benchmarks
+The content of this file was obtained with:
+```Bash
+$ time run -g '("Clique",4)' -g '("Mesh",4)' -g '("RealLife",4)' -d Html -b
+```
+
+# Benchmarks
 
 Doing:
 
