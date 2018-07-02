@@ -1,6 +1,6 @@
 import Distribution.Simple
 import System.Directory
-import Data.List (intercalate, delete, isInfixOf)
+import Data.List (intercalate, delete, isInfixOf, sort)
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 
@@ -9,11 +9,10 @@ main = do
   generateRealLifeGraphs
   defaultMain
 
-
 -- | generate real life graphs from a text file
 generateRealLifeGraphs :: IO ()
 generateRealLifeGraphs = do
-  gr <- delete "README.md" <$> listDirectory prefixDir
+  gr <- sort . delete "README.md" <$> listDirectory prefixDir
   str <- foldl accumF (return start) gr
   writeFile generatedFile $ init (init str) ++ "\n  ]"
   where
