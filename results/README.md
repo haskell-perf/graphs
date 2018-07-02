@@ -22,7 +22,7 @@ The benchmarks were realised using `Stack` and the `stack.newest.yaml` configura
 * Time: https://github.com/haskell-perf/graphs/blob/master/results/TIME.md
 * Space: https://github.com/haskell-perf/graphs/blob/master/results/SPACE.md
 
-Note: Some functions of Data.Graph was not in the original library (edgeCount, hasEdge, vertexCount), their defintion can be found in `bench/Containers/Graph.hs`
+Note: Some functions of Data.Graph was not in the original library (`edgeCount` and `hasEdge`), their defintion can be found in `bench/Containers/Graph.hs`
 
 ### Benchmarking routine
 

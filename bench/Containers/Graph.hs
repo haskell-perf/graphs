@@ -34,7 +34,6 @@ functions =
   , S.dff dff
   , S.topSort topSort
   , S.reachable (flip reachable) id
-  , S.vertexCount vertexCount
   , S.edgeCount edgeCount
   , S.hasEdge hasEdge id
   ]
@@ -59,12 +58,3 @@ edgeCount = foldr (\x y -> length x + y) 0
 -- False
 hasEdge :: (Int,Int) -> Graph -> Bool
 hasEdge (x,y) g = elem y $ g ! x
-
--- |
--- >>> vertexCount fiveVertices
--- 5
---
--- >>> vertexCount path10
--- 10
-vertexCount :: Graph -> Int
-vertexCount = length
