@@ -1443,33 +1443,16 @@ Description: Count the vertices of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         30.90 ns
+         28.94 ns
       </TD>
       <TD CLASS = "thinright">
-         17.90 μs
+         16.55 μs
       </TD>
       <TD CLASS = "thinright">
-         3.956 ms
+         3.875 ms
       </TD>
       <TD>
-         618.4 ms
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         20.21 ns
-      </TD>
-      <TD CLASS = "thinright">
-         20.82 ns
-      </TD>
-      <TD CLASS = "thinright">
-         20.17 ns
-      </TD>
-      <TD>
-         21.02 ns
+         669.3 ms
       </TD>
    </TR>
    <TR>
@@ -1477,16 +1460,16 @@ Description: Count the vertices of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         23.71 ns
+         22.19 ns
       </TD>
       <TD CLASS = "thinright">
-         98.95 ns
+         102.7 ns
       </TD>
       <TD CLASS = "thinright">
-         810.7 ns
+         967.2 ns
       </TD>
       <TD>
-         9.267 μs
+         10.55 μs
       </TD>
    </TR>
    <TR>
@@ -1494,16 +1477,16 @@ Description: Count the vertices of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         24.47 ns
+         22.76 ns
       </TD>
       <TD CLASS = "thinright">
-         88.35 ns
+         86.87 ns
       </TD>
       <TD CLASS = "thinright">
-         793.2 ns
+         813.9 ns
       </TD>
       <TD>
-         9.110 μs
+         8.947 μs
       </TD>
    </TR>
 </TABLE>
@@ -1531,33 +1514,16 @@ Description: Count the vertices of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         30.66 ns
+         29.70 ns
       </TD>
       <TD CLASS = "thinright">
-         5.178 μs
+         4.728 μs
       </TD>
       <TD CLASS = "thinright">
-         131.3 μs
+         129.0 μs
       </TD>
       <TD>
-         2.186 ms
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         20.19 ns
-      </TD>
-      <TD CLASS = "thinright">
-         20.17 ns
-      </TD>
-      <TD CLASS = "thinright">
-         20.27 ns
-      </TD>
-      <TD>
-         20.17 ns
+         2.064 ms
       </TD>
    </TR>
    <TR>
@@ -1565,16 +1531,16 @@ Description: Count the vertices of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         23.82 ns
+         22.21 ns
       </TD>
       <TD CLASS = "thinright">
-         98.40 ns
+         104.0 ns
       </TD>
       <TD CLASS = "thinright">
-         859.8 ns
+         944.6 ns
       </TD>
       <TD>
-         8.932 μs
+         10.66 μs
       </TD>
    </TR>
    <TR>
@@ -1582,16 +1548,16 @@ Description: Count the vertices of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         24.17 ns
+         22.98 ns
       </TD>
       <TD CLASS = "thinright">
-         86.27 ns
+         87.83 ns
       </TD>
       <TD CLASS = "thinright">
-         794.1 ns
+         856.0 ns
       </TD>
       <TD>
-         8.667 μs
+         8.871 μs
       </TD>
    </TR>
 </TABLE>
@@ -1619,33 +1585,16 @@ Description: Count the vertices of the graph
          Alga
       </TH>
       <TD CLASS = "thinright">
-         32.00 ms
+         31.87 ms
       </TD>
       <TD CLASS = "thinright">
-         9.150 μs
+         8.526 μs
       </TD>
       <TD CLASS = "thinright">
-         271.5 μs
+         259.4 μs
       </TD>
       <TD>
-         2.971 ms
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         20.16 ns
-      </TD>
-      <TD CLASS = "thinright">
-         20.18 ns
-      </TD>
-      <TD CLASS = "thinright">
-         20.17 ns
-      </TD>
-      <TD>
-         20.17 ns
+         2.858 ms
       </TD>
    </TR>
    <TR>
@@ -1653,16 +1602,16 @@ Description: Count the vertices of the graph
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         14.95 μs
+         17.71 μs
       </TD>
       <TD CLASS = "thinright">
-         130.2 ns
+         148.7 ns
       </TD>
       <TD CLASS = "thinright">
-         702.0 ns
+         831.2 ns
       </TD>
       <TD>
-         3.139 μs
+         3.678 μs
       </TD>
    </TR>
    <TR>
@@ -1670,16 +1619,16 @@ Description: Count the vertices of the graph
          Hash-Graph
       </TH>
       <TD CLASS = "thinright">
-         13.72 μs
+         14.04 μs
       </TD>
       <TD CLASS = "thinright">
-         118.2 ns
+         117.4 ns
       </TD>
       <TD CLASS = "thinright">
-         712.5 ns
+         741.3 ns
       </TD>
       <TD>
-         3.200 μs
+         3.216 μs
       </TD>
    </TR>
 </TABLE>
@@ -1687,15 +1636,17 @@ Description: Count the vertices of the graph
 
 SUMMARY:
 
- * Containers was the fastest 12 times
+ * Hash-Graph was the fastest 10 times
+
+ There was 2 ex-aequo
 
 
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Containers was 186906.77 times faster than Alga
- * Fgl was 682.35 times faster than Alga
- * Hash-Graph was 681.37 times faster than Alga
+ * Hash-Graph was 25308.34 times faster than Alga
+ * Fgl was 21471.98 times faster than Alga
+
 
 ## edgeCount
 
