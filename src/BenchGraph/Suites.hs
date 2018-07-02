@@ -123,7 +123,7 @@ context fun genArg = Suite
 -- Algorithms
 
 dff :: NFData o => (g -> o) -> Suite g
-dff = simpleSuite "dff" "Produce a forest, obtainened from a DFS (Deep First Search) of each vertex"
+dff = simpleSuite "dff" "Produce a forest, obtained from a DFS (Deep First Search) of each vertex"
 
 topSort :: NFData o => (g -> o) -> Suite g
 topSort = simpleSuite "topSort" "Topological sorting of the vertices"
