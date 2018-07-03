@@ -1291,60 +1291,6 @@ ABSTRACT:
 
 Description: Topological sorting of the vertices
 
-### Clique
-<TABLE>
-   <TR>
-      <TH>
-      </TH>
-      <TH CLASS = "thinright">
-         1
-      </TH>
-      <TH CLASS = "thinright">
-         10
-      </TH>
-      <TH CLASS = "thinright">
-         100
-      </TH>
-      <TH>
-         1000
-      </TH>
-   </TR>
-   <TR>
-      <TH>
-         Containers
-      </TH>
-      <TD CLASS = "thinright">
-         143.7 ns
-      </TD>
-      <TD CLASS = "thinright">
-         3.444 μs
-      </TD>
-      <TD CLASS = "thinright">
-         342.8 μs
-      </TD>
-      <TD>
-         81.90 ms
-      </TD>
-   </TR>
-   <TR>
-      <TH>
-         Fgl
-      </TH>
-      <TD CLASS = "thinright">
-         393.3 ns
-      </TD>
-      <TD CLASS = "thinright">
-         28.17 μs
-      </TD>
-      <TD CLASS = "thinright">
-         11.17 ms
-      </TD>
-      <TD>
-         3.778 s
-      </TD>
-   </TR>
-</TABLE>
-
 ### Mesh
 <TABLE>
    <TR>
@@ -1368,16 +1314,16 @@ Description: Topological sorting of the vertices
          Containers
       </TH>
       <TD CLASS = "thinright">
-         143.8 ns
+         141.5 ns
       </TD>
       <TD CLASS = "thinright">
-         1.928 μs
+         1.807 μs
       </TD>
       <TD CLASS = "thinright">
-         20.47 μs
+         19.53 μs
       </TD>
       <TD>
-         260.3 μs
+         254.5 μs
       </TD>
    </TR>
    <TR>
@@ -1385,16 +1331,104 @@ Description: Topological sorting of the vertices
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         394.4 ns
+         359.7 ns
       </TD>
       <TD CLASS = "thinright">
-         14.13 μs
+         14.27 μs
       </TD>
       <TD CLASS = "thinright">
-         337.6 μs
+         339.8 μs
       </TD>
       <TD>
-         21.70 ms
+         22.77 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         209.2 ns
+      </TD>
+      <TD CLASS = "thinright">
+         11.43 μs
+      </TD>
+      <TD CLASS = "thinright">
+         278.7 μs
+      </TD>
+      <TD>
+         19.63 ms
+      </TD>
+   </TR>
+</TABLE>
+
+### Clique
+<TABLE>
+   <TR>
+      <TH>
+      </TH>
+      <TH CLASS = "thinright">
+         1
+      </TH>
+      <TH CLASS = "thinright">
+         10
+      </TH>
+      <TH CLASS = "thinright">
+         100
+      </TH>
+      <TH>
+         1000
+      </TH>
+   </TR>
+   <TR>
+      <TH>
+         Containers
+      </TH>
+      <TD CLASS = "thinright">
+         143.9 ns
+      </TD>
+      <TD CLASS = "thinright">
+         3.579 μs
+      </TD>
+      <TD CLASS = "thinright">
+         364.7 μs
+      </TD>
+      <TD>
+         100.6 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Fgl
+      </TH>
+      <TD CLASS = "thinright">
+         361.9 ns
+      </TD>
+      <TD CLASS = "thinright">
+         27.78 μs
+      </TD>
+      <TD CLASS = "thinright">
+         10.49 ms
+      </TD>
+      <TD>
+         3.615 s
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         208.2 ns
+      </TD>
+      <TD CLASS = "thinright">
+         26.53 μs
+      </TD>
+      <TD CLASS = "thinright">
+         7.743 ms
+      </TD>
+      <TD>
+         3.486 s
       </TD>
    </TR>
 </TABLE>
@@ -1422,16 +1456,16 @@ Description: Topological sorting of the vertices
          Containers
       </TH>
       <TD CLASS = "thinright">
-         2.770 μs
+         2.751 μs
       </TD>
       <TD CLASS = "thinright">
-         33.20 μs
+         32.74 μs
       </TD>
       <TD CLASS = "thinright">
-         285.8 μs
+         284.4 μs
       </TD>
       <TD>
-         7.401 ms
+         6.213 ms
       </TD>
    </TR>
    <TR>
@@ -1439,16 +1473,33 @@ Description: Topological sorting of the vertices
          Fgl
       </TH>
       <TD CLASS = "thinright">
-         23.18 μs
+         23.22 μs
       </TD>
       <TD CLASS = "thinright">
-         749.2 μs
+         753.4 μs
       </TD>
       <TD CLASS = "thinright">
-         29.11 ms
+         22.99 ms
       </TD>
       <TD>
-         576.9 ms
+         611.3 ms
+      </TD>
+   </TR>
+   <TR>
+      <TH>
+         Hash-Graph
+      </TH>
+      <TD CLASS = "thinright">
+         19.17 μs
+      </TD>
+      <TD CLASS = "thinright">
+         525.1 μs
+      </TD>
+      <TD CLASS = "thinright">
+         17.83 ms
+      </TD>
+      <TD>
+         557.1 ms
       </TD>
    </TR>
 </TABLE>
@@ -1462,7 +1513,8 @@ SUMMARY:
 ABSTRACT:
 (Based on an average of the ratio between largest benchmarks)
 
- * Containers was 64.51 times faster than Fgl
+ * Containers was 61.01 times faster than Fgl
+ * Hash-Graph was 1.08 times faster than Fgl
 
 
 ## reachable

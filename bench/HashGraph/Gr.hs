@@ -42,5 +42,6 @@ functions =
   , S.removeEdge HG.delEdge mkEdge
   , S.context (HG.&) $ \(x,y) -> (x,HG.Context' Set.empty (Set.singleton (HG.Tail () y)))
   , S.dff A.dfs
+  , S.topSort A.topSort
   ]
 
