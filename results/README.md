@@ -51,7 +51,7 @@ The functions are benchmarked against:
 [(0,1),(0,2),(0,3),(0,4),(1,2),(1,3),(1,4),(2,3),(2,4),(3,4)]
 ```
 
-* RealLife graphs are graphs from the real life, please see [https://github.com/haskell-perf/graphs/tree/master/src/BenchGraph/RealLife/Graphs]
+* RealLife graphs are graphs from the real life, please see <https://github.com/haskell-perf/graphs/tree/master/src/BenchGraph/RealLife/Graphs>
 
 The two first graphs are built with successive ten powers vertices. Here, with 1, 10, 100 and 1000 vertices.
 
@@ -63,6 +63,6 @@ All the functions are tested with arguments in the _domain_ of the graph, where 
 
 ## Remarks
 
-* Results are condensed in table, without the detail of arguments. For more precise results, please run the benchmark suite
-* Other graphs are supported (path, circuit and complete), you can run the benchmark suite using them
+* Results are condensed in table, without the detail of arguments. For more precise results, please run the benchmark suite.
+* Other graphs are supported (path, circuit and complete), you can run the benchmark suite using them.
 
