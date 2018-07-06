@@ -32,6 +32,11 @@ import Text.Printf (printf)
 import Command
 import ListS (listOfSuites, descs)
 
+-- If you are trying to add your library using YourLib/Graph.hs:
+--   Uncomment the corresponding lines, and you are ready to build and run
+
+-- UNCOMMENT import qualified YourLib.Graph
+
 import qualified Containers.Graph
 #ifdef ALGA
 import qualified Alga.Graph
@@ -66,7 +71,7 @@ genReport :: Int
            -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
 genReport lev flg arr = do
-  unless notquickComp $ putStrLn $ let comp = head libNames 
+  unless notquickComp $ putStrLn $ let comp = head libNames
                                        oth =  head $ tail libNames
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
   mapM_ mapped $ nubBy (liftExtract2 (==)) arr
@@ -213,5 +218,6 @@ listOfCreation dontBenchLittleOnes gr =
 #ifdef HASHGRAPH
   , ("Hash-Graph", benchmarkCreation dontBenchLittleOnes gr HashGraph.Gr.mk)
 #endif
+-- UNCOMMENT, ("YourFancyLibName", benchmarkCreation dontBenchLittleOnes gr YourLib.Graph.mk)
   ]
 

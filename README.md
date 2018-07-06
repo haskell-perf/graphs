@@ -143,4 +143,4 @@ if benchCreation
 
 ### And if I don't care and only want to add a benchmark?
 
-Copy/paste a library file (like `bench/Alga/Graph.hs`), adapt it, and add it to `bench/ListS.hs`.
+Follow the instructions starting in `bench/YourLib/Graph.hs`

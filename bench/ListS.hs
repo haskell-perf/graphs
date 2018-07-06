@@ -18,6 +18,12 @@ import qualified Fgl.PatriciaTree
 import qualified HashGraph.Gr
 #endif
 
+-- If you are trying to add your library using YourLib/Graph.hs:
+--   Uncomment the corresponding lines and it is ready to be used, unless you want to bench the graph creation.
+--   If you want to, go to bench/Time.hs
+
+-- UNCOMMENT import qualified YourLib.Graph
+
 import BenchGraph.Types
 import BenchGraph.Named
 
@@ -39,5 +45,6 @@ listOfSuites = concatMap sequence
 #ifdef HASHGRAPH
   , ("Hash-Graph", map Shadow HashGraph.Gr.functions)
 #endif
+-- UNCOMMENT, ("YourFancyLibName", map Shadow YourLib.Graph.functions)
   ]
 
