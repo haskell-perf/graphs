@@ -1,4 +1,11 @@
-﻿# Introduction
+﻿## Results
+
+* Time: https://github.com/haskell-perf/graphs/blob/master/results/TIME.md
+* Space: https://github.com/haskell-perf/graphs/blob/master/results/SPACE.md
+
+Note: Some functions of Data.Graph was not in the original library (`edgeCount` and `hasEdge`), their defintion can be found in `bench/Containers/Graph.hs`
+
+## What is benchmarked
 
 In this folder, you will find the lastest benchmarks of 4 haskell graphs libraries:
 
@@ -16,13 +23,6 @@ The benchmarks were realised using `Stack` and the `stack.newest.yaml` configura
 * Space benchmarks were run using [Weigh v0.12](https://hackage.haskell.org/package/weigh-0.0.12)
 
 * ~~Data size benchmarks were run using [ghc-datasize v0.2.0](http://hackage.haskell.org/package/ghc-datasize-0.2.0)~~
-
-## Results
-
-* Time: https://github.com/haskell-perf/graphs/blob/master/results/TIME.md
-* Space: https://github.com/haskell-perf/graphs/blob/master/results/SPACE.md
-
-Note: Some functions of Data.Graph was not in the original library (`edgeCount` and `hasEdge`), their defintion can be found in `bench/Containers/Graph.hs`
 
 ### Benchmarking routine
 
