@@ -40,6 +40,9 @@ Flag Fgl
 Flag HashGraph
   Description: Enable benchmarking HashGraph
 
+Flag Haggle 
+  Description: Enable benchmarking Haggle
+
 Flag RealLife
   Description: Enable realLife graphs
 
@@ -120,6 +123,12 @@ benchmark time
       other-modules:    HashGraph.Gr
       build-depends:    hash-graph       >= 0.1.0.0
       cpp-options:      -DHASHGRAPH
+
+    if flag(Haggle)
+      other-modules:    Haggle.SimpleBiDigraph 
+      build-depends:    haggle           >= 0.1.0.0
+      cpp-options:      -DHAGGLE
+
 
   else
     hs-source-dirs:     bench

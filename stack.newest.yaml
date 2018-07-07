@@ -10,9 +10,13 @@ extra-deps:
     commit: 785c20dc608774b133d89c942bc33d7f56ef6ced
   - git: https://github.com/snowleopard/alga.git
     commit: 7c585142afc3811dc44093f5e6e7165f6f609539
+  - git: https://github.com/travitch/haggle.git
+    commit: 7be9effa985cf4dcdf209976b1c5846bdf29a88b
   - ghc-datasize-0.2.0
   - ghc-heap-view-0.5.10
   - aeson-1.4.0.0
+  - monad-primitive-0.1
+  - ref-tf-0.4.0.1
 
 flags:
   ghc-heap-view:

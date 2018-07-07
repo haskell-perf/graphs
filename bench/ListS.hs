@@ -17,6 +17,9 @@ import qualified Fgl.PatriciaTree
 #ifdef HASHGRAPH
 import qualified HashGraph.Gr
 #endif
+#ifdef HAGGLE
+import qualified Haggle.SimpleBiDigraph
+#endif
 
 -- If you are trying to add your library using YourLib/Graph.hs:
 --   Uncomment the corresponding lines and it is ready to be used, unless you want to bench the graph creation.
@@ -44,6 +47,9 @@ listOfSuites = concatMap sequence
 #endif
 #ifdef HASHGRAPH
   , ("Hash-Graph", map Shadow HashGraph.Gr.functions)
+#endif
+#ifdef HAGGLE
+  , ("Haggle", map Shadow Haggle.SimpleBiDigraph.functions)
 #endif
 -- UNCOMMENT, ("YourFancyLibName", map Shadow YourLib.Graph.functions)
   ]
