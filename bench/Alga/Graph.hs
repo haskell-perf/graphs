@@ -24,8 +24,8 @@ mkSpecClique edgs = clique [0..(extractMaxVertex edgs)]
 
 functions :: [Suite (Graph Int)]
 functions =
-  [ S.isEmpty isEmpty
-  , S.vertexList vertexList
+  [ S.vertexList vertexList
+  , S.isEmpty isEmpty
   , S.vertexCount vertexCount
   , S.hasVertex hasVertex id
   , S.edgeCount edgeCount
