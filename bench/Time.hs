@@ -62,22 +62,27 @@ showBenchName (Benchmark n _) = n
 showBenchName (BenchGroup n _) = n
 showBenchName Environment{}    = error "Cannot show the bench name of an Env"
 
-genReport :: Int
-           -- ^ The number of '#' to write
-           -> Output
+genReport :: Output
            -- ^ Output options
            -> [Named Benchmark]
            -- ^ The list of benchmarks with their library name
            -> IO()
-genReport _ _ [] = putStrLn "\nNo data\n"
-genReport lev flg arr = do
+genReport _ [] = putStrLn "\nNo data\n"
+genReport flg arr = do
   unless notquickComp $ putStrLn $ let comp = head libNames
                                        oth =  head $ tail libNames
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
   mapM_ mapped $ nubBy (liftExtract2 (==)) arr
   where
     mapped e = do
-      res <- toPrint lev (staOut flg) arr $ snd e
+      let bname = showBenchName $ snd e
+      if notquickComp
+        then do
+          putStrLn $ unwords [replicate 2 '#',bname]
+          maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
+          putStrLn ""
+        else putStr $ bname ++ ": "
+      res <- toPrint 2 (staOut flg) arr $ snd e
       case fmap (fmap (map (fmap getCriterionTime))) res of
         Nothing -> return ()
         Just res' -> when (sumOut flg) $ if notquickComp
@@ -88,17 +93,10 @@ genReport lev flg arr = do
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
 
-toPrint :: Int -- ^ Must start with 2
+toPrint :: Int -- ^ Will start with 2
         -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
 toPrint lev flg arr breport = case lev of
-  2 -> do
-    if flg /= QuickComparison
-       then do
-         pTitle
-         maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
-         putStrLn ""
-        else putStr $ bname ++ ": "
-    doGrp
+  2 -> doGrp
   3 -> do
     when (flg == Ascii || flg == Html) pTitle
     if flg /= Html
@@ -197,7 +195,7 @@ main' opts
                                     in drop ((one-1)*per) $ f grNames
             samples = filter (\(_,n) -> showBenchName n `elem` todo) grList'
         unless (staOut flg == QuickComparison) $ printHeader gr $ nub $ map (showBenchName . snd) samples
-        genReport 2 flg samples
+        genReport flg samples
   where
     grNames = nub $ map (showBenchName . snd) $ grList False False defaultGr
     grList benchWithCreation dontBenchLittleOnes gr = map (fmap (\(Shadow s) -> allBench benchWithCreation dontBenchLittleOnes gr s)) listOfSuites ++ listOfCreation dontBenchLittleOnes gr

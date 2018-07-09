@@ -66,6 +66,9 @@ useResults (Output su st) todo = do
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
     mapped e = do
+      putStrLn $ unwords [replicate 2 '#', showGrouped $ snd e]
+      maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup (showGrouped $ snd e) descs)
+      putStrLn ""
       res <- printReport 2 st namedBenchs $ snd e
       case res of
         Nothing -> return ()
@@ -82,11 +85,7 @@ printReport :: Int -- ^ The number of # to write, must start with 2
             -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (T.Grouped [Named Int64])) -- Maybe if there was actual data
 printReport lev flg arr act = case lev of
-  2 -> do
-    pTitle
-    maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
-    putStrLn ""
-    doGrp
+  2 -> doGrp
   3 -> do
     when (flg /= Null) pTitle
     if flg /= Html
