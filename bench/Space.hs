@@ -26,6 +26,7 @@ import BenchGraph.Utils (defaultGr)
 import qualified BenchGraph.Render.Types as T
 import BenchGraph.Render.Best
 import BenchGraph.Render.Abstract
+import BenchGraph.Render.Chart
 import BenchGraph.Render.Common
 
 import qualified Containers.Graph
@@ -60,7 +61,7 @@ takeLastAfterBk w = case elemIndices '/' w of
                           x -> drop (1+last x) w
 
 useResults :: Output -> [Grouped WeighResult] -> IO ()
-useResults (Output su st) todo = do
+useResults (Output su st fi) todo = do
   putStrLn "Note: results are in bytes"
   mapM_ mapped $ nubBy (liftExtract2 eqG) namedBenchs
   where
@@ -74,9 +75,11 @@ useResults (Output su st) todo = do
         Nothing -> return ()
         Just res' ->
           let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
-              in when su $ do
-                printBest "used the least amount of memory" res''
-                printAbstract "lighter" $ T.setBGroupT res''
+              in do
+                when su $ do
+                  printBest "used the least amount of memory" res''
+                  printAbstract "lighter" $ T.setBGroupT res''
+                when fi $ mkChart (showGrouped $ snd e) res''
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write, must start with 2

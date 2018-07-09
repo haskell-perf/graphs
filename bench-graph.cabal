@@ -51,6 +51,7 @@ library
                      , BenchGraph.Named
                      , BenchGraph.Render.Abstract
                      , BenchGraph.Render.Best
+                     , BenchGraph.Render.Chart
                      , BenchGraph.Render.Common
                      , BenchGraph.Render.Types
   other-extensions:    ExistentialQuantification
@@ -58,9 +59,12 @@ library
                        deepseq      >= 1.4 && < 1.5,
                        comonad      >= 5.0.3,
                        -- Render
-                       tabular    >= 0.2.2.7,
-                       html       >= 1.0.1.2,
-                       containers >= 0.5.5.1 && < 0.8
+                       tabular     >= 0.2.2.7,
+                       html        >= 1.0.1.2,
+                       containers  >= 0.5.5.1 && < 0.8,
+                       Chart       >= 1.9,
+                       Chart-cairo >= 1.9
+
   hs-source-dirs:      src
   default-language:    Haskell2010
 

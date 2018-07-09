@@ -12,6 +12,8 @@ extra-deps:
   - ghc-heap-view-0.5.10
   - criterion-1.4.0.0
   - base-compat-batteries-0.10.1
+  - Chart-cairo-1.9
+  - Chart-1.9
 
 flags:
   ghc-heap-view:

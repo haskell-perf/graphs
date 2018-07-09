@@ -51,6 +51,7 @@ import qualified HashGraph.Gr
 import BenchGraph.Render.Types
 import BenchGraph.Render.Best
 import BenchGraph.Render.Abstract
+import BenchGraph.Render.Chart
 import BenchGraph.Render.Common
 
 -- We consider Benchmark equality using their name
@@ -85,11 +86,13 @@ genReport flg arr = do
       res <- toPrint 2 (staOut flg) arr $ snd e
       case fmap (fmap (map (fmap getCriterionTime))) res of
         Nothing -> return ()
-        Just res' -> when (sumOut flg) $ if notquickComp
-          then do
-            printBest "was the fastest" res'
-            printAbstract "faster" $ setBGroupT res'
-          else printQuick (head libNames) $ setBGroupT res'
+        Just res' -> do
+          when (sumOut flg) $ if notquickComp
+            then do
+              printBest "was the fastest" res'
+              printAbstract "faster" $ setBGroupT res'
+            else printQuick (head libNames) $ setBGroupT res'
+          when (figOut flg) $ mkChart bname res'
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
 

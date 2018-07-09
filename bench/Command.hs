@@ -25,7 +25,8 @@ data StaOut = Ascii | Html | Null | QuickComparison deriving (Read, Show, Eq)
 
 data Output = Output {
   sumOut :: Bool, -- ^ Output summary ?
-  staOut :: StaOut -- ^ Output standard ?
+  staOut :: StaOut, -- ^ Output standard ?
+  figOut :: Bool -- ^Output figures ?
   }
   deriving (Read, Show, Eq)
 
@@ -67,6 +68,9 @@ options = partOpt <|> ( Only <$> onlyOpt)
 sumFlag :: Parser Bool
 sumFlag = flag True False $ long "noSummarize" <> short 's' <> help "When set, disable SUMMARIZE and ABSTRACT output"
 
+figFlag :: Parser Bool
+figFlag = flag False True $ long "Chart" <> short 'c' <> help "When set, will output a chart in for every benchmark"
+
 benchWithCreation :: Parser Bool
 benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b' <> help "When set, will benchmark also the graph-creation function. See README"
 
@@ -77,7 +81,7 @@ staFlag :: Parser StaOut
 staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii <> help "The standard output, can be: Ascii | Html | Null | QuickComparison"
 
 output :: Parser Output
-output = Output <$> sumFlag <*> staFlag
+output = Output <$> sumFlag <*> staFlag <*> figFlag
 
 runCom :: Parser CommandTime
 runCom = Run <$> optional options <*> output <*> optional (some libOpt) <*> benchWithCreation <*> benchLittleOne <*> graphsOpt
@@ -130,7 +134,7 @@ runSpace = info ( semiOptional <**> helper)
      <> progDesc "Benchmark size of functions on different graphs libraries"
      <> header "Help")
   where
-    semiOptional = pure (fromMaybe (RunS Nothing (Output True Ascii) Nothing)) <*> optional space'
+    semiOptional = pure (fromMaybe (RunS Nothing (Output True Ascii False) Nothing)) <*> optional space'
 
 runDataSize :: ParserInfo CommandDataSize
 runDataSize = info ((RunD <$> graphsOpt) <**> helper)
