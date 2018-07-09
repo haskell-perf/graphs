@@ -12,7 +12,10 @@ import qualified BenchGraph.Suites as S
 
 import Control.Monad (replicateM, mapM_)
 import Control.Monad.ST
+import Data.Bifunctor
+
 import Data.Graph.Haggle
+import Data.Graph.Haggle.Internal.Basic (Vertex (..))
 
 instance GraphImpl SimpleBiDigraph where
   mkGraph e = runST $ do
@@ -29,4 +32,5 @@ functions =
   [ S.isEmpty isEmpty
   , S.vertexList vertices
   , S.edgeList edges
+  , S.hasEdge (\(u,v) g -> edgeExists g u v) (bimap V V)
   ]
