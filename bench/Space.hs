@@ -26,8 +26,11 @@ import BenchGraph.Utils (defaultGr)
 import qualified BenchGraph.Render.Types as T
 import BenchGraph.Render.Best
 import BenchGraph.Render.Abstract
-import BenchGraph.Render.Chart
 import BenchGraph.Render.Common
+
+#ifdef CHART
+import BenchGraph.Render.Chart
+#endif
 
 import qualified Containers.Graph
 #ifdef ALGA
@@ -79,7 +82,9 @@ useResults (Output su st fi) todo = do
                 when su $ do
                   printBest "used the least amount of memory" res''
                   printAbstract "lighter" $ T.setBGroupT res''
+#ifdef CHART
                 when fi $ mkChart (showGrouped $ snd e) res''
+#endif
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write, must start with 2

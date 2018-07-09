@@ -43,6 +43,9 @@ Flag HashGraph
 Flag RealLife
   Description: Enable realLife graphs
 
+Flag Chart
+  Description: Enable Chart output
+
 library
   exposed-modules:     BenchGraph.GenericGraph
                      , BenchGraph.Types
@@ -51,7 +54,6 @@ library
                      , BenchGraph.Named
                      , BenchGraph.Render.Abstract
                      , BenchGraph.Render.Best
-                     , BenchGraph.Render.Chart
                      , BenchGraph.Render.Common
                      , BenchGraph.Render.Types
   other-extensions:    ExistentialQuantification
@@ -61,10 +63,7 @@ library
                        -- Render
                        tabular     >= 0.2.2.7,
                        html        >= 1.0.1.2,
-                       containers  >= 0.5.5.1 && < 0.8,
-                       Chart       >= 1.9,
-                       Chart-cairo >= 1.9
-
+                       containers  >= 0.5.5.1 && < 0.8
   hs-source-dirs:      src
   default-language:    Haskell2010
 
@@ -85,6 +84,10 @@ library
     other-modules:     BenchGraph.RealLife.Generated
     cpp-options:       -DREALLIFE
 
+  if flag(Chart)
+    build-depends:     Chart       >= 1.9,
+                       Chart-cairo >= 1.9
+    exposed-modules:   BenchGraph.Render.Chart
 
   GHC-options:        -O2
                       -Wall
@@ -124,6 +127,9 @@ benchmark time
       other-modules:    HashGraph.Gr
       build-depends:    hash-graph       >= 0.1.0.0
       cpp-options:      -DHASHGRAPH
+
+    if flag(Chart)
+      cpp-options:       -DCHART
 
   else
     hs-source-dirs:     bench

@@ -51,8 +51,11 @@ import qualified HashGraph.Gr
 import BenchGraph.Render.Types
 import BenchGraph.Render.Best
 import BenchGraph.Render.Abstract
-import BenchGraph.Render.Chart
 import BenchGraph.Render.Common
+
+#ifdef CHART
+import BenchGraph.Render.Chart
+#endif
 
 -- We consider Benchmark equality using their name
 instance Eq Benchmark where
@@ -92,7 +95,9 @@ genReport flg arr = do
               printBest "was the fastest" res'
               printAbstract "faster" $ setBGroupT res'
             else printQuick (head libNames) $ setBGroupT res'
+#ifdef CHART
           when (figOut flg) $ mkChart bname res'
+#endif
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
 

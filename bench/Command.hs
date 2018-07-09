@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module Command
   (
   Option (..),
@@ -69,7 +70,11 @@ sumFlag :: Parser Bool
 sumFlag = flag True False $ long "noSummarize" <> short 's' <> help "When set, disable SUMMARIZE and ABSTRACT output"
 
 figFlag :: Parser Bool
+#ifdef CHART
 figFlag = flag False True $ long "Chart" <> short 'c' <> help "When set, will output a chart in for every benchmark"
+#else
+figFlag = pure False
+#endif
 
 benchWithCreation :: Parser Bool
 benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b' <> help "When set, will benchmark also the graph-creation function. See README"
