@@ -90,13 +90,14 @@ genReport flg arr = do
       case fmap (fmap (map (fmap getCriterionTime))) res of
         Nothing -> return ()
         Just res' -> do
+          let onlyLargeBenchs = setBGroupT res'
           when (sumOut flg) $ if notquickComp
             then do
               printBest "was the fastest" res'
-              printAbstract "faster" $ setBGroupT res'
-            else printQuick (head libNames) $ setBGroupT res'
+              printAbstract "faster" onlyLargeBenchs
+            else printQuick (head libNames) onlyLargeBenchs
 #ifdef CHART
-          when (figOut flg) $ mkChart bname res'
+          when (figOut flg) $ mkChart bname onlyLargeBenchs
 #endif
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison

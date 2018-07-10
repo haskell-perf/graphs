@@ -1,6 +1,8 @@
 module BenchGraph.Render.Common where
 
 import BenchGraph.Named
+import BenchGraph.Render.Types
+
 import Control.Comonad (extract, extend)
 
 import qualified Text.Tabular as T
@@ -34,4 +36,8 @@ printHtml arr' ren = print $ TH.render stringToHtml stringToHtml stringToHtml ta
 
 printHeader :: [Named Int] -> [String] -> IO ()
 printHeader gr todo = putStrLn $ unlines ["# Benchmarks\n","Doing:","\n----",unlines $ map (\x ->"* [" ++ x ++"](#"++ unwords (intersperse "-" $ words $ map toLower x) ++")") todo ++ ["----"],unwords ["Using",show gr,"as graphs"]]
+
+getSimples :: Grouped [Named Double] -> [[Named Double]]
+getSimples (Simple b v) = if b then [v] else [[]]
+getSimples (Group lst) = filter (not . null) $ concatMap getSimples lst
 

@@ -9,7 +9,7 @@ import Data.List (uncons)
 import Graphics.Rendering.Chart.Easy hiding (uncons)
 import Graphics.Rendering.Chart.Backend.Cairo
 
-import Data.Map.Strict (Map,unionsWith, fromList, elems)
+import Data.Map.Strict (Map, unionWith, fromList, elems)
 import qualified Data.Map.Strict as M
 
 import BenchGraph.Render.Types
@@ -29,8 +29,7 @@ mkChart name grouped = toFile def (name ++ ".png") $ do
   where
     titles (Simple _ xs) = map fst xs
     titles (Group xs) = maybe [] (titles . fst) $ uncons xs
-    values = [(name, elems $ M.map average $ mkValues grouped)]
+    values = [(name, elems $ M.map average $ mkValues $ getSimples grouped)]
 
-mkValues :: Grouped [Named Double] -> Map String [Double]
-mkValues (Simple _ xs) = fromList  $ map (fmap return) xs
-mkValues (Group xs) = unionsWith (++) $ map mkValues xs
+mkValues :: [[Named Double]] -> Map String [Double]
+mkValues = foldr (\vals -> unionWith (++) (fromList $ map (fmap return) vals)) M.empty

@@ -79,11 +79,12 @@ useResults (Output su st fi) todo = do
         Just res' ->
           let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
               in do
+                let onlyLargeBenchs = T.setBGroupT res''
                 when su $ do
                   printBest "used the least amount of memory" res''
-                  printAbstract "lighter" $ T.setBGroupT res''
+                  printAbstract "lighter" onlyLargeBenchs
 #ifdef CHART
-                when fi $ mkChart (showGrouped $ snd e) res''
+                when fi $ mkChart (showGrouped $ snd e) onlyLargeBenchs
 #endif
 
 -- | Print a report from the lists of benchmarks

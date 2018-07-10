@@ -16,7 +16,7 @@ import Control.Applicative ((<|>))
 import BenchGraph.Named
 
 import BenchGraph.Render.Types
-import BenchGraph.Render.Common (average)
+import BenchGraph.Render.Common (average, getSimples)
 
 -- | Will print an abstract, comparing libraries by their average time
 printAbstract :: String -- ^ A comparative (like "faster")
@@ -40,10 +40,6 @@ printQuickMap _ = putStrLn "ERROR"
 
 removeNaN :: Named [Named Double] -> Named [Named Double]
 removeNaN = fmap (filter (not . isNaN . snd))
-
-getSimples :: Grouped [Named Double] -> [[Named Double]]
-getSimples (Simple b v) = if b then [v] else [[]]
-getSimples (Group lst) = filter (not . null) $ concatMap getSimples lst
 
 -- | Sort the results, plus put the worst lib for comparison
 rearrange :: Named [Named Double] -> Named [Named Double]
