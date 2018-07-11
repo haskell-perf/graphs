@@ -66,7 +66,11 @@ takeLastAfterBk w = case elemIndices '/' w of
 useResults :: Output -> [Grouped WeighResult] -> IO ()
 useResults (Output su st fi) todo = do
   putStrLn "Note: results are in bytes"
-  mapM_ mapped $ nubBy (liftExtract2 eqG) namedBenchs
+  resutls <- mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
+#ifdef CHART
+  when fi $ mkChart "time" $ catMaybes results
+#endif
+  return ()
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
     mapped e = do
@@ -75,7 +79,7 @@ useResults (Output su st fi) todo = do
       putStrLn ""
       res <- printReport 2 st namedBenchs $ snd e
       case res of
-        Nothing -> return ()
+        Nothing -> return Nothing
         Just res' ->
           let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
               in do
@@ -83,9 +87,7 @@ useResults (Output su st fi) todo = do
                 when su $ do
                   printBest "used the least amount of memory" res''
                   printAbstract "lighter" onlyLargeBenchs
-#ifdef CHART
-                when fi $ mkChart (showGrouped $ snd e) onlyLargeBenchs
-#endif
+                return $ Just (showGrouped $ snd e, onlyLargeBenchs)
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write, must start with 2

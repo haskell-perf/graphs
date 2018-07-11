@@ -76,7 +76,11 @@ genReport flg arr = do
   unless notquickComp $ putStrLn $ let comp = head libNames
                                        oth =  head $ tail libNames
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
-  mapM_ mapped $ nubBy (liftExtract2 (==)) arr
+  results <- mapM mapped $ nubBy (liftExtract2 (==)) arr
+#ifdef CHART
+  when (figOut flg) $ mkChart "time" $ catMaybes results
+#endif
+  return ()
   where
     mapped e = do
       let bname = showBenchName $ snd e
@@ -88,7 +92,7 @@ genReport flg arr = do
         else putStr $ bname ++ ": "
       res <- toPrint 2 (staOut flg) arr $ snd e
       case fmap (fmap (map (fmap getCriterionTime))) res of
-        Nothing -> return ()
+        Nothing -> return Nothing
         Just res' -> do
           let onlyLargeBenchs = setBGroupT res'
           when (sumOut flg) $ if notquickComp
@@ -96,9 +100,7 @@ genReport flg arr = do
               printBest "was the fastest" res'
               printAbstract "faster" onlyLargeBenchs
             else printQuick (head libNames) onlyLargeBenchs
-#ifdef CHART
-          when (figOut flg) $ mkChart bname onlyLargeBenchs
-#endif
+          return $ Just (bname,onlyLargeBenchs)
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
 

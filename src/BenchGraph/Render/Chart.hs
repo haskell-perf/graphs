@@ -4,7 +4,7 @@ module BenchGraph.Render.Chart
   )
 where
 
-import Data.List (uncons)
+import Data.List (uncons, sort)
 
 import Graphics.Rendering.Chart.Easy hiding (uncons)
 import Graphics.Rendering.Chart.Backend.Cairo
@@ -17,19 +17,20 @@ import BenchGraph.Named
 import BenchGraph.Render.Common
 
 mkChart :: String
-        -- ^ The name of the bench
-        -> Grouped [Named Double]
+        -- ^ The name of the benchs
+        -> [Named (Grouped [Named Double])]
         -- ^ The data
         -> IO ()
-mkChart name grouped = toFile def (name ++ ".png") $ do
-    layout_title .= name
+mkChart _ [] = return ()
+mkChart title grouped = toFile def "results.png" $ do
+    layout_title .= title
     layout_title_style . font_size .= 10
-    layout_x_axis . laxis_generate .= autoIndexAxis (map fst values)
-    plot $ plotBars <$> bars (titles grouped) (addIndexes (map snd values))
+    layout_x_axis . laxis_generate .= autoIndexAxis (map fst grouped)
+    plot $ plotBars <$> bars (titles $ snd $ head grouped) (addIndexes values)
   where
-    titles (Simple _ xs) = map fst xs
+    titles (Simple _ xs) = sort $ map fst xs
     titles (Group xs) = maybe [] (titles . fst) $ uncons xs
-    values = [(name, elems $ M.map average $ mkValues $ getSimples grouped)]
+    values = map (elems . M.map average . mkValues . getSimples . snd) grouped
 
 mkValues :: [[Named Double]] -> Map String [Double]
 mkValues = foldr (\vals -> unionWith (++) (fromList $ map (fmap return) vals)) M.empty
