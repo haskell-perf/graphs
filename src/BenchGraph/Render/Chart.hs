@@ -74,7 +74,7 @@ mkChart title s chopt grouped = void $ renderableToFile fo ("results." ++ foExt)
 mkValues :: Set String
          -- ^ This contains all the libs names. It allow to have coherent legends
          -> [[Named Double]] -> Map String [Double]
-mkValues s = foldr (\vals -> unionWith (++) (fromList $ map (fmap return) vals)) (M.fromSet (const [0]) s)
+mkValues s = foldr (\vals -> unionWith (++) (fromList $ map (fmap return) vals)) (M.fromSet (const []) s)
 
 group :: Int -> [a] -> [[a]]
 group _ [] = [[]]

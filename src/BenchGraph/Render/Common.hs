@@ -13,6 +13,7 @@ import Data.List (transpose, intersperse, sortBy)
 import Data.Char (toLower)
 
 average :: Fractional a => [a] -> a
+average [] = 0
 average lst = sum lst / fromRational (toRational (length lst))
 
 makeAverage :: [[Named Double]] -> [Named Double]
