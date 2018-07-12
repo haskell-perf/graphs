@@ -55,7 +55,7 @@ mkChart title s chopt grouped = void $ renderableToFile fo ("results." ++ foExt)
 
     layout e = layout_title .~ fst e
       $ layout_title_style . font_size .~ 10
-      $ layout_y_axis . laxis_override .~ ((\x -> x {_axis_labels = [map (\(y,_) -> (y, s y)) $ head $ _axis_labels x]} ) . axisGridHide)
+      $ layout_y_axis . laxis_override .~ ((\x -> x {_axis_labels = [map (\(y,_) -> (y, s (y**2))) $ head $ _axis_labels x]} ) . axisGridHide)
       $ layout_left_axis_visibility . axis_show_ticks .~ False
       $ layout_plots .~ [ plotBars $ bars2 e ]
       $ def :: Layout PlotIndex Double
@@ -67,7 +67,7 @@ mkChart title s chopt grouped = void $ renderableToFile fo ("results." ++ foExt)
       $ plot_bars_spacing .~ BarsFixGap 30 5
       $ plot_bars_item_styles .~ map mkstyle (cycle defaultColorSeq)
       $ def
-    value = elems . M.map average . mkValues is . getSimples . snd
+    value = elems . M.map (sqrt . average) . mkValues is . getSimples . snd
     mkstyle c = (solidFillStyle c, Just (solidLine 1.0 $ opaque black))
     is = initSet grouped
 
