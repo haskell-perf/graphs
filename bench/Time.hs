@@ -78,7 +78,7 @@ genReport flg arr = do
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
   results <- mapM mapped $ nubBy (liftExtract2 (==)) arr
 #ifdef CHART
-  when (figOut flg) $ mkChart "time" $ catMaybes results
+  when (figOut flg) $ mkChart "time" secs $ catMaybes results
 #endif
   return ()
   where

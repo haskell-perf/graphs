@@ -68,7 +68,7 @@ useResults (Output su st fi) todo = do
   putStrLn "Note: results are in bytes"
   resutls <- mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
 #ifdef CHART
-  when fi $ mkChart "time" $ catMaybes results
+  when fi $ mkChart "time" show $ catMaybes results
 #endif
   return ()
   where
