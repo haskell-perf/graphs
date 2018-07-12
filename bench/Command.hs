@@ -19,6 +19,8 @@ import Options.Applicative
 import Data.Semigroup ((<>))
 import Data.Maybe (fromMaybe)
 
+import BenchGraph.Render.Types
+
 data Option = Part Int Int | Only Only
   deriving (Show, Eq)
 
@@ -27,7 +29,7 @@ data StaOut = Ascii | Html | Null | QuickComparison deriving (Read, Show, Eq)
 data Output = Output {
   sumOut :: Bool, -- ^ Output summary ?
   staOut :: StaOut, -- ^ Output standard ?
-  figOut :: Bool -- ^Output figures ?
+  figOut :: Maybe ChartOutputFormat -- ^ Output figures ?
   }
   deriving (Read, Show, Eq)
 
@@ -69,11 +71,11 @@ options = partOpt <|> ( Only <$> onlyOpt)
 sumFlag :: Parser Bool
 sumFlag = flag True False $ long "noSummarize" <> short 's' <> help "When set, disable SUMMARIZE and ABSTRACT output"
 
-figFlag :: Parser Bool
+figFlag :: Parser (Maybe ChartOutputFormat)
 #ifdef CHART
-figFlag = flag False True $ long "Chart" <> short 'c' <> help "When set, will output a chart in for every benchmark"
+figFlag = optional $ option auto (long "chart" <> short 'c' <> metavar "OUTTYPE" <> help "Output type: Png or Svg")
 #else
-figFlag = pure False
+figFlag = pure Nothing
 #endif
 
 benchWithCreation :: Parser Bool
@@ -139,7 +141,7 @@ runSpace = info ( semiOptional <**> helper)
      <> progDesc "Benchmark size of functions on different graphs libraries"
      <> header "Help")
   where
-    semiOptional = pure (fromMaybe (RunS Nothing (Output True Ascii False) Nothing)) <*> optional space'
+    semiOptional = pure (fromMaybe (RunS Nothing (Output True Ascii Nothing) Nothing)) <*> optional space'
 
 runDataSize :: ParserInfo CommandDataSize
 runDataSize = info ((RunD <$> graphsOpt) <**> helper)

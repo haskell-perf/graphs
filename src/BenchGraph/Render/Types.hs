@@ -6,6 +6,7 @@ module BenchGraph.Render.Types
   , lengthG
   , setBGroupT
   , IsGrouped (..)
+  , ChartOutputFormat (..)
   )
 
 where
@@ -45,3 +46,5 @@ instance IsGrouped Grouped where
   isSimple _ = False
   simple_ (Simple _ e) = e
   group_ (Group e) = e
+
+data ChartOutputFormat = Png | Svg deriving (Read, Show, Eq)

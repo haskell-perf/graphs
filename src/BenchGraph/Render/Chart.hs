@@ -25,11 +25,13 @@ mkChart :: String
         -- ^ The name of the benchs
         -> (Double -> String)
         -- ^ A show function
+        -> ChartOutputFormat
+        -- ^ The format
         -> [Named (Grouped [Named Double])]
         -- ^ The data
         -> IO ()
-mkChart _ _ [] = return ()
-mkChart title s grouped = void $ renderableToFile svg "results.svg" $ fillBackground def $ gridToRenderable grid
+mkChart _ _ _ [] = return ()
+mkChart title s chopt grouped = void $ renderableToFile fo ("results." ++ foExt) $ fillBackground def $ gridToRenderable grid
   where
     grid = title' `wideAbove` (legend' `wideAbove` aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp))
       where
@@ -47,7 +49,9 @@ mkChart title s grouped = void $ renderableToFile svg "results.svg" $ fillBackgr
         legendInfo = _plot_legend $ plotBars $ bars2 hhgrp
 
     -- Render to svg
-    svg = def {_fo_format = SVG}
+    (fo,foExt) = case chopt of
+                   Png -> (def, "png")
+                   Svg -> (def {_fo_format = SVG},"svg")
 
     layout e = layout_title .~ fst e
       $ layout_title_style . font_size .~ 10
