@@ -29,9 +29,9 @@ mkChart :: String
         -- ^ The data
         -> IO ()
 mkChart _ _ [] = return ()
-mkChart title s grouped = void $ renderableToFile def "results.png" $ fillBackground def $ gridToRenderable grid
+mkChart title s grouped = void $ renderableToFile svg "results.svg" $ fillBackground def $ gridToRenderable grid
   where
-    grid = title' `wideAbove` (legend' `fullOverlayOver` aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp))
+    grid = title' `wideAbove` (legend' `wideAbove` aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp))
       where
         -- Group the benchs per line of 4 items
         grp = group 4 grouped
@@ -45,6 +45,9 @@ mkChart title s grouped = void $ renderableToFile def "results.png" $ fillBackgr
         hhgrp = head $ head grp
         legendStyle = fromJust $ _layout_legend $ layout hhgrp
         legendInfo = _plot_legend $ plotBars $ bars2 hhgrp
+
+    -- Render to svg
+    svg = def {_fo_format = SVG}
 
     layout e = layout_title .~ fst e
       $ layout_title_style . font_size .~ 10
