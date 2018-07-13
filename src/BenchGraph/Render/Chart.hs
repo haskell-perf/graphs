@@ -69,9 +69,9 @@ mkChart title s chopt grouped =
       $ plot_bars_spacing .~ BarsFixGap 30 5
       $ plot_bars_item_styles .~ map mkstyle (cycle defaultColorSeq)
       $ def
-    value x = let maybeverysmall = filter (/=0) $ elems $ M.map average $ mkValues is $ getSimples $ snd x
-                  tenp           = 1 + ceiling (abs $ minimum $ map (logBase 10) maybeverysmall) :: Int
-               in (tenp, map (\u -> fromIntegral tenp + logBase 10 u) maybeverysmall) -- Make everyone > 1, so the log is positive.
+    value x = let maybeverysmall = elems $ M.map average $ mkValues is $ getSimples $ snd x
+                  tenp           = 1 + ceiling (abs $ minimum $ map (logBase 10) $ filter (/= 0) maybeverysmall) :: Int
+               in (tenp, map (\u -> if u == 0 then 0 else fromIntegral tenp + logBase 10 u) maybeverysmall) -- Make everyone > 1, so the log is positive.
     mkstyle c = (solidFillStyle c, Just (solidLine 1.0 $ opaque black))
     is = initSet grouped
 
