@@ -8,7 +8,7 @@ import Control.Monad (void)
 import Data.List (uncons, sort)
 import Data.Maybe (fromJust)
 
-import Graphics.Rendering.Chart.Easy hiding (uncons)
+import Graphics.Rendering.Chart.Easy hiding (uncons, colors)
 import Graphics.Rendering.Chart.Backend.Cairo
 import Graphics.Rendering.Chart.Grid
 
@@ -46,7 +46,7 @@ mkChart title s chopt grouped =
 
         -- Recreate the legend
         legend' = setPickFn nullPickFn $ toRenderable $ Legend legendStyle legendInfo
-        hhgrp = head $ head grp
+        hhgrp = ("",Simple True $ zip (S.toList is) (replicate (S.size is) 0)) -- False data to generate the legend
         legendStyle = fromJust $ _layout_legend $ layout hhgrp
         legendInfo = _plot_legend $ plotBars $ bars2 hhgrp
 
@@ -62,17 +62,22 @@ mkChart title s chopt grouped =
       $ layout_plots .~ [ plotBars $ bars2 e ]
       $ def :: Layout PlotIndex Double
 
-    bars2 e = plot_bars_titles .~ S.toList is
+    bars2 e = plot_bars_titles .~ libsName
       $ plot_bars_values .~ addIndexes [snd $ value e]
       $ plot_bars_singleton_width .~ 100
       $ plot_bars_style .~ BarsClustered
       $ plot_bars_spacing .~ BarsFixGap 30 5
-      $ plot_bars_item_styles .~ map mkstyle (cycle defaultColorSeq)
+      $ plot_bars_item_styles .~ map snd (filter (\(n,_) -> n `elem` libsName) colors)
       $ def
-    value x = let maybeverysmall = elems $ M.map average $ mkValues is $ getSimples $ snd x
-                  tenp           = 1 + ceiling (abs $ minimum $ map (logBase 10) $ filter (/= 0) maybeverysmall) :: Int
-               in (tenp, map (\u -> if u == 0 then 0 else fromIntegral tenp + logBase 10 u) maybeverysmall) -- Make everyone > 1, so the log is positive.
+      where
+        libsName= tkLibsName $ snd e
+
+    value x = let maybeverysmall = filter (/=0) $ elems $ M.map average $ mkValues is $ getSimples $ snd x
+                  tenp           = 1 + ceiling (abs $ minimum $ map (logBase 10) maybeverysmall) :: Int
+               in (tenp, map (\u -> fromIntegral tenp + logBase 10 u) maybeverysmall) -- Make everyone > 1, so the log is positive.
     mkstyle c = (solidFillStyle c, Just (solidLine 1.0 $ opaque black))
+    colors = let colo = take (S.size is) $ map mkstyle (cycle defaultColorSeq)
+              in zip (S.toList is) colo
     is = initSet grouped
 
 mkValues :: Set String
@@ -91,7 +96,7 @@ group i xs = if null l
 initSet :: [Named (Grouped [Named Double])] -> Set String
 initSet = foldr (\(_,vals) -> S.union (S.fromList $ tkLibsName vals)) S.empty
 
-tkLibsName :: Grouped [Named Double] -> [String]
+tkLibsName :: Grouped [Named a] -> [String]
 tkLibsName (Simple _ xs) = sort $ map fst xs
 tkLibsName (Group xs) = maybe [] (tkLibsName . fst) $ uncons xs
 
