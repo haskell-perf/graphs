@@ -8,6 +8,8 @@ where
 import BenchGraph.Types
 import BenchGraph.GenericGraph (Edges)
 import BenchGraph.Utils
+
+import BenchGraph.Suites (a,s)
 import qualified BenchGraph.Suites as S
 
 import qualified Data.HashGraph.Strict as HG
@@ -28,20 +30,20 @@ mk e = HG.mkGraph (map mkEdge e) (vertices e)
 
 functions :: [Suite Gr]
 functions =
-  [ S.isEmpty HG.null
-  , S.edgeList HG.edges
-  , S.edgeCount HG.size
-  , S.vertexCount HG.order
-  , S.vertexList HG.nodes
-  , S.hasVertex HG.member id
-  , S.hasEdge HG.hasEdge mkEdge
-  , S.addVertex HG.insNode id
-  , S.removeVertex HG.delNode id
+  [ s S.isEmpty HG.null
+  , s S.edgeList HG.edges
+  , s S.edgeCount HG.size
+  , s S.vertexCount HG.order
+  , s S.vertexList HG.nodes
+  , a S.hasVertex HG.member id
+  , a S.hasEdge HG.hasEdge mkEdge
+  , a S.addVertex HG.insNode id
+  , a S.removeVertex HG.delNode id
   , S.eq (==)
-  , S.addEdge HG.insEdge mkEdge
-  , S.removeEdge HG.delEdge mkEdge
-  , S.context (HG.&) $ \(x,y) -> (x,HG.Context' Set.empty (Set.singleton (HG.Tail () y)))
-  , S.dff A.dfs
-  , S.topSort A.topSort
+  , a S.addEdge HG.insEdge mkEdge
+  , a S.removeEdge HG.delEdge mkEdge
+  , a S.context (HG.&) $ \(x,y) -> (x,HG.Context' Set.empty (Set.singleton (HG.Tail () y)))
+  , s S.dff A.dfs
+  , s S.topSort A.topSort
   ]
 

@@ -17,24 +17,26 @@ import BenchGraph.Types
 ---- Criterion
 -- | Main function, will benchmark the given suite against the given graphs
 
-benchmark :: (GraphImpl g, NFData g) 
+benchmark :: (GraphImpl g, NFData g)
           => Bool -- ^ Set to False, it will force the graph, using deepseq, before passing it to the benched function
           -> [(GenericGraph, [Size])] -> Suite g -> Benchmark
 benchmark benchCreation graphs' (Suite sname _ algo inputs') = bgroup sname cases
   where
-    cases = [ bgroup gname $ map (benchSuite benchCreation algo inputs' gfunc) ss | ((gname,gfunc), ss) <- graphs' ]
+    cases = [ bgroup gname $ map (benchSuite benchCreation (Left algo) inputs' gfunc) ss | ((gname,gfunc), ss) <- graphs' ]
 
 benchSuite :: (GraphImpl g, NFData g, NFData o)
-           => Bool -> (i -> g -> o) -> (Edges -> [Named i]) -> (Size -> (Edges,Int)) -> Size -> Benchmark
+           => Bool -> Either (i -> g -> o) (i -> g -> IO o) -> (Edges -> [Named i]) -> (Size -> (Edges,Int)) -> Size -> Benchmark
 benchSuite benchCreation algorithm' inputs' gfunc size = bgroup (show sizeName) cases
   where
     (edges, sizeName) = gfunc size
     !graph = case edges of
               [] -> const mkVertex
               _ -> mkGraph
-    cases = if benchCreation
-               then [ bench name' $ nf (algorithm' i . graph) $!! edges | (name',i) <- inputs' edges ]
-               else [ bench name' $ nf (algorithm' i) $!! graph edges | (name',i) <- inputs' edges ]
+    cases = case algorithm' of
+              Left al -> if benchCreation
+                then [ bench name' $ nf (al i . graph) edges | (name',i) <- inputs' edges ]
+                else [ bench name' $ nf (al i) $!! graph edges | (name',i) <- inputs' edges ]
+              Right al -> [ bench name' $ nfIO (al i $ graph edges) | (name',i) <- inputs' edges ]
 
 allBench :: (GraphImpl g, NFData g)
          => Bool -- ^ Do we bench creation of the graph ?

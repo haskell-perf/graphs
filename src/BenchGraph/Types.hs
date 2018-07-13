@@ -4,6 +4,8 @@ module BenchGraph.Types (
   ShadowedS (..),
   Suite (..),
   simpleSuite,
+  SuiteIO (..),
+  simpleSuiteIO,
   GraphImpl (..),
   extractDescription
 ) where
@@ -28,6 +30,16 @@ data Suite g = forall i o. NFData o => Suite
 -- A suite that don't take arguments apart a graph
 simpleSuite :: NFData o => Name -> String -> (g -> o) -> Suite g
 simpleSuite name' desc' algorithm' = Suite name' desc' (const algorithm') (const [("",())])
+
+data SuiteIO g = forall i o. NFData o => SuiteIO
+  { nameIO :: String
+  , descIO :: String
+  , algorithmIO :: i -> g -> IO o
+  , inputsIO    :: Edges -> [Named i] }
+
+-- A suite that don't take arguments apart a graph
+simpleSuiteIO :: NFData o => Name -> String -> (g -> IO o) -> SuiteIO g
+simpleSuiteIO name' desc' algorithm' = SuiteIO name' desc' (const algorithm') (const [("",())])
 
 -- An interface between our generic graphs and others
 class GraphImpl g where

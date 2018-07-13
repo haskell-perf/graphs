@@ -6,6 +6,7 @@ module Alga.Graph
 where
 
 import BenchGraph.Types
+import BenchGraph.Suites (s,a)
 import qualified BenchGraph.Suites as S
 import BenchGraph.GenericGraph (Edges)
 import BenchGraph.Utils (extractMaxVertex)
@@ -24,19 +25,19 @@ mkSpecClique edgs = clique [0..(extractMaxVertex edgs)]
 
 functions :: [Suite (Graph Int)]
 functions =
-  [ S.isEmpty isEmpty
-  , S.vertexList vertexList
-  , S.vertexCount vertexCount
-  , S.hasVertex hasVertex id
-  , S.edgeCount edgeCount
-  , S.edgeList edgeList
-  , S.hasEdge (uncurry hasEdge) id
-  , S.hasSelfLoop hasSelfLoop id
-  , S.addEdge (\(x,y) -> overlay $ edge x y) id
-  , S.addVertex connect vertex
-  , S.removeVertex removeVertex id
+  [ s S.isEmpty isEmpty
+  , s S.vertexList vertexList
+  , s S.vertexCount vertexCount
+  , a S.hasVertex hasVertex id
+  , s S.edgeCount edgeCount
+  , s S.edgeList edgeList
+  , a S.hasEdge (uncurry hasEdge) id
+  , a S.hasSelfLoop hasSelfLoop id
+  , a S.addEdge (\(x,y) -> overlay $ edge x y) id
+  , a S.addVertex connect vertex
+  , a S.removeVertex removeVertex id
   , S.eq (==)
-  , S.removeEdge (uncurry removeEdge) id
-  , S.transpose transpose
+  , a S.removeEdge (uncurry removeEdge) id
+  , s S.transpose transpose
   ]
 

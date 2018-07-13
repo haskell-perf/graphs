@@ -8,6 +8,8 @@ where
 
 import BenchGraph.Types
 import BenchGraph.Utils hiding (vertices)
+
+import BenchGraph.Suites (a,s)
 import qualified BenchGraph.Suites as S
 
 import Control.Monad (replicateM, mapM_)
@@ -30,10 +32,10 @@ instance GraphImpl SimpleBiDigraph where
 
 functions :: [Suite SimpleBiDigraph]
 functions =
-  [ S.isEmpty isEmpty
-  , S.vertexList vertices
-  , S.edgeList edges
-  , S.hasEdge (\(u,v) g -> edgeExists g u v) (bimap V V)
-  , S.topSort topsort
-  , S.reachable reachable V
+  [ s S.isEmpty isEmpty
+  , s S.vertexList vertices
+  , s S.edgeList edges
+  , a S.hasEdge (\(u,v) g -> edgeExists g u v) (bimap V V)
+  , s S.topSort topsort
+  , a S.reachable reachable V
   ]

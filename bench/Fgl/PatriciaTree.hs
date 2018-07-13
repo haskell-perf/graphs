@@ -8,6 +8,8 @@ where
 import BenchGraph.Types
 import BenchGraph.GenericGraph (Edges)
 import BenchGraph.Utils
+
+import BenchGraph.Suites (a,s)
 import qualified BenchGraph.Suites as S
 
 import Data.Graph.Inductive.Graph
@@ -25,21 +27,21 @@ mk e = mkUGraph (vertices e) e
 
 functions :: [Suite UGr]
 functions =
-  [ S.isEmpty isEmpty
-  , S.edgeList edges
-  , S.edgeCount size
-  , S.vertexCount order
-  , S.vertexList nodes
-  , S.hasVertex (\x y -> isJust $ lab y x) id -- lab is the only function not erroring if tested with a vertex not in the graph
-  , S.hasEdge (flip hasEdge) id
-  , S.addVertex insNode (\x -> (x,()))
-  , S.removeVertex delNode id
+  [ s S.isEmpty isEmpty
+  , s S.edgeList edges
+  , s S.edgeCount size
+  , s S.vertexCount order
+  , s S.vertexList nodes
+  , a S.hasVertex (\x y -> isJust $ lab y x) id -- lab is the only function not erroring if tested with a vertex not in the graph
+  , a S.hasEdge (flip hasEdge) id
+  , a S.addVertex insNode (\x -> (x,()))
+  , a S.removeVertex delNode id
   , S.eq equal
-  , S.addEdge insEdge (\(x,y) -> (x,y,()))
-  , S.removeEdge delEdge id
-  , S.context (&) (\(x,y) -> ([],x,(),[((),y)]))
-  , S.dff dfs'
-  , S.topSort topsort
-  , S.reachable reachable id
+  , a S.addEdge insEdge (\(x,y) -> (x,y,()))
+  , a S.removeEdge delEdge id
+  , a S.context (&) (\(x,y) -> ([],x,(),[((),y)]))
+  , s S.dff dfs'
+  , s S.topSort topsort
+  , a S.reachable reachable id
   ]
 
