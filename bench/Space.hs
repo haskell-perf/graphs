@@ -121,7 +121,9 @@ printReport lev flg arr act = case lev of
               [] -> do
                 when (flg == Ascii) $ putStrLn "\nNo data\n"
                 return Nothing
-              real -> Just . T.Group . catMaybes <$> mapM (printReport (lev+1) flg otherGroups . snd) real
+              real -> do
+                grp <- catMaybes <$> mapM (printReport (lev+1) flg otherGroups . snd) real
+                return $ Just $ T.Group $ (if lev == 3 then (map (T.setGName bname)) else id) grp
     here e = filter (eqG e . snd) arr
     nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
     getNOtherGroups = reverse $ map (showGrouped . snd) nubOtherGroups

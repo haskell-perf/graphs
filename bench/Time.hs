@@ -79,6 +79,7 @@ genReport flg arr = do
   results <- mapM mapped $ nubBy (liftExtract2 (==)) arr
 #ifdef CHART
   maybe (return ()) (\x -> mkChart "time" secs x $ catMaybes results) $ figOut flg
+  print results
 #endif
   return ()
   where
@@ -134,7 +135,9 @@ toPrint lev flg arr breport = case lev of
               [] -> do
                 when (flg == Ascii) $ putStrLn "\nNo data\n"
                 return Nothing
-              real -> Just . Group . catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . snd) real
+              real -> do
+                grp <- catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . snd) real
+                return $ Just $ Group $ (if lev == 3 then map (setGName bname) else id) grp
     nubOtherGroups = nubBy (liftExtract2 (==)) otherGroups
     getNOtherGroups = reverse $ map (showBenchName . snd) nubOtherGroups
     bname = showBenchName breport

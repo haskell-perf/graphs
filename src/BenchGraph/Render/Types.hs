@@ -5,6 +5,7 @@ module BenchGraph.Render.Types
   ( Grouped (..)
   , lengthG
   , setBGroupT
+  , setGName
   , IsGrouped (..)
   , ChartOutputFormat (..)
   )
@@ -31,6 +32,10 @@ setBGroup :: Bool -> Grouped a -> Grouped a
 setBGroup b (Simple _ n a) = Simple b n a
 setBGroup b (Group lst@(Group (Simple{}:_):_)) = Group $ map (setBGroup (not b)) (init lst) ++ [setBGroup b $ last lst]
 setBGroup b (Group lst) = Group $ map (setBGroup b) lst
+
+setGName :: String -> Grouped a -> Grouped a
+setGName s (Simple b _ xs) = Simple b s xs
+setGName s (Group xs) = Group $ map (setGName s) xs
 
 class IsGrouped f where
   isSimple :: f a -> Bool
