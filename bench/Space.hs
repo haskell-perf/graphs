@@ -134,7 +134,7 @@ printSimples lev flg arr act = do
   when (flg == Ascii) $ do
     unless (null bname) $ putStrLn $ unwords [replicate lev '#',bname]
     putStrLn $ TAA.render id id id table
-  return $ T.Simple False $ map (fmap $ weightAllocatedBytes . fst) filtered -- False by default, changed after
+  return $ T.Simple False "" $ map (fmap $ weightAllocatedBytes . fst) filtered -- False by default, changed after
   where
     bname = takeLastAfterBk $ weightLabel $ fst act
     -- filter by the 'act' argument, and sort

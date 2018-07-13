@@ -46,7 +46,7 @@ mkChart title s chopt grouped =
 
         -- Recreate the legend
         legend' = setPickFn nullPickFn $ toRenderable $ Legend legendStyle legendInfo
-        hhgrp = ("",Simple True $ zip (S.toList is) (replicate (S.size is) 0)) -- False data to generate the legend
+        hhgrp = ("",Simple True "" $ zip (S.toList is) (replicate (S.size is) 0)) -- False data to generate the legend
         legendStyle = fromJust $ _layout_legend $ layout hhgrp
         legendInfo = _plot_legend $ plotBars $ bars2 hhgrp
 
@@ -97,6 +97,6 @@ initSet :: [Named (Grouped [Named Double])] -> Set String
 initSet = foldr (\(_,vals) -> S.union (S.fromList $ tkLibsName vals)) S.empty
 
 tkLibsName :: Grouped [Named a] -> [String]
-tkLibsName (Simple _ xs) = sort $ map fst xs
+tkLibsName (Simple _ _ xs) = sort $ map fst xs
 tkLibsName (Group xs) = maybe [] (tkLibsName . fst) $ uncons xs
 

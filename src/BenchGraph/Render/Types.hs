@@ -12,10 +12,11 @@ module BenchGraph.Render.Types
 where
 
 -- | The Bool is here to tell if we get it into the benchs
-data Grouped a = Simple Bool a | Group [Grouped a] deriving (Show)
+-- The string is the type of graphs used
+data Grouped a = Simple Bool String a | Group [Grouped a] deriving (Show)
 
 instance Functor Grouped where
-  fmap f (Simple b a) = Simple b $ f a
+  fmap f (Simple b n a) = Simple b n $ f a
   fmap f (Group lst) = Group $ map (fmap f) lst
 
 lengthG :: Grouped a -> Int
@@ -27,8 +28,8 @@ setBGroupT :: Grouped a -> Grouped a
 setBGroupT = setBGroup True
 
 setBGroup :: Bool -> Grouped a -> Grouped a
-setBGroup b (Simple _ a) = Simple b a
-setBGroup b (Group lst@(Group (Simple _ _:_):_)) = Group $ map (setBGroup (not b)) (init lst) ++ [setBGroup b $ last lst]
+setBGroup b (Simple _ n a) = Simple b n a
+setBGroup b (Group lst@(Group (Simple{}:_):_)) = Group $ map (setBGroup (not b)) (init lst) ++ [setBGroup b $ last lst]
 setBGroup b (Group lst) = Group $ map (setBGroup b) lst
 
 class IsGrouped f where
@@ -44,7 +45,7 @@ class IsGrouped f where
 instance IsGrouped Grouped where
   isSimple Simple{} = True
   isSimple _ = False
-  simple_ (Simple _ e) = e
+  simple_ (Simple _ _ e) = e
   group_ (Group e) = e
 
 data ChartOutputFormat = Png | Svg deriving (Read, Show, Eq)

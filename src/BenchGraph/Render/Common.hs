@@ -39,6 +39,6 @@ printHeader :: [Named Int] -> [String] -> IO ()
 printHeader gr todo = putStrLn $ unlines ["# Benchmarks\n","Doing:","\n----",unlines $ map (\x ->"* [" ++ x ++"](#"++ unwords (intersperse "-" $ words $ map toLower x) ++")") todo ++ ["----"],unwords ["Using",show gr,"as graphs"]]
 
 getSimples :: Grouped [Named Double] -> [[Named Double]]
-getSimples (Simple b v) = if b then [v] else [[]]
+getSimples (Simple b _ v) = if b then [v] else [[]]
 getSimples (Group lst) = filter (not . null) $ concatMap getSimples lst
 
