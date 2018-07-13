@@ -17,7 +17,7 @@ import BenchGraph.Types
 ---- Criterion
 -- | Main function, will benchmark the given suite against the given graphs
 
-benchmark :: (GraphImpl g, NFData g) 
+benchmark :: (GraphImpl g, NFData g)
           => Bool -- ^ Set to False, it will force the graph, using deepseq, before passing it to the benched function
           -> [(GenericGraph, [Size])] -> Suite g -> Benchmark
 benchmark benchCreation graphs' (Suite sname _ algo inputs') = bgroup sname cases

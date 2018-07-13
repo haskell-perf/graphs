@@ -31,12 +31,14 @@ mkChart :: String
         -- ^ The data
         -> IO ()
 mkChart _ _ _ [] = return ()
-mkChart title s chopt grouped = void $ renderableToFile fo ("results." ++ foExt) $ fillBackground def $ gridToRenderable grid
+mkChart title s chopt grouped =
+  void $ renderableToFile fo ("results." ++ foExt) $ fillBackground def $ gridToRenderable grid
   where
+    -- Group the benchs per line of 4 items
+    grp = group 4 grouped
+
     grid = title' `wideAbove` (legend' `wideAbove` aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp))
       where
-        -- Group the benchs per line of 4 items
-        grp = group 4 grouped
 
         -- Custom title
         title' = setPickFn nullPickFn $ label ls HTA_Centre VTA_Centre title
@@ -55,19 +57,21 @@ mkChart title s chopt grouped = void $ renderableToFile fo ("results." ++ foExt)
 
     layout e = layout_title .~ fst e
       $ layout_title_style . font_size .~ 10
-      $ layout_y_axis . laxis_override .~ ((\x -> x {_axis_labels = [map (\(y,_) -> (y, s (y**2))) $ head $ _axis_labels x]} ) . axisGridHide)
+      $ layout_y_axis . laxis_override .~ ((\x -> x {_axis_labels = [map (\(y,_) -> (y,s $ 10**(y - fromIntegral (fst (value e))))) $ head $ _axis_labels x]} ) . axisGridHide) -- Change the label with the corresponding 10 power
       $ layout_left_axis_visibility . axis_show_ticks .~ False
       $ layout_plots .~ [ plotBars $ bars2 e ]
       $ def :: Layout PlotIndex Double
 
     bars2 e = plot_bars_titles .~ S.toList is
-      $ plot_bars_values .~ addIndexes [value e]
+      $ plot_bars_values .~ addIndexes [snd $ value e]
       $ plot_bars_singleton_width .~ 100
       $ plot_bars_style .~ BarsClustered
       $ plot_bars_spacing .~ BarsFixGap 30 5
       $ plot_bars_item_styles .~ map mkstyle (cycle defaultColorSeq)
       $ def
-    value = elems . M.map (sqrt . average) . mkValues is . getSimples . snd
+    value x = let maybeverysmall = filter (/=0) $ elems $ M.map average $ mkValues is $ getSimples $ snd x
+                  tenp           = 1 + ceiling (abs $ minimum $ map (logBase 10) maybeverysmall) :: Int
+               in (tenp, map (\u -> fromIntegral tenp + logBase 10 u) maybeverysmall) -- Make everyone > 1, so the log is positive.
     mkstyle c = (solidFillStyle c, Just (solidLine 1.0 $ opaque black))
     is = initSet grouped
 
@@ -78,7 +82,9 @@ mkValues s = foldr (\vals -> unionWith (++) (fromList $ map (fmap return) vals))
 
 group :: Int -> [a] -> [[a]]
 group _ [] = [[]]
-group i xs = f : group i l
+group i xs = if null l
+                then [f]
+                else f : group i l
   where
     (f,l) = splitAt i xs
 
