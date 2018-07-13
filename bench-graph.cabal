@@ -173,6 +173,9 @@ benchmark space
       build-depends:    hash-graph       >= 0.1.0.0
       cpp-options:      -DHASHGRAPH
 
+    if flag(Chart)
+      cpp-options:       -DCHART
+
   else
     hs-source-dirs:     bench
     type:               exitcode-stdio-1.0
