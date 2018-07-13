@@ -46,8 +46,8 @@ mkChart title s chopt grouped =
 
         -- Recreate the legend
         legend' = setPickFn nullPickFn $ toRenderable $ Legend legendStyle legendInfo
-        hhgrp = ("",Simple True "" $ zip (S.toList is) (replicate (S.size is) 0)) -- False data to generate the legend
-        legendStyle = fromJust $ _layout_legend $ layout hhgrp
+        hhgrp = Simple True "" $ zip (S.toList is) (replicate (S.size is) 0) -- False data to generate the legend
+        legendStyle = fromJust $ _layout_legend $ layout ("",hhgrp)
         legendInfo = _plot_legend $ plotBars $ bars2 hhgrp
 
     -- Render to svg
@@ -57,9 +57,9 @@ mkChart title s chopt grouped =
 
     layout e = layout_title .~ fst e
       $ layout_title_style . font_size .~ 10
-      $ layout_y_axis . laxis_override .~ ((\x -> x {_axis_labels = [map (\(y,_) -> (y,s $ 10**(y - fromIntegral (fst (value e))))) $ head $ _axis_labels x]} ) . axisGridHide) -- Change the label with the corresponding 10 power
+      $ layout_y_axis . laxis_override .~ ((\x -> x {_axis_labels = [map (\(y,_) -> (y,s $ 10**(y - fromIntegral (fst (value $ snd e))))) $ head $ _axis_labels x]} ) . axisGridHide) -- Change the label with the corresponding 10 power
       $ layout_left_axis_visibility . axis_show_ticks .~ False
-      $ layout_plots .~ [ plotBars $ bars2 e ]
+      $ layout_plots .~ [ plotBars $ bars2 $ snd e ]
       $ def :: Layout PlotIndex Double
 
     bars2 e = plot_bars_titles .~ libsName
@@ -70,9 +70,9 @@ mkChart title s chopt grouped =
       $ plot_bars_item_styles .~ map snd (filter (\(n,_) -> n `elem` libsName) colors)
       $ def
       where
-        libsName= tkLibsName $ snd e
+        libsName= tkLibsName e
 
-    value x = let maybeverysmall = filter (/=0) $ elems $ M.map average $ mkValues is $ getSimples $ snd x
+    value x = let maybeverysmall = filter (/=0) $ elems $ M.map average $ mkValues is $ getSimples x
                   tenp           = 1 + ceiling (abs $ minimum $ map (logBase 10) maybeverysmall) :: Int
                in (tenp, map (\u -> fromIntegral tenp + logBase 10 u) maybeverysmall) -- Make everyone > 1, so the log is positive.
     mkstyle c = (solidFillStyle c, Just (solidLine 1.0 $ opaque black))

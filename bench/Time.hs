@@ -79,7 +79,6 @@ genReport flg arr = do
   results <- mapM mapped $ nubBy (liftExtract2 (==)) arr
 #ifdef CHART
   maybe (return ()) (\x -> mkChart "time" secs x $ catMaybes results) $ figOut flg
-  print results
 #endif
   return ()
   where
