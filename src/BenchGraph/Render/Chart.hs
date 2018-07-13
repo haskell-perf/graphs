@@ -5,7 +5,7 @@ module BenchGraph.Render.Chart
 where
 
 import Control.Monad (void)
-import Data.List (uncons, sort)
+import Data.List (uncons, sort, intercalate)
 import Data.Maybe (fromJust)
 
 import Graphics.Rendering.Chart.Easy hiding (uncons, colors)
@@ -20,9 +20,12 @@ import qualified Data.Set as S
 import BenchGraph.Render.Types
 import BenchGraph.Named
 import BenchGraph.Render.Common
+import BenchGraph.Utils
 
 mkChart :: String
         -- ^ The name of the benchs
+        -> [(String,Int)]
+        -- ^ The graphs used
         -> (Double -> String)
         -- ^ A show function
         -> ChartOutputFormat
@@ -30,19 +33,22 @@ mkChart :: String
         -> [Named (Grouped [Named Double])]
         -- ^ The data
         -> IO ()
-mkChart _ _ _ [] = return ()
-mkChart title s chopt grouped =
+mkChart _ _ _ _ [] = return ()
+mkChart title gparam s chopt grouped =
   void $ renderableToFile fo ("results." ++ foExt) $ fillBackground def $ gridToRenderable grid
   where
     -- Group the benchs per line of 4 items
     grp = group 4 grouped
 
-    grid = title' `wideAbove` (legend' `wideAbove` aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp))
+    grid = wideAbove title' $ wideAbove graphsInfo $ wideAbove legend' $ aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp)
       where
-
         -- Custom title
         title' = setPickFn nullPickFn $ label ls HTA_Centre VTA_Centre title
-        ls = def { _font_size = 15 , _font_weight = FontWeightBold }
+        ls = def { _font_size = 20 , _font_weight = FontWeightBold }
+
+        -- Infor about graphs used
+        graphsInfo = setPickFn nullPickFn $ label ls' HTA_Centre VTA_Centre $ (++) "Graphs used: " $ intercalate ", " $ map (\((n,f),xs) -> unwords [n,"with",show $ snd $ f $ last xs,"vertices"]) $ graphs True gparam
+        ls' = def { _font_size = 15 , _font_weight = FontWeightNormal }
 
         -- Recreate the legend
         legend' = setPickFn nullPickFn $ toRenderable $ Legend legendStyle legendInfo

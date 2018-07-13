@@ -66,19 +66,20 @@ showBenchName (Benchmark n _) = n
 showBenchName (BenchGroup n _) = n
 showBenchName Environment{}    = error "Cannot show the bench name of an Env"
 
-genReport :: Output
-           -- ^ Output options
-           -> [Named Benchmark]
-           -- ^ The list of benchmarks with their library name
-           -> IO()
-genReport _ [] = putStrLn "\nNo data\n"
-genReport flg arr = do
+genReport :: [(String,Int)]
+          -> Output
+          -- ^ Output options
+          -> [Named Benchmark]
+          -- ^ The list of benchmarks with their library name
+          -> IO()
+genReport _ _ [] = putStrLn "\nNo data\n"
+genReport gr flg arr = do
   unless notquickComp $ putStrLn $ let comp = head libNames
                                        oth =  head $ tail libNames
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
   results <- mapM mapped $ nubBy (liftExtract2 (==)) arr
 #ifdef CHART
-  maybe (return ()) (\x -> mkChart "time" secs x $ catMaybes results) $ figOut flg
+  maybe (return ()) (\x -> mkChart "Time results" gr secs x $ catMaybes results) $ figOut flg
 #endif
   return ()
   where
@@ -208,7 +209,7 @@ main' opts
                                     in drop ((one-1)*per) $ f grNames
             samples = filter (\(_,n) -> showBenchName n `elem` todo) grList'
         unless (staOut flg == QuickComparison) $ printHeader gr $ nub $ map (showBenchName . snd) samples
-        genReport flg samples
+        genReport gr flg samples
   where
     grNames = nub $ map (showBenchName . snd) $ grList False False defaultGr
     grList benchWithCreation dontBenchLittleOnes gr = map (fmap (\(Shadow s) -> allBench benchWithCreation dontBenchLittleOnes gr s)) listOfSuites ++ listOfCreation dontBenchLittleOnes gr
