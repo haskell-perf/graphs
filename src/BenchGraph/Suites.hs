@@ -30,8 +30,9 @@ a :: NFData o => SpecialisedSuite u i -> (i -> g -> o) -> (u -> i) -> Suite g
 a ss f genArg = Suite n d f args
   where (n,d,args) = ss genArg
 
-aIO :: NFData o => (String, String,Edges -> [Named i]) -> (i -> g -> IO o) -> SuiteIO g
-aIO (n,d,args) f = SuiteIO n d f args
+aIO :: NFData o => SpecialisedSuite u i -> (i -> g -> IO o) -> (u -> i) -> SuiteIO g
+aIO ss f genArg = SuiteIO n d f args
+  where (n,d,args) = ss genArg
 
 -- Vertex work
 
@@ -106,10 +107,10 @@ transpose = ("transpose","Transpose (invert all the edges) the graph")
 
 eq :: (NFData g, GraphImpl g) => (g -> g -> Bool) -> Suite g
 eq fun = Suite
-  { name = "equality"
-  , desc = "Test if two graphs are equals"
-  , algorithm = fun
-  , inputs    = \x -> fmap mkGraph <$>
+  { nameN = "equality"
+  , descN = "Test if two graphs are equals"
+  , algorithmN = fun
+  , inputsN    = \x -> fmap mkGraph <$>
     [nameBy ((++)"vertex: " . show . head) [(0,2)]
     ,("Same graph",x)
     ]

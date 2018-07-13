@@ -17,8 +17,8 @@ import qualified Data.Map as Map
 
 import Statistics.Types (estPoint)
 
-import BenchGraph.Types (ShadowedS (..))
-import BenchGraph.Time (allBench, benchmarkCreation)
+import BenchGraph.Types
+import BenchGraph.Time (allBench, benchmarkCreation, allBenchIO)
 import BenchGraph.Named
 import BenchGraph.Utils (defaultGr)
 
@@ -200,7 +200,7 @@ main' opts
         genReport 2 flg samples
   where
     grNames = nub $ map (showBenchName . snd) $ grList False False defaultGr
-    grList benchWithCreation dontBenchLittleOnes gr = map (fmap (\(Shadow s) -> allBench benchWithCreation dontBenchLittleOnes gr s)) listOfSuites ++ listOfCreation dontBenchLittleOnes gr
+    grList benchWithCreation dontBenchLittleOnes gr = map (fmap (either (\(Shadow s) -> allBench benchWithCreation dontBenchLittleOnes gr s) (\(ShadowIO s) -> allBenchIO dontBenchLittleOnes gr s))) listOfSuites ++ listOfCreation dontBenchLittleOnes gr
     mkGr gr' = case gr' of
                  [] -> defaultGr
                  g -> g

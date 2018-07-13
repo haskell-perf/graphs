@@ -160,11 +160,11 @@ main' (RunS only flg libs) = do
   where
     bN = benchsNames only
     addCrea = if "creation" `elem` bN then (++ listOfCreation) else id
-    benchs = mapM_ (uncurry wgroup) $ maybe id (\lbs -> filter (\(n,_) -> n `elem` lbs)) libs $ addCrea $ map (fmap (\(Shadow s) -> allWeigh s)) $ filter filterLN listOfSuites
-    filterLN (_,Shadow s) = name s `elem` bN
+    benchs = mapM_ (uncurry wgroup) $ maybe id (\lbs -> filter (\(n,_) -> n `elem` lbs)) libs $ addCrea $ map (fmap (\(Left (Shadow s)) -> allWeigh s)) $ filter filterLN listOfSuites -- Bug here, since there is not only Left values
+    filterLN (_,Left (Shadow s)) = name s `elem` bN
 
 benchsNames :: Maybe [String] -> [String]
-benchsNames only = nub (map (\(_,Shadow s) -> name s)  (maybe id (\e -> filter (\(_,Shadow s) -> name s `elem` e)) only listOfSuites)) ++ listOfCreation'
+benchsNames only = nub (map (\(_,s) -> name s)  (maybe id (\e -> filter (\(_,s) -> name s `elem` e)) only listOfSuites)) ++ listOfCreation'
   where
     listOfCreation' = case only of
                         Nothing -> ["creation"]

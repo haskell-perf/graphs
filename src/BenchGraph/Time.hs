@@ -1,6 +1,9 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module BenchGraph.Time (
   benchmark,
   allBench,
+  allBenchIO,
   benchmarkCreation
 ) where
 
@@ -22,27 +25,48 @@ benchmark :: (GraphImpl g, NFData g)
           -> [(GenericGraph, [Size])] -> Suite g -> Benchmark
 benchmark benchCreation graphs' (Suite sname _ algo inputs') = bgroup sname cases
   where
-    cases = [ bgroup gname $ map (benchSuite benchCreation (Left algo) inputs' gfunc) ss | ((gname,gfunc), ss) <- graphs' ]
+    cases = [ bgroup gname $ map (benchSuite benchCreation algo inputs' gfunc) ss | ((gname,gfunc), ss) <- graphs' ]
 
 benchSuite :: (GraphImpl g, NFData g, NFData o)
-           => Bool -> Either (i -> g -> o) (i -> g -> IO o) -> (Edges -> [Named i]) -> (Size -> (Edges,Int)) -> Size -> Benchmark
+           => Bool -> (i -> g -> o) -> (Edges -> [Named i]) -> (Size -> (Edges,Int)) -> Size -> Benchmark
 benchSuite benchCreation algorithm' inputs' gfunc size = bgroup (show sizeName) cases
   where
     (edges, sizeName) = gfunc size
     !graph = case edges of
               [] -> const mkVertex
               _ -> mkGraph
-    cases = case algorithm' of
-              Left al -> if benchCreation
-                then [ bench name' $ nf (al i . graph) edges | (name',i) <- inputs' edges ]
-                else [ bench name' $ nf (al i) $!! graph edges | (name',i) <- inputs' edges ]
-              Right al -> [ bench name' $ nfIO (al i $ graph edges) | (name',i) <- inputs' edges ]
+    cases = if benchCreation
+               then [ bench name' $ nf (algorithm' i . graph) edges | (name',i) <- inputs' edges ]
+              else [ bench name' $ nf (algorithm' i) $!! graph edges | (name',i) <- inputs' edges ]
 
 allBench :: (GraphImpl g, NFData g)
          => Bool -- ^ Do we bench creation of the graph ?
          -> Bool -- ^ Do we use only bigger graphs ?
          -> [(String,Int)] -> Suite g -> Benchmark
 allBench benchCreation b gr = benchmark benchCreation (graphs b gr)
+
+
+--- IO work
+benchmarkIO :: (GraphImpl (IO g), NFData g)
+          => [(GenericGraph, [Size])] -> SuiteIO g -> Benchmark
+benchmarkIO graphs' (SuiteIO sname _ algo inputs') = bgroup sname cases
+  where
+    cases = [ bgroup gname $ map (benchSuiteIO algo inputs' gfunc) ss | ((gname,gfunc), ss) <- graphs' ]
+
+benchSuiteIO :: (GraphImpl (IO g), NFData g, NFData o)
+           => (i -> g -> IO o) -> (Edges -> [Named i]) -> (Size -> (Edges,Int)) -> Size -> Benchmark
+benchSuiteIO algorithm' inputs' gfunc size = bgroup (show sizeName) cases
+  where
+    (edges, sizeName) = gfunc size
+    !graph = case edges of
+              [] -> const mkVertex
+              _ -> mkGraph
+    cases = [ bench name' $ nfIO (graph edges >>= algorithm' i ) | (name',i) <- inputs' edges ]
+
+allBenchIO :: (GraphImpl (IO g), NFData g)
+         => Bool -- ^ Do we use only bigger graphs ?
+         -> [(String,Int)] -> SuiteIO g -> Benchmark
+allBenchIO b gr = benchmarkIO (graphs b gr)
 
 benchmarkCreation :: (NFData g) => Bool -> [(String,Int)] -> (Edges -> g) -> Benchmark
 benchmarkCreation b gr mk = bgroup "creation" [ bgroup n $ map (\i -> let (gr',sizeName) = grf i in bgroup (show sizeName) [bench "" $ nf mk gr'] ) ss | ((n,grf), ss) <- graphs b gr ]

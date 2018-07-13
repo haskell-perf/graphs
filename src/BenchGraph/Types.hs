@@ -1,13 +1,15 @@
-{-# LANGUAGE ExistentialQuantification #-}
+{-# LANGUAGE ExistentialQuantification, FlexibleContexts, FlexibleInstances #-}
 
 module BenchGraph.Types (
   ShadowedS (..),
+  ShadowedSIO (..),
   Suite (..),
   simpleSuite,
   SuiteIO (..),
   simpleSuiteIO,
   GraphImpl (..),
-  extractDescription
+  extractDescription,
+  name
 ) where
 
 import Control.DeepSeq (NFData)
@@ -17,15 +19,16 @@ import BenchGraph.Named
 
 -- | Type to shadow the argument of a Suite
 data ShadowedS = forall g. (GraphImpl g, NFData g) => Shadow (Suite g)
+data ShadowedSIO = forall g. (GraphImpl (IO g), NFData g) => ShadowIO (SuiteIO g)
 
 -- | A graph algorithm operates on a graph type @g@, which takes an input of
 -- type @i@ and produces an output of type @o@. Algorithms come with a list of
 -- named inputs, all of which will be tried during benchmarking.
 data Suite g = forall i o. NFData o => Suite
-  { name :: String
-  , desc :: String
-  , algorithm :: i -> g -> o
-  , inputs    :: Edges -> [Named i] }
+  { nameN :: String
+  , descN :: String
+  , algorithmN :: i -> g -> o
+  , inputsN    :: Edges -> [Named i] }
 
 -- A suite that don't take arguments apart a graph
 simpleSuite :: NFData o => Name -> String -> (g -> o) -> Suite g
@@ -46,5 +49,22 @@ class GraphImpl g where
   mkGraph :: Edges -> g
   mkVertex :: g -- | A single vertex
 
-extractDescription :: Suite a -> Named String
-extractDescription (Suite name' desc' _ _) = (name',desc')
+class HaveDesc a where
+  extractDescription :: a -> Named String
+  name :: a -> String
+  name = fst . extractDescription
+
+instance HaveDesc (Suite a) where
+  extractDescription (Suite name' desc' _ _) = (name',desc')
+
+instance HaveDesc (SuiteIO a) where
+  extractDescription (SuiteIO name' desc' _ _) = (name',desc')
+
+instance HaveDesc ShadowedS where
+  extractDescription (Shadow a) = extractDescription a
+
+instance HaveDesc ShadowedSIO where
+  extractDescription (ShadowIO a) = extractDescription a
+
+instance HaveDesc (Either ShadowedS ShadowedSIO) where
+  extractDescription = either extractDescription extractDescription

@@ -19,6 +19,7 @@ import qualified HashGraph.Gr
 #endif
 #ifdef HAGGLE
 import qualified Haggle.SimpleBiDigraph
+import qualified Haggle.MSimpleBiDigraph
 #endif
 
 -- If you are trying to add your library using YourLib/Graph.hs:
@@ -32,24 +33,26 @@ import BenchGraph.Named
 
 -- | List of descs
 descs :: [Named String]
-descs = ("creation","Create a graph from a list of edges") : (nubBy eq1 $ map ((\(Shadow s) -> extractDescription s) . snd) listOfSuites)
+descs = ("creation","Create a graph from a list of edges") : (nubBy eq1 $ map (extractDescription . snd) listOfSuites)
 
 -- | List of queued Suite, "Shadowized"
 -- Note: The layout of the list is important
-listOfSuites :: [Named ShadowedS]
+listOfSuites :: [Named (Either ShadowedS ShadowedSIO)]
 listOfSuites = concatMap sequence
-  [ ("Containers", map Shadow Containers.Graph.functions)
+  [ ("Containers", map (Left . Shadow) Containers.Graph.functions)
 #ifdef ALGA
-  , ("Alga", map Shadow Alga.Graph.functions )
+  , ("Alga", map (Left . Shadow) Alga.Graph.functions )
 #endif
 #ifdef FGL
-  , ("Fgl", map Shadow Fgl.PatriciaTree.functions)
+  , ("Fgl", map (Left . Shadow) Fgl.PatriciaTree.functions)
 #endif
 #ifdef HASHGRAPH
-  , ("Hash-Graph", map Shadow HashGraph.Gr.functions)
+  , ("Hash-Graph", map (Left . Shadow) HashGraph.Gr.functions)
 #endif
 #ifdef HAGGLE
-  , ("Haggle", map Shadow Haggle.SimpleBiDigraph.functions)
+  , ("Haggle", map (Left . Shadow) Haggle.SimpleBiDigraph.functions)
+  , ("Haggle", map (Right . ShadowIO) Haggle.MSimpleBiDigraph.functions)
+
 #endif
 -- UNCOMMENT, ("YourFancyLibName", map Shadow YourLib.Graph.functions)
   ]

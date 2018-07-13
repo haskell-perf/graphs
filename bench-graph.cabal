@@ -104,6 +104,7 @@ benchmark time
                         array >= 0.5.1.1,
                         statistics,
                         optparse-applicative,
+                        deepseq,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
@@ -125,7 +126,8 @@ benchmark time
       cpp-options:      -DHASHGRAPH
 
     if flag(Haggle)
-      other-modules:    Haggle.SimpleBiDigraph 
+      other-modules:    Haggle.SimpleBiDigraph
+                      , Haggle.MSimpleBiDigraph 
       build-depends:    haggle           >= 0.1.0.0
       cpp-options:      -DHAGGLE
 
