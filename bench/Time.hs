@@ -4,6 +4,7 @@
 import Data.List (filter, nub, sortBy, nubBy)
 import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes, fromMaybe)
+import Data.Either (isLeft)
 import Control.Monad (when, unless)
 
 import Criterion (Benchmarkable)
@@ -200,7 +201,7 @@ main' opts
         genReport 2 flg samples
   where
     grNames = nub $ map (showBenchName . snd) $ grList False False defaultGr
-    grList benchWithCreation dontBenchLittleOnes gr = map (fmap (either (\(Shadow s) -> allBench benchWithCreation dontBenchLittleOnes gr s) (\(ShadowIO s) -> allBenchIO dontBenchLittleOnes gr s))) listOfSuites ++ listOfCreation dontBenchLittleOnes gr
+    grList benchWithCreation dontBenchLittleOnes gr = map (fmap (either (\(Shadow s) -> allBench benchWithCreation dontBenchLittleOnes gr s) (\(ShadowIO s) -> allBenchIO dontBenchLittleOnes gr s))) ((if benchWithCreation then id else filter (isLeft . snd)) listOfSuites) ++ listOfCreation dontBenchLittleOnes gr -- If we don't benchmark creation, we remove the *IO benchs
     mkGr gr' = case gr' of
                  [] -> defaultGr
                  g -> g
