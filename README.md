@@ -33,8 +33,6 @@ You can disable the three first (and thus avoid depending on them) by disabling 
 * Alga
 * HashGraph
 
-WARNING: Disabling a library is _PERMANENT_ . Feel free to do a `git reset --hard` to reset to the original state.
-
 ## Usage
 
 ### Time
@@ -102,7 +100,7 @@ It allows to convert `Edges` (a list of edges) to the graph representation of th
 ```Haskell
 type Named a = (String,a)
 ```
-We highly use this type, don't be surprised
+We highly use this type, don't be surprised.
 
 ### The `Suite g` data
 
