@@ -63,13 +63,14 @@ mkChart title gparam s chopt grouped =
 
     layout e = layout_title .~ fst e
       $ layout_title_style . font_size .~ 10
+      $ layout_x_axis . laxis_generate .~ autoIndexAxis (M.keys $ snd $ value $ snd e)
       $ layout_y_axis . laxis_override .~ ((\x -> x {_axis_labels = [map (\(y,_) -> (y,s $ 10**(y - fromIntegral (fst (value $ snd e))))) $ head $ _axis_labels x]} ) . axisGridHide) -- Change the label with the corresponding 10 power
       $ layout_left_axis_visibility . axis_show_ticks .~ False
       $ layout_plots .~ [ plotBars $ bars2 $ snd e ]
       $ def :: Layout PlotIndex Double
 
     bars2 e = plot_bars_titles .~ libsName
-      $ plot_bars_values .~ addIndexes [snd $ value e]
+      $ plot_bars_values .~ addIndexes (map elems $ elems $ snd $ value e)
       $ plot_bars_singleton_width .~ 100
       $ plot_bars_style .~ BarsClustered
       $ plot_bars_spacing .~ BarsFixGap 30 5
@@ -78,9 +79,10 @@ mkChart title gparam s chopt grouped =
       where
         libsName= tkLibsName e
 
-    value x = let maybeverysmall = filter (/=0) $ elems $ M.map average $ mkValues is $ getSimples x
-                  tenp           = 1 + ceiling (abs $ minimum $ map (logBase 10) maybeverysmall) :: Int
-               in (tenp, map (\u -> fromIntegral tenp + logBase 10 u) maybeverysmall) -- Make everyone > 1, so the log is positive.
+    value x = let doubleMap = M.map (M.filter (/=0) . M.map average) $ M.map (mkValues is) $ getSimplesWithG x
+                  maybeverysmall = concatMap elems $ elems doubleMap
+                  tenp           = if null maybeverysmall then 0 else 1 + ceiling (abs $ minimum $ map (logBase 10) maybeverysmall) :: Int
+               in (tenp, M.map (M.map (\u -> fromIntegral tenp + logBase 10 u)) doubleMap) -- Make everyone > 1, so the log is positive.
     mkstyle c = (solidFillStyle c, Just (solidLine 1.0 $ opaque black))
     colors = let colo = take (S.size is) $ map mkstyle (cycle defaultColorSeq)
               in zip (S.toList is) colo
@@ -105,4 +107,8 @@ initSet = foldr (\(_,vals) -> S.union (S.fromList $ tkLibsName vals)) S.empty
 tkLibsName :: Grouped [Named a] -> [String]
 tkLibsName (Simple _ _ xs) = sort $ map fst xs
 tkLibsName (Group xs) = maybe [] (tkLibsName . fst) $ uncons xs
+
+getSimplesWithG :: Grouped [Named Double] -> Map String [[Named Double]]
+getSimplesWithG (Simple b n v) = if b then M.singleton n [v] else M.empty
+getSimplesWithG (Group lst) = M.unionsWith (++) $ map getSimplesWithG lst
 
