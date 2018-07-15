@@ -14,8 +14,8 @@ import Data.Graph hiding (path)
 import Data.Array
 
 -- $setup
--- >>> import BenchGraph.Path
--- >>> let path10 = mk $ snd path 9
+-- >>> import BenchGraph.GenericGraph
+-- >>> let path10 = mk $ fst $ snd path 1
 -- >>> let fiveVertices = buildG (0,4) []
 
 instance GraphImpl Graph where
@@ -36,6 +36,9 @@ functions =
   , S.reachable (flip reachable) id
   , S.edgeCount edgeCount
   , S.hasEdge hasEdge id
+  , S.isEmpty null
+  , S.vertexCount vertexCount
+  , S.hasVertex hasVertex id
   ]
 
 -- |
@@ -58,3 +61,25 @@ edgeCount = foldr (\x y -> length x + y) 0
 -- False
 hasEdge :: (Int,Int) -> Graph -> Bool
 hasEdge (x,y) g = elem y $ g ! x
+
+-- |
+-- >>> vertexCount path10
+-- 10
+--
+-- >>> vertexCount fiveVertices
+-- 5
+vertexCount :: Graph -> Int
+vertexCount g = if v >= u then v - u + 1 else 0
+  where
+    (u,v) = bounds g
+
+-- |
+-- >>> hasVertex 1 path10
+-- True
+--
+-- >>> hasVertex 11 path10
+-- False
+hasVertex :: Int -> Graph -> Bool
+hasVertex i g = (i >= u) && (i <= v)
+  where
+    (u,v) = bounds g
