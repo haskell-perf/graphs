@@ -11,6 +11,7 @@ import BenchGraph.GenericGraph (Edges)
 import BenchGraph.Utils (extractMaxVertex)
 
 import Algebra.Graph
+import qualified Algebra.Graph.AdjacencyIntMap as AIM
 
 instance GraphImpl (Graph Int) where
   mkGraph = mk
@@ -38,5 +39,7 @@ functions =
   , S.eq (==)
   , S.removeEdge (uncurry removeEdge) id
   , S.transpose transpose
+  , S.dff (AIM.dfsForest . foldg AIM.empty AIM.vertex AIM.overlay AIM.connect)
+  , S.topSort (AIM.topSort . foldg AIM.empty AIM.vertex AIM.overlay AIM.connect)
   ]
 
