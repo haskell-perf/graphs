@@ -16,6 +16,10 @@ import Data.Graph.Inductive.Query.DFS
 
 import Data.Maybe (isJust)
 
+-- $setup
+-- >>> import BenchGraph.GenericGraph
+-- >>> let path10 = mk $ fst $ snd path 1
+
 instance GraphImpl UGr where
   mkGraph = mk
   mkVertex = mkUGraph [0] []
@@ -42,5 +46,16 @@ functions =
   , S.dff dfs'
   , S.topSort topsort
   , S.reachable reachable id
+  , S.transpose transpose
   ]
 
+-- |
+-- >>> hasEdge (transpose path10) (1,0)
+-- True
+--
+-- >>> hasEdge (transpose path10) (0,1)
+-- False
+transpose :: UGr -> UGr
+transpose = gmap flip4
+  where
+    flip4 (a,b,c,d) = (d,b,c,a)

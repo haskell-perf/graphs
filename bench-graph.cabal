@@ -218,11 +218,12 @@ benchmark datasize
 test-suite test-containers
     type:           exitcode-stdio-1.0
     hs-source-dirs: test
-    main-is:        Containers.hs
+    main-is:        Test.hs
     build-depends:  base    >= 4.7 && < 4.12,
                     doctest,
                     bench-graph,
-                    containers       >= 0.5.5.1 && < 0.8,
-                    array  >= 0.5.1.1
+                    containers  >= 0.5.5.1 && < 0.8,
+                    array  >= 0.5.1.1,
+                    fgl >= 5.5.4.0
     default-language: Haskell2010
 
