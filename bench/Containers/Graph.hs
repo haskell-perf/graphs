@@ -39,6 +39,7 @@ functions =
   , S.isEmpty null
   , S.vertexCount vertexCount
   , S.hasVertex hasVertex id
+  , S.addVertex addVertex id
   ]
 
 -- |
@@ -83,3 +84,24 @@ hasVertex :: Int -> Graph -> Bool
 hasVertex i g = (i >= u) && (i <= v)
   where
     (u,v) = bounds g
+
+-- |
+-- >>> vertexCount $ addVertex 10 path10
+-- 11
+--
+-- >>> vertexCount $ addVertex (-1) path10
+-- 11
+--
+-- >>> hasVertex 15 $ addVertex 15 fiveVertices
+-- True
+addVertex :: Int -> Graph -> Graph
+addVertex i g =
+  if i >= f
+     then if i <= l
+             then g
+             else listArray (f,i) $ edgeList ++ diff l
+     else listArray (i,l) $ diff f ++ edgeList
+  where
+    edgeList = elems g
+    (f,l) = bounds g
+    diff k = replicate (abs (k-i)) []
