@@ -40,10 +40,10 @@ type Graph = String
 data ListOption = Benchs | Libs
   deriving (Show, Eq)
 
-data CommandTime = List ListOption | Run (Maybe Option) Output (Maybe [Lib]) Bool Bool [(Graph,Int)]
+data CommandTime = List ListOption | Run (Maybe Option) (Maybe Only) Output (Maybe [Lib]) Bool Bool [(Graph,Int)]
   deriving (Show, Eq)
 
-data CommandSpace = ListS ListOption | RunS (Maybe Only) Output (Maybe [Lib])
+data CommandSpace = ListS ListOption | RunS (Maybe Only) (Maybe Only) Output (Maybe [Lib])
 
 newtype CommandDataSize = RunD [(Graph,Int)]
 
@@ -53,8 +53,11 @@ partOpt = Part <$> rpart <*> rof
     rpart = option auto (long "part")
     rof = option auto (long "of")
 
-onlyOpt :: Parser [String]
+onlyOpt :: Parser Only
 onlyOpt = some $ strOption (long "only" <> short 'o' <> metavar "NAME" <> help "Benchmark only the function with NAME. Can be used multiple times")
+
+notOnlyOpt :: Parser Only
+notOnlyOpt = some $ strOption (long "notonly" <> short 'n' <> metavar "NAME" <> help "Do not benchmark function with NAME. Can be used multiple times")
 
 libOpt :: Parser Lib
 libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME" <> help "Benchmark only the library with LIBNAME. Can be used multiple times")
@@ -66,7 +69,7 @@ graphsOpt :: Parser [(Graph,Int)]
 graphsOpt = many graphOpt
 
 options :: Parser Option
-options = partOpt <|> ( Only <$> onlyOpt)
+options = partOpt <|> (Only <$> onlyOpt)
 
 sumFlag :: Parser Bool
 sumFlag = flag True False $ long "noSummarize" <> short 's' <> help "When set, disable SUMMARIZE and ABSTRACT output"
@@ -91,7 +94,7 @@ output :: Parser Output
 output = Output <$> sumFlag <*> staFlag <*> figFlag
 
 runCom :: Parser CommandTime
-runCom = Run <$> optional options <*> output <*> optional (some libOpt) <*> benchWithCreation <*> benchLittleOne <*> graphsOpt
+runCom = Run <$> optional options <*> optional notOnlyOpt <*> output <*> optional (some libOpt) <*> benchWithCreation <*> benchLittleOne <*> graphsOpt
 
 listOpt :: Parser ListOption
 listOpt = flag' Benchs (long "benchs") <|> flag' Libs (long "libs")
@@ -130,7 +133,7 @@ space' = subparser
       ( fullDesc
       <> progDesc "Compare benchmarks of graphs libraries"
       <> header "Help" )
-    run = info ( (RunS <$> optional onlyOpt <*> output <*> optional (some libOpt)) <**> helper)
+    run = info ( (RunS <$> optional onlyOpt <*> optional notOnlyOpt <*> output <*> optional (some libOpt)) <**> helper)
       ( fullDesc
      <> progDesc "list benchmarks"
      <> header "Help" )
@@ -141,7 +144,7 @@ runSpace = info ( semiOptional <**> helper)
      <> progDesc "Benchmark size of functions on different graphs libraries"
      <> header "Help")
   where
-    semiOptional = pure (fromMaybe (RunS Nothing (Output True Ascii Nothing) Nothing)) <*> optional space'
+    semiOptional = pure (fromMaybe (RunS Nothing Nothing (Output True Ascii Nothing) Nothing)) <*> optional space'
 
 runDataSize :: ParserInfo CommandDataSize
 runDataSize = info ((RunD <$> graphsOpt) <**> helper)

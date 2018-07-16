@@ -164,20 +164,21 @@ main = execParser runSpace >>= main'
 
 main' :: CommandSpace -> IO ()
 main' (ListS opt) = case opt of
-                    Benchs -> putStr $ unlines $ benchsNames Nothing
+                    Benchs -> putStr $ unlines $ benchsNames Nothing Nothing
                     Libs -> putStr $ unlines $ nub $ map fst listOfSuites
-main' (RunS only flg libs) = do
+main' (RunS only notonly flg libs) = do
   printHeader defaultGr bN
   mainWeigh benchs (useResults flg)
   where
-    bN = benchsNames only
+    bN = benchsNames only notonly
     addCrea = if "creation" `elem` bN then (++ listOfCreation) else id
     benchs = mapM_ (uncurry wgroup) $ maybe id (\lbs -> filter (\(n,_) -> n `elem` lbs)) libs $ addCrea $ map (fmap (\(Shadow s) -> allWeigh s)) $ filter filterLN listOfSuites
     filterLN (_,Shadow s) = name s `elem` bN
 
-benchsNames :: Maybe [String] -> [String]
-benchsNames only = nub (map (\(_,Shadow s) -> name s)  (maybe id (\e -> filter (\(_,Shadow s) -> name s `elem` e)) only listOfSuites)) ++ listOfCreation'
+benchsNames :: Maybe [String] -> Maybe [String] -> [String]
+benchsNames only notonly = nub (map (\(_,Shadow s) -> name s) (maybe id (\e -> filter (\s -> not $ s `isNameIn` e)) notonly $ maybe id (\e -> filter (`isNameIn` e)) only listOfSuites)) ++ listOfCreation'
   where
+    isNameIn (_,Shadow s) e = name s `elem` e
     listOfCreation' = case only of
                         Nothing -> ["creation"]
                         Just e -> [ "creation" | "creation" `elem` e]

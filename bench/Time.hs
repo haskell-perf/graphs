@@ -193,12 +193,13 @@ main' opts
       List listOpt -> case listOpt of
                         Benchs -> putStr $ unlines grNames
                         Libs -> putStr $ unlines $ nub $ map fst listOfSuites ++ map fst (listOfCreation False [])
-      Run opt flg libs benchWithCreation dontBenchLittleOnes gr' -> do
+      Run opt nottodo' flg libs benchWithCreation dontBenchLittleOnes gr' -> do
         let modifyL = case libs of
               Nothing -> id
               Just libss -> filter (\x -> fst x `elem` libss)
             gr = mkGr gr'
             grList' = modifyL $ grList benchWithCreation dontBenchLittleOnes gr
+            nottodo = fromMaybe [] nottodo'
             todo = case opt of
               Nothing -> grNames
               Just opt' -> case opt' of
@@ -207,7 +208,7 @@ main' opts
                                        per = length grNames `div` two
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grNames
-            samples = filter (\(_,n) -> showBenchName n `elem` todo) grList'
+            samples = filter (\(_,n) -> let nam = showBenchName n in nam `elem` todo && nam `notElem` nottodo) grList'
         unless (staOut flg == QuickComparison) $ printHeader gr $ nub $ map (showBenchName . snd) samples
         genReport gr flg samples
   where
