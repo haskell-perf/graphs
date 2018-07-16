@@ -35,6 +35,7 @@ functions =
   , S.vertexList HG.nodes
   , S.hasVertex HG.member id
   , S.hasEdge HG.hasEdge mkEdge
+  , S.hasSelfLoop HG.hasEdge (\x -> mkEdge (x,x))
   , S.addVertex HG.insNode id
   , S.removeVertex HG.delNode id
   , S.eq (==)
