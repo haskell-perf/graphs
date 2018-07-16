@@ -13,6 +13,11 @@ import qualified BenchGraph.Suites as S
 import qualified Data.HashGraph.Strict as HG
 import qualified Data.HashGraph.Algorithms as A
 import qualified Data.HashSet as Set
+import qualified Data.HashMap.Strict as M
+
+-- $setup
+-- >>> import BenchGraph.GenericGraph
+-- >>> let path10 = mk $ fst $ snd path 1
 
 type Gr = HG.Gr () Int
 
@@ -44,5 +49,14 @@ functions =
   , S.context (HG.&) $ \(x,y) -> (x,HG.Context' Set.empty (Set.singleton (HG.Tail () y)))
   , S.dff A.dfs
   , S.topSort A.topSort
+  , S.transpose transpose
   ]
 
+-- |
+-- >>> HG.hasEdge (mkEdge (1,0)) $ transpose path10
+-- True
+--
+-- >>> HG.hasEdge (mkEdge (0,1)) $ transpose path10
+-- False
+transpose :: Gr -> Gr
+transpose (HG.Gr g) = HG.Gr $ M.map (\(HG.Context' h t) -> HG.Context' (Set.map (\(HG.Tail a b) -> HG.Head a b) t) (Set.map (\(HG.Head a b) -> HG.Tail a b) h)) g

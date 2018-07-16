@@ -65,7 +65,9 @@ edgeCount = foldr (\x y -> length x + y) 0
 -- >>> hasEdge (0,1) fiveVertices
 -- False
 hasEdge :: (Int,Int) -> Graph -> Bool
-hasEdge (x,y) g = elem y $ g ! x
+hasEdge (x,y) g = (x >= u && x <= v) && elem y (g ! x)
+  where
+    (u,v) = bounds g
 
 -- |
 -- >>> vertexCount path10

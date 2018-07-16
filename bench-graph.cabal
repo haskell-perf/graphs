@@ -224,6 +224,8 @@ test-suite test-containers
                     bench-graph,
                     containers  >= 0.5.5.1 && < 0.8,
                     array  >= 0.5.1.1,
-                    fgl >= 5.5.4.0
+                    fgl >= 5.5.4.0,
+                    unordered-containers >= 0.2.9.0,
+                    hash-graph >= 0.1.0.0
     default-language: Haskell2010
 
