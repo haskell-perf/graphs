@@ -40,6 +40,10 @@ functions =
   , S.vertexCount vertexCount
   , S.hasVertex hasVertex id
   , S.addVertex addVertex id
+  , S.addEdge addEdge id
+  , S.removeEdge removeEdge id
+  , S.hasSelfLoop (\x -> hasEdge (x,x)) id
+  -- removeVertex is not implementable
   ]
 
 -- |
@@ -105,3 +109,21 @@ addVertex i g =
     edgeList = elems g
     (f,l) = bounds g
     diff k = replicate (abs (k-i)) []
+
+-- |
+-- >>> hasEdge (1,0) $ addEdge (1,0) fiveVertices
+-- True
+--
+-- >>> hasEdge (0,1) $ addEdge (1,0) fiveVertices
+-- False
+addEdge :: (Int,Int) -> Graph -> Graph
+addEdge (i,j) g = g // [(i,j:(g ! i))]
+
+-- |
+-- >>> hasEdge (0,1) $ removeEdge (0,1) path10
+-- False
+--
+-- >>> hasEdge (0,1) $ removeEdge (1,0) path10
+-- True
+removeEdge :: (Int,Int) -> Graph -> Graph
+removeEdge (i,j) g = g // [(i,filter (/= j) $ g ! i)]
