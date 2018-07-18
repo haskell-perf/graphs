@@ -27,26 +27,26 @@ instance GraphImpl UGr where
 mk :: Edges -> UGr
 mk e = mkUGraph (vertices e) e
 
-functions :: [Suite UGr]
+functions :: [SuiteWithExp UGr]
 functions =
-  [ S.isEmpty isEmpty
-  , S.edgeList edges
-  , S.edgeCount size
-  , S.vertexCount order
-  , S.vertexList nodes
-  , S.hasVertex (\x y -> isJust $ lab y x) id -- lab is the only function not erroring if tested with a vertex not in the graph
-  , S.hasEdge (flip hasEdge) id
-  , S.hasSelfLoop (\x -> flip hasEdge (x,x)) id
-  , S.addVertex insNode (\x -> (x,()))
-  , S.removeVertex delNode id
-  , S.eq equal
-  , S.addEdge insEdge (\(x,y) -> (x,y,()))
-  , S.removeEdge delEdge id
-  , S.context (&) (\(x,y) -> ([],x,(),[((),y)]))
-  , S.dff dfs'
-  , S.topSort topsort
-  , S.reachable reachable id
-  , S.transpose transpose
+  [ Right $ S.isEmpty isEmpty
+  , Right $ S.edgeList edges
+  , Right $ S.edgeCount size
+  , Right $ S.vertexCount order
+  , Right $ S.vertexList nodes
+  , Right $ S.hasVertex (\x y -> isJust $ lab y x) id -- lab is the only function not erroring if tested with a vertex not in the graph
+  , Right $ S.hasEdge (flip hasEdge) id
+  , Right $ S.hasSelfLoop (\x -> flip hasEdge (x,x)) id
+  , Right $ S.addVertex insNode (\x -> (x,()))
+  , Right $ S.removeVertex delNode id
+  , Right $ S.eq equal
+  , Right $ S.addEdge insEdge (\(x,y) -> (x,y,()))
+  , Right $ S.removeEdge delEdge id
+  , Right $ S.context (&) (\(x,y) -> ([],x,(),[((),y)]))
+  , Right $ S.dff dfs'
+  , Right $ S.topSort topsort
+  , Right $ S.reachable reachable id
+  , Right $ S.transpose transpose
   ]
 
 -- |

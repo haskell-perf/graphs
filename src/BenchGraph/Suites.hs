@@ -58,7 +58,7 @@ removeVertex fun genArg = Suite
   }
     where
       oldV x = let getOldV = extractMaxVertex x - 1
-                   in nub [if getOldV < 0 then 0 else getOldV, getOldV `div` 2]
+                   in if getOldV < 0 then [0] else nub [getOldV, getOldV `div` 3, 2 * getOldV `div` 3]
 
 -- Edge work
 

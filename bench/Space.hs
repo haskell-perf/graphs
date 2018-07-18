@@ -5,8 +5,9 @@ import Data.List (nub, nubBy, sortBy, elemIndices)
 import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes, isJust)
 import Data.Int (Int64)
-import Control.Monad (when, unless, (>=>))
+import Control.Monad (when, unless, (>=>), forM_)
 import System.Environment (lookupEnv)
+import Data.Foldable (sequence_)
 
 import Weigh (Grouped (..), Weight (..), Weigh, wgroup, commas, weighResults)
 
@@ -63,8 +64,8 @@ takeLastAfterBk w = case elemIndices '/' w of
                           [] -> w
                           x -> drop (1+last x) w
 
-useResults :: Output -> [Grouped WeighResult] -> IO ()
-useResults (Output su st fi) todo = do
+useResults :: Output -> [Named (Named String)] -> [Grouped (Weight, Maybe String)] -> IO ()
+useResults (Output su st fi) notDef todo = do
   putStrLn "Note: results are in bytes"
   results <- mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
 #ifdef CHART
@@ -78,6 +79,7 @@ useResults (Output su st fi) todo = do
       maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup (showGrouped $ snd e) descs)
       putStrLn ""
       res <- printReport 2 st namedBenchs $ snd e
+      forM_ (filter (\(_,(a,_)) -> a == showGrouped (snd e)) notDef) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)]
       case res of
         Nothing -> return Nothing
         Just res' ->
@@ -168,20 +170,23 @@ main' (ListS opt) = case opt of
                     Libs -> putStr $ unlines $ nub $ map fst listOfSuites
 main' (RunS only notonly flg libs) = do
   printHeader defaultGr bN
-  mainWeigh benchs (useResults flg)
+  mainWeigh benchs (useResults flg (mapMaybe (\(n,Shadow s) -> either (\x -> Just (n,x)) (const Nothing) s ) filteredArr))
   where
     bN = benchsNames only notonly
+    benchs = map (uncurry wgroup) $ filterLib $ addCrea $ mapMaybe (\(n,Shadow a) -> either (const Nothing) (\x -> Just (n,allWeigh x)) a) filteredArr
+    filterLib = maybe id (\lbs -> filter (\(n,_) -> n `elem` lbs)) libs
     addCrea = if "creation" `elem` bN then (++ listOfCreation) else id
-    benchs = mapM_ (uncurry wgroup) $ maybe id (\lbs -> filter (\(n,_) -> n `elem` lbs)) libs $ addCrea $ map (fmap (\(Shadow s) -> allWeigh s)) $ filter filterLN listOfSuites
-    filterLN (_,Shadow s) = name s `elem` bN
+    filteredArr = filter (`isNameIn` bN) listOfSuites
 
 benchsNames :: Maybe [String] -> Maybe [String] -> [String]
-benchsNames only notonly = nub (map (\(_,Shadow s) -> name s) (maybe id (\e -> filter (\s -> not $ s `isNameIn` e)) notonly $ maybe id (\e -> filter (`isNameIn` e)) only listOfSuites)) ++ listOfCreation'
+benchsNames only notonly = nub (map (\(_,Shadow s) -> either fst name s) (maybe id (\e -> filter (\s -> not $ s `isNameIn` e)) notonly $ maybe id (\e -> filter (`isNameIn` e)) only listOfSuites)) ++ listOfCreation'
   where
-    isNameIn (_,Shadow s) e = name s `elem` e
     listOfCreation' = case only of
                         Nothing -> ["creation"]
                         Just e -> [ "creation" | "creation" `elem` e]
+
+isNameIn :: (a,ShadowedS) -> [String] -> Bool
+isNameIn (_,Shadow s) e = either fst name s `elem` e
 
 listOfCreation :: [Named (Weigh ())]
 listOfCreation  =
@@ -197,10 +202,10 @@ listOfCreation  =
 #endif
   ]
 
-mainWeigh :: Weigh () -> ([Grouped (Weight, Maybe String)] -> IO ()) -> IO ()
-mainWeigh wei f = do
+mainWeigh :: [Weigh ()] -> ([Grouped (Weight, Maybe String)] -> IO ()) -> IO ()
+mainWeigh rights f = do
   args <- lookupEnv "WEIGH_CASE"
-  (results,_) <- weighResults wei
+  (results,_) <- weighResults $ sequence_ rights
   unless (isJust args) $ f results
 
 -- | Weigh Grouped isGrouped

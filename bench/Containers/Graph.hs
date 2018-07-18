@@ -25,24 +25,25 @@ instance GraphImpl Graph where
 mk :: Edges -> Graph
 mk e = buildG (0,extractMaxVertex e) e
 
-functions :: [Suite Graph]
+functions :: [SuiteWithExp Graph]
 functions =
-  [ S.edgeList edges
-  , S.vertexList vertices
-  , S.eq (==)
-  , S.transpose transposeG
-  , S.dff dff
-  , S.topSort topSort
-  , S.reachable (flip reachable) id
-  , S.edgeCount edgeCount
-  , S.hasEdge hasEdge id
-  , S.isEmpty null
-  , S.vertexCount vertexCount
-  , S.hasVertex hasVertex id
-  , S.addVertex addVertex id
-  , S.addEdge addEdge id
-  , S.removeEdge removeEdge id
-  , S.hasSelfLoop (\x -> hasEdge (x,x)) id
+  [ Right $ S.edgeList edges
+  , Right $ S.vertexList vertices
+  , Right $ S.eq (==)
+  , Right $ S.transpose transposeG
+  , Right $ S.dff dff
+  , Right $ S.topSort topSort
+  , Right $ S.reachable (flip reachable) id
+  , Right $ S.edgeCount edgeCount
+  , Right $ S.hasEdge hasEdge id
+  , Right $ S.isEmpty null
+  , Right $ S.vertexCount vertexCount
+  , Right $ S.hasVertex hasVertex id
+  , Right $ S.addVertex addVertex id
+  , Right $ S.addEdge addEdge id
+  , Right $ S.removeEdge removeEdge id
+  , Right $ S.hasSelfLoop (\x -> hasEdge (x,x)) id
+  , Left    ("removeVertex","the array based implementation does not allow it")
   -- removeVertex is not implementable
   ]
 

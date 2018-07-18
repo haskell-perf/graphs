@@ -41,3 +41,7 @@ printHeader gr todo = putStrLn $ unlines ["# Benchmarks\n","Doing:","\n----",unl
 getSimples :: Grouped [Named Double] -> [[Named Double]]
 getSimples (Simple b _ v) = if b then [v] else [[]]
 getSimples (Group lst) = filter (not . null) $ concatMap getSimples lst
+
+stripOutEither :: Named (Either a b) -> Either (Named a) (Named b)
+stripOutEither (n,Left a)  = Left (n,a)
+stripOutEither (n,Right b) = Right (n,b)

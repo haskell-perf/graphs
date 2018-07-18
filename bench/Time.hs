@@ -4,7 +4,9 @@
 import Data.List (filter, nub, sortBy, nubBy)
 import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes, fromMaybe)
-import Control.Monad (when, unless)
+import Control.Monad (when, unless, forM_)
+import Data.Bifunctor (second)
+import Data.Either (partitionEithers)
 
 import Criterion (Benchmarkable)
 import Criterion.Types (Benchmark (..), Report (..), DataRecord( Analysed ), Config (..), SampleAnalysis (..), Verbosity (..), Regression (..))
@@ -69,7 +71,7 @@ showBenchName Environment{}    = error "Cannot show the bench name of an Env"
 genReport :: [(String,Int)]
           -> Output
           -- ^ Output options
-          -> [Named Benchmark]
+          -> [Named (Either (Named String) Benchmark)]
           -- ^ The list of benchmarks with their library name
           -> IO()
 genReport _ _ [] = putStrLn "\nNo data\n"
@@ -77,7 +79,7 @@ genReport gr flg arr = do
   unless notquickComp $ putStrLn $ let comp = head libNames
                                        oth =  head $ tail libNames
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
-  results <- mapM mapped $ nubBy (liftExtract2 (==)) arr
+  results <- mapM mapped $ nubBy (liftExtract2 (==)) refinedarr
 #ifdef CHART
   maybe (return ()) (\x -> mkChart "Time results" gr secs x $ catMaybes results) $ figOut flg
 #endif
@@ -91,7 +93,8 @@ genReport gr flg arr = do
           maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
           putStrLn ""
         else putStr $ bname ++ ": "
-      res <- toPrint 2 (staOut flg) arr $ snd e
+      res <- toPrint 2 (staOut flg) refinedarr $ snd e
+      forM_ (filter (\(_,(a,_)) -> a == showBenchName (snd e)) noimpl) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)]
       case fmap (fmap (map (fmap getCriterionTime))) res of
         Nothing -> return Nothing
         Just res' -> do
@@ -104,6 +107,7 @@ genReport gr flg arr = do
           return $ Just (bname,onlyLargeBenchs)
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
+    (noimpl,refinedarr) = partitionEithers $ map stripOutEither arr
 
 toPrint :: Int -- ^ Will start with 2
         -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
@@ -208,28 +212,30 @@ main' opts
                                        per = length grNames `div` two
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grNames
-            samples = filter (\(_,n) -> let nam = showBenchName n in nam `elem` todo && nam `notElem` nottodo) grList'
-        unless (staOut flg == QuickComparison) $ printHeader gr $ nub $ map (showBenchName . snd) samples
+            samples = filter (\(_,n) -> let nam = either fst showBenchName n in nam `elem` todo && nam `notElem` nottodo) grList'
+        unless (staOut flg == QuickComparison) $ printHeader gr $ nub $ map (either fst showBenchName . snd) samples
         genReport gr flg samples
   where
-    grNames = nub $ map (showBenchName . snd) $ grList False False defaultGr
-    grList benchWithCreation dontBenchLittleOnes gr = map (fmap (\(Shadow s) -> allBench benchWithCreation dontBenchLittleOnes gr s)) listOfSuites ++ listOfCreation dontBenchLittleOnes gr
+    grNames = nub $ map (either fst showBenchName . snd) $ grList False False defaultGr
+    grList benchWithCreation dontBenchLittleOnes gr =
+      map (fmap (\(Shadow s) -> second (allBench benchWithCreation dontBenchLittleOnes gr) s)) listOfSuites
+      ++ listOfCreation dontBenchLittleOnes gr
     mkGr gr' = case gr' of
                  [] -> defaultGr
                  g -> g
 
 -- Note: The layout of the list is important
-listOfCreation :: Bool -> [(String,Int)] -> [Named Benchmark]
+listOfCreation :: Bool -> [(String,Int)] -> [Named (Either (String,String) Benchmark)]
 listOfCreation dontBenchLittleOnes gr =
-  [ ("Containers", benchmarkCreation dontBenchLittleOnes gr Containers.Graph.mk)
+  [ ("Containers", Right $ benchmarkCreation dontBenchLittleOnes gr Containers.Graph.mk)
 #ifdef ALGA
-  , ("Alga", benchmarkCreation dontBenchLittleOnes gr Alga.Graph.mk )
+  , ("Alga", Right $ benchmarkCreation dontBenchLittleOnes gr Alga.Graph.mk )
 #endif
 #ifdef FGL
-  , ("Fgl", benchmarkCreation dontBenchLittleOnes gr Fgl.PatriciaTree.mk)
+  , ("Fgl", Right $ benchmarkCreation dontBenchLittleOnes gr Fgl.PatriciaTree.mk)
 #endif
 #ifdef HASHGRAPH
-  , ("Hash-Graph", benchmarkCreation dontBenchLittleOnes gr HashGraph.Gr.mk)
+  , ("Hash-Graph", Right $ benchmarkCreation dontBenchLittleOnes gr HashGraph.Gr.mk)
 #endif
 -- UNCOMMENT, ("YourFancyLibName", benchmarkCreation dontBenchLittleOnes gr YourLib.Graph.mk)
   ]

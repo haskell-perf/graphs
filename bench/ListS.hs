@@ -5,7 +5,7 @@ module ListS
 where
 
 import Data.List (nubBy)
-
+import Data.Maybe (mapMaybe)
 
 import qualified Containers.Graph
 #ifdef ALGA
@@ -29,7 +29,7 @@ import BenchGraph.Named
 
 -- | List of descs
 descs :: [Named String]
-descs = ("creation","Create a graph from a list of edges") : (nubBy eq1 $ map ((\(Shadow s) -> extractDescription s) . snd) listOfSuites)
+descs = ("creation","Create a graph from a list of edges") : nubBy eq1 (mapMaybe ((\(Shadow s) -> either (const Nothing) (Just . extractDescription) s) . snd) listOfSuites)
 
 -- | List of queued Suite, "Shadowized"
 -- Note: The layout of the list is important

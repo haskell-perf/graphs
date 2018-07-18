@@ -31,25 +31,25 @@ mkEdge (x,y) = HG.Edge x () y
 mk :: Edges -> Gr
 mk e = HG.mkGraph (map mkEdge e) (vertices e)
 
-functions :: [Suite Gr]
+functions :: [SuiteWithExp Gr]
 functions =
-  [ S.isEmpty HG.null
-  , S.edgeList HG.edges
-  , S.edgeCount HG.size
-  , S.vertexCount HG.order
-  , S.vertexList HG.nodes
-  , S.hasVertex HG.member id
-  , S.hasEdge HG.hasEdge mkEdge
-  , S.hasSelfLoop HG.hasEdge (\x -> mkEdge (x,x))
-  , S.addVertex HG.insNode id
-  , S.removeVertex HG.delNode id
-  , S.eq (==)
-  , S.addEdge HG.insEdge mkEdge
-  , S.removeEdge HG.delEdge mkEdge
-  , S.context (HG.&) $ \(x,y) -> (x,HG.Context' Set.empty (Set.singleton (HG.Tail () y)))
-  , S.dff A.dfs
-  , S.topSort A.topSort
-  , S.transpose transpose
+  [ Right $ S.isEmpty HG.null
+  , Right $ S.edgeList HG.edges
+  , Right $ S.edgeCount HG.size
+  , Right $ S.vertexCount HG.order
+  , Right $ S.vertexList HG.nodes
+  , Right $ S.hasVertex HG.member id
+  , Right $ S.hasEdge HG.hasEdge mkEdge
+  , Right $ S.hasSelfLoop HG.hasEdge (\x -> mkEdge (x,x))
+  , Right $ S.addVertex HG.insNode id
+  , Right $ S.removeVertex HG.delNode id
+  , Right $ S.eq (==)
+  , Right $ S.addEdge HG.insEdge mkEdge
+  , Right $ S.removeEdge HG.delEdge mkEdge
+  , Right $ S.context (HG.&) $ \(x,y) -> (x,HG.Context' Set.empty (Set.singleton (HG.Tail () y)))
+  , Right $ S.dff A.dfs
+  , Right $ S.topSort A.topSort
+  , Right $ S.transpose transpose
   ]
 
 -- |
