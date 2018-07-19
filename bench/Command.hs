@@ -21,7 +21,7 @@ import Data.Maybe (fromMaybe)
 
 import BenchGraph.Render.Types
 
-data Option = Part Int Int | Only Only
+data Option = Part Int Int | Only [String]
   deriving (Show, Eq)
 
 data StaOut = Ascii | Html | Null | QuickComparison deriving (Read, Show, Eq)
@@ -33,17 +33,16 @@ data Output = Output {
   }
   deriving (Read, Show, Eq)
 
-type Only = [String]
 type Lib = String
 type Graph = String
 
 data ListOption = Benchs | Libs
   deriving (Show, Eq)
 
-data CommandTime = List ListOption | Run (Maybe Option) (Maybe Only) Output (Maybe [Lib]) Bool Bool [(Graph,Int)]
+data CommandTime = List ListOption | Run (Maybe Option) (Maybe [String]) Output (Maybe [Lib]) Bool Bool [(Graph,Int)]
   deriving (Show, Eq)
 
-data CommandSpace = ListS ListOption | RunS (Maybe Only) (Maybe Only) Output (Maybe [Lib])
+data CommandSpace = ListS ListOption | RunS (Maybe [String]) (Maybe [String]) Output (Maybe [Lib])
 
 newtype CommandDataSize = RunD [(Graph,Int)]
 
@@ -53,10 +52,10 @@ partOpt = Part <$> rpart <*> rof
     rpart = option auto (long "part")
     rof = option auto (long "of")
 
-onlyOpt :: Parser Only
+onlyOpt :: Parser [String]
 onlyOpt = some $ strOption (long "only" <> short 'o' <> metavar "NAME" <> help "Benchmark only the function with NAME. Can be used multiple times")
 
-notOnlyOpt :: Parser Only
+notOnlyOpt :: Parser [String]
 notOnlyOpt = some $ strOption (long "notonly" <> short 'n' <> metavar "NAME" <> help "Do not benchmark function with NAME. Can be used multiple times")
 
 libOpt :: Parser Lib
