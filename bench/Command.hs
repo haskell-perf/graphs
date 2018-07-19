@@ -18,13 +18,19 @@ where
 import Options.Applicative
 import Data.Semigroup ((<>))
 import Data.Maybe (fromMaybe)
+import Data.List (intercalate)
 
 import BenchGraph.Render.Types
+
+import ListS (listOfSuites)
 
 data Option = Part Int Int | Only [String]
   deriving (Show, Eq)
 
 data StaOut = Ascii | Html | Null | QuickComparison deriving (Read, Show, Eq)
+
+staOutCons :: [String]
+staOutCons = ["Ascii", "Html", "Null", "QuickComparison"]
 
 data Output = Output {
   sumOut :: Bool, -- ^ Output summary ?
@@ -53,7 +59,7 @@ partOpt = Part <$> rpart <*> rof
     rof = option auto (long "of")
 
 onlyOpt :: Parser [String]
-onlyOpt = some $ strOption (long "only" <> short 'o' <> metavar "NAME" <> help "Benchmark only the function with NAME. Can be used multiple times")
+onlyOpt = some $ strOption $ long "only" <> short 'o' <> metavar "NAME" <> help "Benchmark only the function with NAME. Can be used multiple times" <> completeWith (map fst listOfSuites)
 
 notOnlyOpt :: Parser [String]
 notOnlyOpt = some $ strOption (long "notonly" <> short 'n' <> metavar "NAME" <> help "Do not benchmark function with NAME. Can be used multiple times")
@@ -87,7 +93,7 @@ benchLittleOne :: Parser Bool
 benchLittleOne = flag False True $ long "dont-bench-little-ones" <> short 'i' <> help "When set, will only benchmark the largest graphs"
 
 staFlag :: Parser StaOut
-staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii <> help "The standard output, can be: Ascii | Html | Null | QuickComparison"
+staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii <> help ("The standard output, can be: " ++ intercalate ", " staOutCons) <> completeWith staOutCons
 
 output :: Parser Output
 output = Output <$> sumFlag <*> staFlag <*> figFlag
