@@ -41,5 +41,7 @@ functions =
   , Right $ S.transpose transpose
   , Right $ S.dff (AIM.dfsForest . foldg AIM.empty AIM.vertex AIM.overlay AIM.connect)
   , Right $ S.topSort (AIM.topSort . foldg AIM.empty AIM.vertex AIM.overlay AIM.connect)
+  , Left    ("reachable","it is not implemented")
+  , Left    ("mergeContext","it is a nonsense")
   ]
 

@@ -44,7 +44,7 @@ functions =
   , Right $ S.removeEdge removeEdge id
   , Right $ S.hasSelfLoop (\x -> hasEdge (x,x)) id
   , Left    ("removeVertex","the array based implementation does not allow it")
-  -- removeVertex is not implementable
+  , Left    ("mergeContext","it is a nonsense")
   ]
 
 -- |

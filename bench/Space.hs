@@ -79,7 +79,7 @@ useResults (Output su st fi) notDef todo = do
       maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup (showGrouped $ snd e) descs)
       putStrLn ""
       res <- printReport 2 st namedBenchs $ snd e
-      forM_ (filter (\(_,(a,_)) -> a == showGrouped (snd e)) notDef) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)]
+      forM_ (filter (\(_,(a,_)) -> a == showGrouped (snd e)) notDef) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)] ++ "."
       case res of
         Nothing -> return Nothing
         Just res' ->

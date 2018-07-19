@@ -50,6 +50,7 @@ functions =
   , Right $ S.dff A.dfs
   , Right $ S.topSort A.topSort
   , Right $ S.transpose transpose
+  , Left    ("reachable","it is not implemented")
   ]
 
 -- |

@@ -94,7 +94,7 @@ genReport gr flg arr = do
           putStrLn ""
         else putStr $ bname ++ ": "
       res <- toPrint 2 (staOut flg) refinedarr $ snd e
-      forM_ (filter (\(_,(a,_)) -> a == showBenchName (snd e)) noimpl) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)]
+      forM_ (filter (\(_,(a,_)) -> a == showBenchName (snd e)) noimpl) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)] ++ "."
       case fmap (fmap (map (fmap getCriterionTime))) res of
         Nothing -> return Nothing
         Just res' -> do
