@@ -25,13 +25,19 @@ You can customize your build using several cabal flags (all of them are on by de
 
 ### Libraries
 
-By default, we bench against `fgl`, `alga`, `hash-graph` and `containers`.
+By default, we benchmark `fgl`, `alga`, `hash-graph` and `containers`.
 
 You can disable the three first (and thus avoid depending on them) by disabling the flags:
 
 * Fgl
 * Alga
 * HashGraph
+
+### Other flags
+
+* RealLife: Allow to benchmark against "reallife graphs" (see below). The compilation can take time when this is on. Disabling the flag will remove this build-step, and obviously the abilty to benchmark using such graphs.
+
+* Chart: Allow to produce a chart with the results. Since it can require many dependencies to be downloaded and built, this option is not suitable for builds in a Travis instance. Disabling it will remove the dependecies on the `Chart` package, and obviously the ability to create charts whith the results.
 
 ## Usage
 
@@ -57,9 +63,9 @@ The benchmark suite `datasize` will use `ghc-datasize` to calculate size of grap
 ### Arguments
 
 Command-line arguments are self-explaining, but the `--graph "(String,Int)"` requires some explanations:
-We test functions against standards graphs, and they are built with ten-powers vertices. the Int supplied is the upper-bound of the ten-powers. So `"(Path,100)"` will generate the `Path` with `1`, `10` and `100` vertices. You can specify several graphs.
+We test functions against standards graphs, and they are built with ten-powers vertices. For standard graphs, the Int supplied is the upper-bound of the ten-powers. So `"(Path,100)"` will generate the `Path` with `1`, `10` and `100` vertices. You can specify several graphs.
 
-The default is: `[("Mesh",3),("Clique",2)]`
+The default is: `[("Mesh",3),("Clique",3)]`
 
 #### Real-life graphs
 
@@ -91,9 +97,11 @@ type Edges = [(Int,Int)]
 
 class GraphImpl g where
     mkGraph :: Edges -> g
+    mkVertex :: g
 ```
 
 It allows to convert `Edges` (a list of edges) to the graph representation of the library.
+When the list is empty, it is guaranteed that the graph will be built using `mkVertex` which is producing a graph with a single vertex `0`.
 
 ### The `Named` type 
 
