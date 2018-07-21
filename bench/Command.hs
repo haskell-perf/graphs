@@ -9,8 +9,8 @@ module Command
   StaOut (..),
   CommandDataSize (..),
   commandTime,
-  runSpace,
-  runDataSize
+  commandSpace,
+  commandDataSize
   )
 
 where
@@ -143,16 +143,16 @@ space' = subparser
      <> progDesc "list benchmarks"
      <> header "Help" )
 
-runSpace :: ParserInfo CommandSpace
-runSpace = info ( semiOptional <**> helper)
+commandSpace :: ParserInfo CommandSpace
+commandSpace = info ( semiOptional <**> helper)
       ( fullDesc
      <> progDesc "Benchmark size of functions on different graphs libraries"
      <> header "Help")
   where
     semiOptional = pure (fromMaybe (RunS Nothing Nothing (Output True Ascii Nothing) Nothing)) <*> optional space'
 
-runDataSize :: ParserInfo CommandDataSize
-runDataSize = info ((RunD <$> graphsOpt) <**> helper)
+commandDataSize :: ParserInfo CommandDataSize
+commandDataSize = info ((RunD <$> graphsOpt) <**> helper)
      ( fullDesc
      <> progDesc "Benchmark datasize on different graphs representations"
      <> header "Help")

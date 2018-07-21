@@ -43,7 +43,7 @@ shExtr :: Named (Named a) -> String
 shExtr = fst . snd
 
 main :: IO ()
-main = execParser runDataSize >>= main'
+main = execParser commandDataSize >>= main'
 
 main' :: CommandDataSize -> IO ()
 main' (RunD gr') = do

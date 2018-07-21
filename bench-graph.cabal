@@ -194,6 +194,7 @@ benchmark datasize
                       , Fgl.PatriciaTree
                       , HashGraph.Gr
                       , Command
+                      , ListS
     build-depends:      base             >= 4.7     && < 4.12,
                         fgl              >= 5.5.4.0,
                         containers       >= 0.5.5.1 && < 0.8,

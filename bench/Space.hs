@@ -162,7 +162,7 @@ tkChilds :: Grouped WeighResult -> Maybe [Grouped WeighResult]
 tkChilds = groupedToNamed >=> Just . snd
 
 main :: IO ()
-main = execParser runSpace >>= main'
+main = execParser commandSpace >>= main'
 
 main' :: CommandSpace -> IO ()
 main' (ListS opt) = case opt of
