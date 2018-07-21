@@ -10,14 +10,16 @@ import BenchGraph.Render.Types
 import BenchGraph.Named
 
 import Data.List (sortBy)
-import Control.Monad (void, when)
+import Control.Monad (void, when, unless)
 import Data.Map.Strict (Map, alter, unionWith, empty, toList)
 
 -- | Will print the best libraries
 printBest :: String -- ^ An infix for the output (like "was the fastest")
-          -> Grouped [Named Double] -- ^ The datas
+          -> Grouped [Named Double] -- ^ The data
           -> IO ()
-printBest str = printMap str . getBest
+printBest str grp = do
+  let res = getBest grp
+  unless (length (snd res) == 1 && fst res == 0) $ printMap str res
 
 printMap :: String -> (Int,[Named Int]) -> IO ()
 printMap str (diff,m) = do
