@@ -31,11 +31,13 @@ functions =
   -- Here go the functions that will be benchmarked
   -- You need to pass them to a Suite (full list in src/BenchGraph/Suites).
   -- For example if you want to bench your 'isEmpty'
-    S.isEmpty REPLACEWITHyourFUnctionThatTestIfTheGraphIsEmpty
+    Right $ S.isEmpty REPLACEWITHyourFUnctionThatTestIfTheGraphIsEmpty
   -- Some Suite will need more arguments (generally how to convert a generic argument to on that fits your library's function. It is often 'id'
   -- For example:
-  , S.hasVertex REPLACEWITHyourFunctionTahtTestIfAVertexIsInTheGraph REPLACEWITHaFunctionThatConvertAnIntToTheArgumentOfYourHasVertex
+  , Right $ S.hasVertex REPLACEWITHyourFunctionTahtTestIfAVertexIsInTheGraph REPLACEWITHaFunctionThatConvertAnIntToTheArgumentOfYourHasVertex
   -- others...
+  -- You can also add why some algorithms are not benchmarked
+  , Left   ("hasEdge","the library author has not figured out how to implement it")
   --
   -- See examples of use in other libraries repository.
   ]
