@@ -18,6 +18,7 @@ import qualified Data.HashMap.Strict as M
 -- $setup
 -- >>> import BenchGraph.GenericGraph
 -- >>> let path10 = mk $ fst $ snd path 1
+-- >>> let path4 = mk [(0,1),(1,2),(2,3)]
 
 type Gr = HG.Gr () Int
 
@@ -50,7 +51,7 @@ functions =
   , Right $ S.dff A.dfs
   , Right $ S.topSort A.topSort
   , Right $ S.transpose transpose
-  , Left    ("reachable","it is not implemented")
+  , Right $ S.reachable reachable id
   ]
 
 -- |
@@ -61,3 +62,12 @@ functions =
 -- False
 transpose :: Gr -> Gr
 transpose (HG.Gr g) = HG.Gr $ M.map (\(HG.Context' h t) -> HG.Context' (Set.map (\(HG.Tail a b) -> HG.Head a b) t) (Set.map (\(HG.Head a b) -> HG.Tail a b) h)) g
+
+-- |
+-- >>> reachable 0 path4
+-- [0,1,2,3]
+--
+-- >>> reachable 2 path4
+-- [2,3]
+reachable :: Int -> Gr -> [Int]
+reachable = A.dfsn
