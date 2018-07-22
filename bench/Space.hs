@@ -87,9 +87,9 @@ useResults (Output su st fi) notDef todo = do
               in do
                 let onlyLargeBenchs = T.setBGroupT res''
                 when su $ do
-                  printBest "used the least amount of memory" res''
+                  printBest "used the least amount of memory" onlyLargeBenchs
                   printAbstract "lighter" onlyLargeBenchs
-                return $ Just (showGrouped $ snd e, onlyLargeBenchs)
+                return $ Just (showGrouped $ snd e, fmap (fmap (\x -> (x,Nothing))) <$> onlyLargeBenchs)
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write, must start with 2

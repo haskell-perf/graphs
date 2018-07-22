@@ -95,15 +95,16 @@ genReport gr flg arr = do
         else putStr $ bname ++ ": "
       res <- toPrint 2 (staOut flg) refinedarr $ snd e
       forM_ (filter (\(_,(a,_)) -> a == showBenchName (snd e)) noimpl) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)] ++ "."
-      case fmap (fmap (map (fmap getCriterionTime))) res of
+      case fmap (fmap (map (fmap (\x -> (getCriterionTime x, Just (getStdDev x)))))) res of
         Nothing -> return Nothing
         Just res' -> do
           let onlyLargeBenchs = setBGroupT res'
+              onlyLargeBenchsWithoutStdDev = fmap (fmap fst) <$> onlyLargeBenchs
           when (sumOut flg) $ if notquickComp
             then do
-              printBest "was the fastest" res'
-              printAbstract "faster" onlyLargeBenchs
-            else printQuick (head libNames) onlyLargeBenchs
+              printBest "was the fastest" onlyLargeBenchsWithoutStdDev
+              printAbstract "faster" onlyLargeBenchsWithoutStdDev
+            else printQuick (head libNames) onlyLargeBenchsWithoutStdDev
           return $ Just (bname,onlyLargeBenchs)
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
@@ -174,6 +175,9 @@ getCriterionTime :: Report -> Double
 getCriterionTime t = estPoint $ lReg $ regCoeffs $ head $ anRegress $ reportAnalysis t
   where
     lReg = fromMaybe (anMean $ reportAnalysis t) . Map.lookup "iters"
+
+getStdDev :: Report -> Double
+getStdDev = estPoint . anStdDev . reportAnalysis
 
 getRSquare :: Report -> Double
 getRSquare = estPoint . regRSquare . head . anRegress . reportAnalysis

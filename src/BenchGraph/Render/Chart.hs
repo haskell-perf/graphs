@@ -30,14 +30,15 @@ mkChart :: String
         -- ^ A show function
         -> ChartOutputFormat
         -- ^ The format
-        -> [Named (Grouped [Named Double])]
+        -> [Named (Grouped [Named (Double, Maybe Double)])]
         -- ^ The data
         -> IO ()
 mkChart _ _ _ _ [] = return ()
-mkChart title gparam s chopt grouped =
+mkChart title gparam s chopt grouped' =
   void $ renderableToFile fo ("results." ++ foExt) $ fillBackground def $ gridToRenderable grid
   where
     -- Group the benchs per line of 4 items
+    grouped = map (fmap (fmap (fmap (fmap fst)))) grouped'
     grp = group 4 grouped
 
     grid = wideAbove title' $ wideAbove graphsInfo $ wideAbove legend' $ aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp)
