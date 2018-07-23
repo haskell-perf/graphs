@@ -98,20 +98,11 @@ hasVertex i g = (i >= u) && (i <= v)
 --
 -- >>> vertexCount $ addVertex (-1) path10
 -- 11
---
--- >>> hasVertex 15 $ addVertex 15 fiveVertices
--- True
 addVertex :: Int -> Graph -> Graph
-addVertex i g =
-  if i >= f
-     then if i <= l
-             then g
-             else listArray (f,i) $ edgeList ++ diff l
-     else listArray (i,l) $ diff f ++ edgeList
+addVertex _ g = listArray (f,l+1) edgeList
   where
     edgeList = elems g
     (f,l) = bounds g
-    diff k = replicate (abs (k-i)) []
 
 -- |
 -- >>> hasEdge (1,0) $ addEdge (1,0) fiveVertices
