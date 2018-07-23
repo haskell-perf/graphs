@@ -4,13 +4,13 @@ module BenchGraph.Render.Chart
   )
 where
 
-import Control.Monad (void, forM_)
+import Control.Monad (void, mapM_, forM_)
 import Data.List (uncons, sort, intercalate, nub)
 import Data.Maybe (fromJust, mapMaybe)
 
-import Graphics.Rendering.Chart.Easy hiding (uncons, colors)
+import Graphics.Rendering.Chart.Easy hiding (uncons, colors, transform, bars)
 import Graphics.Rendering.Chart.Backend.Cairo
-import Graphics.Rendering.Chart.Grid
+import Graphics.Rendering.Chart.Grid hiding (width)
 
 import Data.Map.Strict (Map, unionWith, fromList, elems)
 import Data.Set (Set)
@@ -42,8 +42,7 @@ mkChart title gparam s chopt grouped' =
     grouped = either (map (fmap (fmap Left))) (map (fmap (fmap Right))) grouped'
     grp = group 4 grouped
 
- --   grid = wideAbove title' $ wideAbove graphsInfo $ wideAbove legend' $ aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp)
-    grid = wideAbove title' $ wideAbove graphsInfo $ aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp)
+    grid = wideAbove title' $ wideAbove graphsInfo $ wideAbove legend' $ aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp)
 
       where
         -- Custom title
@@ -53,13 +52,12 @@ mkChart title gparam s chopt grouped' =
         -- Infor about graphs used
         graphsInfo = setPickFn nullPickFn $ label ls' HTA_Centre VTA_Centre $ (++) "Graphs used: " $ intercalate ", " $ map (\((n,f),xs) -> unwords [n,"with",show $ snd $ f $ last xs,"vertices"]) $ graphs True gparam
         ls' = def { _font_size = 15 , _font_weight = FontWeightNormal }
-          {-
+
         -- Recreate the legend
         legend' = setPickFn nullPickFn $ toRenderable $ Legend legendStyle legendInfo
         hhgrp = Simple True "" $ Left $ zip (S.toList is) (replicate (S.size is) 0) -- False data to generate the legend
         legendStyle = fromJust $ _layout_legend $ layout ("",hhgrp)
-        legendInfo = _plot_legend $ plotBars $ bars2 hhgrp
-  -}
+        legendInfo = _plot_legend $ head $ _layout_plots $ layout ("",hhgrp)
 
     -- Render to svg
     (fo,foExt) = case chopt of
@@ -115,14 +113,13 @@ mkChart title gparam s chopt grouped' =
       $ plot_errbars_line_style .~ solidLine 1 (opaque black)
       $ def
 
-    mkErrPts = map (\(a,b,c) -> ErrPoint (ErrValue 0 0 0) (ErrValue a b c)) . concat
+    mkErrPts = map (\(a,b,c) -> ErrPoint (ErrValue 0 0 0) (ErrValue a b c)) . concat -- ErrValue for x will be set after
 
+-- | A render function very inspired by the one for bars BUT adapted for ErrBars
 updateRender :: BarsPlotValue y => Int -> ([PlotIndex], b) -> PlotErrBars x y -> PointMapFn PlotIndex y -> BackendProgram ()
-updateRender i allBarPoints p pmap = forM_ vals clusteredErrBars
+updateRender i allBarPoints p pmap = mapM_ clusteredErrBars vals
       where
-        clusteredErrBars (x,ys) =
-           forM_ (zip [0,1..] ys) $ \(i, y) ->
-               drawErrBar $ epmap (offset i) x y
+        clusteredErrBars (x,ys) = forM_ (zip [0,1..] ys) $ \(j, y) -> drawErrBar $ epmap (offset j) x y
 
         epmap xos x (ErrPoint _ (ErrValue yl y yh)) =
             ErrPoint (ErrValue (xl' + xos) (x' + xos) (xh' + xos)) (ErrValue yl' y' yh')
@@ -131,7 +128,7 @@ updateRender i allBarPoints p pmap = forM_ vals clusteredErrBars
                   (Point xh' yh') = pmap' (x,yh)
         drawErrBar = drawErrBar0 p
 
-        offset i = fromIntegral (2*i-nys) * width/2 + width/2
+        offset j = fromIntegral (2*j-nys) * width/2 + width/2
 
         vals  = addIndexes $ group i $ _plot_errbars_values p
         width = let w = max (minXInterval - 30) 5
@@ -160,10 +157,11 @@ toPlotCustom i bars p = Plot {
      pts = _plot_errbars_values p
 
 mkValues :: Set String
-         -- ^ This contains all the libs names. It allow to have coherent legends
+         -- ^ This contains all the libs names. It allow to have a coherent legend
          -> [[Named Double]] -> Map String [Double]
 mkValues s = foldr (\vals -> unionWith (++) (fromList $ map (fmap return) vals)) (M.fromSet (const []) s)
 
+-- | Group a list by subList of length @i@
 group :: Int -> [a] -> [[a]]
 group _ [] = [[]]
 group i xs = if null l
@@ -172,6 +170,7 @@ group i xs = if null l
   where
     (f,l) = splitAt i xs
 
+-- | Set that contains every libName, used to define which color will identify whom
 initSet :: [Named (Grouped [Named a])] -> Set String
 initSet = foldr (\(_,vals) -> S.union (S.fromList $ tkLibsName vals)) S.empty
 
