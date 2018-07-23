@@ -76,8 +76,7 @@ mkChart title gparam s chopt grouped' =
 
       where
         lay_plots = let plottedBars2 = plotBars bars2
-                        toBePlotted stdVal = barsErrs (map elems $ elems stdVal)
-                        in plottedBars2 : maybe [] (\stdVal -> [toPlotCustom (maybe 0 (M.size . snd) $ M.lookupMin mapVal) plottedBars2 $ toBePlotted stdVal]) std
+                     in plottedBars2 : maybe [] (\stdVal -> [toPlotCustom (maybe 0 (M.size . snd) $ M.lookupMin mapVal) plottedBars2 $ barsErrs (map elems $ elems stdVal)]) std
 
         bars2 = plot_bars_titles .~ libsName
           $ plot_bars_values .~ addIndexes (map elems $ elems mapVal)
@@ -88,11 +87,13 @@ mkChart title gparam s chopt grouped' =
           $ def
           where
             libsName = tkLibsName $ either id (map $ fmap fst) <$> snd e
+            colors = zip (S.toList is)
+              $ take (S.size is) $ map (\c -> (solidFillStyle c, Just (solidLine 1.0 $ opaque black))) (cycle defaultColorSeq)
 
         (expo,mapVal,std) = mkValue $ snd e
 
     mkValue x = let doubleMap = M.map (M.filter (/=0) . M.map average) $ M.map (mkValues is) $ getSimplesWithG x
-                    std = M.map (M.filter (/=0) . M.map average) <$> M.map (mkValues is) <$> getSimplesStdWithG x
+                    std = M.map (M.filter (/=0) . M.map average) . M.map (mkValues is) <$> getSimplesStdWithG x
                     maybeverysmall = concatMap elems $ elems doubleMap
                     tenp           = if null maybeverysmall then 0 else 1 + ceiling (abs $ minimum $ map (logBase 10) maybeverysmall) :: Int
                     transform u = fromIntegral tenp + logBase 10 u
@@ -106,43 +107,37 @@ mkChart title gparam s chopt grouped' =
                                                    ) v) <$> std
                 in (tenp, transformed, transformedStd) -- Make everyone > 1, so the log is positive.
 
-    mkstyle c = (solidFillStyle c, Just (solidLine 1.0 $ opaque black))
-    colors = let colo = take (S.size is) $ map mkstyle (cycle defaultColorSeq)
-              in zip (S.toList is) colo
     is = either initSet initSet grouped'
 
     barsErrs v = plot_errbars_values .~ mkErrPts v
       $ plot_errbars_line_style .~ solidLine 1 (opaque black)
       $ plot_errbars_tick_length .~ 7
       $ def
-
-    mkErrPts = map (\(a,b,c) -> ErrPoint (ErrValue 0 0 0) (ErrValue a b c)) . concat -- ErrValue for x will be set after
+      where
+        mkErrPts = map (\(a,b,c) -> ErrPoint (ErrValue 0 0 0) (ErrValue a b c)) . concat -- ErrValue for x will be set after
 
 -- | A render function very inspired by the one for bars BUT adapted for ErrBars
 updateRender :: BarsPlotValue y => Int -> ([PlotIndex], b) -> PlotErrBars x y -> PointMapFn PlotIndex y -> BackendProgram ()
 updateRender i allBarPoints p pmap = mapM_ clusteredErrBars vals
       where
-        clusteredErrBars (x,ys) = forM_ (zip [0,1..] ys) $ \(j, y) -> drawErrBar $ epmap (offset j) x y
+        clusteredErrBars (x,ys) = forM_ (zip [0,1..] ys) $ \(j, y) -> drawErrBar0 p $ epmap (offset j) x y
 
         epmap xos x (ErrPoint _ (ErrValue yl y yh)) =
-            ErrPoint (ErrValue (xl' + xos) (x' + xos) (xh' + xos)) (ErrValue yl' y' yh')
+            ErrPoint (ErrValue 0 (x' + xos) 0) (ErrValue yl' y' yh') -- | To be used only with updateRenderer
             where (Point x' y')   = pmap' (x,y)
                   (Point xl' yl') = pmap' (x,yl)
                   (Point xh' yh') = pmap' (x,yh)
-        drawErrBar = drawErrBar0 p
 
         offset j = fromIntegral (2*j-nys) * width/2 + width/2
 
         vals  = addIndexes $ group i $ _plot_errbars_values p
-        width = let w = max (minXInterval - 30) 5
-                 in w / fromIntegral nys
+        width = max (minXInterval - 30) 5 / fromIntegral nys
         minXInterval = let diffs = zipWith (-) (tail mxs) mxs
                        in if null diffs
                             then 100
                             else minimum diffs
           where
-            xs  = fst allBarPoints
-            mxs = nub $ sort $ map mapX xs
+            mxs = nub $ sort $ map mapX $ fst allBarPoints
 
         nys    = maximum [ length ys | (_,ys) <- vals ]
         pmap'  = mapXY pmap
@@ -152,12 +147,8 @@ toPlotCustom ::(BarsPlotValue y) => Int -> Plot PlotIndex b -> PlotErrBars PlotI
 toPlotCustom i bars p = Plot {
   _plot_render     = updateRender i (_plot_all_points bars) p,
   _plot_legend     = [],
-  _plot_all_points = ( [PlotIndex 0]
-                     , concat [ [ev_low y,ev_high y]
-                              | ErrPoint _ y <- pts ] )
+  _plot_all_points = ([],[]) -- do not need anything for scale
     }
-   where
-     pts = _plot_errbars_values p
 
 mkValues :: Set String
          -- ^ This contains all the libs names. It allow to have a coherent legend
@@ -193,7 +184,7 @@ getSimplesStdWithG (Group lst) = Just $ M.unionsWith (++) $ mapMaybe getSimplesS
 
 -- | Copy/paste from http://hackage.haskell.org/package/Chart-1.9/docs/src/Graphics.Rendering.Chart.Plot.ErrBars.html#drawErrBar0 MODIFIED
 drawErrBar0 :: PlotErrBars x y -> ErrPoint Double Double -> BackendProgram ()
-drawErrBar0 ps (ErrPoint (ErrValue _ x _) (ErrValue yl y yh)) = do
+drawErrBar0 ps (ErrPoint (ErrValue _ x _) (ErrValue yl _ yh)) = do
         let tl = _plot_errbars_tick_length ps
         withLineStyle (_plot_errbars_line_style ps) $
           strokePath $ moveTo' x yl
