@@ -69,7 +69,7 @@ useResults (Output su st fi) notDef todo = do
   putStrLn "Note: results are in bytes"
   results <- mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
 #ifdef CHART
-  maybe (return ()) (\x -> mkChart "time" defaultGr show x $ catMaybes results) fi
+  maybe (return ()) (\x -> mkChart "time" defaultGr show x $ Left $ catMaybes results) fi
 #endif
   return ()
   where
@@ -89,7 +89,7 @@ useResults (Output su st fi) notDef todo = do
                 when su $ do
                   printBest "used the least amount of memory" onlyLargeBenchs
                   printAbstract "lighter" onlyLargeBenchs
-                return $ Just (showGrouped $ snd e, fmap (fmap (\x -> (x,Nothing))) <$> onlyLargeBenchs)
+                return $ Just (showGrouped $ snd e, onlyLargeBenchs)
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write, must start with 2

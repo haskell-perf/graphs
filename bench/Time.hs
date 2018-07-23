@@ -81,7 +81,7 @@ genReport gr flg arr = do
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
   results <- mapM mapped $ nubBy (liftExtract2 (==)) refinedarr
 #ifdef CHART
-  maybe (return ()) (\x -> mkChart "Time results" gr secs x $ catMaybes results) $ figOut flg
+  maybe (return ()) (\x -> mkChart "Time results" gr secs x $ Right $ catMaybes results) $ figOut flg
 #endif
   return ()
   where
@@ -95,7 +95,7 @@ genReport gr flg arr = do
         else putStr $ bname ++ ": "
       res <- toPrint 2 (staOut flg) refinedarr $ snd e
       forM_ (filter (\(_,(a,_)) -> a == showBenchName (snd e)) noimpl) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)] ++ "."
-      case fmap (fmap (map (fmap (\x -> (getCriterionTime x, Just (getStdDev x)))))) res of
+      case fmap (fmap (map (fmap (\x -> (getCriterionTime x, getStdDev x))))) res of
         Nothing -> return Nothing
         Just res' -> do
           let onlyLargeBenchs = setBGroupT res'
