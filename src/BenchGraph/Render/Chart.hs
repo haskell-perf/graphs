@@ -69,14 +69,14 @@ mkChart title gparam s chopt grouped' =
     layout e = layout_title .~ fst e
       $ layout_title_style . font_size .~ 10
       $ layout_x_axis . laxis_generate .~ autoIndexAxis (M.keys mapVal)
-      $ layout_y_axis . laxis_override .~ {- ((\x -> x {_axis_labels = [map (\(y,_) -> (y,s $ 10**(y - fromIntegral expo))) $ head $ _axis_labels x]} ) . -} axisGridHide -- ) -- Change the label with the corresponding 10 power
+      $ layout_y_axis . laxis_override .~ ((\x -> x {_axis_labels = [map (\(y,_) -> (y,s $ 10**(y - fromIntegral expo))) $ head $ _axis_labels x]} ) . axisGridHide ) -- Change the label with the corresponding 10 power
       $ layout_left_axis_visibility . axis_show_ticks .~ False
       $ layout_plots .~ lay_plots
       $ def :: Layout PlotIndex Double
 
       where
         lay_plots = let plottedBars2 = plotBars bars2
-                        toBePlotted stdVal = barsErrs (map elems $ elems mapVal) (map elems $ elems stdVal)
+                        toBePlotted stdVal = barsErrs (map elems $ elems stdVal)
                         in plottedBars2 : maybe [] (\stdVal -> [toPlotCustom (maybe 0 (M.size . snd) $ M.lookupMin mapVal) plottedBars2 $ toBePlotted stdVal]) std
 
         bars2 = plot_bars_titles .~ libsName
@@ -95,22 +95,27 @@ mkChart title gparam s chopt grouped' =
                     std = M.map (M.filter (/=0) . M.map average) <$> M.map (mkValues is) <$> getSimplesStdWithG x
                     maybeverysmall = concatMap elems $ elems doubleMap
                     tenp           = if null maybeverysmall then 0 else 1 + ceiling (abs $ minimum $ map (logBase 10) maybeverysmall) :: Int
-                   -- transform = M.map (M.map (\u -> fromIntegral tenp + logBase 10 u))
-                    transform = id
-                 in (tenp, transform doubleMap, fmap transform std) -- Make everyone > 1, so the log is positive.
+                    transform u = fromIntegral tenp + logBase 10 u
+                    transformed = M.map (M.map transform) doubleMap
+                    transformedStd = M.mapWithKey
+                      (\k v -> let equiv = fromJust (M.lookup k doubleMap)
+                                   equivt = fromJust (M.lookup k transformed)
+                                in M.mapWithKey (\k' v' -> let d  = fromJust (M.lookup k' equiv)
+                                                               dt = fromJust (M.lookup k' equivt)
+                                                             in (transform (d-v'/2),dt,transform (d+v'/2))
+                                                   ) v) <$> std
+                in (tenp, transformed, transformedStd) -- Make everyone > 1, so the log is positive.
 
     mkstyle c = (solidFillStyle c, Just (solidLine 1.0 $ opaque black))
     colors = let colo = take (S.size is) $ map mkstyle (cycle defaultColorSeq)
               in zip (S.toList is) colo
     is = either initSet initSet grouped'
 
-    barsErrs v e = plot_errbars_values .~ mkErrPts v e
+    barsErrs v = plot_errbars_values .~ mkErrPts v
       $ plot_errbars_line_style .~ solidLine 1 (opaque black)
       $ def
 
-    mkErrPts [] _ = []
-    mkErrPts _ [] = []
-    mkErrPts (x:xs) (y:ys) = [symErrPoint x y 0 dy | (x,y,dy) <- zip3 (map fst $ addIndexes x) x y] ++ mkErrPts xs ys
+    mkErrPts = map (\(a,b,c) -> ErrPoint (ErrValue 0 0 0) (ErrValue a b c)) . concat
 
 updateRender :: BarsPlotValue y => Int -> ([PlotIndex], b) -> PlotErrBars x y -> PointMapFn PlotIndex y -> BackendProgram ()
 updateRender i allBarPoints p pmap = forM_ vals clusteredErrBars
@@ -128,7 +133,7 @@ updateRender i allBarPoints p pmap = forM_ vals clusteredErrBars
 
         offset i = fromIntegral (2*i-nys) * width/2 + width/2
 
-        vals  = addIndexes $ group i $ _plot_errbars_values p --TODO
+        vals  = addIndexes $ group i $ _plot_errbars_values p
         width = let w = max (minXInterval - 30) 5
                  in w / fromIntegral nys
         minXInterval = let diffs = zipWith (-) (tail mxs) mxs
@@ -139,7 +144,6 @@ updateRender i allBarPoints p pmap = forM_ vals clusteredErrBars
             xs  = fst allBarPoints
             mxs = nub $ sort $ map mapX xs
 
-        nbLib  = length $ fst allBarPoints
         nys    = maximum [ length ys | (_,ys) <- vals ]
         pmap'  = mapXY pmap
         mapX x = p_x (pmap' (x,barsReference))

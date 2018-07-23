@@ -85,8 +85,8 @@ library
     cpp-options:       -DREALLIFE
 
   if flag(Chart)
-    build-depends:     Chart       >= 1.9,
-                       Chart-cairo >= 1.9
+    build-depends:     Chart       >= 1.9 && < 1.10,
+                       Chart-cairo >= 1.9 && < 1.10
     exposed-modules:   BenchGraph.Render.Chart
 
   GHC-options:        -O2
