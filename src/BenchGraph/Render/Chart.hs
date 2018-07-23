@@ -17,6 +17,8 @@ import Data.Set (Set)
 import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 
+import Data.Monoid ((<>))
+
 import BenchGraph.Render.Types
 import BenchGraph.Named
 import BenchGraph.Render.Common
@@ -111,6 +113,7 @@ mkChart title gparam s chopt grouped' =
 
     barsErrs v = plot_errbars_values .~ mkErrPts v
       $ plot_errbars_line_style .~ solidLine 1 (opaque black)
+      $ plot_errbars_tick_length .~ 7
       $ def
 
     mkErrPts = map (\(a,b,c) -> ErrPoint (ErrValue 0 0 0) (ErrValue a b c)) . concat -- ErrValue for x will be set after
@@ -188,22 +191,15 @@ getSimplesStdWithG (Simple _ _ Left{}) = Nothing
 getSimplesStdWithG (Simple b n (Right v)) = if b then Just (M.singleton n [map (fmap snd) v]) else Nothing
 getSimplesStdWithG (Group lst) = Just $ M.unionsWith (++) $ mapMaybe getSimplesStdWithG lst
 
--- | Copy/paste from http://hackage.haskell.org/package/Chart-1.9/docs/src/Graphics.Rendering.Chart.Plot.ErrBars.html#drawErrBar0
+-- | Copy/paste from http://hackage.haskell.org/package/Chart-1.9/docs/src/Graphics.Rendering.Chart.Plot.ErrBars.html#drawErrBar0 MODIFIED
 drawErrBar0 :: PlotErrBars x y -> ErrPoint Double Double -> BackendProgram ()
-drawErrBar0 ps (ErrPoint (ErrValue xl x xh) (ErrValue yl y yh)) = do
+drawErrBar0 ps (ErrPoint (ErrValue _ x _) (ErrValue yl y yh)) = do
         let tl = _plot_errbars_tick_length ps
-        let oh = _plot_errbars_overhang ps
         withLineStyle (_plot_errbars_line_style ps) $
-          strokePath $ moveTo' (xl-oh) y
-                    <> lineTo' (xh+oh) y
-                    <> moveTo' x (yl-oh)
-                    <> lineTo' x (yh+oh)
-                    <> moveTo' xl (y-tl)
-                    <> lineTo' xl (y+tl)
+          strokePath $ moveTo' x yl
+                    <> lineTo' x yh
                     <> moveTo' (x-tl) yl
                     <> lineTo' (x+tl) yl
-                    <> moveTo' xh (y-tl)
-                    <> lineTo' xh (y+tl)
                     <> moveTo' (x-tl) yh
                     <> lineTo' (x+tl) yh
 
