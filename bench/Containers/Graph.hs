@@ -99,7 +99,7 @@ hasVertex i g = (i >= u) && (i <= v)
 -- >>> vertexCount $ addVertex (-1) path10
 -- 11
 addVertex :: Int -> Graph -> Graph
-addVertex _ g = listArray (f,l+1) edgeList
+addVertex _ g = buildG (f,l+1) edgeList
   where
     edgeList = elems g
     (f,l) = bounds g
