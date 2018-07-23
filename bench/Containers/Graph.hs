@@ -101,7 +101,7 @@ hasVertex i g = (i >= u) && (i <= v)
 addVertex :: Int -> Graph -> Graph
 addVertex _ g = buildG (f,l+1) edgeList
   where
-    edgeList = elems g
+    edgeList = assocs g
     (f,l) = bounds g
 
 -- |
