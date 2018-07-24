@@ -43,7 +43,7 @@ functions =
   , Right $ S.addEdge addEdge id
   , Right $ S.removeEdge removeEdge id
   , Right $ S.hasSelfLoop (\x -> hasEdge (x,x)) id
-  , Left    ("removeVertex","the array based implementation does not allow it")
+  , Right $ S.removeVertex removeVertex id
   , Left    ("mergeContext","it is a nonsense")
   ]
 
@@ -124,3 +124,16 @@ addEdge (i,j) g = g // [(i,j:(g ! i))]
 -- True
 removeEdge :: (Int,Int) -> Graph -> Graph
 removeEdge (i,j) g = g // [(i,filter (/= j) $ g ! i)]
+
+-- |
+--
+-- This is a very special 'removeVertex' since it remove the desired vertex but relabel the end
+-- of the vertices, so there is no gap between indices.
+--
+-- >>> vertexCount $ removeVertex 1 $ fiveVertices
+-- 4
+removeVertex :: Int -> Graph -> Graph
+removeVertex i g = listArray (f,l-1) $ h ++ tail t
+  where
+    (h,t) = splitAt (i-f) $ elems g
+    (f,l) = bounds g
