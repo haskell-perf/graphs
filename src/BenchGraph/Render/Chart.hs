@@ -125,8 +125,8 @@ updateRender i allBarPoints p pmap = mapM_ clusteredErrBars vals
         epmap xos x (ErrPoint _ (ErrValue yl y yh)) =
             ErrPoint (ErrValue 0 (x' + xos) 0) (ErrValue yl' y' yh') -- | To be used only with updateRenderer
             where (Point x' y')   = pmap' (x,y)
-                  (Point xl' yl') = pmap' (x,yl)
-                  (Point xh' yh') = pmap' (x,yh)
+                  (Point _ yl') = pmap' (x,yl)
+                  (Point _ yh') = pmap' (x,yh)
 
         offset j = fromIntegral (2*j-nys) * width/2 + width/2
 

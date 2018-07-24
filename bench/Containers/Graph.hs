@@ -93,15 +93,18 @@ hasVertex i g = (i >= u) && (i <= v)
     (u,v) = bounds g
 
 -- |
+--
+--  This is a very special 'addVertex' since it add a vertex, but not with the specified indice.
+--
 -- >>> vertexCount $ addVertex 10 path10
 -- 11
 --
 -- >>> vertexCount $ addVertex (-1) path10
 -- 11
 addVertex :: Int -> Graph -> Graph
-addVertex _ g = array (f,l+1) edgeList
+addVertex _ g = listArray (f,l+1) $ edgeList ++ [[]]
   where
-    edgeList = assocs g
+    edgeList = elems g
     (f,l) = bounds g
 
 -- |
