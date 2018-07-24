@@ -44,7 +44,7 @@ mkChart title gparam s chopt grouped' =
     grouped = either (map (fmap (fmap Left))) (map (fmap (fmap Right))) grouped'
     grp = group 4 grouped
 
-    grid = wideAbove title' $ wideAbove graphsInfo $ wideAbove legend' $ aboveN (map (besideN . map (layoutToGrid . (\x -> x {_layout_legend = Nothing}) . layout)) grp)
+    grid = wideAbove title' $ wideAbove graphsInfo $ wideAbove legend' $ aboveN $ map (besideN . map (layoutToGrid . set layout_legend Nothing . layout)) grp
 
       where
         -- Custom title
@@ -69,7 +69,7 @@ mkChart title gparam s chopt grouped' =
     layout e = layout_title .~ fst e
       $ layout_title_style . font_size .~ 10
       $ layout_x_axis . laxis_generate .~ autoIndexAxis (M.keys mapVal)
-      $ layout_y_axis . laxis_override .~ ((\x -> x {_axis_labels = [map (\(y,_) -> (y,s $ 10**(y - fromIntegral expo))) $ head $ _axis_labels x]} ) . axisGridHide ) -- Change the label with the corresponding 10 power
+      $ layout_y_axis . laxis_override .~ (over axis_labels (\x -> [map (\(y,_) -> (y,s $ 10**(y - fromIntegral expo))) $ head x]) . axisGridHide ) -- Change the label with the corresponding 10 power
       $ layout_left_axis_visibility . axis_show_ticks .~ False
       $ layout_plots .~ lay_plots
       $ def :: Layout PlotIndex Double
@@ -92,20 +92,22 @@ mkChart title gparam s chopt grouped' =
 
         (expo,mapVal,std) = mkValue $ snd e
 
-    mkValue x = let doubleMap = M.map (M.filter (/=0) . M.map average) $ M.map (mkValues is) $ getSimplesWithG x
-                    std = M.map (M.filter (/=0) . M.map average) . M.map (mkValues is) <$> getSimplesStdWithG x
-                    maybeverysmall = concatMap elems $ elems doubleMap
-                    tenp           = if null maybeverysmall then 0 else 1 + ceiling (abs $ minimum $ map (logBase 10) maybeverysmall) :: Int
-                    transform u = fromIntegral tenp + logBase 10 u
-                    transformed = M.map (M.map transform) doubleMap
-                    transformedStd = M.mapWithKey
-                      (\k v -> let equiv = fromJust (M.lookup k doubleMap)
-                                   equivt = fromJust (M.lookup k transformed)
-                                in M.mapWithKey (\k' v' -> let d  = fromJust (M.lookup k' equiv)
-                                                               dt = fromJust (M.lookup k' equivt)
-                                                             in (transform (d-v'/2),dt,transform (d+v'/2))
-                                                   ) v) <$> std
-                in (tenp, transformed, transformedStd) -- Make everyone > 1, so the log is positive.
+        mkValue x = (tenp, transformed, transformedStd) -- Make everyone > 1, so the log is positive.
+          where
+            mkAverageDeep  = M.map (M.filter (/=0) . M.map average) . M.map (mkValues is)
+            doubleMap      = mkAverageDeep $ getSimplesWithG x
+            stdVar         = mkAverageDeep <$> getSimplesStdWithG x
+            maybeverysmall = concatMap elems $ elems doubleMap
+            tenp           = if null maybeverysmall then 0 else 1 + ceiling (abs $ minimum $ map (logBase 10) maybeverysmall) :: Int
+            transform u    = fromIntegral tenp + logBase 10 u
+            transformed    = M.map (M.map transform) doubleMap
+            transformedStd = M.mapWithKey
+              (\k v -> let equiv  = fromJust (M.lookup k doubleMap)
+                           equivt = fromJust (M.lookup k transformed)
+                        in M.mapWithKey (\k' v' -> let d  = fromJust (M.lookup k' equiv)
+                                                       dt = fromJust (M.lookup k' equivt)
+                                                    in (transform (d-v'/2),dt,transform (d+v'/2))
+              ) v) <$> stdVar
 
     is = either initSet initSet grouped'
 
