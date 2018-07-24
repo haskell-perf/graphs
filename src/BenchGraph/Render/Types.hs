@@ -8,6 +8,7 @@ module BenchGraph.Render.Types
   , setGName
   , IsGrouped (..)
   , ChartOutputFormat (..)
+  , ChartOutput (..)
   )
 
 where
@@ -53,4 +54,5 @@ instance IsGrouped Grouped where
   simple_ (Simple _ _ e) = e
   group_ (Group e) = e
 
+data ChartOutput = ChartOutput String ChartOutputFormat deriving (Read, Show, Eq)
 data ChartOutputFormat = Png | Svg deriving (Read, Show, Eq)

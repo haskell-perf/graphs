@@ -30,15 +30,15 @@ mkChart :: String
         -- ^ The graphs used
         -> (Double -> String)
         -- ^ A show function
-        -> ChartOutputFormat
+        -> ChartOutput
         -- ^ The format
         -> Either [Named (Grouped [Named Double])] [Named (Grouped [Named (Double, Double)])]
         -- ^ The data
         -> IO ()
 mkChart _ _ _ _ (Left []) = return ()
 mkChart _ _ _ _ (Right []) = return ()
-mkChart title gparam s chopt grouped' =
-  void $ renderableToFile fo ("results." ++ foExt) $ fillBackground def $ gridToRenderable grid
+mkChart title gparam s (ChartOutput filename chopt) grouped' =
+  void $ renderableToFile fo (filename ++ "." ++ foExt) $ fillBackground def $ gridToRenderable grid
   where
     -- Group the benchs per line of 4 items
     grouped = either (map (fmap (fmap Left))) (map (fmap (fmap Right))) grouped'

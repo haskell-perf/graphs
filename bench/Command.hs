@@ -35,7 +35,7 @@ staOutCons = ["Ascii", "Html", "Null", "QuickComparison"]
 data Output = Output {
   sumOut :: Bool, -- ^ Output summary ?
   staOut :: StaOut, -- ^ Output standard ?
-  figOut :: Maybe ChartOutputFormat -- ^ Output figures ?
+  figOut :: Maybe ChartOutput -- ^ Output figures ?
   }
   deriving (Read, Show, Eq)
 
@@ -79,9 +79,12 @@ options = partOpt <|> (Only <$> onlyOpt)
 sumFlag :: Parser Bool
 sumFlag = flag True False $ long "noSummarize" <> short 's' <> help "When set, disable SUMMARIZE and ABSTRACT output"
 
-figFlag :: Parser (Maybe ChartOutputFormat)
+figFlag :: Parser (Maybe ChartOutput)
 #ifdef CHART
-figFlag = optional $ option auto (long "chart" <> short 'c' <> metavar "OUTTYPE" <> help "Output type: Png or Svg")
+figFlag = optional $ ChartOutput <$> outfile <*> outtype
+  where
+    outfile = strOption $ long "chartfile" <> short 'f' <> metavar "FILENAME" <> help "Output file WITHOUT extension" <> value "result"
+    outtype = option auto $ long "chart" <> short 'c' <> metavar "OUTTYPE" <> help "Output type: Png or Svg"
 #else
 figFlag = pure Nothing
 #endif
