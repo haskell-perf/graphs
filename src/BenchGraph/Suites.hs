@@ -76,15 +76,6 @@ hasEdge fun genArg = Suite
   , inputs    = \x -> map (fmap genArg) $ withNames $ getDifferents x ++ take 3 (edgesNotInGraph x)
   }
 
-hasSelfLoop :: NFData o => SpecialisedSuite Vertex o i g
-hasSelfLoop fun genArg = Suite
-  { name = "hasSelfLoop"
-  , desc = "Test if the given self-loop is in the graph (with arguments both in the graph and not in the graph (where applicable))"
-  , algorithm = fun
-  , inputs    = \x -> let old = extractMaxVertex x
-                       in map (fmap genArg) $ withNames $ nub [0, old `div` 2, old+1, old+100]
-  }
-
 addEdge :: NFData o => SpecialisedSuite Edge o i g
 addEdge fun genArg = Suite
   { name = "addEdge"

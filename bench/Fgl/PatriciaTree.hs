@@ -36,7 +36,6 @@ functions =
   , Right $ S.vertexList nodes
   , Right $ S.hasVertex (\x y -> isJust $ lab y x) id -- lab is the only function not erroring if tested with a vertex not in the graph
   , Right $ S.hasEdge (flip hasEdge) id
-  , Right $ S.hasSelfLoop (\x -> flip hasEdge (x,x)) id
   , Right $ S.addVertex insNode (\x -> (x,()))
   , Right $ S.removeVertex delNode id
   , Right $ S.eq equal

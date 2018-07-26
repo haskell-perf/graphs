@@ -42,7 +42,6 @@ functions =
   , Right $ S.addVertex addVertex id
   , Right $ S.addEdge addEdge id
   , Right $ S.removeEdge removeEdge id
-  , Right $ S.hasSelfLoop (\x -> hasEdge (x,x)) id
   , Right $ S.removeVertex removeVertex id
   , Left    ("mergeContext","it is a nonsense")
   ]

@@ -36,7 +36,6 @@ functions =
   , Right $ S.edgeCount edgeCount
   , Right $ S.edgeList edgeList
   , Right $ S.hasEdge (uncurry hasEdge) id
-  , Right $ S.hasSelfLoop hasSelfLoop id
   , Right $ S.addEdge (\(x,y) -> overlay $ edge x y) id
   , Right $ S.addVertex connect vertex
   , Right $ S.removeVertex removeVertex id
