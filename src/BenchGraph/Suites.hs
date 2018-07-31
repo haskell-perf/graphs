@@ -36,7 +36,7 @@ hasVertex fun genArg = Suite
   }
     where
       vertices x = let maxV = extractMaxVertex x
-                   in nub $ 0 : maxV `div` 3 : (2 * maxV) `div` 3 : [maxV + 1]
+                   in nub $ 3 : maxV `div` 3 : (2 * maxV) `div` 3 : [maxV + 1]
 
 addVertex :: NFData o => SpecialisedSuite Vertex o i g
 addVertex fun genArg = Suite
@@ -58,7 +58,7 @@ removeVertex fun genArg = Suite
   }
     where
       oldV x = let getOldV = extractMaxVertex x - 1
-                   in if getOldV < 0 then [0] else nub [getOldV, getOldV `div` 3, 2 * getOldV `div` 3]
+                   in if getOldV < 0 then [0] else nub [getOldV-3, getOldV `div` 3, 2 * getOldV `div` 3]
 
 -- Edge work
 
@@ -73,7 +73,7 @@ hasEdge fun genArg = Suite
   { name = "hasEdge"
   , desc = "Test if the given edge is in the graph (with arguments both in the graph and not in the graph (where applicable))"
   , algorithm = fun
-  , inputs    = \x -> map (fmap genArg) $ withNames $ getDifferents x ++ take 3 (edgesNotInGraph x)
+  , inputs    = \x -> map (fmap genArg) $ withNames $ getDifferents x ++ edgesNotInGraph' x
   }
 
 addEdge :: NFData o => SpecialisedSuite Edge o i g
@@ -81,7 +81,7 @@ addEdge fun genArg = Suite
   { name = "addEdge"
   , desc = "Add an edge (not already in the graph)"
   , algorithm = fun
-  , inputs = map (fmap genArg) . withNames . take 4 . edgesNotInGraph
+  , inputs = map (fmap genArg) . withNames . edgesNotInGraph'
   }
 
 removeEdge :: NFData o => SpecialisedSuite Edge o i g
@@ -140,5 +140,14 @@ reachable fun genArg = Suite
 -- | Take the first, the middle and the last edges, if possible
 getDifferents :: Edges -> Edges
 getDifferents edgs = if length edgs >= 2
-                        then nub [head edgs, edgs !! (length edgs `div` 2 - 1), last $ init edgs]
+                        then nub [edgs!!2, edgs !! (length edgs `div` 2 - 1), last $ init edgs]
                         else edgs
+
+edgesNotInGraph' :: Edges -> Edges
+edgesNotInGraph' x = if lx >= 3
+                        then let edgs  = edgesNotInGraph x
+                              in [edgs !! 2, edgs !! (lx `div` 10), edgs !! ((2*lx) `div` 10)]
+                        else take 3 $ edgesNotInGraph x
+  where
+    lx = length x
+
