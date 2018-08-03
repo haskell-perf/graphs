@@ -44,7 +44,7 @@ type Graph = String
 data ListOption = Benchs | Libs
   deriving (Show, Eq)
 
-data Command = List ListOption | Run (Maybe Option) (Maybe [String]) Output (Maybe [Lib]) Bool Bool [(Graph,Int)]
+data Command = List ListOption | Run (Maybe Option) (Maybe [String]) Output (Maybe [Lib]) Bool Bool [(Graph,Int)] | Render String ChartOutput
   deriving (Show, Eq)
 
 newtype CommandDataSize = RunD [(Graph,Int)]
@@ -81,13 +81,16 @@ saveOpt = strOption $ long "saveRawResults" <> short 'r' <> help "Write the raw 
 
 figFlag :: Parser (Maybe ChartOutput)
 #ifdef CHART
-figFlag = optional $ ChartOutput <$> outfile <*> outtype
-  where
-    outfile = strOption $ long "chartfile" <> short 'f' <> metavar "FILENAME" <> help "Output file WITHOUT extension" <> value "result"
-    outtype = option auto $ long "chart" <> short 'c' <> metavar "OUTTYPE" <> help "Output type: Png or Svg"
+figFlag = optional figSFlag
 #else
 figFlag = pure Nothing
 #endif
+
+figSFlag :: Parser ChartOutput
+figSFlag = ChartOutput <$> outfile <*> outtype
+  where
+    outfile = strOption $ long "chartfile" <> short 'f' <> metavar "FILENAME" <> help "Output file WITHOUT extension" <> value "result"
+    outtype = option auto $ long "chart" <> short 'c' <> metavar "OUTTYPE" <> help "Output type: Png or Svg"
 
 benchWithCreation :: Parser Bool
 benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b' <> help "When set, will benchmark also the graph-creation function. See README (IGNORED FOR SPACE BENCHMARKS)"
@@ -110,10 +113,17 @@ listOpt = flag' Benchs (long "benchs") <|> flag' Libs (long "libs")
 listCom :: Parser Command
 listCom = List <$> listOpt
 
+renderGOpt :: Parser String
+renderGOpt = strArgument $ help "the file to load raw datas. Likely something exported with \" run -r \"" <> metavar "INFILE"
+
+renderGCom :: Parser Command
+renderGCom = Render <$> renderGOpt <*> figSFlag
+
 command' :: Parser Command
 command' = subparser
   ( command "list" list
     <> command "run" run
+    <> command "renderG" renderG
   )
   where
     run = info (runCom <**> helper)
@@ -123,6 +133,10 @@ command' = subparser
     list = info (listCom <**> helper)
       ( fullDesc
      <> progDesc "List benchmarks"
+     <> header "Help" )
+    renderG = info (renderGCom <**> helper)
+      ( fullDesc
+     <> progDesc "Render data into a graph"
      <> header "Help" )
 
 commandP :: ParserInfo Command

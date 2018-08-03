@@ -69,10 +69,9 @@ useResults flg notDef todo = do
   putStrLn "Note: results are in bytes"
   results <- mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
   maybe (return ()) (\x -> writeFile x $ show results) $ saveToFile flg
-#ifdef CHART
-  maybe (return ()) (\x -> mkChart "time" defaultGr show x $ Left $ catMaybes results) $ figOut flg
-#endif
-  return ()
+  case figOut flg of
+    Nothing -> return ()
+    (Just x) -> renderG x results
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
     mapped e = do
@@ -91,6 +90,13 @@ useResults flg notDef todo = do
                   printBest "used the least amount of memory" onlyLargeBenchs
                   printAbstract "lighter" onlyLargeBenchs
                 return $ Just (showGrouped $ snd e, onlyLargeBenchs)
+
+renderG :: T.ChartOutput -> [Maybe (Named (T.Grouped [Named Double]))] -> IO ()
+#ifdef CHART
+renderG x results = mkChart "Space results" defaultGr show x $ Left $ catMaybes results
+#else
+renderG _ _ = return ()
+#endif
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write, must start with 2
@@ -169,6 +175,7 @@ main' :: Command -> IO ()
 main' (List opt) = case opt of
                     Benchs -> putStr $ unlines $ benchsNames Nothing Nothing
                     Libs -> putStr $ unlines $ nub $ map fst listOfSuites
+main' (Render fp opt) = readFile fp >>= renderG opt . read
 main' (Run only notonly flg libs _ _ _) = do
   printHeader defaultGr bN
   mainWeigh benchs (useResults flg (mapMaybe (\(n,Shadow s) -> either (\x -> Just (n,x)) (const Nothing) s ) filteredArr))
@@ -180,7 +187,7 @@ main' (Run only notonly flg libs _ _ _) = do
     filteredArr = filter (`isNameIn` bN) listOfSuites
 
 benchsNames :: Maybe Option -> Maybe [String] -> [String]
-benchsNames only notonly = useNotOnly $ useOnly extractedNames
+benchsNames only notonly = nub $ useNotOnly $ useOnly extractedNames
   where
     extractedNames = "creation" : map (\(_,Shadow s) -> either fst name s) listOfSuites
     useOnly = case only of

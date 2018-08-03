@@ -80,11 +80,10 @@ genReport gr flg arr = do
                                        oth =  head $ tail libNames
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
   results <- mapM mapped $ nubBy (liftExtract2 (==)) refinedarr
-  maybe (return ()) (\x -> writeFile x $ show results) $ saveToFile flg
-#ifdef CHART
-  maybe (return ()) (\x -> mkChart "Time results" gr secs x $ Right $ catMaybes results) $ figOut flg
-#endif
-  return ()
+  maybe (return ()) (\x -> writeFile x $ unlines [show gr,show results]) $ saveToFile flg
+  case figOut flg of
+    Nothing -> return ()
+    (Just x) -> renderG gr x results
   where
     mapped e = do
       let bname = showBenchName $ snd e
@@ -110,6 +109,13 @@ genReport gr flg arr = do
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
     (noimpl,refinedarr) = partitionEithers $ map stripOutEither arr
+
+renderG :: [(String,Int)] -> ChartOutput -> [Maybe (Name, Grouped [(Name, (Double, Double))])] -> IO ()
+#ifdef CHART
+renderG gr x results = mkChart "Time results" gr secs x $ Right $ catMaybes results
+#else
+renderG _ _ _ = return ()
+#endif
 
 toPrint :: Int -- ^ Will start with 2
         -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
@@ -202,6 +208,9 @@ main' opts
       List listOpt -> case listOpt of
                         Benchs -> putStr $ unlines grNames
                         Libs -> putStr $ unlines $ nub $ map fst listOfSuites ++ map fst (listOfCreation False [])
+      Render filep dg -> do
+        (gr,res) <- span (/='\n') <$> readFile filep
+        renderG (read gr) dg (read res)
       Run opt nottodo' flg libs benchWithCreation dontBenchLittleOnes gr' -> do
         let modifyL = case libs of
               Nothing -> id
