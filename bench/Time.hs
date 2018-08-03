@@ -80,6 +80,7 @@ genReport gr flg arr = do
                                        oth =  head $ tail libNames
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
   results <- mapM mapped $ nubBy (liftExtract2 (==)) refinedarr
+  maybe (return ()) (\x -> writeFile x $ show results) $ saveToFile flg
 #ifdef CHART
   maybe (return ()) (\x -> mkChart "Time results" gr secs x $ Right $ catMaybes results) $ figOut flg
 #endif

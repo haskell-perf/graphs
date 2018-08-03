@@ -65,11 +65,12 @@ takeLastAfterBk w = case elemIndices '/' w of
                           x -> drop (1+last x) w
 
 useResults :: Output -> [Named (Named String)] -> [Grouped (Weight, Maybe String)] -> IO ()
-useResults (Output su st fi) notDef todo = do
+useResults flg notDef todo = do
   putStrLn "Note: results are in bytes"
   results <- mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
+  maybe (return ()) (\x -> writeFile x $ show results) $ saveToFile flg
 #ifdef CHART
-  maybe (return ()) (\x -> mkChart "time" defaultGr show x $ Left $ catMaybes results) fi
+  maybe (return ()) (\x -> mkChart "time" defaultGr show x $ Left $ catMaybes results) $ figOut flg
 #endif
   return ()
   where
@@ -78,7 +79,7 @@ useResults (Output su st fi) notDef todo = do
       putStrLn $ unwords [replicate 2 '#', showGrouped $ snd e]
       maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup (showGrouped $ snd e) descs)
       putStrLn ""
-      res <- printReport 2 st namedBenchs $ snd e
+      res <- printReport 2 (staOut flg) namedBenchs $ snd e
       forM_ (filter (\(_,(a,_)) -> a == showGrouped (snd e)) notDef) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)] ++ "."
       case res of
         Nothing -> return Nothing
@@ -86,7 +87,7 @@ useResults (Output su st fi) notDef todo = do
           let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
               in do
                 let onlyLargeBenchs = T.setBGroupT res''
-                when su $ do
+                when (sumOut flg) $ do
                   printBest "used the least amount of memory" onlyLargeBenchs
                   printAbstract "lighter" onlyLargeBenchs
                 return $ Just (showGrouped $ snd e, onlyLargeBenchs)

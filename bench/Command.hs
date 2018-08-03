@@ -34,6 +34,7 @@ staOutCons = ["Ascii", "Html", "Null", "QuickComparison"]
 
 data Output = Output {
   sumOut :: Bool, -- ^ Output summary ?
+  saveToFile :: Maybe String,
   staOut :: StaOut, -- ^ Output standard ?
   figOut :: Maybe ChartOutput -- ^ Output figures ?
   }
@@ -79,6 +80,9 @@ options = partOpt <|> (Only <$> onlyOpt)
 sumFlag :: Parser Bool
 sumFlag = flag True False $ long "noSummarize" <> short 's' <> help "When set, disable SUMMARIZE and ABSTRACT output"
 
+saveOpt :: Parser String
+saveOpt = strOption $ long "saveRawResults" <> short 'r' <> help "Write the raw results in a given file"
+
 figFlag :: Parser (Maybe ChartOutput)
 #ifdef CHART
 figFlag = optional $ ChartOutput <$> outfile <*> outtype
@@ -99,7 +103,7 @@ staFlag :: Parser StaOut
 staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii <> help ("The standard output, can be: " ++ intercalate ", " staOutCons) <> completeWith staOutCons
 
 output :: Parser Output
-output = Output <$> sumFlag <*> staFlag <*> figFlag
+output = Output <$> sumFlag <*> optional saveOpt <*> staFlag <*> figFlag
 
 runCom :: Parser CommandTime
 runCom = Run <$> optional options <*> optional notOnlyOpt <*> output <*> optional (some libOpt) <*> benchWithCreation <*> benchLittleOne <*> graphsOpt
@@ -152,7 +156,7 @@ commandSpace = info ( semiOptional <**> helper)
      <> progDesc "Benchmark size of functions on different graphs libraries"
      <> header "Help")
   where
-    semiOptional = pure (fromMaybe (RunS Nothing Nothing (Output True Ascii Nothing) Nothing)) <*> optional space'
+    semiOptional = pure (fromMaybe (RunS Nothing Nothing (Output True Nothing Ascii Nothing) Nothing)) <*> optional space'
 
 commandDataSize :: ParserInfo CommandDataSize
 commandDataSize = info ((RunD <$> graphsOpt) <**> helper)
