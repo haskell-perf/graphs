@@ -15,7 +15,7 @@ where
 
 -- | The Bool is here to tell if we get it into the benchs
 -- The string is the type of graphs used
-data Grouped a = Simple Bool String a | Group [Grouped a] deriving (Show)
+data Grouped a = Simple Bool String a | Group [Grouped a] deriving (Show, Read)
 
 instance Functor Grouped where
   fmap f (Simple b n a) = Simple b n $ f a

@@ -3,13 +3,11 @@ module Command
   (
   Option (..),
   Output (..),
-  CommandTime (..),
+  Command (..),
   ListOption (..),
-  CommandSpace (..),
   StaOut (..),
   CommandDataSize (..),
-  commandTime,
-  commandSpace,
+  commandP,
   commandDataSize
   )
 
@@ -34,6 +32,7 @@ staOutCons = ["Ascii", "Html", "Null", "QuickComparison"]
 
 data Output = Output {
   sumOut :: Bool, -- ^ Output summary ?
+  saveToFile :: Maybe String,
   staOut :: StaOut, -- ^ Output standard ?
   figOut :: Maybe ChartOutput -- ^ Output figures ?
   }
@@ -45,10 +44,8 @@ type Graph = String
 data ListOption = Benchs | Libs
   deriving (Show, Eq)
 
-data CommandTime = List ListOption | Run (Maybe Option) (Maybe [String]) Output (Maybe [Lib]) Bool Bool [(Graph,Int)]
+data Command = List ListOption | Run (Maybe Option) (Maybe [String]) Output (Maybe [Lib]) Bool Bool [(Graph,Int)] | Render String ChartOutput
   deriving (Show, Eq)
-
-data CommandSpace = ListS ListOption | RunS (Maybe [String]) (Maybe [String]) Output (Maybe [Lib])
 
 newtype CommandDataSize = RunD [(Graph,Int)]
 
@@ -68,7 +65,7 @@ libOpt :: Parser Lib
 libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME" <> help "Benchmark only the library with LIBNAME. Can be used multiple times")
 
 graphOpt :: Parser (Graph,Int)
-graphOpt = option auto (long "graph" <> short 'g' <> metavar "GRAPH" <> help "graph to be tested")
+graphOpt = option auto (long "graph" <> short 'g' <> metavar "GRAPH" <> help "graph to be tested (IGNORED FOR SPACE BENCHMARKS)")
 
 graphsOpt :: Parser [(Graph,Int)]
 graphsOpt = many graphOpt
@@ -79,41 +76,54 @@ options = partOpt <|> (Only <$> onlyOpt)
 sumFlag :: Parser Bool
 sumFlag = flag True False $ long "noSummarize" <> short 's' <> help "When set, disable SUMMARIZE and ABSTRACT output"
 
+saveOpt :: Parser String
+saveOpt = strOption $ long "saveRawResults" <> short 'r' <> help "Write the raw results in a given file"
+
 figFlag :: Parser (Maybe ChartOutput)
 #ifdef CHART
-figFlag = optional $ ChartOutput <$> outfile <*> outtype
-  where
-    outfile = strOption $ long "chartfile" <> short 'f' <> metavar "FILENAME" <> help "Output file WITHOUT extension" <> value "result"
-    outtype = option auto $ long "chart" <> short 'c' <> metavar "OUTTYPE" <> help "Output type: Png or Svg"
+figFlag = optional figSFlag
 #else
 figFlag = pure Nothing
 #endif
 
+figSFlag :: Parser ChartOutput
+figSFlag = ChartOutput <$> outfile <*> outtype
+  where
+    outfile = strOption $ long "chartfile" <> short 'f' <> metavar "FILENAME" <> help "Output file WITHOUT extension" <> value "result"
+    outtype = option auto $ long "chart" <> short 'c' <> metavar "OUTTYPE" <> help "Output type: Png or Svg"
+
 benchWithCreation :: Parser Bool
-benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b' <> help "When set, will benchmark also the graph-creation function. See README"
+benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b' <> help "When set, will benchmark also the graph-creation function. See README (IGNORED FOR SPACE BENCHMARKS)"
 
 benchLittleOne :: Parser Bool
-benchLittleOne = flag False True $ long "dont-bench-little-ones" <> short 'i' <> help "When set, will only benchmark the largest graphs"
+benchLittleOne = flag False True $ long "dont-bench-little-ones" <> short 'i' <> help "When set, will only benchmark the largest graphs (IGNORED FOR SPACE BENCHMARKS)"
 
 staFlag :: Parser StaOut
 staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii <> help ("The standard output, can be: " ++ intercalate ", " staOutCons) <> completeWith staOutCons
 
 output :: Parser Output
-output = Output <$> sumFlag <*> staFlag <*> figFlag
+output = Output <$> sumFlag <*> optional saveOpt <*> staFlag <*> figFlag
 
-runCom :: Parser CommandTime
+runCom :: Parser Command
 runCom = Run <$> optional options <*> optional notOnlyOpt <*> output <*> optional (some libOpt) <*> benchWithCreation <*> benchLittleOne <*> graphsOpt
 
 listOpt :: Parser ListOption
 listOpt = flag' Benchs (long "benchs") <|> flag' Libs (long "libs")
 
-listCom :: Parser CommandTime
+listCom :: Parser Command
 listCom = List <$> listOpt
 
-command' :: Parser CommandTime
+renderGOpt :: Parser String
+renderGOpt = strArgument $ help "the file to load raw datas. Likely something exported with \" run -r \"" <> metavar "INFILE"
+
+renderGCom :: Parser Command
+renderGCom = Render <$> renderGOpt <*> figSFlag
+
+command' :: Parser Command
 command' = subparser
   ( command "list" list
     <> command "run" run
+    <> command "renderG" renderG
   )
   where
     run = info (runCom <**> helper)
@@ -124,35 +134,18 @@ command' = subparser
       ( fullDesc
      <> progDesc "List benchmarks"
      <> header "Help" )
-
-commandTime :: ParserInfo CommandTime
-commandTime = info (command' <**> helper)
+    renderG = info (renderGCom <**> helper)
       ( fullDesc
-     <> progDesc "Benchmark time of functions on different graphs libraries"
+     <> progDesc "Render data into a graph"
      <> header "Help" )
 
-space' :: Parser CommandSpace
-space' = subparser
-  ( command "list" list
-    <> command "run" run
-  )
-  where
-    list = info (ListS <$> listOpt <**> helper)
+commandP :: ParserInfo Command
+commandP = info (semiOptional <**> helper)
       ( fullDesc
-      <> progDesc "Compare benchmarks of graphs libraries"
-      <> header "Help" )
-    run = info ( (RunS <$> optional onlyOpt <*> optional notOnlyOpt <*> output <*> optional (some libOpt)) <**> helper)
-      ( fullDesc
-     <> progDesc "list benchmarks"
+     <> progDesc "Benchmark different graphs libraries"
      <> header "Help" )
-
-commandSpace :: ParserInfo CommandSpace
-commandSpace = info ( semiOptional <**> helper)
-      ( fullDesc
-     <> progDesc "Benchmark size of functions on different graphs libraries"
-     <> header "Help")
   where
-    semiOptional = pure (fromMaybe (RunS Nothing Nothing (Output True Ascii Nothing) Nothing)) <*> optional space'
+    semiOptional = pure (fromMaybe (Run Nothing Nothing (Output True Nothing Ascii Nothing) Nothing False False [])) <*> optional command'
 
 commandDataSize :: ParserInfo CommandDataSize
 commandDataSize = info ((RunD <$> graphsOpt) <**> helper)

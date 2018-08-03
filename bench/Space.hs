@@ -65,20 +65,20 @@ takeLastAfterBk w = case elemIndices '/' w of
                           x -> drop (1+last x) w
 
 useResults :: Output -> [Named (Named String)] -> [Grouped (Weight, Maybe String)] -> IO ()
-useResults (Output su st fi) notDef todo = do
+useResults flg notDef todo = do
   putStrLn "Note: results are in bytes"
   results <- mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
-#ifdef CHART
-  maybe (return ()) (\x -> mkChart "time" defaultGr show x $ Left $ catMaybes results) fi
-#endif
-  return ()
+  maybe (return ()) (\x -> writeFile x $ show results) $ saveToFile flg
+  case figOut flg of
+    Nothing -> return ()
+    (Just x) -> renderG x results
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
     mapped e = do
       putStrLn $ unwords [replicate 2 '#', showGrouped $ snd e]
       maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup (showGrouped $ snd e) descs)
       putStrLn ""
-      res <- printReport 2 st namedBenchs $ snd e
+      res <- printReport 2 (staOut flg) namedBenchs $ snd e
       forM_ (filter (\(_,(a,_)) -> a == showGrouped (snd e)) notDef) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)] ++ "."
       case res of
         Nothing -> return Nothing
@@ -86,10 +86,17 @@ useResults (Output su st fi) notDef todo = do
           let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
               in do
                 let onlyLargeBenchs = T.setBGroupT res''
-                when su $ do
+                when (sumOut flg) $ do
                   printBest "used the least amount of memory" onlyLargeBenchs
                   printAbstract "lighter" onlyLargeBenchs
                 return $ Just (showGrouped $ snd e, onlyLargeBenchs)
+
+renderG :: T.ChartOutput -> [Maybe (Named (T.Grouped [Named Double]))] -> IO ()
+#ifdef CHART
+renderG x results = mkChart "Space results" defaultGr show x $ Left $ catMaybes results
+#else
+renderG _ _ = return ()
+#endif
 
 -- | Print a report from the lists of benchmarks
 printReport :: Int -- ^ The number of # to write, must start with 2
@@ -162,13 +169,14 @@ tkChilds :: Grouped WeighResult -> Maybe [Grouped WeighResult]
 tkChilds = groupedToNamed >=> Just . snd
 
 main :: IO ()
-main = execParser commandSpace >>= main'
+main = execParser commandP >>= main'
 
-main' :: CommandSpace -> IO ()
-main' (ListS opt) = case opt of
+main' :: Command -> IO ()
+main' (List opt) = case opt of
                     Benchs -> putStr $ unlines $ benchsNames Nothing Nothing
                     Libs -> putStr $ unlines $ nub $ map fst listOfSuites
-main' (RunS only notonly flg libs) = do
+main' (Render fp opt) = readFile fp >>= renderG opt . read
+main' (Run only notonly flg libs _ _ _) = do
   printHeader defaultGr bN
   mainWeigh benchs (useResults flg (mapMaybe (\(n,Shadow s) -> either (\x -> Just (n,x)) (const Nothing) s ) filteredArr))
   where
@@ -178,12 +186,21 @@ main' (RunS only notonly flg libs) = do
     addCrea = if "creation" `elem` bN then (++ listOfCreation) else id
     filteredArr = filter (`isNameIn` bN) listOfSuites
 
-benchsNames :: Maybe [String] -> Maybe [String] -> [String]
-benchsNames only notonly = nub (map (\(_,Shadow s) -> either fst name s) (maybe id (\e -> filter (\s -> not $ s `isNameIn` e)) notonly $ maybe id (\e -> filter (`isNameIn` e)) only listOfSuites)) ++ listOfCreation'
+benchsNames :: Maybe Option -> Maybe [String] -> [String]
+benchsNames only notonly = nub $ useNotOnly $ useOnly extractedNames
   where
-    listOfCreation' = case only of
-                        Nothing -> ["creation"]
-                        Just e -> [ "creation" | "creation" `elem` e]
+    extractedNames = "creation" : map (\(_,Shadow s) -> either fst name s) listOfSuites
+    useOnly = case only of
+      Nothing -> id
+      (Just (Only lst)) -> filter (`elem` lst)
+      (Just (Part one' two)) -> \as ->
+          let one = one' + 1
+              per = length as `div` two
+              f   = if one' + 1 == two then id else take (one*per)
+           in drop ((one-1)*per) $ f as
+    useNotOnly = case notonly of
+                   Nothing -> id
+                   (Just lst) -> filter (`notElem` lst)
 
 isNameIn :: (a,ShadowedS) -> [String] -> Bool
 isNameIn (_,Shadow s) e = either fst name s `elem` e
