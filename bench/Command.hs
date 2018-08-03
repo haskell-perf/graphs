@@ -3,13 +3,11 @@ module Command
   (
   Option (..),
   Output (..),
-  CommandTime (..),
+  Command (..),
   ListOption (..),
-  CommandSpace (..),
   StaOut (..),
   CommandDataSize (..),
-  commandTime,
-  commandSpace,
+  commandP,
   commandDataSize
   )
 
@@ -46,10 +44,8 @@ type Graph = String
 data ListOption = Benchs | Libs
   deriving (Show, Eq)
 
-data CommandTime = List ListOption | Run (Maybe Option) (Maybe [String]) Output (Maybe [Lib]) Bool Bool [(Graph,Int)]
+data Command = List ListOption | Run (Maybe Option) (Maybe [String]) Output (Maybe [Lib]) Bool Bool [(Graph,Int)]
   deriving (Show, Eq)
-
-data CommandSpace = ListS ListOption | RunS (Maybe [String]) (Maybe [String]) Output (Maybe [Lib])
 
 newtype CommandDataSize = RunD [(Graph,Int)]
 
@@ -69,7 +65,7 @@ libOpt :: Parser Lib
 libOpt = strOption (long "lib" <> short 'l' <> metavar "LIBNAME" <> help "Benchmark only the library with LIBNAME. Can be used multiple times")
 
 graphOpt :: Parser (Graph,Int)
-graphOpt = option auto (long "graph" <> short 'g' <> metavar "GRAPH" <> help "graph to be tested")
+graphOpt = option auto (long "graph" <> short 'g' <> metavar "GRAPH" <> help "graph to be tested (IGNORED FOR SPACE BENCHMARKS)")
 
 graphsOpt :: Parser [(Graph,Int)]
 graphsOpt = many graphOpt
@@ -94,10 +90,10 @@ figFlag = pure Nothing
 #endif
 
 benchWithCreation :: Parser Bool
-benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b' <> help "When set, will benchmark also the graph-creation function. See README"
+benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b' <> help "When set, will benchmark also the graph-creation function. See README (IGNORED FOR SPACE BENCHMARKS)"
 
 benchLittleOne :: Parser Bool
-benchLittleOne = flag False True $ long "dont-bench-little-ones" <> short 'i' <> help "When set, will only benchmark the largest graphs"
+benchLittleOne = flag False True $ long "dont-bench-little-ones" <> short 'i' <> help "When set, will only benchmark the largest graphs (IGNORED FOR SPACE BENCHMARKS)"
 
 staFlag :: Parser StaOut
 staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii <> help ("The standard output, can be: " ++ intercalate ", " staOutCons) <> completeWith staOutCons
@@ -105,16 +101,16 @@ staFlag = option auto $ long "standardOutput" <> short 'd' <> value Ascii <> hel
 output :: Parser Output
 output = Output <$> sumFlag <*> optional saveOpt <*> staFlag <*> figFlag
 
-runCom :: Parser CommandTime
+runCom :: Parser Command
 runCom = Run <$> optional options <*> optional notOnlyOpt <*> output <*> optional (some libOpt) <*> benchWithCreation <*> benchLittleOne <*> graphsOpt
 
 listOpt :: Parser ListOption
 listOpt = flag' Benchs (long "benchs") <|> flag' Libs (long "libs")
 
-listCom :: Parser CommandTime
+listCom :: Parser Command
 listCom = List <$> listOpt
 
-command' :: Parser CommandTime
+command' :: Parser Command
 command' = subparser
   ( command "list" list
     <> command "run" run
@@ -129,34 +125,13 @@ command' = subparser
      <> progDesc "List benchmarks"
      <> header "Help" )
 
-commandTime :: ParserInfo CommandTime
-commandTime = info (command' <**> helper)
+commandP :: ParserInfo Command
+commandP = info (semiOptional <**> helper)
       ( fullDesc
-     <> progDesc "Benchmark time of functions on different graphs libraries"
+     <> progDesc "Benchmark different graphs libraries"
      <> header "Help" )
-
-space' :: Parser CommandSpace
-space' = subparser
-  ( command "list" list
-    <> command "run" run
-  )
   where
-    list = info (ListS <$> listOpt <**> helper)
-      ( fullDesc
-      <> progDesc "Compare benchmarks of graphs libraries"
-      <> header "Help" )
-    run = info ( (RunS <$> optional onlyOpt <*> optional notOnlyOpt <*> output <*> optional (some libOpt)) <**> helper)
-      ( fullDesc
-     <> progDesc "list benchmarks"
-     <> header "Help" )
-
-commandSpace :: ParserInfo CommandSpace
-commandSpace = info ( semiOptional <**> helper)
-      ( fullDesc
-     <> progDesc "Benchmark size of functions on different graphs libraries"
-     <> header "Help")
-  where
-    semiOptional = pure (fromMaybe (RunS Nothing Nothing (Output True Nothing Ascii Nothing) Nothing)) <*> optional space'
+    semiOptional = pure (fromMaybe (Run Nothing Nothing (Output True Nothing Ascii Nothing) Nothing False False [])) <*> optional command'
 
 commandDataSize :: ParserInfo CommandDataSize
 commandDataSize = info ((RunD <$> graphsOpt) <**> helper)

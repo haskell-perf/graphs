@@ -194,9 +194,9 @@ benchmarkWithoutOutput bm = do
     defaultConfig' = defaultConfig {verbosity = Quiet, timeLimit = 10}
 
 main :: IO ()
-main = execParser commandTime >>= main'
+main = execParser commandP >>= main'
 
-main' :: CommandTime -> IO ()
+main' :: Command -> IO ()
 main' opts
   = case opts of
       List listOpt -> case listOpt of

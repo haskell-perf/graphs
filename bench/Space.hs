@@ -163,13 +163,13 @@ tkChilds :: Grouped WeighResult -> Maybe [Grouped WeighResult]
 tkChilds = groupedToNamed >=> Just . snd
 
 main :: IO ()
-main = execParser commandSpace >>= main'
+main = execParser commandP >>= main'
 
-main' :: CommandSpace -> IO ()
-main' (ListS opt) = case opt of
+main' :: Command -> IO ()
+main' (List opt) = case opt of
                     Benchs -> putStr $ unlines $ benchsNames Nothing Nothing
                     Libs -> putStr $ unlines $ nub $ map fst listOfSuites
-main' (RunS only notonly flg libs) = do
+main' (Run only notonly flg libs _ _ _) = do
   printHeader defaultGr bN
   mainWeigh benchs (useResults flg (mapMaybe (\(n,Shadow s) -> either (\x -> Just (n,x)) (const Nothing) s ) filteredArr))
   where
@@ -179,12 +179,21 @@ main' (RunS only notonly flg libs) = do
     addCrea = if "creation" `elem` bN then (++ listOfCreation) else id
     filteredArr = filter (`isNameIn` bN) listOfSuites
 
-benchsNames :: Maybe [String] -> Maybe [String] -> [String]
-benchsNames only notonly = nub (map (\(_,Shadow s) -> either fst name s) (maybe id (\e -> filter (\s -> not $ s `isNameIn` e)) notonly $ maybe id (\e -> filter (`isNameIn` e)) only listOfSuites)) ++ listOfCreation'
+benchsNames :: Maybe Option -> Maybe [String] -> [String]
+benchsNames only notonly = useNotOnly $ useOnly extractedNames
   where
-    listOfCreation' = case only of
-                        Nothing -> ["creation"]
-                        Just e -> [ "creation" | "creation" `elem` e]
+    extractedNames = "creation" : map (\(_,Shadow s) -> either fst name s) listOfSuites
+    useOnly = case only of
+      Nothing -> id
+      (Just (Only lst)) -> filter (`elem` lst)
+      (Just (Part one' two)) -> \as ->
+          let one = one' + 1
+              per = length as `div` two
+              f   = if one' + 1 == two then id else take (one*per)
+           in drop ((one-1)*per) $ f as
+    useNotOnly = case notonly of
+                   Nothing -> id
+                   (Just lst) -> filter (`notElem` lst)
 
 isNameIn :: (a,ShadowedS) -> [String] -> Bool
 isNameIn (_,Shadow s) e = either fst name s `elem` e
