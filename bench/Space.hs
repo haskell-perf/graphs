@@ -93,7 +93,7 @@ useResults flg notDef todo = do
 
 renderG :: T.ChartOutput -> [Maybe (Named (T.Grouped [Named Double]))] -> IO ()
 #ifdef CHART
-renderG x results = mkChart "Space results" defaultGr show x $ Left $ catMaybes results
+renderG x results = mkChart "Space results" defaultGr show x $ Left $ sortBy (on compare fst) $ catMaybes results
 #else
 renderG _ _ = return ()
 #endif

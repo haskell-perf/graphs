@@ -112,7 +112,7 @@ genReport gr flg arr = do
 
 renderG :: [(String,Int)] -> ChartOutput -> [Maybe (Name, Grouped [(Name, (Double, Double))])] -> IO ()
 #ifdef CHART
-renderG gr x results = mkChart "Time results" gr secs x $ Right $ catMaybes results
+renderG gr x results = mkChart "Time results" gr secs x $ Right $ sortBy (on compare fst) $ catMaybes results
 #else
 renderG _ _ _ = return ()
 #endif
@@ -210,7 +210,7 @@ main' opts
                         Libs -> putStr $ unlines $ nub $ map fst listOfSuites ++ map fst (listOfCreation False [])
       Render filep dg -> do
         (gr,res) <- span (/='\n') <$> readFile filep
-        renderG (read gr) dg (read res)
+        renderG (read gr) dg  $ read res
       Run opt nottodo' flg libs benchWithCreation dontBenchLittleOnes gr' -> do
         let modifyL = case libs of
               Nothing -> id
@@ -226,7 +226,7 @@ main' opts
                                        per = length grNames `div` two
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grNames
-            samples = filter (\(_,n) -> let nam = either fst showBenchName n in nam `elem` todo && nam `notElem` nottodo) grList'
+            samples = sortBy (on compare (either fst showBenchName . snd)) $ filter (\(_,n) -> let nam = either fst showBenchName n in nam `elem` todo && nam `notElem` nottodo) grList'
         unless (staOut flg == QuickComparison) $ printHeader gr $ nub $ map (either fst showBenchName . snd) samples
         genReport gr flg samples
   where

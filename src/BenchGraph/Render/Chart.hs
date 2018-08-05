@@ -58,7 +58,11 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
         ls = def { _font_size = 20 , _font_weight = FontWeightBold }
 
         -- Infor about graphs used
-        graphsInfo = setPickFn nullPickFn $ label ls' HTA_Centre VTA_Centre $ (++) "Graphs used: " $ intercalate ", " $ map (\((n,f),xs) -> unwords [n,"with",show $ snd $ f $ last xs,"vertices"]) $ graphs True gparam
+        graphsInfo = setPickFn nullPickFn $ label ls' HTA_Centre VTA_Centre $ (++) "Graphs used: " $ intercalate ", " $ map (\((n,f),xs) ->
+          case n of
+            "RealLife" -> unwords [n,"number",show $ snd $ f $ last xs]
+            _ -> unwords [n,"with",show $ snd $ f $ last xs,"vertices"])
+            $ graphs True gparam
         ls' = def { _font_size = 15 , _font_weight = FontWeightNormal }
 
         -- Recreate the legend
