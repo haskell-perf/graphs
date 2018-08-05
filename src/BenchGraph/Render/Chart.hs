@@ -24,6 +24,12 @@ import BenchGraph.Named
 import BenchGraph.Render.Common
 import BenchGraph.Utils
 
+fixGap1 :: Double
+fixGap1 = 10
+
+fixGap2 :: Double
+fixGap2 = 20
+
 mkChart :: String
         -- ^ The name of the benchs
         -> [(String,Int)]
@@ -68,6 +74,7 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
 
     layout e = layout_title .~ fst e
       $ layout_title_style . font_size .~ 10
+      $ layout_x_axis . laxis_style . axis_label_style . font_size .~ 8
       $ layout_x_axis . laxis_generate .~ autoIndexAxis (M.keys mapVal)
       $ layout_y_axis . laxis_override .~ (over axis_labels (\x -> [map (\(y,_) -> (y,s $ 10**(y - fromIntegral expo))) $ head x]) . axisGridHide ) -- Change the label with the corresponding 10 power
       $ layout_left_axis_visibility . axis_show_ticks .~ False
@@ -82,13 +89,13 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
           $ plot_bars_values .~ addIndexes (map elems $ elems mapVal)
           $ plot_bars_singleton_width .~ 100
           $ plot_bars_style .~ BarsClustered
-          $ plot_bars_spacing .~ BarsFixGap 30 5
+          $ plot_bars_spacing .~ BarsFixGap fixGap1 fixGap2
           $ plot_bars_item_styles .~ map snd (filter (\(n,_) -> n `elem` libsName) colors)
           $ def
           where
             libsName = tkLibsName $ either id (map $ fmap fst) <$> snd e
             colors = zip (S.toList is)
-              $ take (S.size is) $ map (\c -> (solidFillStyle c, Just (solidLine 1.0 $ opaque black))) (cycle defaultColorSeq)
+              $ take (S.size is) $ map (\c -> (solidFillStyle c, Just (solidLine 0.5 $ opaque black))) (cycle defaultColorSeq)
 
         (expo,mapVal,std) = mkValue $ snd e
 
@@ -113,7 +120,7 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
 
     barsErrs v = plot_errbars_values .~ mkErrPts v
       $ plot_errbars_line_style .~ solidLine 1 (opaque black)
-      $ plot_errbars_tick_length .~ 7
+      $ plot_errbars_tick_length .~ 2
       $ def
       where
         mkErrPts = map (\(a,b,c) -> ErrPoint (ErrValue 0 0 0) (ErrValue a b c)) . concat -- ErrValue for x will be set after
@@ -133,7 +140,7 @@ updateRender i allBarPoints p pmap = mapM_ clusteredErrBars vals
         offset j = fromIntegral (2*j-nys) * width/2 + width/2
 
         vals  = addIndexes $ group i $ _plot_errbars_values p
-        width = max (minXInterval - 30) 5 / fromIntegral nys
+        width = max (minXInterval - fixGap1) fixGap2 / fromIntegral nys
         minXInterval = let diffs = zipWith (-) (tail mxs) mxs
                        in if null diffs
                             then 100
