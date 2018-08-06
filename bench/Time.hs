@@ -226,12 +226,12 @@ main' opts
                                        per = length grNames `div` two
                                        f   = if one' + 1 == two then id else take (one*per)
                                     in drop ((one-1)*per) $ f grNames
-            samples = sortBy (on compare (either fst showBenchName . snd)) $ filter (\(_,n) -> let nam = either fst showBenchName n in nam `elem` todo && nam `notElem` nottodo) grList'
+            samples = filter (\(_,n) -> let nam = either fst showBenchName n in nam `elem` todo && nam `notElem` nottodo) grList'
         unless (staOut flg == QuickComparison) $ printHeader gr $ nub $ map (either fst showBenchName . snd) samples
         genReport gr flg samples
   where
     grNames = nub $ map (either fst showBenchName . snd) $ grList False False defaultGr
-    grList benchWithCreation dontBenchLittleOnes gr =
+    grList benchWithCreation dontBenchLittleOnes gr = sortBy (on compare (either fst showBenchName . snd)) $
       map (fmap (\(Shadow s) -> second (allBench benchWithCreation dontBenchLittleOnes gr) s)) listOfSuites
       ++ listOfCreation dontBenchLittleOnes gr
     mkGr gr' = case gr' of

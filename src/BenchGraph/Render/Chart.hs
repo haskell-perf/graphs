@@ -25,10 +25,10 @@ import BenchGraph.Render.Common
 import BenchGraph.Utils
 
 fixGap1 :: Double
-fixGap1 = 10
+fixGap1 = 15
 
 fixGap2 :: Double
-fixGap2 = 20
+fixGap2 = 10
 
 mkChart :: String
         -- ^ The name of the benchs
@@ -48,14 +48,14 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
   where
     -- Group the benchs per line of 4 items
     grouped = either (map (fmap (fmap Left))) (map (fmap (fmap Right))) grouped'
-    grp = group 4 grouped
+    grp = group 3 grouped
 
     grid = wideAbove title' $ wideAbove graphsInfo $ wideAbove legend' $ aboveN $ map (besideN . map (layoutToGrid . set layout_legend Nothing . layout)) grp
 
       where
         -- Custom title
         title' = setPickFn nullPickFn $ label ls HTA_Centre VTA_Centre title
-        ls = def { _font_size = 20 , _font_weight = FontWeightBold }
+        ls = def { _font_size = 25 , _font_weight = FontWeightBold }
 
         -- Infor about graphs used
         graphsInfo = setPickFn nullPickFn $ label ls' HTA_Centre VTA_Centre $ (++) "Graphs used: " $ intercalate ", " $ map (\((n,f),xs) ->
@@ -63,24 +63,27 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
             "RealLife" -> unwords [n,"number",show $ snd $ f $ last xs]
             _ -> unwords [n,"with",show $ snd $ f $ last xs,"vertices"])
             $ graphs True gparam
-        ls' = def { _font_size = 15 , _font_weight = FontWeightNormal }
+        ls' = def { _font_size = 20 , _font_weight = FontWeightNormal }
 
         -- Recreate the legend
         legend' = setPickFn nullPickFn $ toRenderable $ Legend legendStyle legendInfo
         hhgrp = Simple True "" $ Left $ zip (S.toList is) (replicate (S.size is) 0) -- False data to generate the legend
-        legendStyle = fromJust $ _layout_legend $ layout ("",hhgrp)
+        legendStyle = legend_label_style . font_size .~ 17 $ fromJust $ _layout_legend $ layout ("",hhgrp)
         legendInfo = _plot_legend $ head $ _layout_plots $ layout ("",hhgrp)
 
     -- Render to svg
     (fo,foExt) = case chopt of
-                   Png -> (def, "png")
-                   Svg -> (def {_fo_format = SVG},"svg")
+                   Png -> (def', "png")
+                   Svg -> (def' {_fo_format = SVG},"svg")
+    def' = def {_fo_size = (1200,1800)}
 
     layout e = layout_title .~ fst e
-      $ layout_title_style . font_size .~ 10
-      $ layout_x_axis . laxis_style . axis_label_style . font_size .~ 8
+      $ layout_title_style . font_size .~ 17
+      $ layout_left_axis_visibility . axis_show_ticks .~ True
+      $ layout_y_axis . laxis_style . axis_line_style . line_width .~ 0.5
+      $ layout_x_axis . laxis_style . axis_label_style . font_size .~ 15
       $ layout_x_axis . laxis_generate .~ autoIndexAxis (M.keys mapVal)
-      $ layout_y_axis . laxis_override .~ (over axis_labels (\x -> [map (\(y,_) -> (y,s $ 10**(y - fromIntegral expo))) $ head x]) . axisGridHide ) -- Change the label with the corresponding 10 power
+      $ layout_y_axis . laxis_override .~ over axis_labels (\x -> [map (\(y,_) -> (y,s $ 10**(y - fromIntegral expo))) $ head x]) -- Change the label with the corresponding 10 power
       $ layout_left_axis_visibility . axis_show_ticks .~ False
       $ layout_plots .~ lay_plots
       $ def :: Layout PlotIndex Double
@@ -124,7 +127,7 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
 
     barsErrs v = plot_errbars_values .~ mkErrPts v
       $ plot_errbars_line_style .~ solidLine 1 (opaque black)
-      $ plot_errbars_tick_length .~ 2
+      $ plot_errbars_tick_length .~ 7
       $ def
       where
         mkErrPts = map (\(a,b,c) -> ErrPoint (ErrValue 0 0 0) (ErrValue a b c)) . concat -- ErrValue for x will be set after
@@ -206,4 +209,3 @@ drawErrBar0 ps (ErrPoint (ErrValue _ x _) (ErrValue yl _ yh)) = do
                     <> lineTo' (x+tl) yl
                     <> moveTo' (x-tl) yh
                     <> lineTo' (x+tl) yh
-

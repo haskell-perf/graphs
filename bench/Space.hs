@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
 {-# LANGUAGE CPP #-}
 
-import Data.List (nub, nubBy, sortBy, elemIndices)
+import Data.List (nub, nubBy, sort, sortBy, elemIndices)
 import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes, isJust)
 import Data.Int (Int64)
@@ -189,7 +189,7 @@ main' (Run only notonly flg libs _ _ _) = do
 benchsNames :: Maybe Option -> Maybe [String] -> [String]
 benchsNames only notonly = nub $ useNotOnly $ useOnly extractedNames
   where
-    extractedNames = "creation" : map (\(_,Shadow s) -> either fst name s) listOfSuites
+    extractedNames = sort $ "creation" : map (\(_,Shadow s) -> either fst name s) listOfSuites
     useOnly = case only of
       Nothing -> id
       (Just (Only lst)) -> filter (`elem` lst)
