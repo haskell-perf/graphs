@@ -30,11 +30,22 @@ The benchmarks were realised using `Stack` and the `stack.yaml` configuration
 ### Benchmarking routine
 
 For the main results, we produce a generic list of edges (in ascending orders, but none of the libraries rely on this), create a graph from it, fully evaluate this graph to Normal Form, then pass it to then benchmarked function.
-This may not reflect the reality, so we produced <https://github.com/haskell-perf/graphs/blob/master/results/TIME-creation.md> where the creation time (from a list of edges) is taken into account.
+
+#### Creation
+
+This may not reflect the reality, so we produced an alternative table where creation time (from a list of edges) is taken into account:
+
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME-creation.svg?sanitize=true)
+
+<https://github.com/haskell-perf/graphs/blob/master/results/TIME-creation.md> 
 
 ### The list of edges
 
-Containers, Fgl and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced <https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md> where we used the alga representation instead of a list of edges.
+Containers, Fgl and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced an alternative table where we used the alga representation instead of a list of edges:
+
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME-extra.svg?sanitize=true)
+
+<https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md>
 
 ## Some words about graphs
 The functions are benchmarked against:
