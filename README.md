@@ -1,10 +1,8 @@
 # Benchmark suite for graph libraries
 
-## Warning: Under Active Developement
-This is being developed as part of the Google Summer of Code 2018.
-Please do not expect anything from the code for now. 
-
-Feel free to open an issue anyway :)
+## Intro
+This project was developed as part of the Google Summer of Code 2018.
+Feel free to open an issue :)
 
 ## Results
 Current results of `cabal bench time` and `cabal bench space` can be found here: https://travis-ci.org/haskell-perf/graphs
@@ -21,7 +19,7 @@ You can customize your build using several cabal flags (all of them are on by de
 
 * Time: will produce a benchmark suite using `criterion`.
 * Space: will produce a benchmark suite using `weigh`.
-* Datasize: will produce a benchmark suite using `ghc-datasize`.
+* Datasize: will produce a benchmark suite using `ghc-datasize` (disabled by default).
 
 ### Libraries
 

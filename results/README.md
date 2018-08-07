@@ -14,7 +14,7 @@ In this folder, you will find the lastest benchmarks of 4 haskell graphs librari
 * [FGL v5.6.0.0](https://hackage.haskell.org/package/fgl-5.6.0.0)
 * [Hash-Graph (not yet on hackage)](https://github.com/patrickdoc/hash-graph)
 
-The benchmarks were realised using `Stack` and the `stack.newest.yaml` configuration
+The benchmarks were realised using `Stack` and the `stack.yaml` configuration
 
 ## Tools
 
@@ -27,7 +27,7 @@ The benchmarks were realised using `Stack` and the `stack.newest.yaml` configura
 ### Benchmarking routine
 
 For the main results, we produce a generic list of edges (in ascending orders, but none of the libraries rely on this), create a graph from it, fully evaluate this graph to Normal Form, then pass it to then benchmarked function.
-This may not reflect the reality, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-creation.md where the creation time (from a list of edges) is taken into account.
+This may not reflect the reality, so we produced <https://github.com/haskell-perf/graphs/blob/master/results/TIME-creation.md> where the creation time (from a list of edges) is taken into account.
 
 ### The list of edges
 
