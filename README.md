@@ -87,6 +87,14 @@ The following graphs are supported:
 * Clique
 * RealLife (Note that because we have a limited set, you cannot request more than 4 real-life graphs)
 
+### Charts
+
+One can produce a chart from the results, use:
+
+```
+  -f,--chartfile FILENAME  Output file WITHOUT extension
+  -c,--chart OUTTYPE       Output type: Png or Svg
+```
 
 ## About implementation
 
