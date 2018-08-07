@@ -1,9 +1,12 @@
 ﻿## Results
 
 * Time: https://github.com/haskell-perf/graphs/blob/master/results/TIME.md
+
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME.svg?sanitize=true)
+
 * Space: https://github.com/haskell-perf/graphs/blob/master/results/SPACE.md
 
-Note: Some functions of Data.Graph was not in the original library (`edgeCount` and `hasEdge`), their defintion can be found in `bench/Containers/Graph.hs`
+Note: Some functions of some libraries are not implemented so we use a "hand-made" implementation. Defintions can be found in `bench/`. Suggestions are welcome!
 
 ## What is benchmarked
 
@@ -31,7 +34,7 @@ This may not reflect the reality, so we produced <https://github.com/haskell-per
 
 ### The list of edges
 
-Containers, Fgl and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md where we used the alga representation instead of a list of edges.
+Containers, Fgl and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced <https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md> where we used the alga representation instead of a list of edges.
 
 ## Some words about graphs
 The functions are benchmarked against:
@@ -56,9 +59,11 @@ The functions are benchmarked against:
 The two first graphs are built with successive ten powers vertices. Here, with 1, 10, 100 and 1000 vertices.
 
 ### Types
+
 Libraries are benchmarked against graphs with *Int* vertices.
 
 ## About arguments
+
 All the functions are tested with arguments in the _domain_ of the graph, where applicable: unless it is mentioned, edges and vertices generated for the test can be in the complete graph with the same number of vertices.
 
 ## Remarks

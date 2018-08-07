@@ -5,6 +5,9 @@ This project was developed as part of the Google Summer of Code 2018.
 Feel free to open an issue :)
 
 ## Results
+
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME.svg?sanitize=true)
+
 Current results of `cabal bench time` and `cabal bench space` can be found here: https://travis-ci.org/haskell-perf/graphs
 
 Results on bigger graphs and with more beautiful output can be found here: <https://github.com/haskell-perf/graphs/tree/master/results>
