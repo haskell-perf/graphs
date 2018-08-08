@@ -1,3 +1,9 @@
+The content of this file was obtained with:
+
+```
+$ time run -g '("Clique",4)' -g '("Mesh",4)' -g '("RealLife",4)' -d Html -c
+```
+
 # Benchmarks
 
 Doing:

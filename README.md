@@ -64,9 +64,13 @@ The benchmark suite `datasize` will use `ghc-datasize` to calculate size of grap
 ### Arguments
 
 Command-line arguments are self-explaining, but the `--graph "(String,Int)"` requires some explanations:
-We test functions against standards graphs, and they are built with ten-powers vertices. For standard graphs, the Int supplied is the upper-bound of the ten-powers. So `"(Path,100)"` will generate the `Path` with `1`, `10` and `100` vertices. You can specify several graphs.
+Standards graphs are built with ten-powers vertices. The `Int` supplied is the upper-bound of these ten-powers. So `"(Path,3)"` will generate three `Path` with `1`, `10` and `100` vertices. You can specify several graphs.
 
-The default is: `[("Mesh",3),("Clique",3)]`
+You can force the suite to use only bigger graphs with the `-i` flag.
+
+The default is: `[("Mesh",3),("Clique",3)]`.
+
+For real-life graphs (see below) you cannot use an integer greater than 4.
 
 #### Real-life graphs
 
@@ -139,7 +143,6 @@ data Suite g = forall i o. NFData o => Suite
 ### BenchGraph.Suites
 
 This module defines common builders for `Suite`, and particularly provides stable names for standard operations on graphs, and thus allows for simpler comparison (remember, benchmarks are identified by their _name_).
-
 
 ### Benchmarking with creation?
 
