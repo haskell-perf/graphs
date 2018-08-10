@@ -79,11 +79,11 @@ genReport gr flg arr = do
   unless notquickComp $ putStrLn $ let comp = head libNames
                                        oth =  head $ tail libNames
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
-  results <- mapM mapped $ nubBy (liftExtract2 (==)) refinedarr
+  results <- fmap catMaybes $ mapM mapped $ nubBy (liftExtract2 (==)) refinedarr
   maybe (return ()) (\x -> writeFile x $ unlines [show gr,show results]) $ saveToFile flg
   case figOut flg of
     Nothing -> return ()
-    (Just x) -> renderG gr x results
+    (Just x) -> renderG gr x  results
   where
     mapped e = do
       let bname = showBenchName $ snd e
@@ -110,9 +110,9 @@ genReport gr flg arr = do
     notquickComp = staOut flg /= QuickComparison
     (noimpl,refinedarr) = partitionEithers $ map stripOutEither arr
 
-renderG :: [(String,Int)] -> ChartOutput -> [Maybe (Name, Grouped [(Name, (Double, Double))])] -> IO ()
+renderG :: [(String,Int)] -> ChartOutput -> [(Name, Grouped [(Name, (Double, Double))])] -> IO ()
 #ifdef CHART
-renderG gr x results = mkChart "Time results" gr secs x $ Right $ sortBy (on compare fst) $ catMaybes results
+renderG gr x results = mkChart "Time results" gr secs x $ Right $ sortBy (on compare fst) results
 #else
 renderG _ _ _ = return ()
 #endif

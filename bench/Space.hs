@@ -67,7 +67,7 @@ takeLastAfterBk w = case elemIndices '/' w of
 useResults :: Output -> [Named (Named String)] -> [Grouped (Weight, Maybe String)] -> IO ()
 useResults flg notDef todo = do
   putStrLn "Note: results are in bytes"
-  results <- mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
+  results <- fmap catMaybes $ mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
   maybe (return ()) (\x -> writeFile x $ show results) $ saveToFile flg
   case figOut flg of
     Nothing -> return ()
@@ -91,9 +91,9 @@ useResults flg notDef todo = do
                   printAbstract "lighter" onlyLargeBenchs
                 return $ Just (showGrouped $ snd e, onlyLargeBenchs)
 
-renderG :: T.ChartOutput -> [Maybe (Named (T.Grouped [Named Double]))] -> IO ()
+renderG :: T.ChartOutput -> [Named (T.Grouped [Named Double])] -> IO ()
 #ifdef CHART
-renderG x results = mkChart "Space results" defaultGr show x $ Left $ sortBy (on compare fst) $ catMaybes results
+renderG x results = mkChart "Space results" defaultGr show x $ Left $ sortBy (on compare fst) results
 #else
 renderG _ _ = return ()
 #endif
