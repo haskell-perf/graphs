@@ -35,6 +35,7 @@ env:
 - DO=TIME STEP=0
 - DO=TIME STEP=1
 - DO=TIME STEP=2
+- DO=TIME STEP=3
 - DO=SPACE
 
 install:
@@ -45,7 +46,7 @@ script:
 # Build the package, its tests, and its docs and run the tests
 - stack --no-terminal bench --no-run-benchmarks
 - PREFIX=.stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build
-- if [ $DO = SPACE ]; then travis_wait 30 $PREFIX/space/space; else timeout 45m $PREFIX/time/time run --part $STEP --of 3  -g '("Mesh",2)' -g '("Clique",2)' ; fi;
+- if [ $DO = SPACE ]; then travis_wait 30 $PREFIX/space/space; else $PREFIX/time/time run --part $STEP --of 4  -g '("Mesh",2)' -g '("Clique",2)' ; fi;
 
 before_install:
 # Download and unpack the stack executable
