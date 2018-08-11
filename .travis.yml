@@ -42,7 +42,7 @@ install:
 - stack --no-terminal --install-ghc bench --only-dependencies
 
 script:
-- travis_wait 45 timeout 45m ./travis.sh
+- timeout 45m ./travis.sh
 
 before_install:
 # Download and unpack the stack executable
