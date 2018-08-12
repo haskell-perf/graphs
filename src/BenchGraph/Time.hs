@@ -29,13 +29,12 @@ benchSuite :: (GraphImpl g, NFData g, NFData o)
 benchSuite benchCreation algorithm' inputs' gfunc size = bgroup (show sizeName) cases
   where
     (edges, sizeName) = gfunc size
-    !graph = case edges of
+    graph = case edges of
               [] -> const mkVertex
               _ -> mkGraph
     cases = if benchCreation
                then [ bench name' $ nf (algorithm' i . graph) $!! edges | (name',i) <- inputs' edges ]
-               else let !gr = graph edges
-                     in [ bench name' $ nf (algorithm' i) $!! gr | (name',i) <- inputs' edges ]
+               else [ bench name' $ nf (algorithm' i) $!! graph edges | (name',i) <- inputs' edges ]
 
 allBench :: (GraphImpl g, NFData g)
          => Bool -- ^ Do we bench creation of the graph ?

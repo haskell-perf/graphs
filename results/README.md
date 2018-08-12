@@ -1,9 +1,12 @@
 ﻿## Results
 
 * Time: https://github.com/haskell-perf/graphs/blob/master/results/TIME.md
+
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME.svg?sanitize=true)
+
 * Space: https://github.com/haskell-perf/graphs/blob/master/results/SPACE.md
 
-Note: Some functions of Data.Graph was not in the original library (`edgeCount` and `hasEdge`), their defintion can be found in `bench/Containers/Graph.hs`
+Note: Some functions of some libraries are not implemented so we use a "hand-made" implementation. Defintions can be found in `bench/`. Suggestions are welcome!
 
 ## What is benchmarked
 
@@ -14,7 +17,7 @@ In this folder, you will find the lastest benchmarks of 4 haskell graphs librari
 * [FGL v5.6.0.0](https://hackage.haskell.org/package/fgl-5.6.0.0)
 * [Hash-Graph (not yet on hackage)](https://github.com/patrickdoc/hash-graph)
 
-The benchmarks were realised using `Stack` and the `stack.newest.yaml` configuration
+The benchmarks were realised using `Stack` and the `stack.yaml` configuration
 
 ## Tools
 
@@ -27,11 +30,22 @@ The benchmarks were realised using `Stack` and the `stack.newest.yaml` configura
 ### Benchmarking routine
 
 For the main results, we produce a generic list of edges (in ascending orders, but none of the libraries rely on this), create a graph from it, fully evaluate this graph to Normal Form, then pass it to then benchmarked function.
-This may not reflect the reality, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-creation.md where the creation time (from a list of edges) is taken into account.
+
+#### Creation
+
+This may not reflect the reality, so we produced an alternative table where creation time (from a list of edges) is taken into account:
+
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME-creation.svg?sanitize=true)
+
+<https://github.com/haskell-perf/graphs/blob/master/results/TIME-creation.md> 
 
 ### The list of edges
 
-Containers, Fgl and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md where we used the alga representation instead of a list of edges.
+Containers, Fgl and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced an alternative table where we used the alga representation instead of a list of edges:
+
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME-extra.svg?sanitize=true)
+
+<https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md>
 
 ## Some words about graphs
 The functions are benchmarked against:
@@ -56,9 +70,11 @@ The functions are benchmarked against:
 The two first graphs are built with successive ten powers vertices. Here, with 1, 10, 100 and 1000 vertices.
 
 ### Types
+
 Libraries are benchmarked against graphs with *Int* vertices.
 
 ## About arguments
+
 All the functions are tested with arguments in the _domain_ of the graph, where applicable: unless it is mentioned, edges and vertices generated for the test can be in the complete graph with the same number of vertices.
 
 ## Remarks

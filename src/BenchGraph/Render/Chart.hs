@@ -24,6 +24,12 @@ import BenchGraph.Named
 import BenchGraph.Render.Common
 import BenchGraph.Utils
 
+fixGap1 :: Double
+fixGap1 = 15
+
+fixGap2 :: Double
+fixGap2 = 10
+
 mkChart :: String
         -- ^ The name of the benchs
         -> [(String,Int)]
@@ -42,34 +48,42 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
   where
     -- Group the benchs per line of 4 items
     grouped = either (map (fmap (fmap Left))) (map (fmap (fmap Right))) grouped'
-    grp = group 4 grouped
+    grp = group 3 grouped
 
     grid = wideAbove title' $ wideAbove graphsInfo $ wideAbove legend' $ aboveN $ map (besideN . map (layoutToGrid . set layout_legend Nothing . layout)) grp
 
       where
         -- Custom title
         title' = setPickFn nullPickFn $ label ls HTA_Centre VTA_Centre title
-        ls = def { _font_size = 20 , _font_weight = FontWeightBold }
+        ls = def { _font_size = 25 , _font_weight = FontWeightBold }
 
         -- Infor about graphs used
-        graphsInfo = setPickFn nullPickFn $ label ls' HTA_Centre VTA_Centre $ (++) "Graphs used: " $ intercalate ", " $ map (\((n,f),xs) -> unwords [n,"with",show $ snd $ f $ last xs,"vertices"]) $ graphs True gparam
-        ls' = def { _font_size = 15 , _font_weight = FontWeightNormal }
+        graphsInfo = setPickFn nullPickFn $ label ls' HTA_Centre VTA_Centre $ (++) "Graphs used: " $ intercalate ", " $ map (\((n,f),xs) ->
+          case n of
+            "RealLife" -> unwords [n,"number",show $ snd $ f $ last xs]
+            _ -> unwords [n,"with",show $ snd $ f $ last xs,"vertices"])
+            $ graphs True gparam
+        ls' = def { _font_size = 20 , _font_weight = FontWeightNormal }
 
         -- Recreate the legend
         legend' = setPickFn nullPickFn $ toRenderable $ Legend legendStyle legendInfo
         hhgrp = Simple True "" $ Left $ zip (S.toList is) (replicate (S.size is) 0) -- False data to generate the legend
-        legendStyle = fromJust $ _layout_legend $ layout ("",hhgrp)
+        legendStyle = legend_label_style . font_size .~ 17 $ fromJust $ _layout_legend $ layout ("",hhgrp)
         legendInfo = _plot_legend $ head $ _layout_plots $ layout ("",hhgrp)
 
     -- Render to svg
     (fo,foExt) = case chopt of
-                   Png -> (def, "png")
-                   Svg -> (def {_fo_format = SVG},"svg")
+                   Png -> (def', "png")
+                   Svg -> (def' {_fo_format = SVG},"svg")
+    def' = def {_fo_size = (1200,1800)}
 
     layout e = layout_title .~ fst e
-      $ layout_title_style . font_size .~ 10
+      $ layout_title_style . font_size .~ 17
+      $ layout_left_axis_visibility . axis_show_ticks .~ True
+      $ layout_y_axis . laxis_style . axis_line_style . line_width .~ 0.5
+      $ layout_x_axis . laxis_style . axis_label_style . font_size .~ 15
       $ layout_x_axis . laxis_generate .~ autoIndexAxis (M.keys mapVal)
-      $ layout_y_axis . laxis_override .~ (over axis_labels (\x -> [map (\(y,_) -> (y,s $ 10**(y - fromIntegral expo))) $ head x]) . axisGridHide ) -- Change the label with the corresponding 10 power
+      $ layout_y_axis . laxis_override .~ over axis_labels (\x -> [map (\(y,_) -> (y,s $ 10**(y - fromIntegral expo))) $ head x]) -- Change the label with the corresponding 10 power
       $ layout_left_axis_visibility . axis_show_ticks .~ False
       $ layout_plots .~ lay_plots
       $ def :: Layout PlotIndex Double
@@ -82,13 +96,13 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
           $ plot_bars_values .~ addIndexes (map elems $ elems mapVal)
           $ plot_bars_singleton_width .~ 100
           $ plot_bars_style .~ BarsClustered
-          $ plot_bars_spacing .~ BarsFixGap 30 5
+          $ plot_bars_spacing .~ BarsFixGap fixGap1 fixGap2
           $ plot_bars_item_styles .~ map snd (filter (\(n,_) -> n `elem` libsName) colors)
           $ def
           where
             libsName = tkLibsName $ either id (map $ fmap fst) <$> snd e
             colors = zip (S.toList is)
-              $ take (S.size is) $ map (\c -> (solidFillStyle c, Just (solidLine 1.0 $ opaque black))) (cycle defaultColorSeq)
+              $ take (S.size is) $ map (\c -> (solidFillStyle c, Just (solidLine 0.5 $ opaque black))) (cycle defaultColorSeq)
 
         (expo,mapVal,std) = mkValue $ snd e
 
@@ -133,7 +147,7 @@ updateRender i allBarPoints p pmap = mapM_ clusteredErrBars vals
         offset j = fromIntegral (2*j-nys) * width/2 + width/2
 
         vals  = addIndexes $ group i $ _plot_errbars_values p
-        width = max (minXInterval - 30) 5 / fromIntegral nys
+        width = max (minXInterval - fixGap1) fixGap2 / fromIntegral nys
         minXInterval = let diffs = zipWith (-) (tail mxs) mxs
                        in if null diffs
                             then 100
@@ -195,4 +209,3 @@ drawErrBar0 ps (ErrPoint (ErrValue _ x _) (ErrValue yl _ yh)) = do
                     <> lineTo' (x+tl) yl
                     <> moveTo' (x-tl) yh
                     <> lineTo' (x+tl) yh
-

@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
 {-# LANGUAGE CPP #-}
 
-import Data.List (nub, nubBy, sortBy, elemIndices)
+import Data.List (nub, nubBy, sort, sortBy, elemIndices)
 import Data.Function (on)
 import Data.Maybe (mapMaybe, catMaybes, isJust)
 import Data.Int (Int64)
@@ -67,7 +67,7 @@ takeLastAfterBk w = case elemIndices '/' w of
 useResults :: Output -> [Named (Named String)] -> [Grouped (Weight, Maybe String)] -> IO ()
 useResults flg notDef todo = do
   putStrLn "Note: results are in bytes"
-  results <- mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
+  results <- fmap catMaybes $ mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
   maybe (return ()) (\x -> writeFile x $ show results) $ saveToFile flg
   case figOut flg of
     Nothing -> return ()
@@ -91,9 +91,9 @@ useResults flg notDef todo = do
                   printAbstract "lighter" onlyLargeBenchs
                 return $ Just (showGrouped $ snd e, onlyLargeBenchs)
 
-renderG :: T.ChartOutput -> [Maybe (Named (T.Grouped [Named Double]))] -> IO ()
+renderG :: T.ChartOutput -> [Named (T.Grouped [Named Double])] -> IO ()
 #ifdef CHART
-renderG x results = mkChart "Space results" defaultGr show x $ Left $ catMaybes results
+renderG x results = mkChart "Space results" defaultGr show x $ Left $ sortBy (on compare fst) results
 #else
 renderG _ _ = return ()
 #endif
@@ -189,7 +189,7 @@ main' (Run only notonly flg libs _ _ _) = do
 benchsNames :: Maybe Option -> Maybe [String] -> [String]
 benchsNames only notonly = nub $ useNotOnly $ useOnly extractedNames
   where
-    extractedNames = "creation" : map (\(_,Shadow s) -> either fst name s) listOfSuites
+    extractedNames = sort $ "creation" : map (\(_,Shadow s) -> either fst name s) listOfSuites
     useOnly = case only of
       Nothing -> id
       (Just (Only lst)) -> filter (`elem` lst)

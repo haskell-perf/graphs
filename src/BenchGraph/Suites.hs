@@ -73,7 +73,7 @@ hasEdge fun genArg = Suite
   { name = "hasEdge"
   , desc = "Test if the given edge is in the graph (with arguments both in the graph and not in the graph (where applicable))"
   , algorithm = fun
-  , inputs    = \x -> map (fmap genArg) $ withNames $ getDifferents x ++ edgesNotInGraph' x
+  , inputs    = \x -> map (fmap genArg) $ withNames $ getDifferents x ++ take 3 (edgesNotInGraph x)
   }
 
 addEdge :: NFData o => SpecialisedSuite Edge o i g
@@ -81,7 +81,7 @@ addEdge fun genArg = Suite
   { name = "addEdge"
   , desc = "Add an edge (not already in the graph)"
   , algorithm = fun
-  , inputs = map (fmap genArg) . withNames . edgesNotInGraph'
+  , inputs = map (fmap genArg) . withNames . take 3 . edgesNotInGraph
   }
 
 removeEdge :: NFData o => SpecialisedSuite Edge o i g
@@ -142,12 +142,3 @@ getDifferents :: Edges -> Edges
 getDifferents edgs = if length edgs >= 2
                         then nub [edgs!!2, edgs !! (length edgs `div` 2 - 1), last $ init edgs]
                         else edgs
-
-edgesNotInGraph' :: Edges -> Edges
-edgesNotInGraph' x = if lx >= 3
-                        then let edgs  = edgesNotInGraph x
-                              in [edgs !! 2, edgs !! (lx `div` 10), edgs !! ((2*lx) `div` 10)]
-                        else take 3 $ edgesNotInGraph x
-  where
-    lx = length x
-

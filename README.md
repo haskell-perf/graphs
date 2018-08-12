@@ -1,13 +1,14 @@
 # Benchmark suite for graph libraries
 
-## Warning: Under Active Developement
-This is being developed as part of the Google Summer of Code 2018.
-Please do not expect anything from the code for now. 
-
-Feel free to open an issue anyway :)
+## Intro
+This project was developed as part of the Google Summer of Code 2018.
+Feel free to open an issue :)
 
 ## Results
-Current results of `cabal bench time` and `cabal bench space` can be found here: https://travis-ci.org/haskell-perf/graphs
+
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME.svg?sanitize=true)
+
+Current results of `cabal bench time` and `cabal bench space` can be found here: <https://travis-ci.org/haskell-perf/graphs>
 
 Results on bigger graphs and with more beautiful output can be found here: <https://github.com/haskell-perf/graphs/tree/master/results>
 
@@ -21,7 +22,7 @@ You can customize your build using several cabal flags (all of them are on by de
 
 * Time: will produce a benchmark suite using `criterion`.
 * Space: will produce a benchmark suite using `weigh`.
-* Datasize: will produce a benchmark suite using `ghc-datasize`.
+* Datasize: will produce a benchmark suite using `ghc-datasize` (disabled by default).
 
 ### Libraries
 
@@ -63,9 +64,13 @@ The benchmark suite `datasize` will use `ghc-datasize` to calculate size of grap
 ### Arguments
 
 Command-line arguments are self-explaining, but the `--graph "(String,Int)"` requires some explanations:
-We test functions against standards graphs, and they are built with ten-powers vertices. For standard graphs, the Int supplied is the upper-bound of the ten-powers. So `"(Path,100)"` will generate the `Path` with `1`, `10` and `100` vertices. You can specify several graphs.
+Standards graphs are built with ten-powers vertices. The `Int` supplied is the upper-bound of these ten-powers. So `"(Path,3)"` will generate three `Path` with `1`, `10` and `100` vertices. You can specify several graphs.
 
-The default is: `[("Mesh",3),("Clique",3)]`
+You can force the suite to use only bigger graphs with the `-i` flag.
+
+The default is: `[("Mesh",3),("Clique",3)]`.
+
+For real-life graphs (see below) you cannot use an integer greater than 4.
 
 #### Real-life graphs
 
@@ -86,6 +91,14 @@ The following graphs are supported:
 * Clique
 * RealLife (Note that because we have a limited set, you cannot request more than 4 real-life graphs)
 
+### Charts
+
+One can produce a chart from the results, use:
+
+```
+  -f,--chartfile FILENAME  Output file WITHOUT extension
+  -c,--chart OUTTYPE       Output type: Png or Svg
+```
 
 ## About implementation
 
@@ -130,7 +143,6 @@ data Suite g = forall i o. NFData o => Suite
 ### BenchGraph.Suites
 
 This module defines common builders for `Suite`, and particularly provides stable names for standard operations on graphs, and thus allows for simpler comparison (remember, benchmarks are identified by their _name_).
-
 
 ### Benchmarking with creation?
 
