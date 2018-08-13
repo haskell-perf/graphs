@@ -2,7 +2,7 @@
 
 * Time: https://github.com/haskell-perf/graphs/blob/master/results/TIME.md
 
-![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME.svg?sanitize=true)
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/master/results/TIME.svg?sanitize=true)
 
 * Space: https://github.com/haskell-perf/graphs/blob/master/results/SPACE.md
 
@@ -35,7 +35,7 @@ For the main results, we produce a generic list of edges (in ascending orders, b
 
 This may not reflect the reality, so we produced an alternative table where creation time (from a list of edges) is taken into account:
 
-![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME-creation.svg?sanitize=true)
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/master/results/TIME-creation.svg?sanitize=true)
 
 <https://github.com/haskell-perf/graphs/blob/master/results/TIME-creation.md> 
 
@@ -43,7 +43,7 @@ This may not reflect the reality, so we produced an alternative table where crea
 
 Containers, Fgl and Hash-Graph are dealing well with a list of edges. This is *not* the case with Alga, so we produced an alternative table where we used the alga representation instead of a list of edges:
 
-![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME-extra.svg?sanitize=true)
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/master/results/TIME-extra.svg?sanitize=true)
 
 <https://github.com/haskell-perf/graphs/blob/master/results/TIME-extra.md>
 

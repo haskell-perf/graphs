@@ -6,7 +6,7 @@ Feel free to open an issue :)
 
 ## Results
 
-![svg](https://raw.githubusercontent.com/haskell-perf/graphs/newStack/results/TIME.svg?sanitize=true)
+![svg](https://raw.githubusercontent.com/haskell-perf/graphs/master/results/TIME.svg?sanitize=true)
 
 Current results of `cabal bench time` and `cabal bench space` can be found here: <https://travis-ci.org/haskell-perf/graphs>
 
