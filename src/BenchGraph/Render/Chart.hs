@@ -84,7 +84,6 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
       $ layout_x_axis . laxis_style . axis_label_style . font_size .~ 15
       $ layout_x_axis . laxis_generate .~ autoIndexAxis (M.keys mapVal)
       $ layout_y_axis . laxis_override .~ over axis_labels (\x -> [map (\(y,_) -> (y,s $ 10**(y - fromIntegral expo))) $ head x]) -- Change the label with the corresponding 10 power
-      $ layout_left_axis_visibility . axis_show_ticks .~ False
       $ layout_plots .~ lay_plots
       $ def :: Layout PlotIndex Double
 
