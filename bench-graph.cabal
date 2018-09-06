@@ -25,10 +25,6 @@ source-repository head
 Flag Time
   Description: Enable time benchmarks using Criterion
 
-Flag old-criterion
-  Description: Use criterion pre 1.5
-  default: False
-
 Flag Space
   Description: Enable space benchmarks using Weigh
 
