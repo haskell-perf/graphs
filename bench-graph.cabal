@@ -7,7 +7,7 @@ license-file:        LICENSE
 author:              Alexandre Moine
 maintainer:          alexandre@moine.me
 category:            Benchmark
-build-type:          Custom 
+build-type:          Custom
 extra-source-files:  ChangeLog.md, README.md
 cabal-version:       >=1.10
 
@@ -69,7 +69,8 @@ library
 
   if flag(Time)
     exposed-modules:   BenchGraph.Time
-    build-depends:     criterion    >= 1.4 && < 1.5
+    build-depends:     criterion        >= 1.5 && < 1.6,
+                       criterion-measurement >= 0.1 && < 0.2
 
   if flag(Space)
     exposed-modules:   BenchGraph.Space
@@ -102,13 +103,15 @@ benchmark time
                       , ListS
     build-depends:      base             >= 4.7     && < 4.12,
                         containers       >= 0.5.5.1 && < 0.8,
-                        criterion        >= 1.4     && < 1.5,
+                        criterion        >= 1.5 && < 1.6,
+                        criterion-measurement >= 0.1 && < 0.2,
                         tabular          >= 0.2.2.7,
                         unordered-containers >= 0.2.9.0,
                         array >= 0.5.1.1,
                         statistics,
                         optparse-applicative,
                         bench-graph
+
     default-language:   Haskell2010
     GHC-options:        -O2
                         -Wall
