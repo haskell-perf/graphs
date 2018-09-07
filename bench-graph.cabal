@@ -13,10 +13,10 @@ cabal-version:       >=1.10
 
 custom-setup
   setup-depends:
-    base >= 4.7 && < 4.12,
-    directory >= 1.3 && < 1.4,
-    Cabal >= 1.10,
-    text >= 1.2.3 && < 1.2.4
+    base      >= 4.7   && < 4.12,
+    directory >= 1.3   && < 1.4,
+    text      >= 1.2.3 && < 1.2.4,
+    Cabal     >= 1.10
 
 source-repository head
   type:     git
@@ -57,12 +57,12 @@ library
                      , BenchGraph.Render.Common
                      , BenchGraph.Render.Types
   other-extensions:    ExistentialQuantification
-  build-depends:       base         >= 4.7 && < 4.12,
-                       deepseq      >= 1.4 && < 1.5,
-                       comonad      >= 5.0.3,
+  build-depends:       base         >= 4.7    && < 4.12,
+                       deepseq      >= 1.4    && < 1.5,
+                       comonad      >= 5.0.3  && < 5.1,
                        -- Render
-                       tabular     >= 0.2.2.7,
-                       html        >= 1.0.1.2,
+                       tabular     >= 0.2.2.7 && < 0.2.3,
+                       html        >= 1.0.1.2 && < 1.0.2,
                        containers  >= 0.5.5.1 && < 0.8
   hs-source-dirs:      src
   default-language:    Haskell2010
@@ -101,15 +101,15 @@ benchmark time
     other-modules:      Containers.Graph
                       , Command
                       , ListS
-    build-depends:      base             >= 4.7     && < 4.12,
-                        containers       >= 0.5.5.1 && < 0.8,
-                        criterion        >= 1.5 && < 1.6,
-                        criterion-measurement >= 0.1 && < 0.2,
-                        tabular          >= 0.2.2.7,
-                        unordered-containers >= 0.2.9.0,
-                        array >= 0.5.1.1,
-                        statistics,
-                        optparse-applicative,
+    build-depends:      base                  >= 4.7      && < 4.12,
+                        containers            >= 0.5.5.1  && < 0.8,
+                        criterion             >= 1.5      && < 1.6,
+                        criterion-measurement >= 0.1      && < 0.2,
+                        tabular               >= 0.2.2.7  && < 0.2.3,
+                        unordered-containers  >= 0.2.9.0  && < 0.2.10,
+                        array                 >= 0.5.2.0  && < 0.5.3,
+                        statistics            >= 0.14.0.2 && < 0.14.1,
+                        optparse-applicative  >= 0.14.2.0 && < 0.14.3,
                         bench-graph
 
     default-language:   Haskell2010
@@ -118,17 +118,17 @@ benchmark time
 
     if flag(Alga)
       other-modules:    Alga.Graph
-      build-depends:    algebraic-graphs >= 0.2
+      build-depends:    algebraic-graphs >= 0.2     && < 0.3
       cpp-options:      -DALGA
 
     if flag(Fgl)
       other-modules:    Fgl.PatriciaTree
-      build-depends:    fgl              >= 5.5.4.0
+      build-depends:    fgl              >= 5.6.0.0 && < 5.6.0.1
       cpp-options:      -DFGL
 
     if flag(HashGraph)
       other-modules:    HashGraph.Gr
-      build-depends:    hash-graph       >= 0.1.0.0
+      build-depends:    hash-graph       >= 0.1.0.0 && < 0.1.0.1
       cpp-options:      -DHASHGRAPH
 
     if flag(Chart)
@@ -149,13 +149,13 @@ benchmark space
     other-modules:      Containers.Graph
                       , Command
                       , ListS
-    build-depends:      base             >= 4.7     && < 4.12,
-                        containers       >= 0.5.5.1 && < 0.8,
-                        weigh            >= 0.0.12,
-                        tabular          >= 0.2.2.7,
-                        unordered-containers >= 0.2.9.0,
-                        array >= 0.5.1.1,
-                        optparse-applicative,
+    build-depends:      base                 >= 4.7      && < 4.12,
+                        containers           >= 0.5.5.1  && < 0.8,
+                        weigh                >= 0.0.12   && < 0.0.13,
+                        tabular              >= 0.2.2.7  && < 0.2.3,
+                        unordered-containers >= 0.2.9.0  && < 0.2.10,
+                        array                >= 0.5.2.0  && < 0.5.3,
+                        optparse-applicative >= 0.14.2.0 && < 0.14.3,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
@@ -163,17 +163,17 @@ benchmark space
 
     if flag(Alga)
       other-modules:    Alga.Graph
-      build-depends:    algebraic-graphs >= 0.2
+      build-depends:    algebraic-graphs >= 0.2     && < 0.3
       cpp-options:      -DALGA
 
     if flag(Fgl)
       other-modules:    Fgl.PatriciaTree
-      build-depends:    fgl              >= 5.5.4.0
+      build-depends:    fgl              >= 5.6.0.0 && < 5.6.0.1
       cpp-options:      -DFGL
 
     if flag(HashGraph)
       other-modules:    HashGraph.Gr
-      build-depends:    hash-graph       >= 0.1.0.0
+      build-depends:    hash-graph       >= 0.1.0.0 && < 0.1.0.1
       cpp-options:      -DHASHGRAPH
 
     if flag(Chart)
@@ -198,16 +198,16 @@ benchmark datasize
                       , HashGraph.Gr
                       , Command
                       , ListS
-    build-depends:      base             >= 4.7     && < 4.12,
-                        fgl              >= 5.5.4.0,
-                        containers       >= 0.5.5.1 && < 0.8,
-                        hash-graph       >= 0.1.0.0,
-                        algebraic-graphs >= 0.2,
-                        ghc-datasize     >= 0.2.0,
-                        tabular          >= 0.2.2.7,
-                        array >= 0.5.1.1,
-                        unordered-containers >= 0.2.9.0,
-                        optparse-applicative,
+    build-depends:      base                 >= 4.7      && < 4.12,
+                        fgl                  >= 5.6.0.0  && < 5.6.0.1,
+                        containers           >= 0.5.5.1  && < 0.8,
+                        hash-graph           >= 0.1.0.0  && < 0.1.0.1,
+                        algebraic-graphs     >= 0.2      && < 0.3,
+                        ghc-datasize         >= 0.2.0    && < 0.2.1,
+                        tabular              >= 0.2.2.7  && < 0.2.3,
+                        array                >= 0.5.2.0  && < 0.5.3,
+                        unordered-containers >= 0.2.9.0  && < 0.2.10,
+                        optparse-applicative >= 0.14.2.0 && < 0.14.3,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2
@@ -223,13 +223,13 @@ test-suite test-containers
     type:           exitcode-stdio-1.0
     hs-source-dirs: test
     main-is:        Test.hs
-    build-depends:  base    >= 4.7 && < 4.12,
-                    doctest,
-                    bench-graph,
-                    containers  >= 0.5.5.1 && < 0.8,
-                    array  >= 0.5.1.1,
-                    fgl >= 5.5.4.0,
-                    unordered-containers >= 0.2.9.0,
-                    hash-graph >= 0.1.0.0
+    build-depends:  base                 >= 4.7     && < 4.12,
+                    doctest              >= 0.16.0  && < 0.17,
+                    containers           >= 0.5.5.1 && < 0.8,
+                    array                >= 0.5.2.0 && < 0.5.3,
+                    unordered-containers >= 0.2.9.0 && < 0.2.10,
+                    fgl                  >= 5.6.0.0 && < 5.6.0.1,
+                    hash-graph           >= 0.1.0.0 && < 0.1.0.1,
+                    bench-graph
     default-language: Haskell2010
 
