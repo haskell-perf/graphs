@@ -93,7 +93,7 @@ genReport gr flg arr = do
           maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
           putStrLn ""
         else putStr $ bname ++ ": "
-      res <- toPrint 2 (staOut flg) refinedarr $ snd e
+      res <- toPrint (staOut flg) refinedarr $ snd e
       forM_ (filter (\(_,(a,_)) -> a == showBenchName (snd e)) noimpl) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)] ++ "."
       case fmap (fmap (map (fmap (\x -> (getCriterionTime x, getStdDev x))))) res of
         Nothing -> return Nothing
@@ -117,44 +117,56 @@ renderG gr x results = mkChart "Time results" gr secs x $ Right $ sortBy (on com
 renderG _ _ _ = return ()
 #endif
 
-toPrint :: Int -- ^ Will start with 2
-        -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
-toPrint lev flg arr breport = case lev of
-  2 -> doGrp
-  3 -> do
-    when (flg == Ascii || flg == Html) pTitle
-    if flg /= Html
-       then doGrp
-       else do
-         res'@(Just (Group res)) <- doGrp
-         let ch = mapMaybe tkGroup res :: [[Grouped [Named Report]]]
-             results = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]] -- Double reverse is necessary, since it can lack some data in the front of ch
-             results' = map (fmap (makeAverage . map (map (fmap getCriterionTime))) ) results :: [Named [Named Double]]
-         printHtml results' secs
-         return res'
-  _ -> do
-    when (not (null bname) && flg == Ascii) pTitle
+-- | First stage
+toPrint :: StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
+toPrint flg arr breport = doGrp flg toPrint1 $ getOtherGroups breport arr
+
+-- | Second stage
+toPrint1 :: StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
+toPrint1 flg arr breport = do
+    when (flg == Ascii || flg == Html) $ putStrLn $ unwords ["###",showBenchName breport]
+    res'@(Just (Group res)) <- grp
+    let ch = mapMaybe tkGroup res :: [[Grouped [Named Report]]]
+        results = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]] -- Double reverse is necessary, since it can lack some data in the front of ch
+        results' = map (fmap (makeAverage . map (map (fmap getCriterionTime))) ) results :: [Named [Named Double]]
+    when (flg == Html) $ printHtml results' secs
+    return res'
+  where
+    grp = doGrp flg (toPrint2 0) otherGroups
+    getNOtherGroups = reverse $ map (showBenchName . snd) $ nubBy (liftExtract2 (==)) otherGroups
+    otherGroups = getOtherGroups breport arr
+
+-- | Last stage
+toPrint2 :: Int -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
+toPrint2 lev flg arr breport = do
+    when (not (null $ showBenchName breport) && flg == Ascii) $
+      putStrLn $ unwords [replicate (4+lev) '#',showBenchName breport]
     case breport of
-      BenchGroup{} -> doGrp
+      BenchGroup{} -> doGrp flg (toPrint2 (lev+1)) $ getOtherGroups breport arr
       Benchmark{} -> do
-        simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimpleB) $ here breport
+        simples <- mapM (traverse benchmarkWithoutOutput) $ getOtherSimple breport arr
         when (flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
         return $ Just $ Simple False "" simples -- False by default, changed after
       Environment{} -> error "Not wanted environnement"
-  where
-    pTitle = putStrLn $ unwords [replicate lev '#',bname]
-    doGrp = case nubOtherGroups of
-              [] -> do
-                when (flg == Ascii) $ putStrLn "\nNo data\n"
-                return Nothing
-              real -> do
-                grp <- catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . snd) real
-                return $ Just $ Group $ (if lev == 3 then map (setGName bname) else id) grp
-    nubOtherGroups = nubBy (liftExtract2 (==)) otherGroups
-    getNOtherGroups = reverse $ map (showBenchName . snd) nubOtherGroups
-    bname = showBenchName breport
-    otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here breport
-    here e = filter ((== e) . snd) arr
+
+getOtherGroups :: Benchmark -> [Named Benchmark] -> [Named Benchmark]
+getOtherGroups breport = concatMap sequence . mapMaybe (traverse tkChilds) . filter ((== breport) . snd)
+
+getOtherSimple :: Benchmark -> [Named Benchmark] -> [Named Benchmarkable]
+getOtherSimple breport = mapMaybe (traverse tkSimpleB) . filter ((== breport) . snd)
+
+doGrp :: StaOut
+      -> (StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report])))
+      -> [Named Benchmark]
+      -> IO (Maybe (Grouped [Named Report]))
+doGrp flg f otherGroups =
+  case nubBy (liftExtract2 (==)) otherGroups of
+    [] -> do
+     when (flg == Ascii) $ putStrLn "\nNo data\n"
+     return Nothing
+    real -> do
+     grp <- catMaybes <$> mapM (f flg otherGroups . snd) real
+     return $ Just $ Group grp
 
 -- | Bench only if it is possible
 tkSimpleB :: Benchmark -> Maybe Benchmarkable
