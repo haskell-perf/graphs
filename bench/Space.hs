@@ -137,7 +137,7 @@ printReport lev flg arr act = case lev of
     nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
     getNOtherGroups = reverse $ map (showGrouped . snd) nubOtherGroups
     otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
-    semiSimples = mapMaybe (traverse T.tkSimple) otherGroups
+    semiSimples = mapMaybe (traverse tkSimple) otherGroups
 
 -- | Really print the simples, different than printReport for type reason
 printSimples :: Int -> StaOut -> [Named WeighResult] -> WeighResult -> IO (T.Grouped [Named Int64])
@@ -225,10 +225,7 @@ mainWeigh rights f = do
   (results,_) <- weighResults $ sequence_ rights
   unless (isJust args) $ f results
 
--- | Weigh Grouped isGrouped
-instance T.IsGrouped Grouped where
-  isSimple Singleton{} = True
-  isSimple _ = False
-  simple_ (Singleton e) = e
-  group_ (Grouped _ e) = e
-
+-- | Util for Weigh Grouped
+tkSimple :: Grouped a -> Maybe a
+tkSimple (Singleton a) = Just a
+tkSimple _ = Nothing

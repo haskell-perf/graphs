@@ -7,7 +7,8 @@ module BenchGraph.Render.Types
   , lengthG
   , removeTailLast
   , setGName
-  , IsGrouped (..)
+  , tkGroup
+  , tkSimple
   , ChartOutputFormat (..)
   , ChartOutput (..)
   )
@@ -31,6 +32,14 @@ instance Functor Grouped where
   fmap f (Simple n a) = Simple n $ f a
   fmap f (Group lst) = Group $ map (fmap f) lst
 
+tkGroup :: Grouped a -> Maybe [Grouped a]
+tkGroup (Group lst) = Just lst
+tkGroup _ = Nothing
+
+tkSimple :: Grouped a -> Maybe a
+tkSimple (Simple _ a) = Just a
+tkSimple _ = Nothing
+
 lengthG :: Grouped a -> Int
 lengthG a = case a of
               Simple{} -> 1
@@ -44,22 +53,6 @@ removeTailLast (Group lst) = Group $ map removeTailLast lst
 setGName :: String -> Grouped a -> Grouped a
 setGName s (Simple _ xs) = Simple s xs
 setGName s (Group xs) = Group $ map (setGName s) xs
-
-class IsGrouped f where
-  isSimple :: f a -> Bool
-  simple_ :: f a -> a
-  group_ :: f a -> [f a]
-
-  tkSimple :: f a -> Maybe a
-  tkSimple e = if isSimple e then Just (simple_ e) else Nothing
-  tkGroup :: f a -> Maybe [f a]
-  tkGroup e = if not (isSimple e) then Just (group_ e) else Nothing
-
-instance IsGrouped Grouped where
-  isSimple Simple{} = True
-  isSimple _ = False
-  simple_ (Simple _ e) = e
-  group_ (Group e) = e
 
 data ChartOutput = ChartOutput String ChartOutputFormat deriving (Read, Show, Eq)
 data ChartOutputFormat = Png | Svg deriving (Read, Show, Eq)
