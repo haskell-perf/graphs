@@ -16,6 +16,8 @@ import qualified Text.Tabular.AsciiArt as TAA
 
 import Options.Applicative (execParser)
 
+import Data.Aeson (encodeFile, decodeFileStrict)
+
 import Command
 import ListS (listOfSuites, descs)
 
@@ -28,6 +30,7 @@ import qualified BenchGraph.Render.Types as T
 import BenchGraph.Render.Best
 import BenchGraph.Render.Abstract
 import BenchGraph.Render.Common
+import BenchGraph.Render.Result
 
 #ifdef CHART
 import BenchGraph.Render.Chart
@@ -68,7 +71,7 @@ useResults :: Output -> [Named (Named String)] -> [Grouped (Weight, Maybe String
 useResults flg notDef todo = do
   putStrLn "Note: results are in bytes"
   results <- fmap catMaybes $ mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
-  maybe (return ()) (\x -> writeFile x $ show results) $ saveToFile flg
+  maybe (return ()) (\x -> encodeFile x $ Result defaultGr results) $ saveToFile flg
   case figOut flg of
     Nothing -> return ()
     (Just x) -> renderG x results
@@ -196,7 +199,11 @@ main' :: Command -> IO ()
 main' (List opt) = case opt of
                     Benchs -> putStr $ unlines $ benchsNames Nothing Nothing
                     Libs -> putStr $ unlines $ nub $ map fst listOfSuites
-main' (Render fp opt) = readFile fp >>= renderG opt . read
+main' (Render fp opt) = do
+  readed <- decodeFileStrict fp
+  case readed of
+    Nothing -> error "Malformed file"
+    Just (Result _ res) -> renderG opt res
 main' (Run only notonly flg libs _ _ _) = do
   printHeader defaultGr bN
   mainWeigh benchs (useResults flg (mapMaybe (\(n,Shadow s) -> either (\x -> Just (n,x)) (const Nothing) s ) filteredArr))
