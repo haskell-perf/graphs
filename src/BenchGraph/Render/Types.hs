@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-incomplete-patterns #-}
+{-# LANGUAGE DeriveGeneric #-}
 
 module BenchGraph.Render.Types
 
@@ -13,9 +14,19 @@ module BenchGraph.Render.Types
 
 where
 
+import GHC.Generics
+import Data.Aeson
+
 -- | The Bool is here to tell if we get it into the benchs
 -- The string is the type of graphs used
-data Grouped a = Simple Bool String a | Group [Grouped a] deriving (Show, Read)
+data Grouped a = Simple Bool String a | Group [Grouped a] deriving (Generic, Show, Read)
+
+instance ToJSON a => ToJSON (Grouped a) where
+    -- For efficiency, we write a simple toEncoding implementation, as
+    -- the default version uses toJSON.
+    toEncoding = genericToEncoding defaultOptions
+
+instance FromJSON a => FromJSON (Grouped a)
 
 instance Functor Grouped where
   fmap f (Simple b n a) = Simple b n $ f a

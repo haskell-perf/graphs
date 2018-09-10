@@ -26,6 +26,8 @@ import BenchGraph.Utils (defaultGr)
 
 import Options.Applicative (execParser)
 
+import Data.Aeson (encodeFile, decodeFileStrict)
+
 import qualified Text.Tabular as T
 import qualified Text.Tabular.AsciiArt as TAA
 
@@ -51,6 +53,7 @@ import qualified HashGraph.Gr
 #endif
 
 import BenchGraph.Render.Types
+import BenchGraph.Render.Result
 import BenchGraph.Render.Best
 import BenchGraph.Render.Abstract
 import BenchGraph.Render.Common
@@ -64,7 +67,7 @@ instance Eq Benchmark where
   (==) = on (==) showBenchName
 
 showBenchName :: Benchmark -> Name
-showBenchName (Benchmark n _) = n
+showBenchName (Benchmark n _)  = n
 showBenchName (BenchGroup n _) = n
 showBenchName Environment{}    = error "Cannot show the bench name of an Env"
 
@@ -80,7 +83,7 @@ genReport gr flg arr = do
                                        oth =  head $ tail libNames
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
   results <- fmap catMaybes $ mapM mapped $ nubBy (liftExtract2 (==)) refinedarr
-  maybe (return ()) (\x -> writeFile x $ unlines [show gr,show results]) $ saveToFile flg
+  maybe (return ()) (\x -> encodeFile x $ Result gr results) $ saveToFile flg
   case figOut flg of
     Nothing -> return ()
     (Just x) -> renderG gr x  results
@@ -221,8 +224,10 @@ main' opts
                         Benchs -> putStr $ unlines grNames
                         Libs -> putStr $ unlines $ nub $ map fst listOfSuites ++ map fst (listOfCreation False [])
       Render filep dg -> do
-        (gr,res) <- span (/='\n') <$> readFile filep
-        renderG (read gr) dg  $ read res
+        readed <- decodeFileStrict filep
+        case readed of
+          Nothing -> error "Malformed file"
+          Just (Result gr res) -> renderG gr dg res
       Run opt nottodo' flg libs benchWithCreation dontBenchLittleOnes gr' -> do
         let modifyL = case libs of
               Nothing -> id
