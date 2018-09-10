@@ -75,7 +75,7 @@ useResults flg notDef todo = do
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
     mapped e = do
-      putStrLn $ unwords [replicate 2 '#', showGrouped $ snd e]
+      putStrLn $ unwords ["##", showGrouped $ snd e]
       maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup (showGrouped $ snd e) descs)
       putStrLn ""
       res <- printReport (staOut flg) namedBenchs $ snd e
