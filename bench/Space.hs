@@ -103,79 +103,62 @@ printReport :: StaOut -- ^ Output infos
             -> [Named (Grouped WeighResult)] -- ^ The list of benchs
             -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (T.Grouped [Named Int64])) -- Maybe if there was actual data
-printReport flg arr act = doGrp
-  where
-    doGrp = case nubOtherGroups of
-              [] -> do
-                when (flg == Ascii) $ putStrLn "\nNo data\n"
-                return Nothing
-              real -> do
-                grp <- catMaybes <$> mapM (printReport2 flg otherGroups . snd) real
-                return $ Just $ T.Group $ grp
-    nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
-    getNOtherGroups = reverse $ map (showGrouped . snd) nubOtherGroups
-    semiSimples = mapMaybe (traverse tkSimple) otherGroups
-    otherGroups = getOtherGroups act arr
+printReport flg arr act = doGrp flg printReport1 id $ getOtherGroups act arr
 
-printReport2 :: StaOut -- ^ Output infos
+-- | Second stage of report
+printReport1 :: StaOut -- ^ Output infos
             -> [Named (Grouped WeighResult)] -- ^ The list of benchs
             -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (T.Grouped [Named Int64])) -- Maybe if there was actual data
-printReport2 flg arr act = do
-    when (flg /= Null) pTitle
-    if flg /= Html
-       then doGrp
-       else do
-         res'@(Just (T.Group res)) <- doGrp
-         let ch = mapMaybe T.tkGroup res :: [[T.Grouped [Named Int64]]]
-             results = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe T.tkSimple) ch :: [Named [[Named Int64]]] -- Double reverse is necessary, since it can lack some data in the front of ch
-             results' = map (fmap (makeAverage . map (map (fmap (fromRational . toRational)))) ) results :: [Named [Named Double]]
-         printHtml results' ((commas :: Integer -> String) . round)
-         return res'
+printReport1 flg arr act = do
+    when (flg /= Null) $ putStrLn $ unwords ["###",bname]
+    res'@(Just (T.Group res)) <- doGrp flg (printReport2 0) (map (T.setGName bname)) otherGroups
+    when (flg == Html) $
+      let ch       = mapMaybe T.tkGroup res :: [[T.Grouped [Named Int64]]]
+          results  = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe T.tkSimple) ch :: [Named [[Named Int64]]]
+                     -- Double reverse is necessary, since it can lack some data in the front of ch
+          results' = map (fmap (makeAverage . map (map (fmap (fromRational . toRational)))) ) results :: [Named [Named Double]]
+      in printHtml results' ((commas :: Integer -> String) . round)
+    return res'
   where
-    pTitle = putStrLn $ unwords ["###",bname]
     bname = showGrouped act
-    doGrp = case nubOtherGroups of
-              [] -> do
-                when (flg == Ascii) $ putStrLn "\nNo data\n"
-                return Nothing
-              real -> do
-                grp <- catMaybes <$> mapM (printReport3 0 flg otherGroups . snd) real
-                return $ Just $ T.Group $ map (T.setGName bname) grp
-    nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
     getNOtherGroups = reverse $ map (showGrouped . snd) nubOtherGroups
-    semiSimples = mapMaybe (traverse tkSimple) otherGroups
+    nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
     otherGroups = getOtherGroups act arr
 
-
-printReport3 :: Int
+-- | Third stage of report
+printReport2 :: Int
             -> StaOut -- ^ Output infos
             -> [Named (Grouped WeighResult)] -- ^ The list of benchs
             -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (T.Grouped [Named Int64])) -- Maybe if there was actual data
-printReport3 lev flg arr act =  do
-    when (not (null bname) && flg == Ascii) pTitle
+printReport2 lev flg arr act =  do
+    when (not (null bname) && flg == Ascii) $ putStrLn $ unwords [replicate (4+lev) '#',bname]
     case act of
       (Grouped _ (Singleton{}:_)) -> Just . T.Group <$> mapM (printSimples lev flg semiSimples . snd) (nubBy (liftExtract2 eqW) semiSimples)
-      Grouped{} -> doGrp
+      Grouped{} -> doGrp flg (printReport2 (lev+1)) id otherGroups
       Singleton{} -> error "A single singleton of a WeighResult, this should not happen"
   where
-    pTitle = putStrLn $ unwords [replicate (4+lev) '#',bname]
     bname = showGrouped act
-    doGrp = case nubOtherGroups of
-              [] -> do
-                when (flg == Ascii) $ putStrLn "\nNo data\n"
-                return Nothing
-              real -> do
-                grp <- catMaybes <$> mapM (printReport3 (lev+1) flg otherGroups . snd) real
-                return $ Just $ T.Group $ (if lev == 3 then (map (T.setGName bname)) else id) grp
-    nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
     otherGroups = getOtherGroups act arr
-    getNOtherGroups = reverse $ map (showGrouped . snd) nubOtherGroups
     semiSimples = mapMaybe (traverse tkSimple) otherGroups
 
 getOtherGroups :: Grouped WeighResult -> [Named (Grouped WeighResult)] -> [Named (Grouped WeighResult)]
 getOtherGroups act = concatMap sequence . mapMaybe (traverse tkChilds) . filter (eqG act . snd)
+
+doGrp :: StaOut
+      -> (StaOut -> [Named (Grouped WeighResult)] -> Grouped WeighResult -> IO (Maybe (T.Grouped [Named Int64])))
+      -> ([T.Grouped [Named Int64]] -> [T.Grouped [Named Int64]])
+      -> [Named (Grouped WeighResult)]
+      -> IO (Maybe (T.Grouped [Named Int64]))
+doGrp flg f changeName otherGroups =
+  case nubBy (liftExtract2 eqG) otherGroups of
+    [] -> do
+      when (flg == Ascii) $ putStrLn "\nNo data\n"
+      return Nothing
+    real -> do
+      grp <- catMaybes <$> mapM (f flg otherGroups . snd) real
+      return $ Just $ T.Group $ changeName grp
 
 -- | Really print the simples, different than printReport for type reason
 printSimples :: Int -> StaOut -> [Named WeighResult] -> WeighResult -> IO (T.Grouped [Named Int64])
