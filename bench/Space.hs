@@ -74,7 +74,7 @@ useResults flg notDef todo = do
   maybe (return ()) (\x -> encodeFile x $ Result defaultGr results) $ saveToFile flg
   case figOut flg of
     Nothing -> return ()
-    (Just x) -> renderG x results
+    (Just x) -> renderG x $ map (fmap T.removeTailLast) results
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
     mapped e = do
@@ -92,7 +92,7 @@ useResults flg notDef todo = do
                 when (sumOut flg) $ do
                   printBest "used the least amount of memory" res''
                   printAbstract "lighter" onlyLargeBenchs
-                return $ Just (showGrouped $ snd e, onlyLargeBenchs)
+                return $ Just (showGrouped $ snd e, res'')
 
 renderG :: T.ChartOutput -> [Named (T.Grouped [Named Double])] -> IO ()
 #ifdef CHART
@@ -203,7 +203,7 @@ main' (Render fp opt) = do
   readed <- decodeFileStrict fp
   case readed of
     Nothing -> error "Malformed file"
-    Just (Result _ res) -> renderG opt res
+    Just (Result _ res) -> renderG opt $ map (fmap T.removeTailLast) res
 main' (Run only notonly flg libs _ _ _) = do
   printHeader defaultGr bN
   mainWeigh benchs (useResults flg (mapMaybe (\(n,Shadow s) -> either (\x -> Just (n,x)) (const Nothing) s ) filteredArr))

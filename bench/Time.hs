@@ -76,7 +76,7 @@ genReport :: [(String,Int)]
           -- ^ Output options
           -> [Named (Either (Named String) Benchmark)]
           -- ^ The list of benchmarks with their library name
-          -> IO()
+          -> IO ()
 genReport _ _ [] = putStrLn "\nNo data\n"
 genReport gr flg arr = do
   unless notquickComp $ putStrLn $ let comp = head libNames
@@ -86,7 +86,7 @@ genReport gr flg arr = do
   maybe (return ()) (\x -> encodeFile x $ Result gr results) $ saveToFile flg
   case figOut flg of
     Nothing -> return ()
-    (Just x) -> renderG gr x  results
+    (Just x) -> renderG gr x $ map (fmap removeTailLast) results
   where
     mapped e = do
       let bname = showBenchName $ snd e
@@ -108,7 +108,7 @@ genReport gr flg arr = do
               printBest "was the fastest" $ removeStdDev res'
               printAbstract "faster" $ removeStdDev onlyLargeBenchs
             else printQuick (head libNames) $ removeStdDev onlyLargeBenchs
-          return $ Just (bname,onlyLargeBenchs)
+          return $ Just (bname,res')
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
     (noimpl,refinedarr) = partitionEithers $ map stripOutEither arr
@@ -227,7 +227,7 @@ main' opts
         readed <- decodeFileStrict filep
         case readed of
           Nothing -> error "Malformed file"
-          Just (Result gr res) -> renderG gr dg res
+          Just (Result gr res) -> renderG gr dg $ map (fmap removeTailLast) res
       Run opt nottodo' flg libs benchWithCreation dontBenchLittleOnes gr' -> do
         let modifyL = case libs of
               Nothing -> id
