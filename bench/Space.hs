@@ -85,9 +85,9 @@ useResults flg notDef todo = do
         Just res' ->
           let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
               in do
-                let onlyLargeBenchs = T.setBGroupT res''
+                let onlyLargeBenchs = T.removeTailLast res''
                 when (sumOut flg) $ do
-                  printBest "used the least amount of memory" onlyLargeBenchs
+                  printBest "used the least amount of memory" res''
                   printAbstract "lighter" onlyLargeBenchs
                 return $ Just (showGrouped $ snd e, onlyLargeBenchs)
 
@@ -145,7 +145,7 @@ printSimples lev flg arr act = do
   when (flg == Ascii) $ do
     unless (null bname) $ putStrLn $ unwords [replicate lev '#',bname]
     putStrLn $ TAA.render id id id table
-  return $ T.Simple False "" $ map (fmap $ weightAllocatedBytes . fst) filtered -- False by default, changed after
+  return $ T.Simple "" $ map (fmap $ weightAllocatedBytes . fst) filtered -- False by default, changed after
   where
     bname = takeLastAfterBk $ weightLabel $ fst act
     -- filter by the 'act' argument, and sort

@@ -101,13 +101,13 @@ genReport gr flg arr = do
       case fmap (fmap (map (fmap (\x -> (getCriterionTime x, getStdDev x))))) res of
         Nothing -> return Nothing
         Just res' -> do
-          let onlyLargeBenchs = setBGroupT res'
-              onlyLargeBenchsWithoutStdDev = fmap (fmap fst) <$> onlyLargeBenchs
+          let onlyLargeBenchs = removeTailLast res'
+              removeStdDev = fmap (fmap (fmap fst))
           when (sumOut flg) $ if notquickComp
             then do
-              printBest "was the fastest" onlyLargeBenchsWithoutStdDev
-              printAbstract "faster" onlyLargeBenchsWithoutStdDev
-            else printQuick (head libNames) onlyLargeBenchsWithoutStdDev
+              printBest "was the fastest" $ removeStdDev res'
+              printAbstract "faster" $ removeStdDev onlyLargeBenchs
+            else printQuick (head libNames) $ removeStdDev onlyLargeBenchs
           return $ Just (bname,onlyLargeBenchs)
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
@@ -149,7 +149,7 @@ toPrint2 lev flg arr breport = do
       Benchmark{} -> do
         simples <- mapM (traverse benchmarkWithoutOutput) $ getOtherSimple breport arr
         when (flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
-        return $ Just $ Simple False "" simples -- False by default, changed after
+        return $ Just $ Simple "" simples -- False by default, changed after
       Environment{} -> error "Not wanted environnement"
 
 getOtherGroups :: Benchmark -> [Named Benchmark] -> [Named Benchmark]
