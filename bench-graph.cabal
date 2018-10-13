@@ -42,6 +42,7 @@ Flag HashGraph
 
 Flag RealLife
   Description: Enable realLife graphs
+  Default:     False
 
 Flag Chart
   Description: Enable Chart output
@@ -132,7 +133,7 @@ benchmark time
       cpp-options:      -DHASHGRAPH
 
     if flag(Chart)
-      cpp-options:       -DCHART
+      cpp-options:      -DCHART
 
   else
     hs-source-dirs:     bench
@@ -177,7 +178,7 @@ benchmark space
       cpp-options:      -DHASHGRAPH
 
     if flag(Chart)
-      cpp-options:       -DCHART
+      cpp-options:      -DCHART
 
   else
     hs-source-dirs:     bench
