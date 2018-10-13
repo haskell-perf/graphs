@@ -7,7 +7,7 @@ module BenchGraph.Time (
 import Criterion.Main
 import Criterion.Types (Benchmark (..))
 
-import Control.DeepSeq (NFData, ($!!))
+import Control.DeepSeq (NFData, deepseq)
 
 import BenchGraph.GenericGraph
 import BenchGraph.Utils (graphs)
@@ -32,9 +32,10 @@ benchSuite benchCreation algorithm' inputs' gfunc size = bgroup (show sizeName) 
     graph = case edges of
               [] -> const mkVertex
               _ -> mkGraph
+    ge = graph edges
     cases = if benchCreation
-               then [ bench name' $ nf (algorithm' i . graph) $!! edges | (name',i) <- inputs' edges ]
-               else [ bench name' $ nf (algorithm' i) $!! graph edges | (name',i) <- inputs' edges ]
+               then edges `deepseq` [ bench name' $ nf (algorithm' i . graph) $ edges | (name',i) <- inputs' edges ]
+               else ge `deepseq` [ bench name' $ nf (algorithm' i) $ ge | (name',i) <- inputs' edges ]
 
 allBench :: (GraphImpl g, NFData g)
          => Bool -- ^ Do we bench creation of the graph ?
@@ -44,4 +45,3 @@ allBench benchCreation b gr = benchmark benchCreation (graphs b gr)
 
 benchmarkCreation :: (NFData g) => Bool -> [(String,Int)] -> (Edges -> g) -> Benchmark
 benchmarkCreation b gr mk = bgroup "creation" [ bgroup n $ map (\i -> let (gr',sizeName) = grf i in bgroup (show sizeName) [bench "" $ nf mk gr'] ) ss | ((n,grf), ss) <- graphs b gr ]
-
