@@ -65,7 +65,7 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
 
         -- Recreate the legend
         legend' = setPickFn nullPickFn $ toRenderable $ Legend legendStyle legendInfo
-        hhgrp = Simple True "" $ Left $ zip (S.toList is) (replicate (S.size is) 0) -- False data to generate the legend
+        hhgrp = Simple "" $ Left $ zip (S.toList is) (replicate (S.size is) 0) -- False data to generate the legend
         legendStyle = legend_label_style . font_size .~ 17 $ fromJust $ _layout_legend $ layout ("",hhgrp)
         legendInfo = _plot_legend $ head $ _layout_plots $ layout ("",hhgrp)
 
@@ -182,17 +182,17 @@ initSet :: [Named (Grouped [Named a])] -> Set String
 initSet = foldr (\(_,vals) -> S.union (S.fromList $ tkLibsName vals)) S.empty
 
 tkLibsName :: Grouped [Named a] -> [String]
-tkLibsName (Simple _ _ xs) = sort $ map fst xs
+tkLibsName (Simple _ xs) = sort $ map fst xs
 tkLibsName (Group xs) = maybe [] (tkLibsName . fst) $ uncons xs
 
 getSimplesWithG :: Grouped (Either [Named Double] [Named (Double,Double)])  -> Map String [[Named Double]]
-getSimplesWithG (Simple b n (Left v)) = if b then M.singleton n [v] else M.empty
-getSimplesWithG (Simple b n (Right v)) = if b then M.singleton n [map (fmap fst) v] else M.empty
+getSimplesWithG (Simple n (Left v)) = M.singleton n [v]
+getSimplesWithG (Simple n (Right v)) = M.singleton n [map (fmap fst) v]
 getSimplesWithG (Group lst) = M.unionsWith (++) $ map getSimplesWithG lst
 
 getSimplesStdWithG :: Grouped (Either [Named Double] [Named (Double,Double)])  -> Maybe (Map String [[Named Double]])
-getSimplesStdWithG (Simple _ _ Left{}) = Nothing
-getSimplesStdWithG (Simple b n (Right v)) = if b then Just (M.singleton n [map (fmap snd) v]) else Nothing
+getSimplesStdWithG (Simple _ Left{}) = Nothing
+getSimplesStdWithG (Simple n (Right v)) = Just (M.singleton n [map (fmap snd) v])
 getSimplesStdWithG (Group lst) = Just $ M.unionsWith (++) $ mapMaybe getSimplesStdWithG lst
 
 -- | Copy/paste from http://hackage.haskell.org/package/Chart-1.9/docs/src/Graphics.Rendering.Chart.Plot.ErrBars.html#drawErrBar0 MODIFIED

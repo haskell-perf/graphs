@@ -35,7 +35,7 @@ getBest lst = (lengthG lst - foldr (\x act -> act + snd x) 0 res,res)
     res = sortBy (flip compare1) $ toList $ getBest' empty lst
 
 getBest' :: Map String Int -> Grouped [Named Double] -> Map String Int
-getBest' m (Simple _ _ a) = maybe m (\x -> alter (Just . maybe 1 (+ 1)) (fst x) m) $ takeVeryBest $ sortBy compare1 a
+getBest' m (Simple _ a) = maybe m (\x -> alter (Just . maybe 1 (+ 1)) (fst x) m) $ takeVeryBest $ sortBy compare1 a
 getBest' m (Group grp) = foldr (unionWith (+) . getBest' m) empty grp
 
 takeVeryBest :: [Named Double] -> Maybe (Named Double)

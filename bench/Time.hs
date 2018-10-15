@@ -26,6 +26,8 @@ import BenchGraph.Utils (defaultGr)
 
 import Options.Applicative (execParser)
 
+import Data.Aeson (encodeFile, decodeFileStrict)
+
 import qualified Text.Tabular as T
 import qualified Text.Tabular.AsciiArt as TAA
 
@@ -51,6 +53,7 @@ import qualified HashGraph.Gr
 #endif
 
 import BenchGraph.Render.Types
+import BenchGraph.Render.Result
 import BenchGraph.Render.Best
 import BenchGraph.Render.Abstract
 import BenchGraph.Render.Common
@@ -64,7 +67,7 @@ instance Eq Benchmark where
   (==) = on (==) showBenchName
 
 showBenchName :: Benchmark -> Name
-showBenchName (Benchmark n _) = n
+showBenchName (Benchmark n _)  = n
 showBenchName (BenchGroup n _) = n
 showBenchName Environment{}    = error "Cannot show the bench name of an Env"
 
@@ -73,17 +76,17 @@ genReport :: [(String,Int)]
           -- ^ Output options
           -> [Named (Either (Named String) Benchmark)]
           -- ^ The list of benchmarks with their library name
-          -> IO()
+          -> IO ()
 genReport _ _ [] = putStrLn "\nNo data\n"
 genReport gr flg arr = do
   unless notquickComp $ putStrLn $ let comp = head libNames
                                        oth =  head $ tail libNames
                                    in unwords ["\nComparing",comp,"to",oth,". It means that the displayed number will be k such that", comp,"= k *", oth ]
   results <- fmap catMaybes $ mapM mapped $ nubBy (liftExtract2 (==)) refinedarr
-  maybe (return ()) (\x -> writeFile x $ unlines [show gr,show results]) $ saveToFile flg
+  maybe (return ()) (\x -> encodeFile x $ Result gr results) $ saveToFile flg
   case figOut flg of
     Nothing -> return ()
-    (Just x) -> renderG gr x  results
+    (Just x) -> renderG gr x $ map (fmap removeTailLast) results
   where
     mapped e = do
       let bname = showBenchName $ snd e
@@ -93,19 +96,19 @@ genReport gr flg arr = do
           maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
           putStrLn ""
         else putStr $ bname ++ ": "
-      res <- toPrint 2 (staOut flg) refinedarr $ snd e
+      res <- toPrint (staOut flg) refinedarr $ snd e
       forM_ (filter (\(_,(a,_)) -> a == showBenchName (snd e)) noimpl) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)] ++ "."
       case fmap (fmap (map (fmap (\x -> (getCriterionTime x, getStdDev x))))) res of
         Nothing -> return Nothing
         Just res' -> do
-          let onlyLargeBenchs = setBGroupT res'
-              onlyLargeBenchsWithoutStdDev = fmap (fmap fst) <$> onlyLargeBenchs
+          let onlyLargeBenchs = removeTailLast res'
+              removeStdDev = fmap (fmap (fmap fst))
           when (sumOut flg) $ if notquickComp
             then do
-              printBest "was the fastest" onlyLargeBenchsWithoutStdDev
-              printAbstract "faster" onlyLargeBenchsWithoutStdDev
-            else printQuick (head libNames) onlyLargeBenchsWithoutStdDev
-          return $ Just (bname,onlyLargeBenchs)
+              printBest "was the fastest" $ removeStdDev res'
+              printAbstract "faster" $ removeStdDev onlyLargeBenchs
+            else printQuick (head libNames) $ removeStdDev onlyLargeBenchs
+          return $ Just (bname,res')
     libNames = nub $ map fst arr
     notquickComp = staOut flg /= QuickComparison
     (noimpl,refinedarr) = partitionEithers $ map stripOutEither arr
@@ -117,44 +120,56 @@ renderG gr x results = mkChart "Time results" gr secs x $ Right $ sortBy (on com
 renderG _ _ _ = return ()
 #endif
 
-toPrint :: Int -- ^ Will start with 2
-        -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
-toPrint lev flg arr breport = case lev of
-  2 -> doGrp
-  3 -> do
-    when (flg == Ascii || flg == Html) pTitle
-    if flg /= Html
-       then doGrp
-       else do
-         res'@(Just (Group res)) <- doGrp
-         let ch = mapMaybe tkGroup res :: [[Grouped [Named Report]]]
-             results = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]] -- Double reverse is necessary, since it can lack some data in the front of ch
-             results' = map (fmap (makeAverage . map (map (fmap getCriterionTime))) ) results :: [Named [Named Double]]
-         printHtml results' secs
-         return res'
-  _ -> do
-    when (not (null bname) && flg == Ascii) pTitle
-    case breport of
-      BenchGroup{} -> doGrp
-      Benchmark{} -> do
-        simples <- mapM (traverse benchmarkWithoutOutput) $ mapMaybe (traverse tkSimpleB) $ here breport
-        when (flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
-        return $ Just $ Simple False "" simples -- False by default, changed after
-      Environment{} -> error "Not wanted environnement"
+-- | First stage
+toPrint :: StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
+toPrint flg arr breport = doGrp flg toPrint1 $ getOtherGroups breport arr
+
+-- | Second stage
+toPrint1 :: StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
+toPrint1 flg arr breport = do
+    when (flg == Ascii || flg == Html) $ putStrLn $ unwords ["###",showBenchName breport]
+    res'@(Just (Group res)) <- grp
+    let ch = mapMaybe tkGroup res :: [[Grouped [Named Report]]]
+        results = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe tkSimple) ch :: [Named [[Named Report]]] -- Double reverse is necessary, since it can lack some data in the front of ch
+        results' = map (fmap (makeAverage . map (map (fmap getCriterionTime))) ) results :: [Named [Named Double]]
+    when (flg == Html) $ printHtml results' secs
+    return res'
   where
-    pTitle = putStrLn $ unwords [replicate lev '#',bname]
-    doGrp = case nubOtherGroups of
-              [] -> do
-                when (flg == Ascii) $ putStrLn "\nNo data\n"
-                return Nothing
-              real -> do
-                grp <- catMaybes <$> mapM (toPrint (lev+1) flg otherGroups . snd) real
-                return $ Just $ Group $ (if lev == 3 then map (setGName bname) else id) grp
-    nubOtherGroups = nubBy (liftExtract2 (==)) otherGroups
-    getNOtherGroups = reverse $ map (showBenchName . snd) nubOtherGroups
-    bname = showBenchName breport
-    otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here breport
-    here e = filter ((== e) . snd) arr
+    grp = doGrp flg (toPrint2 0) otherGroups
+    getNOtherGroups = reverse $ map (showBenchName . snd) $ nubBy (liftExtract2 (==)) otherGroups
+    otherGroups = getOtherGroups breport arr
+
+-- | Last stage
+toPrint2 :: Int -> StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report]))
+toPrint2 lev flg arr breport = do
+    when (not (null $ showBenchName breport) && flg == Ascii) $
+      putStrLn $ unwords [replicate (4+lev) '#',showBenchName breport]
+    case breport of
+      BenchGroup{} -> doGrp flg (toPrint2 (lev+1)) $ getOtherGroups breport arr
+      Benchmark{} -> do
+        simples <- mapM (traverse benchmarkWithoutOutput) $ getOtherSimple breport arr
+        when (flg == Ascii) $ putStrLn $ "\n" ++ showSimples simples
+        return $ Just $ Simple "" simples -- False by default, changed after
+      Environment{} -> error "Not wanted environnement"
+
+getOtherGroups :: Benchmark -> [Named Benchmark] -> [Named Benchmark]
+getOtherGroups breport = concatMap sequence . mapMaybe (traverse tkChilds) . filter ((== breport) . snd)
+
+getOtherSimple :: Benchmark -> [Named Benchmark] -> [Named Benchmarkable]
+getOtherSimple breport = mapMaybe (traverse tkSimpleB) . filter ((== breport) . snd)
+
+doGrp :: StaOut
+      -> (StaOut -> [Named Benchmark] -> Benchmark -> IO (Maybe (Grouped [Named Report])))
+      -> [Named Benchmark]
+      -> IO (Maybe (Grouped [Named Report]))
+doGrp flg f otherGroups =
+  case nubBy (liftExtract2 (==)) otherGroups of
+    [] -> do
+     when (flg == Ascii) $ putStrLn "\nNo data\n"
+     return Nothing
+    real -> do
+     grp <- catMaybes <$> mapM (f flg otherGroups . snd) real
+     return $ Just $ Group grp
 
 -- | Bench only if it is possible
 tkSimpleB :: Benchmark -> Maybe Benchmarkable
@@ -209,8 +224,10 @@ main' opts
                         Benchs -> putStr $ unlines grNames
                         Libs -> putStr $ unlines $ nub $ map fst listOfSuites ++ map fst (listOfCreation False [])
       Render filep dg -> do
-        (gr,res) <- span (/='\n') <$> readFile filep
-        renderG (read gr) dg  $ read res
+        readed <- decodeFileStrict filep
+        case readed of
+          Nothing -> error "Malformed file"
+          Just (Result gr res) -> renderG gr dg $ map (fmap removeTailLast) res
       Run opt nottodo' flg libs benchWithCreation dontBenchLittleOnes gr' -> do
         let modifyL = case libs of
               Nothing -> id

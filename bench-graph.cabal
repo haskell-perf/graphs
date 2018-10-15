@@ -57,6 +57,7 @@ library
                      , BenchGraph.Render.Best
                      , BenchGraph.Render.Common
                      , BenchGraph.Render.Types
+                     , BenchGraph.Render.Result
   other-extensions:    ExistentialQuantification
   build-depends:       base         >= 4.7    && < 4.13,
                        deepseq      >= 1.4    && < 1.5,
@@ -64,7 +65,8 @@ library
                        -- Render
                        tabular     >= 0.2.2.7 && < 0.2.3,
                        html        >= 1.0.1.2 && < 1.0.2,
-                       containers  >= 0.5.5.1 && < 0.8
+                       containers  >= 0.5.5.1 && < 0.8,
+                       aeson       >= 1.3.0.0 && < 1.4.1
   hs-source-dirs:      src
   default-language:    Haskell2010
 
@@ -111,6 +113,7 @@ benchmark time
                         array                 >= 0.5.2.0  && < 0.5.3,
                         statistics            >= 0.14.0.2 && < 0.14.1,
                         optparse-applicative  >= 0.14.2.0 && < 0.14.3,
+                        aeson                 >= 1.3.0.0  && < 1.4.1,
                         bench-graph
 
     default-language:   Haskell2010
@@ -157,6 +160,7 @@ benchmark space
                         unordered-containers >= 0.2.9.0  && < 0.2.10,
                         array                >= 0.5.2.0  && < 0.5.3,
                         optparse-applicative >= 0.14.2.0 && < 0.14.3,
+                        aeson                >= 1.3.0.0  && < 1.4.1,
                         bench-graph
     default-language:   Haskell2010
     GHC-options:        -O2

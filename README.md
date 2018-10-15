@@ -91,6 +91,22 @@ The following graphs are supported:
 * Clique
 * RealLife (Note that because we have a limited set, you cannot request more than 4 real-life graphs)
 
+### Raw results
+
+You can output the raw results using the `-r` option. It will produce a JSON file with:
+
+* The graphs arguments used
+* The data
+  * For Criterion, it will be the computed time and the standard deviation (in this order).
+
+using the `Result` data-type from `BenchGraph.Render.Result`.
+
+Note that the produced JSON is forgetting some things (ie. the arguments used to test functions).
+
+#### Producing charts
+
+The raw results can be used to produce charts, please see the help of related `space` and `time` executables.
+
 ### Charts
 
 One can produce a chart from the results, use:
@@ -116,7 +132,7 @@ class GraphImpl g where
 It allows to convert `Edges` (a list of edges) to the graph representation of the library.
 When the list is empty, it is guaranteed that the graph will be built using `mkVertex` which is producing a graph with a single vertex `0`.
 
-### The `Named` type 
+### The `Named` type
 
 ```Haskell
 type Named a = (String,a)

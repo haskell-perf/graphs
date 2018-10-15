@@ -16,6 +16,8 @@ import qualified Text.Tabular.AsciiArt as TAA
 
 import Options.Applicative (execParser)
 
+import Data.Aeson (encodeFile, decodeFileStrict)
+
 import Command
 import ListS (listOfSuites, descs)
 
@@ -28,6 +30,7 @@ import qualified BenchGraph.Render.Types as T
 import BenchGraph.Render.Best
 import BenchGraph.Render.Abstract
 import BenchGraph.Render.Common
+import BenchGraph.Render.Result
 
 #ifdef CHART
 import BenchGraph.Render.Chart
@@ -68,28 +71,28 @@ useResults :: Output -> [Named (Named String)] -> [Grouped (Weight, Maybe String
 useResults flg notDef todo = do
   putStrLn "Note: results are in bytes"
   results <- fmap catMaybes $ mapM mapped $ nubBy (liftExtract2 eqG) namedBenchs
-  maybe (return ()) (\x -> writeFile x $ show results) $ saveToFile flg
+  maybe (return ()) (\x -> encodeFile x $ Result defaultGr results) $ saveToFile flg
   case figOut flg of
     Nothing -> return ()
-    (Just x) -> renderG x results
+    (Just x) -> renderG x $ map (fmap T.removeTailLast) results
   where
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
     mapped e = do
-      putStrLn $ unwords [replicate 2 '#', showGrouped $ snd e]
+      putStrLn $ unwords ["##", showGrouped $ snd e]
       maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup (showGrouped $ snd e) descs)
       putStrLn ""
-      res <- printReport 2 (staOut flg) namedBenchs $ snd e
+      res <- printReport (staOut flg) namedBenchs $ snd e
       forM_ (filter (\(_,(a,_)) -> a == showGrouped (snd e)) notDef) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)] ++ "."
       case res of
         Nothing -> return Nothing
         Just res' ->
           let res'' = fmap (fmap (fmap (fromRational . toRational))) res'
               in do
-                let onlyLargeBenchs = T.setBGroupT res''
+                let onlyLargeBenchs = T.removeTailLast res''
                 when (sumOut flg) $ do
-                  printBest "used the least amount of memory" onlyLargeBenchs
+                  printBest "used the least amount of memory" res''
                   printAbstract "lighter" onlyLargeBenchs
-                return $ Just (showGrouped $ snd e, onlyLargeBenchs)
+                return $ Just (showGrouped $ snd e, res'')
 
 renderG :: T.ChartOutput -> [Named (T.Grouped [Named Double])] -> IO ()
 #ifdef CHART
@@ -99,45 +102,66 @@ renderG _ _ = return ()
 #endif
 
 -- | Print a report from the lists of benchmarks
-printReport :: Int -- ^ The number of # to write, must start with 2
+printReport :: StaOut -- ^ Output infos
+            -> [Named (Grouped WeighResult)] -- ^ The list of benchs
+            -> Grouped WeighResult -- ^ A selected bench name
+            -> IO (Maybe (T.Grouped [Named Int64])) -- Maybe if there was actual data
+printReport flg arr act = doGrp flg printReport1 id $ getOtherGroups act arr
+
+-- | Second stage of report
+printReport1 :: StaOut -- ^ Output infos
+            -> [Named (Grouped WeighResult)] -- ^ The list of benchs
+            -> Grouped WeighResult -- ^ A selected bench name
+            -> IO (Maybe (T.Grouped [Named Int64])) -- Maybe if there was actual data
+printReport1 flg arr act = do
+    when (flg /= Null) $ putStrLn $ unwords ["###",bname]
+    res'@(Just (T.Group res)) <- doGrp flg (printReport2 0) (map (T.setGName bname)) otherGroups
+    when (flg == Html) $
+      let ch       = mapMaybe T.tkGroup res :: [[T.Grouped [Named Int64]]]
+          results  = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe T.tkSimple) ch :: [Named [[Named Int64]]]
+                     -- Double reverse is necessary, since it can lack some data in the front of ch
+          results' = map (fmap (makeAverage . map (map (fmap (fromRational . toRational)))) ) results :: [Named [Named Double]]
+      in printHtml results' ((commas :: Integer -> String) . round)
+    return res'
+  where
+    bname = showGrouped act
+    getNOtherGroups = reverse $ map (showGrouped . snd) nubOtherGroups
+    nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
+    otherGroups = getOtherGroups act arr
+
+-- | Third stage of report
+printReport2 :: Int
             -> StaOut -- ^ Output infos
             -> [Named (Grouped WeighResult)] -- ^ The list of benchs
             -> Grouped WeighResult -- ^ A selected bench name
             -> IO (Maybe (T.Grouped [Named Int64])) -- Maybe if there was actual data
-printReport lev flg arr act = case lev of
-  2 -> doGrp
-  3 -> do
-    when (flg /= Null) pTitle
-    if flg /= Html
-       then doGrp
-       else do
-         res'@(Just (T.Group res)) <- doGrp
-         let ch = mapMaybe T.tkGroup res :: [[T.Grouped [Named Int64]]]
-             results = reverse $ zip getNOtherGroups $ reverse $ map (mapMaybe T.tkSimple) ch :: [Named [[Named Int64]]] -- Double reverse is necessary, since it can lack some data in the front of ch
-             results' = map (fmap (makeAverage . map (map (fmap (fromRational . toRational)))) ) results :: [Named [Named Double]]
-         printHtml results' ((commas :: Integer -> String) . round)
-         return res'
-  _ -> do
-    when (not (null bname) && flg == Ascii) pTitle
+printReport2 lev flg arr act =  do
+    when (not (null bname) && flg == Ascii) $ putStrLn $ unwords [replicate (4+lev) '#',bname]
     case act of
-      (Grouped _ (Singleton{}:_)) -> Just . T.Group <$> mapM (printSimples (lev+1) flg semiSimples . snd) (nubBy (liftExtract2 eqW) semiSimples)
-      Grouped{} -> doGrp
+      (Grouped _ (Singleton{}:_)) -> Just . T.Group <$> mapM (printSimples lev flg semiSimples . snd) (nubBy (liftExtract2 eqW) semiSimples)
+      Grouped{} -> doGrp flg (printReport2 (lev+1)) id otherGroups
       Singleton{} -> error "A single singleton of a WeighResult, this should not happen"
   where
-    pTitle = putStrLn $ unwords [replicate lev '#',bname]
     bname = showGrouped act
-    doGrp = case nubOtherGroups of
-              [] -> do
-                when (flg == Ascii) $ putStrLn "\nNo data\n"
-                return Nothing
-              real -> do
-                grp <- catMaybes <$> mapM (printReport (lev+1) flg otherGroups . snd) real
-                return $ Just $ T.Group $ (if lev == 3 then (map (T.setGName bname)) else id) grp
-    here e = filter (eqG e . snd) arr
-    nubOtherGroups = nubBy (liftExtract2 eqG) otherGroups
-    getNOtherGroups = reverse $ map (showGrouped . snd) nubOtherGroups
-    otherGroups = concatMap sequence $ mapMaybe (traverse tkChilds) $ here act
-    semiSimples = mapMaybe (traverse T.tkSimple) otherGroups
+    otherGroups = getOtherGroups act arr
+    semiSimples = mapMaybe (traverse tkSimple) otherGroups
+
+getOtherGroups :: Grouped WeighResult -> [Named (Grouped WeighResult)] -> [Named (Grouped WeighResult)]
+getOtherGroups act = concatMap sequence . mapMaybe (traverse tkChilds) . filter (eqG act . snd)
+
+doGrp :: StaOut
+      -> (StaOut -> [Named (Grouped WeighResult)] -> Grouped WeighResult -> IO (Maybe (T.Grouped [Named Int64])))
+      -> ([T.Grouped [Named Int64]] -> [T.Grouped [Named Int64]])
+      -> [Named (Grouped WeighResult)]
+      -> IO (Maybe (T.Grouped [Named Int64]))
+doGrp flg f changeName otherGroups =
+  case nubBy (liftExtract2 eqG) otherGroups of
+    [] -> do
+      when (flg == Ascii) $ putStrLn "\nNo data\n"
+      return Nothing
+    real -> do
+      grp <- catMaybes <$> mapM (f flg otherGroups . snd) real
+      return $ Just $ T.Group $ changeName grp
 
 -- | Really print the simples, different than printReport for type reason
 printSimples :: Int -> StaOut -> [Named WeighResult] -> WeighResult -> IO (T.Grouped [Named Int64])
@@ -145,7 +169,7 @@ printSimples lev flg arr act = do
   when (flg == Ascii) $ do
     unless (null bname) $ putStrLn $ unwords [replicate lev '#',bname]
     putStrLn $ TAA.render id id id table
-  return $ T.Simple False "" $ map (fmap $ weightAllocatedBytes . fst) filtered -- False by default, changed after
+  return $ T.Simple "" $ map (fmap $ weightAllocatedBytes . fst) filtered -- False by default, changed after
   where
     bname = takeLastAfterBk $ weightLabel $ fst act
     -- filter by the 'act' argument, and sort
@@ -175,7 +199,11 @@ main' :: Command -> IO ()
 main' (List opt) = case opt of
                     Benchs -> putStr $ unlines $ benchsNames Nothing Nothing
                     Libs -> putStr $ unlines $ nub $ map fst listOfSuites
-main' (Render fp opt) = readFile fp >>= renderG opt . read
+main' (Render fp opt) = do
+  readed <- decodeFileStrict fp
+  case readed of
+    Nothing -> error "Malformed file"
+    Just (Result _ res) -> renderG opt $ map (fmap T.removeTailLast) res
 main' (Run only notonly flg libs _ _ _) = do
   printHeader defaultGr bN
   mainWeigh benchs (useResults flg (mapMaybe (\(n,Shadow s) -> either (\x -> Just (n,x)) (const Nothing) s ) filteredArr))
@@ -225,10 +253,7 @@ mainWeigh rights f = do
   (results,_) <- weighResults $ sequence_ rights
   unless (isJust args) $ f results
 
--- | Weigh Grouped isGrouped
-instance T.IsGrouped Grouped where
-  isSimple Singleton{} = True
-  isSimple _ = False
-  simple_ (Singleton e) = e
-  group_ (Grouped _ e) = e
-
+-- | Util for Weigh Grouped
+tkSimple :: Grouped a -> Maybe a
+tkSimple (Singleton a) = Just a
+tkSimple _ = Nothing
