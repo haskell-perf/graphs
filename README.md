@@ -16,7 +16,7 @@ Results on bigger graphs and with more beautiful output can be found here: <http
 
 We support both `cabal` and `stack` to build the project. Please note that using `stack` will allow to download and build libraries not yet on Hackage.
 
-You can customize your build using several cabal flags (all of them are on by default).
+You can customize your build using several cabal flags.
 
 ### Suites
 
