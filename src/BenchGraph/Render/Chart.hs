@@ -1,7 +1,5 @@
 module BenchGraph.Render.Chart
-  (
-  mkChart
-  )
+  ( mkChart )
 where
 
 import Control.Monad (void, mapM_, forM_)
@@ -57,7 +55,7 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
         title' = setPickFn nullPickFn $ label ls HTA_Centre VTA_Centre title
         ls = def { _font_size = 25 , _font_weight = FontWeightBold }
 
-        -- Infor about graphs used
+        -- Info about graphs used
         graphsInfo = setPickFn nullPickFn $ label ls' HTA_Centre VTA_Centre $ (++) "Graphs used: " $ intercalate ", " $ map (\((n,f),xs) ->
           case n of
             "RealLife" -> unwords [n,"number",show $ snd $ f $ last xs]
