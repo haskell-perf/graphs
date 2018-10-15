@@ -105,7 +105,7 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
 
         mkValue x = (tenp, transformed, transformedStd) -- Make everyone > 1, so the log is positive.
           where
-            mkAverageDeep  = M.map (M.filter (/=0) . M.map average) . M.map (mkValues is)
+            mkAverageDeep  = M.map (M.filter (/=0) . M.map average . mkValues is)
             doubleMap      = mkAverageDeep $ getSimplesWithG x
             stdVar         = mkAverageDeep <$> getSimplesStdWithG x
             maybeverysmall = concatMap elems $ elems doubleMap
