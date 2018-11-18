@@ -8,7 +8,7 @@ extra-deps:
   - git: https://github.com/patrickdoc/hash-graph.git
     commit: 785c20dc608774b133d89c942bc33d7f56ef6ced
   - git: https://github.com/snowleopard/alga.git
-    commit: 1e0538a902655095f545011df8af4c06bc336c53
+    commit: 4d8a403a6d0de083c3fb7a3dc8e2267f02cfde15
   - Chart-1.9
   - Chart-cairo-1.9
   - criterion-1.5.1.0
