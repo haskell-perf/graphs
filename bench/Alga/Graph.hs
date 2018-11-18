@@ -11,7 +11,7 @@ import BenchGraph.GenericGraph (Edges)
 import BenchGraph.Utils (extractMaxVertex)
 
 import Algebra.Graph
-import qualified Algebra.Graph.AdjacencyIntMap           as AIM
+import qualified Algebra.Graph.AdjacencyIntMap as AIM
 import qualified Algebra.Graph.AdjacencyIntMap.Algorithm as AIM
 
 import Data.Tree (flatten)
