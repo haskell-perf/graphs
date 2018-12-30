@@ -5,6 +5,7 @@ module HashGraph.Gr
   (functions, mk)
 where
 
+import BenchGraph.Suites (SuiteWithExp)
 import BenchGraph.Types
 import BenchGraph.GenericGraph (Edges)
 import BenchGraph.Utils

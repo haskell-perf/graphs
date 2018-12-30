@@ -12,11 +12,12 @@ import Control.DeepSeq (NFData, ($!!))
 import BenchGraph.GenericGraph
 import BenchGraph.Utils (graphs, defaultGr)
 import BenchGraph.Named
+import BenchGraph.Suites (Suite (..))
 import BenchGraph.Types
 
 -- | Main function, will benchmark the given suite against the given graphs
 weigh :: (GraphImpl g, NFData g) => [(GenericGraph, [Size])] -> Suite g -> Weigh ()
-weigh graphs' (Suite sname _ algo inputs') = wgroup sname cases
+weigh graphs' (Suite sname algo inputs') = wgroup (show sname) cases
   where
     cases = mapM_ (uncurry mkGroup) graphs'
     mkGroup (gname, gfunc) ss = wgroup gname $ mapM_ (weighSuite algo inputs' gfunc) ss

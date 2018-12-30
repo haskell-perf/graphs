@@ -4,9 +4,6 @@ module ListS
 
 where
 
-import Data.List (nubBy)
-import Data.Maybe (mapMaybe)
-
 import qualified Containers.Graph
 #ifdef ALGA
 import qualified Alga.Graph
@@ -24,12 +21,8 @@ import qualified HashGraph.Gr
 
 -- UNCOMMENT import qualified YourLib.Graph
 
-import BenchGraph.Types
 import BenchGraph.Named
-
--- | List of descs
-descs :: [Named String]
-descs = ("creation","Create a graph from a list of edges") : nubBy eq1 (mapMaybe ((\(Shadow s) -> either (const Nothing) (Just . extractDescription) s) . snd) listOfSuites)
+import BenchGraph.Suites (ShadowedS (..))
 
 -- | List of queued Suite, "Shadowized"
 -- Note: The layout of the list is important
@@ -47,4 +40,3 @@ listOfSuites = concatMap sequence
 #endif
 -- UNCOMMENT, ("YourFancyLibName", map Shadow YourLib.Graph.functions)
   ]
-

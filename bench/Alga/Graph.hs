@@ -6,6 +6,7 @@ module Alga.Graph
 where
 
 import BenchGraph.Types
+import BenchGraph.Suites (SuiteWithExp)
 import qualified BenchGraph.Suites as S
 import BenchGraph.GenericGraph (Edges)
 import BenchGraph.Utils (extractMaxVertex)

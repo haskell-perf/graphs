@@ -19,9 +19,9 @@ import Options.Applicative (execParser)
 import Data.Aeson (encodeFile, decodeFileStrict)
 
 import Command
-import ListS (listOfSuites, descs)
+import ListS (listOfSuites)
 
-import BenchGraph.Types
+import BenchGraph.Suites (ShadowedS (..), Suite (..), getDescription)
 import BenchGraph.Space
 import BenchGraph.Named
 import BenchGraph.Utils (defaultGr)
@@ -79,7 +79,7 @@ useResults flg notDef todo = do
     namedBenchs = concatMap sequence $ mapMaybe groupedToNamed todo
     mapped e = do
       putStrLn $ unwords ["##", showGrouped $ snd e]
-      maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup (showGrouped $ snd e) descs)
+      putStrLn $ "\nDescription: " ++ (getDescription $ read $ showGrouped $ snd e)
       putStrLn ""
       res <- printReport (staOut flg) namedBenchs $ snd e
       forM_ (filter (\(_,(a,_)) -> a == showGrouped (snd e)) notDef) $ \no -> putStrLn $ unwords ["Not implemented for",fst no,"because",snd (snd no)] ++ "."
@@ -217,7 +217,7 @@ main' (Run only notonly flg libs _ _ _) = do
 benchsNames :: Maybe Option -> Maybe [String] -> [String]
 benchsNames only notonly = nub $ useNotOnly $ useOnly extractedNames
   where
-    extractedNames = sort $ "creation" : map (\(_,Shadow s) -> either fst name s) listOfSuites
+    extractedNames = sort $ "creation" : map (\(_,Shadow s) -> either fst (show . name) s) listOfSuites
     useOnly = case only of
       Nothing -> id
       (Just (Only lst)) -> filter (`elem` lst)
@@ -231,7 +231,7 @@ benchsNames only notonly = nub $ useNotOnly $ useOnly extractedNames
                    (Just lst) -> filter (`notElem` lst)
 
 isNameIn :: (a,ShadowedS) -> [String] -> Bool
-isNameIn (_,Shadow s) e = either fst name s `elem` e
+isNameIn (_,Shadow s) e = either fst (show . name) s `elem` e
 
 listOfCreation :: [Named (Weigh ())]
 listOfCreation  =

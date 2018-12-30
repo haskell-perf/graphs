@@ -1,3 +1,4 @@
+{-# LANGUAGE ExistentialQuantification #-}
 {-|
 This module describe main suites to be used
 -}
@@ -14,6 +15,69 @@ import BenchGraph.Named
 import Control.DeepSeq (NFData)
 import Data.List (nub)
 
+data SuiteT =
+    VertexList
+  | VertexCount
+  | HasVertex
+  | AddVertex
+  | RemoveVertex
+  | EdgeList
+  | EdgeCount
+  | HasEdge
+  | AddEdge
+  | RemoveEdge
+  | IsEmpty
+  | Transpose
+  | Equality
+  | MergeContext
+  | DFF
+  | TopSort
+  | Reachable
+  | Creation
+  deriving (Eq,Show, Read)
+
+-- | A graph algorithm operates on a graph type @g@, which takes an input of
+-- type @i@ and produces an output of type @o@. Algorithms come with a list of
+-- named inputs, all of which will be tried during benchmarking.
+data Suite g = forall i o. NFData o => Suite
+  { name :: SuiteT
+  , algorithm :: i -> g -> o
+  , inputs    :: Edges -> [Named i]}
+
+extractDescription :: Suite a -> String
+extractDescription x = getDescription (name x)
+
+getDescription :: SuiteT -> String
+getDescription x =
+  case x of
+   VertexList -> "Produce a list of the vertices in the graph"
+   VertexCount -> "Count the vertices of the graph"
+   HasVertex -> "Test if the given vertex is in the graph"
+   AddVertex -> "Add a vertex (not already in the graph)"
+   RemoveVertex ->  "Remove a vertex of the graph"
+   EdgeList -> "Produce a list of the edges in the graph"
+   EdgeCount -> "Count the edges of the graph"
+   HasEdge -> "Test if the given edge is in the graph (with arguments both in the graph and not in the graph (where applicable))"
+   AddEdge -> "Add an edge (not already in the graph)"
+   RemoveEdge -> "Remove an edge of the graph"
+   IsEmpty -> "Test if the graph is empty"
+   Transpose -> "Transpose (invert all the edges) the graph"
+   Equality -> "Test if two graphs are equals"
+   MergeContext -> "Merge a FGL context in the graph"
+   DFF -> "Produce a forest, obtained from a DFS (Deep First Search) of each vertex"
+   TopSort -> "Topological sorting of the vertices"
+   Reachable -> "Produce a list of reachable vertices from a given one"
+   Creation -> "Create a graph from a list of edges"
+
+-- A suite that don't take arguments apart a graph
+simpleSuite :: NFData o => SuiteT -> (g -> o) -> Suite g
+simpleSuite name' algorithm' = Suite name' (const algorithm') (const [("",())])
+
+-- | Type to shadow the argument of a Suite
+data ShadowedS = forall g. (GraphImpl g, NFData g) => Shadow (SuiteWithExp g)
+
+type SuiteWithExp g = Either (String,String) (Suite g)
+
 -- | Type to express the common interface between Specialised suites
 type SpecialisedSuite u o i g = (i -> g -> o) -- ^ The actual function to test.
   -> (u -> i) -- ^ A function to create the tested function argument
@@ -22,15 +86,14 @@ type SpecialisedSuite u o i g = (i -> g -> o) -- ^ The actual function to test.
 -- Vertex work
 
 vertexList :: NFData o => (g -> o) -> Suite g
-vertexList = simpleSuite "vertexList" "Produce a list of the vertices in the graph"
+vertexList = simpleSuite VertexList
 
 vertexCount :: NFData o => (g -> o) -> Suite g
-vertexCount = simpleSuite "vertexCount" "Count the vertices of the graph"
+vertexCount = simpleSuite VertexCount
 
 hasVertex :: NFData o => SpecialisedSuite Vertex o i g
 hasVertex fun genArg = Suite
-  { name = "hasVertex"
-  , desc = "Test if the given vertex is in the graph"
+  { name = HasVertex
   , algorithm = fun
   , inputs    = map (fmap genArg) . withNames . vertices
   }
@@ -40,8 +103,7 @@ hasVertex fun genArg = Suite
 
 addVertex :: NFData o => SpecialisedSuite Vertex o i g
 addVertex fun genArg = Suite
-  { name = "addVertex"
-  , desc = "Add a vertex (not already in the graph)"
+  { name = AddVertex
   , algorithm = fun
   , inputs    = map (fmap genArg . nameBy ((++)"new vertex: " . show)) . newV
   }
@@ -51,8 +113,7 @@ addVertex fun genArg = Suite
 
 removeVertex :: NFData o => SpecialisedSuite Vertex o i g
 removeVertex fun genArg = Suite
-  { name = "removeVertex"
-  , desc = "Remove a vertex of the graph"
+  { name = RemoveVertex
   , algorithm = fun
   , inputs    = map (fmap genArg . nameBy ((++)"vertex: " . show)) . oldV
   }
@@ -63,31 +124,28 @@ removeVertex fun genArg = Suite
 -- Edge work
 
 edgeList :: NFData o => (g -> o) -> Suite g
-edgeList = simpleSuite "edgeList" "Produce a list of the edges in the graph"
+edgeList = simpleSuite EdgeList
 
 edgeCount :: NFData o => (g -> o) -> Suite g
-edgeCount = simpleSuite "edgeCount" "Count the edges of the graph"
+edgeCount = simpleSuite EdgeCount
 
 hasEdge :: NFData o => SpecialisedSuite Edge o i g
 hasEdge fun genArg = Suite
-  { name = "hasEdge"
-  , desc = "Test if the given edge is in the graph (with arguments both in the graph and not in the graph (where applicable))"
+  { name = HasEdge
   , algorithm = fun
   , inputs    = \x -> map (fmap genArg) $ withNames $ getDifferents x ++ take 3 (edgesNotInGraph x)
   }
 
 addEdge :: NFData o => SpecialisedSuite Edge o i g
 addEdge fun genArg = Suite
-  { name = "addEdge"
-  , desc = "Add an edge (not already in the graph)"
+  { name = AddEdge
   , algorithm = fun
   , inputs = map (fmap genArg) . withNames . take 3 . edgesNotInGraph
   }
 
 removeEdge :: NFData o => SpecialisedSuite Edge o i g
 removeEdge fun genArg = Suite
-  { name = "removeEdge"
-  , desc = "Remove an edge of the graph"
+  { name = RemoveEdge
   , algorithm = fun
   , inputs    = map (fmap genArg) . withNames . getDifferents
   }
@@ -95,15 +153,14 @@ removeEdge fun genArg = Suite
 -- Graph work
 
 isEmpty :: NFData o => (g -> o) -> Suite g
-isEmpty = simpleSuite "isEmpty" "Test if the graph is empty"
+isEmpty = simpleSuite IsEmpty
 
 transpose :: NFData o => (g -> o) -> Suite g
-transpose = simpleSuite "transpose" "Transpose (invert all the edges) the graph"
+transpose = simpleSuite Transpose
 
 eq :: (NFData g, GraphImpl g) => (g -> g -> Bool) -> Suite g
 eq fun = Suite
-  { name = "equality"
-  , desc = "Test if two graphs are equals"
+  { name = Equality
   , algorithm = fun
   , inputs    = \x -> fmap mkGraph <$>
     [nameBy ((++)"vertex: " . show . head) [(0,2)]
@@ -113,8 +170,7 @@ eq fun = Suite
 
 context :: NFData o => SpecialisedSuite Edge o i g
 context fun genArg = Suite
-  { name = "mergeContext"
-  , desc = "Merge a FGL context in the graph"
+  { name = MergeContext
   , algorithm = fun
   , inputs = map (fmap genArg) . withNames . const [(0,3),(1,10),(25,3)]
   }
@@ -122,15 +178,14 @@ context fun genArg = Suite
 -- Algorithms
 
 dff :: NFData o => (g -> o) -> Suite g
-dff = simpleSuite "dff" "Produce a forest, obtained from a DFS (Deep First Search) of each vertex"
+dff = simpleSuite DFF
 
 topSort :: NFData o => (g -> o) -> Suite g
-topSort = simpleSuite "topSort" "Topological sorting of the vertices"
+topSort = simpleSuite TopSort
 
 reachable :: NFData o => SpecialisedSuite Vertex o i g
 reachable fun genArg = Suite
-  { name = "reachable"
-  , desc = "Produce a list of reachable vertices from a given one"
+  { name = Reachable
   , algorithm = fun
   , inputs    = \x -> map (fmap genArg) $ withNames $ nub [0, extractMaxVertex x]
   }

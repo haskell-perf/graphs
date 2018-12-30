@@ -19,7 +19,7 @@ import qualified Data.Map as Map
 
 import Statistics.Types (estPoint)
 
-import BenchGraph.Types (ShadowedS (..))
+import BenchGraph.Suites (ShadowedS (..), getDescription)
 import BenchGraph.Time (allBench, benchmarkCreation)
 import BenchGraph.Named
 import BenchGraph.Utils (defaultGr)
@@ -34,7 +34,7 @@ import qualified Text.Tabular.AsciiArt as TAA
 import Text.Printf (printf)
 
 import Command
-import ListS (listOfSuites, descs)
+import ListS (listOfSuites)
 
 -- If you are trying to add your library using YourLib/Graph.hs:
 --   Uncomment the corresponding lines, and you are ready to build and run
@@ -93,7 +93,7 @@ genReport gr flg arr = do
       if notquickComp
         then do
           putStrLn $ unwords [replicate 2 '#',bname]
-          maybe (return ()) (putStrLn . (++) "\nDescription: ") (lookup bname descs)
+          putStrLn $ "\nDescription: " ++ (getDescription $ read bname)
           putStrLn ""
         else putStr $ bname ++ ": "
       res <- toPrint (staOut flg) refinedarr $ snd e
@@ -270,4 +270,3 @@ listOfCreation dontBenchLittleOnes gr =
 #endif
 -- UNCOMMENT, ("YourFancyLibName", benchmarkCreation dontBenchLittleOnes gr YourLib.Graph.mk)
   ]
-

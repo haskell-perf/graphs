@@ -12,6 +12,7 @@ import Control.DeepSeq (NFData, deepseq)
 import BenchGraph.GenericGraph
 import BenchGraph.Utils (graphs)
 import BenchGraph.Named
+import BenchGraph.Suites (Suite (..))
 import BenchGraph.Types
 
 ---- Criterion
@@ -20,7 +21,7 @@ import BenchGraph.Types
 benchmark :: (GraphImpl g, NFData g)
           => Bool -- ^ Set to False, it will force the graph, using deepseq, before passing it to the benched function
           -> [(GenericGraph, [Size])] -> Suite g -> Benchmark
-benchmark benchCreation graphs' (Suite sname _ algo inputs') = bgroup sname cases
+benchmark benchCreation graphs' (Suite sname algo inputs') = bgroup (show sname) cases
   where
     cases = [ bgroup gname $ map (benchSuite benchCreation algo inputs' gfunc) ss | ((gname,gfunc), ss) <- graphs' ]
 
