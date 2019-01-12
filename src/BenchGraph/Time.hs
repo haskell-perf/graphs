@@ -45,4 +45,4 @@ allBench :: (GraphImpl g, NFData g)
 allBench benchCreation b gr = benchmark benchCreation (graphs b gr)
 
 benchmarkCreation :: (NFData g) => Bool -> [(String,Int)] -> (Edges -> g) -> Benchmark
-benchmarkCreation b gr mk = bgroup "creation" [ bgroup n $ map (\i -> let (gr',sizeName) = grf i in bgroup (show sizeName) [bench "" $ nf mk gr'] ) ss | ((n,grf), ss) <- graphs b gr ]
+benchmarkCreation b gr mk = bgroup "Creation" [ bgroup n $ map (\i -> let (gr',sizeName) = grf i in bgroup (show sizeName) [bench "" $ nf mk gr'] ) ss | ((n,grf), ss) <- graphs b gr ]

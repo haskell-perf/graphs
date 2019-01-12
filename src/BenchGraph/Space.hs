@@ -40,7 +40,7 @@ allWeigh = weigh (graphs False defaultGr)
 weighCreation :: (NFData g)
               => (Edges -> g) -- ^ A graph-creator function, typically from the GraphImpl class
               -> Weigh ()
-weighCreation mk = wgroup "creation" $ mapM_ (\(str,((_,grf), ss)) -> wgroup str $ mapM_ (\i -> let (gr',sizeName) = grf i in  wgroup (show sizeName) $ func "" mk gr') ss ) weighCreationList
+weighCreation mk = wgroup "Creation" $ mapM_ (\(str,((_,grf), ss)) -> wgroup str $ mapM_ (\i -> let (gr',sizeName) = grf i in  wgroup (show sizeName) $ func "" mk gr') ss ) weighCreationList
 
 -- | List of generic graph with their case-name
 weighCreationList :: [Named (GenericGraph, [Int])]
