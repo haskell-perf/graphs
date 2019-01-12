@@ -50,24 +50,24 @@ extractDescription x = getDescription (name x)
 getDescription :: SuiteT -> String
 getDescription x =
   case x of
-   VertexList -> "Produce a list of the vertices in the graph"
-   VertexCount -> "Count the vertices of the graph"
-   HasVertex -> "Test if the given vertex is in the graph"
-   AddVertex -> "Add a vertex (not already in the graph)"
+   VertexList   -> "Produce a list of the vertices in the graph"
+   VertexCount  -> "Count the vertices of the graph"
+   HasVertex    -> "Test if the given vertex is in the graph"
+   AddVertex    -> "Add a vertex (not already in the graph)"
    RemoveVertex ->  "Remove a vertex of the graph"
-   EdgeList -> "Produce a list of the edges in the graph"
-   EdgeCount -> "Count the edges of the graph"
-   HasEdge -> "Test if the given edge is in the graph (with arguments both in the graph and not in the graph (where applicable))"
-   AddEdge -> "Add an edge (not already in the graph)"
-   RemoveEdge -> "Remove an edge of the graph"
-   IsEmpty -> "Test if the graph is empty"
-   Transpose -> "Transpose (invert all the edges) the graph"
-   Equality -> "Test if two graphs are equals"
+   EdgeList     -> "Produce a list of the edges in the graph"
+   EdgeCount    -> "Count the edges of the graph"
+   HasEdge      -> "Test if the given edge is in the graph (with arguments both in the graph and not in the graph (where applicable))"
+   AddEdge      -> "Add an edge (not already in the graph)"
+   RemoveEdge   -> "Remove an edge of the graph"
+   IsEmpty      -> "Test if the graph is empty"
+   Transpose    -> "Transpose (invert all the edges) the graph"
+   Equality     -> "Test if two graphs are equals"
    MergeContext -> "Merge a FGL context in the graph"
-   DFF -> "Produce a forest, obtained from a DFS (Deep First Search) of each vertex"
-   TopSort -> "Topological sorting of the vertices"
-   Reachable -> "Produce a list of reachable vertices from a given one"
-   Creation -> "Create a graph from a list of edges"
+   DFF          -> "Produce a forest, obtained from a DFS (Deep First Search) of each vertex"
+   TopSort      -> "Topological sorting of the vertices"
+   Reachable    -> "Produce a list of reachable vertices from a given one"
+   Creation     -> "Create a graph from a list of edges"
 
 -- A suite that don't take arguments apart a graph
 simpleSuite :: NFData o => SuiteT -> (g -> o) -> Suite g
@@ -194,6 +194,7 @@ reachable fun genArg = Suite
 
 -- | Take the first, the middle and the last edges, if possible
 getDifferents :: Edges -> Edges
-getDifferents edgs = if length edgs >= 2
-                        then nub [edgs!!2, edgs !! (length edgs `div` 2 - 1), last $ init edgs]
-                        else edgs
+getDifferents edgs =
+  if length edgs >= 2
+  then nub [edgs!!2, edgs !! (length edgs `div` 2 - 1), last $ init edgs]
+  else edgs
