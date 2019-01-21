@@ -13,6 +13,7 @@ extra-deps:
   - Chart-cairo-1.9
   - criterion-1.5.1.0
   - criterion-measurement-0.1.1.0
+  - array-0.5.3.0
 
 # So we disable it
 flags:
