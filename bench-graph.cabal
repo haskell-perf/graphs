@@ -122,7 +122,7 @@ benchmark time
 
     if flag(Alga)
       other-modules:    Alga.Graph
-      build-depends:    algebraic-graphs >= 0.2     && < 0.4
+      build-depends:    algebraic-graphs >= 0.3     && < 0.5
       cpp-options:      -DALGA
 
     if flag(Fgl)
@@ -168,7 +168,7 @@ benchmark space
 
     if flag(Alga)
       other-modules:    Alga.Graph
-      build-depends:    algebraic-graphs >= 0.2     && < 0.4
+      build-depends:    algebraic-graphs >= 0.3     && < 0.5
       cpp-options:      -DALGA
 
     if flag(Fgl)
@@ -207,7 +207,7 @@ benchmark datasize
                         fgl                  >= 5.6.0.0  && < 5.6.0.1,
                         containers           >= 0.5.5.1  && < 0.8,
                         hash-graph           >= 0.1.0.0  && < 0.1.0.1,
-                        algebraic-graphs     >= 0.2      && < 0.4,
+                        algebraic-graphs     >= 0.3      && < 0.5,
                         ghc-datasize         >= 0.2.0    && < 0.2.1,
                         tabular              >= 0.2.2.7  && < 0.2.3,
                         array                >= 0.5      && < 0.5.4,
