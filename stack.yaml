@@ -1,4 +1,4 @@
-resolver: lts-12.26
+resolver: lts-13.17
 
 packages:
   - '.'
@@ -9,13 +9,10 @@ extra-deps:
     commit: 785c20dc608774b133d89c942bc33d7f56ef6ced
   - git: https://github.com/snowleopard/alga.git
     commit: 1754312dd3fb10c8d1c2d64fbe4bfd9194d1db8e
-  - Chart-1.9
-  - Chart-cairo-1.9
-  - criterion-1.5.1.0
-  - criterion-measurement-0.1.1.0
-  - array-0.5.3.0
 
 # So we disable it
 flags:
   bench-graph:
     datasize: false
+
+allow-newer: true
