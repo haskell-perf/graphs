@@ -87,10 +87,9 @@ figFlag = pure Nothing
 #endif
 
 figSFlag :: Parser ChartOutput
-figSFlag = ChartOutput <$> outfile <*> outtype
+figSFlag = ChartOutput <$> outfile
   where
     outfile = strOption $ long "chartfile" <> short 'f' <> metavar "FILENAME" <> help "Output file WITHOUT extension" <> value "result"
-    outtype = option auto $ long "chart" <> short 'c' <> metavar "OUTTYPE" <> help "Output type: Png or Svg"
 
 benchWithCreation :: Parser Bool
 benchWithCreation = flag False True $ long "bench-with-creation" <> short 'b' <> help "When set, will benchmark also the graph-creation function. See README (IGNORED FOR SPACE BENCHMARKS)"
@@ -152,4 +151,3 @@ commandDataSize = info ((RunD <$> graphsOpt) <**> helper)
      ( fullDesc
      <> progDesc "Benchmark datasize on different graphs representations"
      <> header "Help")
-

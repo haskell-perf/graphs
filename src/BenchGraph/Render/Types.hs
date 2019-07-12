@@ -9,7 +9,6 @@ module BenchGraph.Render.Types
   , setGName
   , tkGroup
   , tkSimple
-  , ChartOutputFormat (..)
   , ChartOutput (..)
   )
 
@@ -54,5 +53,4 @@ setGName :: String -> Grouped a -> Grouped a
 setGName s (Simple _ xs) = Simple s xs
 setGName s (Group xs) = Group $ map (setGName s) xs
 
-data ChartOutput = ChartOutput String ChartOutputFormat deriving (Read, Show, Eq)
-data ChartOutputFormat = Png | Svg deriving (Read, Show, Eq)
+data ChartOutput = ChartOutput String deriving (Read, Show, Eq)

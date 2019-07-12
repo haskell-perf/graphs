@@ -7,7 +7,7 @@ import Data.List (uncons, sort, intercalate, nub)
 import Data.Maybe (fromJust, mapMaybe)
 
 import Graphics.Rendering.Chart.Easy hiding (uncons, colors, transform, bars)
-import Graphics.Rendering.Chart.Backend.Cairo
+import Graphics.Rendering.Chart.Backend.Diagrams
 import Graphics.Rendering.Chart.Grid hiding (width)
 
 import Data.Map.Strict (Map, unionWith, fromList, elems)
@@ -41,7 +41,7 @@ mkChart :: String
         -> IO ()
 mkChart _ _ _ _ (Left []) = return ()
 mkChart _ _ _ _ (Right []) = return ()
-mkChart title gparam s (ChartOutput filename chopt) grouped' =
+mkChart title gparam s (ChartOutput filename) grouped' =
   void $ renderableToFile fo (filename ++ "." ++ foExt) $ fillBackground def $ gridToRenderable grid
   where
     -- Group the benchs per line of 4 items
@@ -70,10 +70,7 @@ mkChart title gparam s (ChartOutput filename chopt) grouped' =
         legendInfo = _plot_legend $ head $ _layout_plots $ layout ("",hhgrp)
 
     -- Render to svg
-    (fo,foExt) = case chopt of
-                   Png -> (def', "png")
-                   Svg -> (def' {_fo_format = SVG},"svg")
-    def' = def {_fo_size = (1200,1800)}
+    (fo,foExt) = (def {_fo_size = (1200,1800), _fo_format = SVG},"svg")
 
     layout e = layout_title .~ fst e
       $ layout_title_style . font_size .~ 17
