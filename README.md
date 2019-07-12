@@ -26,9 +26,9 @@ You can customize your build using several cabal flags.
 
 ### Libraries
 
-By default, we benchmark `fgl`, `alga`, `hash-graph` and `containers`.
+By default, we benchmark  `containers`, `fgl` and `alga`. `hash-graph` can be added using the `HashGraph` flag.
 
-You can disable the three first (and thus avoid depending on them) by disabling the flags:
+You can disable the three last (and thus avoid depending on them) by disabling the flags:
 
 * Fgl
 * Alga
@@ -113,7 +113,6 @@ One can produce a chart from the results, use:
 
 ```
   -f,--chartfile FILENAME  Output file WITHOUT extension
-  -c,--chart OUTTYPE       Output type: Png or Svg
 ```
 
 ## About implementation
