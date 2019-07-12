@@ -123,7 +123,7 @@ benchmark time
 
     if flag(Alga)
       other-modules:    Alga.Graph
-      build-depends:    algebraic-graphs >= 0.3     && < 0.5
+      build-depends:    algebraic-graphs >= 0.3     && < 0.6
       cpp-options:      -DALGA
 
     if flag(Fgl)
@@ -169,7 +169,7 @@ benchmark space
 
     if flag(Alga)
       other-modules:    Alga.Graph
-      build-depends:    algebraic-graphs >= 0.3     && < 0.5
+      build-depends:    algebraic-graphs >= 0.3     && < 0.6
       cpp-options:      -DALGA
 
     if flag(Fgl)
