@@ -14,11 +14,6 @@ import Algebra.Graph
 import qualified Algebra.Graph.AdjacencyIntMap as AIM
 import qualified Algebra.Graph.AdjacencyIntMap.Algorithm as AIM
 
-import Data.Tree (flatten)
-
--- $setup
--- >>> let path4 = mk [(0,1),(1,2),(2,3)]
-
 instance GraphImpl (Graph Int) where
   mkGraph = mk
   mkVertex = vertex 0
@@ -46,19 +41,9 @@ functions =
   , Right $ S.transpose transpose
   , Right $ S.dff (AIM.dfsForest . toAIM)
   , Right $ S.topSort (AIM.topSort . toAIM)
-  , Right $ S.reachable reachable id
+  , Right $ S.reachable (\x g -> AIM.reachable x $ toAIM g) id
   , Left    ("mergeContext","it is a nonsense")
   ]
 
 toAIM :: Graph Int -> AIM.AdjacencyIntMap
 toAIM = foldg AIM.empty AIM.vertex AIM.overlay AIM.connect
-
--- | Look-alike FGL implementation: http://hackage.haskell.org/package/fgl-5.6.0.0/docs/src/Data-Graph-Inductive-Query-DFS.html#reachable
---
--- >>> reachable 0 path4
--- [0,1,2,3]
---
--- >>> reachable 2 path4
--- [2,3]
-reachable :: Int -> Graph Int -> [Int]
-reachable x = concatMap flatten . AIM.dfsForestFrom [x] . toAIM
