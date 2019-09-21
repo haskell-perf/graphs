@@ -127,10 +127,21 @@ dff = simpleSuite "dff" "Produce a forest, obtained from a DFS (Deep First Searc
 topSort :: NFData o => (g -> o) -> Suite g
 topSort = simpleSuite "topSort" "Topological sorting of the vertices"
 
+scc :: NFData o => (g -> o) -> Suite g
+scc = simpleSuite "scc" "Calculate strongly connected components"
+
 reachable :: NFData o => SpecialisedSuite Vertex o i g
 reachable fun genArg = Suite
   { name = "reachable"
   , desc = "Produce a list of reachable vertices from a given one"
+  , algorithm = fun
+  , inputs    = \x -> map (fmap genArg) $ withNames $ nub [0, extractMaxVertex x]
+  }
+
+bfs :: NFData o => SpecialisedSuite Vertex o i g
+bfs fun genArg = Suite
+  { name = "bfs"
+  , desc = "Produce a level structure of vertices from the given ones"
   , algorithm = fun
   , inputs    = \x -> map (fmap genArg) $ withNames $ nub [0, extractMaxVertex x]
   }
