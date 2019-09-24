@@ -13,6 +13,8 @@ import BenchGraph.Utils (extractMaxVertex)
 import Algebra.Graph
 import qualified Algebra.Graph.AdjacencyIntMap as AIM
 import qualified Algebra.Graph.AdjacencyIntMap.Algorithm as AIM
+import qualified Algebra.Graph.AdjacencyMap as AM
+import qualified Algebra.Graph.AdjacencyMap.Algorithm as AM
 
 instance GraphImpl (Graph Int) where
   mkGraph = mk
@@ -41,9 +43,14 @@ functions =
   , Right $ S.transpose transpose
   , Right $ S.dff (AIM.dfsForest . toAIM)
   , Right $ S.topSort (AIM.topSort . toAIM)
+  , Right $ S.scc (AM.scc . toAM)
   , Right $ S.reachable (\x g -> AIM.reachable x $ toAIM g) id
+  , Right $ S.bfs (\x g -> AIM.bfs [x] $ toAIM g) id
   , Left    ("mergeContext","it is a nonsense")
   ]
 
 toAIM :: Graph Int -> AIM.AdjacencyIntMap
 toAIM = foldg AIM.empty AIM.vertex AIM.overlay AIM.connect
+
+toAM :: Graph Int -> AM.AdjacencyMap Int
+toAM = foldg AM.empty AM.vertex AM.overlay AM.connect
