@@ -21,3 +21,4 @@ cabal.project.local~
 .HTF/
 .ghc.environment.*
 src/BenchGraph/RealLife/Generated.hs
+stack.yaml.lock

@@ -8,7 +8,7 @@ extra-deps:
   - git: https://github.com/patrickdoc/hash-graph.git
     commit: 785c20dc608774b133d89c942bc33d7f56ef6ced
   - git: https://github.com/snowleopard/alga.git
-    commit: 35465faff04f0f2a608c5761f62cc65dee122b71
+    commit: 2ab97ffaccac89e1874edff44d96ef504982fbe6
 
 # So we disable it
 flags:
